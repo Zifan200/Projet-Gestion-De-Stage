@@ -58,7 +58,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(POST, USER_LOGIN_PATH).permitAll()
                         .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
-                        .requestMatchers(toH2Console()).permitAll() // Allow H2 console access
 
                         // Use Role enum names for authorities
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
