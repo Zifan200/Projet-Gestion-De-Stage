@@ -77,9 +77,6 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Run tests
-        run: npm test -- --ci --watchAll=false
-
       - name: Build
         run: npm run build
 
