@@ -3,6 +3,7 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.service.UserAppService;
+import org.example.service.dto.EmployerDto;
 import org.example.service.dto.JWTAuthResponse;
 import org.example.service.dto.LoginDTO;
 import org.example.service.dto.UserDTO;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.example.security.exception.UsedEmailAddressException;
 
 import java.util.List;
 
@@ -39,4 +41,16 @@ public class UserController {
 			userService.getMe(request.getHeader("Authorization")));
 	}
 
+	@PostMapping("/employer/register")
+	public ResponseEntity<String> registerEmployer(@RequestBody EmployerDto employerDto) {
+		try {
+			userService.saveEmployer(employerDto);
+		} catch (Exception e) {
+			throw new UsedEmailAddressException(
+						HttpStatus.CONFLICT,
+						"Email already taken: " + employerDto.getEmail()
+				);
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 }

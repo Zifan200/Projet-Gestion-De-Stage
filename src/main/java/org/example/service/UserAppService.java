@@ -51,7 +51,7 @@ public class UserAppService {
                 EmployerDto.empty();
     }
 
-    private void saveEmployer(EmployerDto employerDto) {
+    public void saveEmployer(EmployerDto employerDto) {
         Optional<UserApp> user = userAppRepository.findUserAppByEmail(employerDto.getEmail());
 
         if (user.isEmpty()) {
