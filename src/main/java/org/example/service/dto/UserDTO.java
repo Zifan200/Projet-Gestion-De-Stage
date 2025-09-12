@@ -17,6 +17,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private Role role;
 
     public UserDTO(String firstName, String lastName, Role role) {
@@ -30,6 +31,7 @@ public class UserDTO {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
+        this.password = user.getPassword();
         this.role = user.getRole();
     }
 

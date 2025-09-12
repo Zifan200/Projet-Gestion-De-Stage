@@ -12,7 +12,9 @@ import org.example.service.dto.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,6 +25,8 @@ public class UserAppService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userAppRepository;
     private final EmployerRepository employerRepository;
+    private PasswordEncoder passwordEncoder;
+
 
     public String authenticateUser(LoginDTO loginDto) {
         Authentication authentication = authenticationManager.authenticate(
@@ -46,4 +50,20 @@ public class UserAppService {
                 EmployerDto.create(employerOptional.get()) :
                 EmployerDto.empty();
     }
+
+    private void saveEmployer(EmployerDto employerDto) {
+        Optional<UserApp> user = userAppRepository.findUserAppByEmail(employerDto.getEmail());
+
+        if (user.isEmpty()) {
+            Employer employer = Employer.builder()
+                    .firstName(employerDto.getFirstName())
+                    .lastName(employerDto.getLastName())
+                    .email(employerDto.getEmail())
+                    .password(passwordEncoder.encode(employerDto.getPassword()))
+                    .since(employerDto.getSince())
+                    .build();
+            userAppRepository.save(employer);
+        }
+    }
 }
+

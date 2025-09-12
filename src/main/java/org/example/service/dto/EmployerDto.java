@@ -12,8 +12,8 @@ public class EmployerDto extends UserDTO {
     private LocalDate since;
 
     @Builder
-    public EmployerDto(Long id, String firstName, String lastname, String email, Role role, LocalDate since) {
-        super(id, firstName, lastname, email, role);
+    public EmployerDto(Long id, String firstName, String lastname, String email, String password, Role role, LocalDate since) {
+        super(id, firstName, lastname, email, password, role);
         this.since = since;
     }
 
@@ -25,6 +25,7 @@ public class EmployerDto extends UserDTO {
                 .firstName(employer.getFirstName())
                 .lastname(employer.getLastName())
                 .email(employer.getEmail())
+                .password(employer.getPassword())
                 .role(employer.getRole())
                 .since(employer.getSince())
                 .build();
