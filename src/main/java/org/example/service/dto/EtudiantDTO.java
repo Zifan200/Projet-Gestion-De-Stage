@@ -16,6 +16,6 @@ public class EtudiantDTO {
     private String adresse;
     private String programme;
     private int age;
-
+    private Long cvId;
 }
 
