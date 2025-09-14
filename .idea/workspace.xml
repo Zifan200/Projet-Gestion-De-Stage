@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7e34752-17cc-49a1-bf35-d476140b382e" name="Changes" comment="add : docker compose">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/model/CV.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/model/Etudiant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/model/Etudiant.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -149,7 +151,7 @@
       <workItem from="1757387552946" duration="1275000" />
       <workItem from="1757512507110" duration="7887000" />
       <workItem from="1757540796125" duration="69000" />
-      <workItem from="1757871383408" duration="1219000" />
+      <workItem from="1757871383408" duration="4030000" />
     </task>
     <task id="LOCAL-00001" summary="add : docker compose">
       <option name="closed" value="true" />
