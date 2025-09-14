@@ -32,15 +32,4 @@ public class Etudiant {
     @OneToMany(mappedBy = "etudiant", cascade = jakarta.persistence.CascadeType.ALL)
     private List<CV> cv = new ArrayList<>();
 
-    public Etudiant(String nom, String prenom, String courriel, String telephone, String adresse, String programme, int age, String motDePasse, CV cv) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.courriel = courriel;
-        this.telephone = telephone;
-        this.adresse = adresse;
-        this.programme = programme;
-        this.age = age;
-        this.motDePasse = motDePasse;
-        this.cv.add(cv);
-    }
 }
