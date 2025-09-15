@@ -9,20 +9,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     EtudiantRepository etudiantRepository;
-
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(EtudiantRepository etudiantRepository) {
         this.etudiantRepository = etudiantRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public EtudiantDTO inscriptionEtudiant(EtudiantDTO etudiantDTO) {
         if(etudiantRepository.existsByCourriel(etudiantDTO.getCourriel())){
             throw new RuntimeException("Email already in use");
         }
+        Etudiant etudiant = EtudiantDTO.toEntity(etudiantDTO);
 
-        Etudiant etudiant = etudiantRepository.save(EtudiantDTO.toEntity(etudiantDTO));
+        etudiant.setMotDePasse(passwordEncoder.encode(etudiantDTO.getMotDePasse()));
 
-        return EtudiantDTO.fromEntity(etudiant);
+        Etudiant etudiantSaved = etudiantRepository.save(etudiant);
+
+
+        return EtudiantDTO.fromEntity(etudiantSaved);
     }
 
 }
