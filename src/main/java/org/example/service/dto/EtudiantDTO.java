@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.model.Etudiant;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -17,7 +19,7 @@ public class EtudiantDTO {
     private String adresse;
     private String programme;
     private int age;
-    private Long cvId;
+    private List<Long> listCvId;
 
     public static Etudiant toEntity(EtudiantDTO dto) {
         Etudiant etudiant = new Etudiant();
@@ -42,8 +44,11 @@ public class EtudiantDTO {
         dto.setAdresse(etudiant.getAdresse());
         dto.setProgramme(etudiant.getProgramme());
         dto.setAge(etudiant.getAge());
-        if (etudiant.getCv() != null && !etudiant.getCv().isEmpty()) {
-            dto.setCvId(etudiant.getCv().get(0).getId()); // Assuming one CV per student for simplicity
+        if (etudiant.getCv() != null) {
+            dto.setListCvId(etudiant.getCv()
+                    .stream()
+                    .map(cv -> cv.getId())
+                    .toList());
         }
         return dto;
     }
