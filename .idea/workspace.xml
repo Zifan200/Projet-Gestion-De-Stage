@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f7e34752-17cc-49a1-bf35-d476140b382e" name="Changes" comment="add : docker compose">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/dto/EtudiantDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/dto/EtudiantDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/presentation/EtudiantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/presentation/EtudiantController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/EtudiantRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/EtudiantRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +158,7 @@
       <workItem from="1757871383408" duration="9506000" />
       <workItem from="1757881246230" duration="39000" />
       <workItem from="1757963769367" duration="1383000" />
-      <workItem from="1757965180451" duration="967000" />
+      <workItem from="1757965180451" duration="3377000" />
     </task>
     <task id="LOCAL-00001" summary="add : docker compose">
       <option name="closed" value="true" />

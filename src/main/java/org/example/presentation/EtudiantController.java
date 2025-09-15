@@ -1,5 +1,6 @@
 package org.example.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.service.UserService;
 import org.example.service.dto.EtudiantDTO;
@@ -14,7 +15,7 @@ public class EtudiantController {
     private final UserService userService;
 
     @PostMapping("/inscription")
-    public ResponseEntity<EtudiantDTO> inscription(@RequestBody EtudiantDTO etudiantDTO) {
+    public ResponseEntity<EtudiantDTO> inscription(@Valid @RequestBody EtudiantDTO etudiantDTO) {
         EtudiantDTO savedEtudiant = userService.inscriptionEtudiant(etudiantDTO);
         return ResponseEntity.ok(savedEtudiant);
     }
