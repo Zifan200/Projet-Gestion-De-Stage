@@ -90,4 +90,27 @@ class UserServiceTest {
         assertTrue(encoder.matches("Password123!", saved.getMotDePasse()));
     }
 
+    @Test
+    void inscriptionEtudiant_Succes_utilisateurCreeCorrectement() {
+        when(etudiantRepository.existsByCourriel("nouveau@mail.com")).thenReturn(false);
+        when(etudiantRepository.save(any(Etudiant.class))).thenAnswer(i -> i.getArgument(0));
+
+        EtudiantDTO savedDto = userService.inscriptionEtudiant(dto);
+
+        assertNotNull(savedDto);
+        assertEquals("nouveau@mail.com", savedDto.getCourriel());
+        assertEquals("Miaou", savedDto.getNom());
+        assertEquals("Woof", savedDto.getPrenom());
+        assertEquals("1234567890", savedDto.getTelephone());
+        assertEquals("123 Rue Exemple", savedDto.getAdresse());
+
+        ArgumentCaptor<Etudiant> captor = ArgumentCaptor.forClass(Etudiant.class);
+        verify(etudiantRepository).save(captor.capture());
+        Etudiant savedEtudiant = captor.getValue();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        assertTrue(encoder.matches("Password123!", savedEtudiant.getMotDePasse()));
+    }
+
+
 }

@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7e34752-17cc-49a1-bf35-d476140b382e" name="Changes" comment="add : docker compose">
-      <change afterPath="$PROJECT_DIR$/src/test/java/service/UserServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/UserServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +65,7 @@
     "Docker.docker-compose.yml.api: Compose Deployment.executor": "Run",
     "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
     "JUnit.UserServiceTest.executor": "Run",
+    "JUnit.UserServiceTest.inscriptionEtudiant_Succes_utilisateurCreeCorrectement.executor": "Run",
     "JUnit.UserServiceTest.inscriptionEtudiant_Verification_Nom.executor": "Run",
     "JUnit.UserServiceTest.inscriptionEtudiant_Verification_hashMotDePasseEtSauvegarde.executor": "Run",
     "JUnit.UserServiceTest.inscriptionEtudiant_emailDejaUtilise_lanceException.executor": "Run",
@@ -91,7 +91,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.UserServiceTest">
+  <component name="RunManager" selected="JUnit.UserServiceTest.inscriptionEtudiant_Succes_utilisateurCreeCorrectement">
     <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Miaou" />
       <extension name="coverage">
@@ -103,6 +103,22 @@
       <option name="PACKAGE_NAME" value="service" />
       <option name="MAIN_CLASS_NAME" value="service.UserServiceTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest.inscriptionEtudiant_Succes_utilisateurCreeCorrectement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Miaou" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="service" />
+      <option name="MAIN_CLASS_NAME" value="service.UserServiceTest" />
+      <option name="METHOD_NAME" value="inscriptionEtudiant_Succes_utilisateurCreeCorrectement" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -139,22 +155,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserServiceTest.inscriptionEtudiant_emailDejaUtilise_lanceException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Miaou" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.UserServiceTest" />
-      <option name="METHOD_NAME" value="inscriptionEtudiant_emailDejaUtilise_lanceException" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="UserServiceTest.inscriptionEtudiant_hashMotDePasseEtSauvegarde" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Miaou" />
       <extension name="coverage">
@@ -179,11 +179,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UserServiceTest.inscriptionEtudiant_Succes_utilisateurCreeCorrectement" />
         <item itemvalue="JUnit.UserServiceTest" />
         <item itemvalue="JUnit.UserServiceTest.inscriptionEtudiant_Verification_hashMotDePasseEtSauvegarde" />
         <item itemvalue="JUnit.UserServiceTest.inscriptionEtudiant_Verification_Nom" />
         <item itemvalue="JUnit.UserServiceTest.inscriptionEtudiant_hashMotDePasseEtSauvegarde" />
-        <item itemvalue="JUnit.UserServiceTest.inscriptionEtudiant_emailDejaUtilise_lanceException" />
       </list>
     </recent_temporary>
   </component>
@@ -209,7 +209,8 @@
       <workItem from="1757871383408" duration="9506000" />
       <workItem from="1757881246230" duration="39000" />
       <workItem from="1757963769367" duration="1383000" />
-      <workItem from="1757965180451" duration="6757000" />
+      <workItem from="1757965180451" duration="6887000" />
+      <workItem from="1757988945916" duration="1387000" />
     </task>
     <task id="LOCAL-00001" summary="add : docker compose">
       <option name="closed" value="true" />
