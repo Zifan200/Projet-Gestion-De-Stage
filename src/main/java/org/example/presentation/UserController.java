@@ -40,17 +40,4 @@ public class UserController {
 		return ResponseEntity.accepted().contentType(MediaType.APPLICATION_JSON).body(
 			userService.getMe(request.getHeader("Authorization")));
 	}
-
-	@PostMapping("/employer/register")
-	public ResponseEntity<String> registerEmployer(@RequestBody EmployerDto employerDto) {
-		try {
-			userService.saveEmployer(employerDto);
-		} catch (Exception e) {
-			throw new UsedEmailAddressException(
-						HttpStatus.CONFLICT,
-						"Email already taken: " + employerDto.getEmail()
-				);
-		}
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
 }

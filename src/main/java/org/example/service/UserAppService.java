@@ -7,6 +7,7 @@ import org.example.model.UserApp;
 import org.example.repository.EmployerRepository;
 import org.example.repository.UserAppRepository;
 import org.example.security.JwtTokenProvider;
+import org.example.security.exception.UsedEmailAddressException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +26,7 @@ public class UserAppService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userAppRepository;
     private final EmployerRepository employerRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     public String authenticateUser(LoginDTO loginDto) {
@@ -49,21 +50,6 @@ public class UserAppService {
         return employerOptional.isPresent() ?
                 EmployerDto.create(employerOptional.get()) :
                 EmployerDto.empty();
-    }
-
-    public void saveEmployer(EmployerDto employerDto) {
-        Optional<UserApp> user = userAppRepository.findUserAppByEmail(employerDto.getEmail());
-
-        if (user.isEmpty()) {
-            Employer employer = Employer.builder()
-                    .firstName(employerDto.getFirstName())
-                    .lastName(employerDto.getLastName())
-                    .email(employerDto.getEmail())
-                    .password(passwordEncoder.encode(employerDto.getPassword()))
-                    .since(employerDto.getSince())
-                    .build();
-            userAppRepository.save(employer);
-        }
     }
 }
 

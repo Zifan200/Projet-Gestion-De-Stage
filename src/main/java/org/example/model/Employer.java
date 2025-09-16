@@ -20,7 +20,11 @@ public class Employer extends UserApp {
     public Employer(
             Long id, String firstName, String lastName, String email, String password,
             LocalDate since){
-        super(id, firstName, lastName, Credentials.builder().email(email).password(password).role(Role.EMPLOYER).build());
+        super(id, firstName, lastName, Credentials.builder()
+                .email(email)
+                .password(password)
+                .role(Role.EMPLOYER)
+                .build());
         this.since = since;
     }
 }

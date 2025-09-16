@@ -1,5 +1,8 @@
 package org.example.service.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +17,16 @@ import org.example.model.auth.Role;
 @Setter
 public class UserDTO {
     private Long id;
+    @NotBlank(message = "First name is mandatory")
+    @Size(min = 4)
     private String firstName;
+    @NotBlank(message = "Last name is mandatory")
+    @Size(min = 2)
+    @NotBlank(message = "Email name is mandatory")
     private String lastName;
-    private String email;
+    @Email private String email;
+    @NotBlank(message = "Password name is mandatory")
+    @Size(min = 8)
     private String password;
     private Role role;
 
@@ -34,5 +44,4 @@ public class UserDTO {
         this.password = user.getPassword();
         this.role = user.getRole();
     }
-
 }
