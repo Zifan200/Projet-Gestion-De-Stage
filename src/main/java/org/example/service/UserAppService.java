@@ -7,12 +7,15 @@ import org.example.model.UserApp;
 import org.example.repository.EmployerRepository;
 import org.example.repository.UserAppRepository;
 import org.example.security.JwtTokenProvider;
+import org.example.security.exception.UsedEmailAddressException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,6 +26,8 @@ public class UserAppService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userAppRepository;
     private final EmployerRepository employerRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     public String authenticateUser(LoginDTO loginDto) {
         Authentication authentication = authenticationManager.authenticate(
@@ -47,3 +52,4 @@ public class UserAppService {
                 EmployerDto.empty();
     }
 }
+
