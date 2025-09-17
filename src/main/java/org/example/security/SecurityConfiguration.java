@@ -62,6 +62,7 @@ public class SecurityConfiguration {
                         // Use Role enum names for authorities
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(POST, "/api/etudiants/inscription").permitAll()
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console
@@ -81,7 +82,7 @@ public class SecurityConfiguration {
         // 1. Specify allowed origins (VERY IMPORTANT!)
         //    Must match your React app's URL exactly (e.g., http://localhost:3000)
         //    Do NOT use "*" if you need credentials (like sending Authorization headers)
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Adjust if your frontend runs elsewhere
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Adjust if your frontend runs elsewhere
 
         // 2. Specify allowed HTTP methods
         configuration.setAllowedMethods(Arrays.asList(

@@ -13,6 +13,7 @@ export default function EtudiantForm() {
     });
 
     const [errors, setErrors] = useState({});
+    const [message, setMessage] = useState("");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -60,16 +61,41 @@ export default function EtudiantForm() {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage("");
+
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-        } /* else {
-            setErrors({});
-            console.log("Données du formulaire :", formData);
-            alert("Formulaire soumis !");
-        }*/
+            return;
+        }
+
+        setErrors({});
+        console.log("Données du formulaire :", formData);
+
+        try {
+            const response = await fetch("http://localhost:8080/api/etudiants/inscription", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Réponse du backend :", data);
+                setMessage("Inscription réussie ✅");
+            } else if (response.status === 400) {
+                const errorData = await response.json();
+                console.error("Erreurs de validation :", errorData);
+                setMessage("Erreur de validation ❌ (vérifie tes champs)");
+            } else {
+                setMessage("Une erreur est survenue ❌");
+            }
+        } catch (error) {
+            console.error("Erreur réseau :", error);
+            setMessage("Impossible de contacter le serveur ❌");
+        }
     };
 
     return (
@@ -131,6 +157,8 @@ export default function EtudiantForm() {
                 >
                     Soumettre
                 </button>
+
+                {message && <p className="mt-4 text-center">{message}</p>}
             </form>
         </div>
     );
