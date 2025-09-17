@@ -2,6 +2,7 @@ package org.example.service.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,10 @@ public class UserDTO {
     private String lastName;
     @Email private String email;
     @NotBlank(message = "Password name is mandatory")
-    @Size(min = 8)
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
+            message = "Password must be 8-20 characters long, contain at least one uppercase, one lowercase, one number, and one special character"
+    )
     private String password;
     private Role role;
 

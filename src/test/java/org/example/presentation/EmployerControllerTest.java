@@ -1,7 +1,6 @@
 package org.example.presentation;
 
 import org.example.model.Employer;
-import org.example.security.exception.UsedEmailAddressException;
 import org.example.service.EmployerService;
 import org.example.service.dto.EmployerDto;
 import org.example.service.dto.EmployerResponseDto;
@@ -17,7 +16,6 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,24 +38,22 @@ class EmployerControllerTest {
                 .since(LocalDate.now())
                 .build();
 
-        Employer employer = Employer.builder()
-                .id(1L)
+        EmployerResponseDto employerResponseDto = EmployerResponseDto.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .email("test@google.com")
-                .password("encodedPassword")
                 .since(dto.getSince())
+                .enterpriseName("Google")
                 .build();
 
-        when(employerService.saveEmployer(dto)).thenReturn(employer);
+        when(employerService.saveEmployer(dto)).thenReturn(employerResponseDto);
 
         // Act
-        ResponseEntity response = employerController.registerEmployer(dto);
+        ResponseEntity<EmployerResponseDto> response = employerController.registerEmployer(dto);
 
         // Assert
-
         assertThat(response.getStatusCode().value()).isEqualTo(201);
-        assertThat(response.getBody()).isEqualTo(EmployerResponseDto.create(employer));
+        assertThat(response.getBody()).isEqualTo(employerResponseDto);
     }
 
     @Test
@@ -71,17 +67,7 @@ class EmployerControllerTest {
                 .since(LocalDate.now())
                 .build();
 
-        Employer employer = Employer.builder()
-                .id(1L)
-                .firstName("John")
-                .lastName("Doe")
-                .email("test@google.com")
-                .password("encodedPassword")
-                .since(dto.getSince())
-                .build();
-
         when(employerService.saveEmployer(dto)).thenThrow(new DuplicateUserException(""));
-
 
         // Act + Assert
         assertThatThrownBy(() -> employerController.registerEmployer(dto))

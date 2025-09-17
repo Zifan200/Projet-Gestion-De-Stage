@@ -23,9 +23,8 @@ public class EmployerController {
 
     @PostMapping("/register")
     public ResponseEntity<EmployerResponseDto> registerEmployer(@Valid @RequestBody EmployerDto employerDto) {
-        Employer employer = employerService.saveEmployer(employerDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(EmployerResponseDto.create(employer));
+                .body(employerService.saveEmployer(employerDto));
     }
 }

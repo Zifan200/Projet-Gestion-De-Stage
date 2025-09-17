@@ -16,15 +16,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Employer extends UserApp {
     private LocalDate since;
+    private String enterpriseName;
+    private String phone;
     @Builder
     public Employer(
             Long id, String firstName, String lastName, String email, String password,
-            LocalDate since){
+            LocalDate since, String enterpriseName, String phone){
         super(id, firstName, lastName, Credentials.builder()
                 .email(email)
                 .password(password)
                 .role(Role.EMPLOYER)
                 .build());
         this.since = since;
+        this.enterpriseName = enterpriseName;
+        this.phone = phone;
     }
 }

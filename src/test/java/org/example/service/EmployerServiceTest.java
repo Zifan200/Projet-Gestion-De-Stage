@@ -9,6 +9,7 @@ import org.example.repository.EmployerRepository;
 import org.example.repository.UserAppRepository;
 import org.example.security.exception.UsedEmailAddressException;
 import org.example.service.dto.EmployerDto;
+import org.example.service.dto.EmployerResponseDto;
 import org.example.service.exception.DuplicateUserException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +54,7 @@ class EmployerServiceTest {
                 .lastName("Test LastName")
                 .password("password")
                 .since(LocalDate.now())
+                .enterpriseName("Test enterprise")
                 .build();
 
         when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
@@ -62,13 +64,12 @@ class EmployerServiceTest {
         when(employerRepository.save(any(Employer.class)))
                 .thenAnswer(invocation -> (Employer) invocation.getArgument(0));
 
-
         // Act
-        Employer savedEmployer = employerService.saveEmployer(employerDto);
+        EmployerResponseDto savedEmployer = employerService.saveEmployer(employerDto);
 
         // Assert
         assertThat(savedEmployer)
-                .extracting(Employer::getEmail, Employer::getFirstName, Employer::getLastName)
+                .extracting(EmployerResponseDto::getEmail, EmployerResponseDto::getFirstName, EmployerResponseDto::getLastName)
                 .containsExactly("test@google.com", "Test Firstname", "Test LastName");
         verify(employerRepository).findByCredentialsEmail("test@google.com");
         verify(employerRepository).save(any(Employer.class));
@@ -88,7 +89,6 @@ class EmployerServiceTest {
 
         when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
                 .thenReturn(Optional.of(new Employer()));
-
 
         // Act + Assert
         assertThatThrownBy(() -> employerService.saveEmployer(employerDto))

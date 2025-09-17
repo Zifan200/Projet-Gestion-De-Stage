@@ -11,6 +11,7 @@ import org.example.security.JwtTokenProvider;
 import org.example.security.exception.UsedEmailAddressException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.EmployerDto;
+import org.example.service.dto.EmployerResponseDto;
 import org.example.service.dto.LoginDTO;
 import org.example.service.dto.UserDTO;
 import org.example.service.exception.DuplicateUserException;
@@ -35,7 +36,7 @@ public class EmployerService {
     private final EmailService emailService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public Employer saveEmployer(EmployerDto employerDto) {
+    public EmployerResponseDto saveEmployer(EmployerDto employerDto) {
         employerRepository.findByCredentialsEmail(employerDto.getEmail())
                 .ifPresent(e -> { throw new DuplicateUserException("Employer already exists"); });
 
@@ -45,11 +46,13 @@ public class EmployerService {
                 .email(employerDto.getEmail())
                 .password(passwordEncoder.encode(employerDto.getPassword()))
                 .since(employerDto.getSince())
+                .enterpriseName(employerDto.getEnterpriseName())
+                .phone(employerDto.getPhone())
                 .build();
 
         var savedEmployer = employerRepository.save(employer);
         eventPublisher.publishEvent(new UserCreatedEvent(savedEmployer));
         logger.info("Employer created = {}", employer.getEmail());
-        return savedEmployer;
+        return EmployerResponseDto.create(savedEmployer);
     }
 }
