@@ -29,7 +29,7 @@ public class Main {
             dto.setNom("Dupont");
             dto.setPrenom("Jean");
             dto.setCourriel("jean.dupont@example.com");
-            dto.setTelephone("5141234567");
+            dto.setTelephone("514-123-4567");
             dto.setAdresse("123 rue Principale");
             dto.setProgramme("Informatique");
             dto.setAge(22);
