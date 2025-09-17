@@ -65,7 +65,7 @@ export default function EtudiantForm() {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-        } /*else {
+        } /* else {
             setErrors({});
             console.log("Données du formulaire :", formData);
             alert("Formulaire soumis !");

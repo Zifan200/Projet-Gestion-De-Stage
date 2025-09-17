@@ -9,7 +9,7 @@ export default function EtudiantForm() {
         adresse: "",
         programme: "",
         age: "",
-        motDePasse: "", // important : il existe dans ton DTO
+        motDePasse: "",
     });
 
     const [message, setMessage] = useState("");
@@ -24,6 +24,8 @@ export default function EtudiantForm() {
         setMessage("");
 
         try {
+            console.log("Données envoyées au backend :", formData);
+            console.error("Debug formData:", formData)
             const response = await fetch("http://localhost:8080/api/etudiants/inscription", {
                 method: "POST",
                 headers: {
@@ -37,7 +39,6 @@ export default function EtudiantForm() {
                 console.log("Réponse du backend :", data);
                 setMessage("Inscription réussie ✅");
             } else if (response.status === 400) {
-                // Gestion des erreurs de validation envoyées par Spring Boot
                 const errorData = await response.json();
                 console.error("Erreurs de validation :", errorData);
                 setMessage("Erreur de validation ❌ (vérifie tes champs)");

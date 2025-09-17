@@ -22,34 +22,4 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @Bean
-    CommandLineRunner demo(UserService userService) {
-        return args -> {
-            EtudiantDTO dto = new EtudiantDTO();
-            dto.setNom("Dupont");
-            dto.setPrenom("Jean");
-            dto.setCourriel("jean.dupont@example.com");
-            dto.setTelephone("514-123-4567");
-            dto.setAdresse("123 rue Principale");
-            dto.setProgramme("Informatique");
-            dto.setAge(22);
-            dto.setMotDePasse("Password123!");
-
-            try {
-                EtudiantDTO saved = userService.inscriptionEtudiant(dto);
-                System.out.println("✅ Étudiant inscrit avec succès !");
-                System.out.println("ID : " + saved.getId());
-                System.out.println("Nom : " + saved.getNom());
-                System.out.println("Prénom : " + saved.getPrenom());
-                System.out.println("Courriel : " + saved.getCourriel());
-                System.out.println("Téléphone : " + saved.getTelephone());
-                System.out.println("Adresse : " + saved.getAdresse());
-                System.out.println("Programme : " + saved.getProgramme());
-                System.out.println("Âge : " + saved.getAge());
-                System.out.println("Mot de passe (hashé) : " + saved.getMotDePasse());
-            } catch (Exception e) {
-                System.out.println("❌ Erreur : " + e.getMessage());
-            }
-        };
-    }
 }
