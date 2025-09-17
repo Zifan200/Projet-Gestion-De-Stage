@@ -6,6 +6,7 @@ import org.example.model.auth.Credentials;
 import org.example.model.auth.Role;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -26,6 +27,11 @@ public abstract class UserApp  {
     @Embedded
     private Credentials credentials;
 
+    private boolean active = true;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime lastLoginAt;
+
     public String getEmail(){
         return credentials.getEmail();
     }
@@ -36,6 +42,18 @@ public abstract class UserApp  {
 
     public Role getRole(){
         return credentials.getRole();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.active = true;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
 
