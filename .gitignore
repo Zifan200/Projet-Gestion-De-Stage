@@ -56,3 +56,5 @@ build/
 .idea/dataSources.local.xml
 .idea/workspace.xml
 /.idea
+
+.env

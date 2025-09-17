@@ -19,22 +19,4 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
-
-    @Bean
-    CommandLineRunner init(UserAppRepository userAppRepository, PasswordEncoder passwordEncoder) {
-        return args -> {
-            Optional<UserApp> user = userAppRepository.findUserAppByEmail("employer@example.com");
-            if (user.isEmpty()) {
-                Employer employer = Employer.builder()
-                        .firstName("Jean")
-                        .lastName("Dupont")
-                        .email("employer@example.com")
-                        .password(passwordEncoder.encode("password123"))
-                        .since(LocalDate.now())
-                        .build();
-                userAppRepository.save(employer);
-            }
-            System.out.println("✅ Employer user created: \n{ \n\s'user' : 'admin@example.com',\n\s'password' : 'password123' \n}; ");
-        };
-    }
 }
