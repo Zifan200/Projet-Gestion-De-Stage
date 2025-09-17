@@ -61,21 +61,47 @@ export default function EtudiantForm() {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
         const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
+        const isEmpty = validationErrors &&
+            typeof validationErrors === 'object' &&
+            !Array.isArray(validationErrors) &&
+            Object.keys(validationErrors).length === 0;
+        if (!isEmpty) {
             setErrors(validationErrors);
-        } /* else {
-            setErrors({});
-            console.log("Données du formulaire :", formData);
-            alert("Formulaire soumis !");
-        }*/
+            return;
+        }
+        sendReq().then();
     };
+
+    const sendReq = async () => {
+        try {
+            console.log("Données envoyées au backend :", formData);
+            console.error("Debug formData:", formData)
+            const response = await fetch("http://localhost:8080/api/etudiants/inscription", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Réponse du backend :", data);
+            } else if (response.status === 400) {
+                const errorData = await response.json();
+                console.error("Erreurs de validation :", errorData);
+            } else {
+            }
+        } catch (error) {
+            console.error("Erreur réseau :", error);
+        }
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900 dark:bg-gray-800">
             <form
-                onSubmit={handleSubmit}
+                action={handleSubmit}
                 className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md w-full max-w-md"
             >
                 <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
