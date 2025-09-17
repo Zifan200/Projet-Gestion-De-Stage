@@ -5,12 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -29,4 +26,16 @@ public class InternshipOffer {
 
     private LocalDateTime publishedDate;
     private LocalDateTime expirationDate;
+
+    @Builder
+    public InternshipOffer(
+            Long id, String title, String description, String targeted_programme, LocalDateTime publishedDate, LocalDateTime expirationDate
+    ){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.targeted_programme = targeted_programme;
+        this.publishedDate = publishedDate;
+        this.expirationDate = expirationDate;
+    }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.Employer;
+import org.example.model.InternshipOffer;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +33,7 @@ public class InternshipOfferResponseDto {
         this.expirationDate = expirationDate;
     }
 
-    public static InternshipOfferResponseDto create(InternshipOfferResponseDto internshipOfferDto) {
+    public static InternshipOfferResponseDto create(InternshipOffer internshipOfferDto) {
         return InternshipOfferResponseDto.builder()
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())

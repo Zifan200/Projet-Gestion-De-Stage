@@ -11,7 +11,6 @@ import org.example.model.Employer;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 @Getter
 @Data
 public class InternshipOfferDto {
@@ -40,6 +39,8 @@ public class InternshipOfferDto {
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
     }
+
+    public InternshipOfferDto(){}
 
     public static InternshipOfferDto create(InternshipOfferDto internshipOfferDto) {
         return InternshipOfferDto.builder()
