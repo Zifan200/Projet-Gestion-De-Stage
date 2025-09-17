@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -45,7 +46,7 @@ public class EmployerService {
                 .lastName(employerDto.getLastName())
                 .email(employerDto.getEmail())
                 .password(passwordEncoder.encode(employerDto.getPassword()))
-                .since(employerDto.getSince())
+                .since(LocalDate.now())
                 .enterpriseName(employerDto.getEnterpriseName())
                 .phone(employerDto.getPhone())
                 .build();
