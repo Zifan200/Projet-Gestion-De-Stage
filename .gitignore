@@ -42,16 +42,16 @@ build/
 
 
 ### React ###
-/react-frontend/node_modules/
-/react-frontend/dist/
-/react-frontend/build/
-/react-frontend/.env
-/react-frontend/.cache
-/react-frontend/.next
-/react-frontend/out
-/react-frontend/npm-debug.log*
-/react-frontend/yarn-debug.log*
-/react-frontend/yarn-error.log*
+/projetOseFE/node_modules/
+/projetOseFE/dist/
+/projetOseFE/build/
+/projetOseFE/.env
+/projetOseFE/.cache
+/projetOseFE/.next
+/projetOseFE/out
+/projetOseFE/npm-debug.log*
+/projetOseFE/yarn-debug.log*
+/projetOseFE/yarn-error.log*
 .idea/dataSources.local.xml
 .idea/workspace.xml
 /.idea
