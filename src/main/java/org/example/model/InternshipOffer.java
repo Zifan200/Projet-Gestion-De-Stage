@@ -21,7 +21,7 @@ public class InternshipOffer {
     private Long id;
     private String title;
     private String description;
-    private String targeted_programme; //TODO: find better name for this
+    private String targeted_programme;
 
     @ManyToOne
     @JoinColumn(name = "employer_id")
