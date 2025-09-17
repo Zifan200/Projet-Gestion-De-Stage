@@ -23,13 +23,13 @@ public class UserDTO {
     private String firstName;
     @NotBlank(message = "Last name is mandatory")
     @Size(min = 2)
-    @NotBlank(message = "Email name is mandatory")
+    @NotBlank(message = "Email is mandatory")
     private String lastName;
     @Email private String email;
-    @NotBlank(message = "Password name is mandatory")
+    @NotBlank(message = "Password is mandatory")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,50}$",
-            message = "Password must be 8-20 characters long, contain at least one uppercase, one lowercase, one number, and one special character"
+            message = "Password must be 8-50 characters long, contain at least one uppercase, one lowercase, one number, and one special character"
     )
     private String password;
     private Role role;
