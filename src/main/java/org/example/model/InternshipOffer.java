@@ -21,12 +21,12 @@ public class InternshipOffer {
     private Long id;
     private String title;
     private String description;
-    private String industry; //TODO: find better name for this
+    private String targeted_programme; //TODO: find better name for this
 
     @ManyToOne
     @JoinColumn(name = "employer_id")
     private Employer employer;
-    
+
     private LocalDateTime publishedDate;
     private LocalDateTime expirationDate;
 }
