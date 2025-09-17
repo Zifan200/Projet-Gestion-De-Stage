@@ -30,7 +30,7 @@ public class EtudiantDTO {
     private String courriel;
 
     @NotBlank(message = "Le téléphone est obligatoire")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Le téléphone doit contenir 10 chiffres")
+    @Pattern(regexp = "\\d{3}-\\d{3}-\\d{4}", message = "Le téléphone doit être au format 514-123-4567")
     private String telephone;
 
     @NotBlank(message = "L'adresse est obligatoire")
