@@ -28,7 +28,7 @@ public class UserDTO {
     @Email private String email;
     @NotBlank(message = "Password name is mandatory")
     @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,50}$",
             message = "Password must be 8-20 characters long, contain at least one uppercase, one lowercase, one number, and one special character"
     )
     private String password;
