@@ -1,35 +1,95 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function EtudiantForm() {
+    const [formData, setFormData] = useState({
+        nom: "",
+        prenom: "",
+        courriel: "",
+        telephone: "",
+        adresse: "",
+        programme: "",
+        age: "",
+        motDePasse: "", // important : il existe dans ton DTO
+    });
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const [message, setMessage] = useState("");
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setMessage("");
+
+        try {
+            const response = await fetch("http://localhost:8080/api/etudiants/inscription", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Réponse du backend :", data);
+                setMessage("Inscription réussie ✅");
+            } else if (response.status === 400) {
+                // Gestion des erreurs de validation envoyées par Spring Boot
+                const errorData = await response.json();
+                console.error("Erreurs de validation :", errorData);
+                setMessage("Erreur de validation ❌ (vérifie tes champs)");
+            } else {
+                setMessage("Une erreur est survenue ❌");
+            }
+        } catch (error) {
+            console.error("Erreur réseau :", error);
+            setMessage("Impossible de contacter le serveur ❌");
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "0 auto" }}>
+            <h2>Inscription Étudiant</h2>
+
+            <div>
+                <label>Nom :</label>
+                <input name="nom" value={formData.nom} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Prénom :</label>
+                <input name="prenom" value={formData.prenom} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Courriel :</label>
+                <input name="courriel" type="email" value={formData.courriel} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Téléphone :</label>
+                <input name="telephone" value={formData.telephone} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Adresse :</label>
+                <input name="adresse" value={formData.adresse} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Programme :</label>
+                <input name="programme" value={formData.programme} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Âge :</label>
+                <input name="age" type="number" value={formData.age} onChange={handleChange} />
+            </div>
+            <div>
+                <label>Mot de passe :</label>
+                <input name="motDePasse" type="password" value={formData.motDePasse} onChange={handleChange} />
+            </div>
+
+            <button type="submit">Soumettre</button>
+
+            {message && <p>{message}</p>}
+        </form>
+    );
 }
-
-export default App
