@@ -13,8 +13,8 @@ export const employerSchema = z.object({
     enterpriseName: z.string().min(2),
     phone : z.union([
         z.string().regex(/^\d{10}$/, "Le numéro doit contenir exactement 10 chiffres"),
-        z.literal(""), // accepte vide
-        z.null(),      // accepte null
+        z.literal(""),
+        z.null(),
     ])
         .transform((val) => (val === "" ? null : val)),
 }).refine((data) => data.password === data.confirmPassword, {

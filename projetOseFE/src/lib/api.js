@@ -19,7 +19,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        // log, toast, ou redirect login
         return Promise.reject(error)
     }
 )

@@ -8,8 +8,12 @@ import {api} from "../../lib/api.js";
 import {employerService} from "../../services/employerService.js";
 import { Toaster, toast } from 'sonner';
 import React from "react";
+import {Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
-export function EmployerCreationPage() {
+export const EmployerSignUpPage = () => {
+    const navigate = useNavigate()
+
     const form = useForm({
         resolver: zodResolver(employerSchema),
         defaultValues: {
@@ -27,9 +31,14 @@ export function EmployerCreationPage() {
     const onSubmit = async (data) => {
         try {
             const res = await employerService.register(data)
-            console.log(res)
             form.reset()
-            toast(`Bonjour ${res.firstName}, ton compte pour ${res.enterpriseName} a été créé avec succes!`)
+            toast.success(
+                `Bonjour ${res.firstName}, ton compte pour ${res.enterpriseName} a été créé avec succès!`,
+                { duration: 3000 }
+            )
+            setTimeout(() => {
+                navigate("/login/employer")
+            }, 4500)
         } catch (err) {
             console.error("❌ Error creating employer:", err)
             toast(`❌ Une erreur est survenue veillez réesayer`)
@@ -69,7 +78,7 @@ export function EmployerCreationPage() {
                     </div>
                     <div className={"flex flex-col mb-7"}>
                         <Label name="confirmPassword" label={"*Confirmation de mot de passe"} />
-                        <Input name="confirmPassword" type="text" label="Password" placeholder={"Password"} />
+                        <Input name="confirmPassword" type="password" label="Password" placeholder={"Password"} />
                     </div>
                     <div className={"flex flex-col mb-7"}>
                         <Label name="enterpriseName" label={"*Entrez l'entreprise que vous représenter"} />
@@ -87,9 +96,10 @@ export function EmployerCreationPage() {
                     >
                         Créé un compte pour employer!
                     </button>
+                    <div className={"text-center mt-2 text-zinc-600"}>Vous avez déja un compte? <span className={"text-blue-400"}><Link to={"/login/employer"}>Log in</Link></span></div>
                 </form>
             </FormProvider>
         </div>
-        <Toaster position="top-right" />
+
     </div>
 }
