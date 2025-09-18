@@ -4,20 +4,41 @@ import Input from "../../components/ui/Input.jsx";
 import {employerSchema} from "../../models/employer.js";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Label from "../../components/ui/label.js";
+import {api} from "../../lib/api.js";
+import {employerService} from "../../services/employerService.js";
+import { Toaster, toast } from 'sonner';
+import React from "react";
 
 export function EmployerCreationPage() {
     const form = useForm({
         resolver: zodResolver(employerSchema),
         defaultValues: {
-            email: '',
-            firstName: '',
-            lastName: '',
-            password: '',
+            email: "",
+            firstName: "",
+            lastName: "",
+            password: "",
+            confirmPassword : "",
+            enterpriseName : "",
+            phone : ""
         },
     })
 
-    const onSubmit = (e) => {
-        console.log(e)
+
+    const onSubmit = async (data) => {
+        try {
+            const res = await employerService.register(data)
+            console.log(res)
+            form.reset()
+            toast(`Bonjour ${res.firstName}, ton compte pour ${res.enterpriseName} a été créé avec succes!`)
+        } catch (err) {
+            console.error("❌ Error creating employer:", err)
+            toast(`❌ Une erreur est survenue veillez réesayer`)
+        }
+    }
+
+    const onError = (err) => {
+        console.log("SUBMIT FAIL ❌", err)
+        toast(`Veillez remplir les informations`)
     }
 
 
@@ -28,7 +49,7 @@ export function EmployerCreationPage() {
             <h4 className={"text-lg text-zinc-500 mb-14"}>Rejoignez <span className="font-semibold">Ose</span> et commencez à publier vos offres de stage pour
                 connecter votre entreprise avec les étudiants talentueux.</h4>
             <FormProvider {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="">
+                <form onSubmit={form.handleSubmit(onSubmit, onError)} className="">
                     <div className={"flex flex-col mb-7"}>
                         <Label name="email" label={"*Entrez votre email"} />
                         <Input name="email"  placeholder="Email" />
@@ -47,20 +68,21 @@ export function EmployerCreationPage() {
                         <Input name="password" type="password" label="Password" placeholder={"Password"} />
                     </div>
                     <div className={"flex flex-col mb-7"}>
-                        <Label name="password" label={"*Confirmation de mot de passe"} />
-                        <Input name="confirmPassword" type="confirmPassword" label="Password" placeholder={"Password"} />
+                        <Label name="confirmPassword" label={"*Confirmation de mot de passe"} />
+                        <Input name="confirmPassword" type="text" label="Password" placeholder={"Password"} />
                     </div>
                     <div className={"flex flex-col mb-7"}>
-                        <Label name="enterprise" label={"*Entrez l'entreprise que vous représenter"} />
-                        <Input name="enterprise" type="text" label="Password de confirmation" placeholder={"Nom de l'entreprise"}/>
+                        <Label name="enterpriseName" label={"*Entrez l'entreprise que vous représenter"} />
+                        <Input name="enterpriseName" type="text" label="Password de confirmation" placeholder={"Nom de l'entreprise"}/>
                     </div>
                     <div className={"flex flex-col mb-7"}>
-                        <Label name="enterprise" label={"Numéro de téléphone"} />
-                        <Input name="enterprise" type="text" label="Téléphone de l'entreprise" placeholder={"438-999-9999"}/>
+                        <Label name="phone" label={"Numéro de téléphone"} />
+                        <Input name="phone" type="text" label="Téléphone de l'entreprise" placeholder={"438-999-9999"}/>
                     </div>
 
                     <button
                         type="submit"
+                        onClick={() => console.log("asdf")}
                         className=" p-4 bg-black rounded-xl w-full text-white mt-10 text-xl"
                     >
                         Créé un compte pour employer!
@@ -68,5 +90,6 @@ export function EmployerCreationPage() {
                 </form>
             </FormProvider>
         </div>
+        <Toaster position="top-right" />
     </div>
 }

@@ -2,8 +2,8 @@ import {api} from "../lib/api.js";
 
 
 export const employerService = {
-    async create(employer) {
-        const res = await api.post('/employers', employer)
+    async register(employer) {
+        const res = await api.post('/employer/register', employer)
         return res.data
     },
 }
