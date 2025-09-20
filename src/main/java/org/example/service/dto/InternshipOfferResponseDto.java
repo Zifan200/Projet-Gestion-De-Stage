@@ -1,6 +1,7 @@
 package org.example.service.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Data
 public class InternshipOfferResponseDto {
+
     private Long id;
     private String title;
     private String description;
@@ -33,14 +35,32 @@ public class InternshipOfferResponseDto {
         this.expirationDate = expirationDate;
     }
 
-    public static InternshipOfferResponseDto create(InternshipOffer internshipOfferDto) {
+    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
+    public InternshipOfferResponseDto(String title, String description, String target_programme,
+                              EmployerResponseDto employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+        this.title = title;
+        this.description = description;
+        this.targeted_programme = target_programme;
+        this.employer = Employer.builder()
+                .firstName(employer.getFirstName())
+                .lastName(employer.getLastName())
+                .email(employer.getEmail())
+                .enterpriseName(employer.getEnterpriseName())
+                .phone(employer.getPhone())
+                .since(employer.getSince())
+                .build();
+        this.publishedDate = publishedDate;
+        this.expirationDate = expirationDate;
+    }
+
+    public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
         return InternshipOfferResponseDto.builder()
-                .title(internshipOfferDto.getTitle())
-                .description(internshipOfferDto.getDescription())
-                .target_programme(internshipOfferDto.getTargeted_programme())
-                .employer(internshipOfferDto.getEmployer())
-                .publishedDate(internshipOfferDto.getPublishedDate())
-                .expirationDate(internshipOfferDto.getExpirationDate())
+                .title(internshipOffer.getTitle())
+                .description(internshipOffer.getDescription())
+                .target_programme(internshipOffer.getTargeted_programme())
+                .employer(internshipOffer.getEmployer())
+                .publishedDate(internshipOffer.getPublishedDate())
+                .expirationDate(internshipOffer.getExpirationDate())
                 .build();
     }
 

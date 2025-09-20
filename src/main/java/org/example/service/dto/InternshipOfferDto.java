@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.example.model.Employer;
+import org.example.model.InternshipOffer;
 
 import java.time.LocalDateTime;
 
@@ -25,13 +25,20 @@ public class InternshipOfferDto {
     @NotEmpty
     private String targeted_programme;
 
+    @NotBlank(message = "Le \"employer\" est obligatoire")
+    @NotEmpty
     private Employer employer;
+
+    @NotBlank(message = "Le \"published date\" est obligatoire")
+    @NotEmpty
     private LocalDateTime publishedDate;
+
     private LocalDateTime expirationDate;
 
     @Builder
-    public InternshipOfferDto(String title, String description, String target_programme,
+    public InternshipOfferDto(Long id, String title, String description, String target_programme,
                               Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.targeted_programme = target_programme;
@@ -40,16 +47,36 @@ public class InternshipOfferDto {
         this.expirationDate = expirationDate;
     }
 
+    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
+    public InternshipOfferDto(Long id, String title, String description, String target_programme,
+                              EmployerResponseDto employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.targeted_programme = target_programme;
+        this.employer = Employer.builder()
+                .firstName(employer.getFirstName())
+                .lastName(employer.getLastName())
+                .email(employer.getEmail())
+                .enterpriseName(employer.getEnterpriseName())
+                .phone(employer.getPhone())
+                .since(employer.getSince())
+                .build();
+        this.publishedDate = publishedDate;
+        this.expirationDate = expirationDate;
+    }
+
     public InternshipOfferDto(){}
 
-    public static InternshipOfferDto create(InternshipOfferDto internshipOfferDto) {
+    public static InternshipOfferDto create(InternshipOffer internshipOffer) {
         return InternshipOfferDto.builder()
-                .title(internshipOfferDto.getTitle())
-                .description(internshipOfferDto.getDescription())
-                .target_programme(internshipOfferDto.getTargeted_programme())
-                .employer(internshipOfferDto.getEmployer())
-                .publishedDate(internshipOfferDto.getPublishedDate())
-                .expirationDate(internshipOfferDto.getExpirationDate())
+                .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
+                .description(internshipOffer.getDescription())
+                .target_programme(internshipOffer.getTargeted_programme())
+                .employer(internshipOffer.getEmployer())
+                .publishedDate(internshipOffer.getPublishedDate())
+                .expirationDate(internshipOffer.getExpirationDate())
                 .build();
     }
 

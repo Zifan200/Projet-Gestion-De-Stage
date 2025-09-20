@@ -29,13 +29,15 @@ public class InternshipOffer {
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targeted_programme, LocalDateTime publishedDate, LocalDateTime expirationDate
+            Long id, String title, String description, String targeted_programme, Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate
     ){
         this.id = id;
         this.title = title;
         this.description = description;
+        this.employer = employer;
         this.targeted_programme = targeted_programme;
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
+
+        this.publishedDate = publishedDate; // date when posted
+        this.expirationDate = expirationDate; // optional expiration date for application to the offer
     }
 }

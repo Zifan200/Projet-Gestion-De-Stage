@@ -13,23 +13,28 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class InternshipOfferService {
+
     private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
     private final InternshipOfferRepository internshipOfferRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
-    public InternshipOfferResponseDto createInternshipOffer(InternshipOfferDto intershipOfferDto){
-        InternshipOffer offer = InternshipOffer.builder()
-                .title(intershipOfferDto.getTitle())
-                .description(intershipOfferDto.getDescription())
-                .targeted_programme(intershipOfferDto.getTargeted_programme())
-                .publishedDate(intershipOfferDto.getPublishedDate())
-                .expirationDate(intershipOfferDto.getExpirationDate())
+
+
+    public InternshipOfferResponseDto createInternshipOffer(InternshipOfferDto internshipOfferDto){
+        InternshipOffer internshipOffer = InternshipOffer.builder()
+                .title(internshipOfferDto.getTitle())
+                .description(internshipOfferDto.getDescription())
+                .targeted_programme(internshipOfferDto.getTargeted_programme())
+                .employer(internshipOfferDto.getEmployer())
+                .publishedDate(internshipOfferDto.getPublishedDate())
+                .expirationDate(internshipOfferDto.getExpirationDate())
                 .build();
 
-        var savedInternshipOffer =  internshipOfferRepository.save(offer);
-        //TODO: add event for internship offer (publication / creation)
-        //        eventPublisher.publishEvent(new User);
-        logger.info("InternshipOffer created = {}", offer.getTitle());
+        var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
+        //***
+        //TODO: add event for internship internshipOffer (publication / creation)
+        // eventPublisher.publishEvent(new InternshipOffer);
+        //***
+        logger.info("InternshipOffer created = \"{}\"", internshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
 }
