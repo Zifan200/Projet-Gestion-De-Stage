@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/employer/internship")
 public class InternshipOfferController {
-    private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
     private final InternshipOfferService internshipOfferService;
 
     @PostMapping("/create_offer")
-    public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(@Valid @RequestBody InternshipOfferDto internshipOfferDto) {
-        logger.info("InternshipOffer created (Controller) = \"{}\"", internshipOfferDto.getTitle());
+    public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(@RequestBody InternshipOfferDto internshipOfferDto) {
+        System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHH");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(internshipOfferService.saveInternshipOffer(internshipOfferDto));

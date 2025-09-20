@@ -1,7 +1,9 @@
 package org.example.service.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -14,22 +16,23 @@ import java.time.LocalDateTime;
 @Data
 public class InternshipOfferDto {
     private Long id;
-    @NotBlank(message = "Le \"title\" est obligatoire")
+    @NotBlank(message = "required: title")
+    @Size(min = 4)
     @NotEmpty
     private String title;
-    @NotBlank(message = "Le \"description\" est obligatoire")
+
+    @NotBlank(message = "required: description")
     @NotEmpty
     private String description;
-    @NotBlank(message = "Le \"targeted programme\" est obligatoire")
+
+    @NotBlank(message = "required: targeted programme")
     @NotEmpty
     private String targetedProgramme;
 
-    @NotBlank(message = "Le \"employer email\" est obligatoire")
-    @NotEmpty
+    @NotBlank(message = "required: employer email")
+    @Email
     private String employerEmail;
 
-    @NotBlank(message = "Le \"published date\" est obligatoire")
-    @NotEmpty
     private LocalDateTime publishedDate;
 
     private LocalDateTime expirationDate;
