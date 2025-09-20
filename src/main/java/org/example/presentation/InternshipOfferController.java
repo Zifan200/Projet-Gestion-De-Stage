@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/employer/internshipOffers")
+@RequestMapping("/api/v1/employer/internship")
 public class InternshipOfferController {
     private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
     private final InternshipOfferService internshipOfferService;
