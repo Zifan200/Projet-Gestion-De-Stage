@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.repository.EmployerRepository;
@@ -10,6 +11,7 @@ import org.example.service.dto.InternshipOfferDto;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ public class InternshipOfferService {
     private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
     private final EmployerRepository employerRepository;
     private final InternshipOfferRepository internshipOfferRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
 
 
@@ -46,10 +49,7 @@ public class InternshipOfferService {
                 .build();
 
         var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
-        //***
-        //TODO: add event for internship internshipOffer (publication / creation)
-        // eventPublisher.publishEvent(new InternshipOffer);
-        //***
+        eventPublisher.publishEvent(new EmployerCreatedInternshipOfferEvent(savedInternshipOffer));
         logger.info("InternshipOffer created = \"{}\"", internshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }

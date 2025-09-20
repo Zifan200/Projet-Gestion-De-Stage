@@ -1,5 +1,7 @@
 package org.example.service;
 
+import org.example.event.EmployerCreatedInternshipOfferEvent;
+import org.example.event.UserCreatedEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.repository.EmployerRepository;
@@ -108,7 +110,7 @@ public class InternshipOfferServiceTest {
                 .containsExactly("recherche Scratch Developer", offerPublishDateTime);
 
         verify(internshipOfferRepository).save(any(InternshipOffer.class));
-        // TODO: verify(eventPublisher).publishEvent(any(UserCreatedEvent.class));
+        verify(eventPublisher).publishEvent(any(EmployerCreatedInternshipOfferEvent.class));
     }
 
     @Test
@@ -134,7 +136,7 @@ public class InternshipOfferServiceTest {
         assertTrue(savedOffer.getEmployerEmail().equalsIgnoreCase("test@google.com"));
         assertNotNull(employerRepository.findByCredentialsEmail("test@google.com"));
 
-        // TODO: verify(eventPublisher).publishEvent(any(UserCreatedEvent.class));
+        verify(eventPublisher).publishEvent(any(EmployerCreatedInternshipOfferEvent.class));
     }
 
     @Test
