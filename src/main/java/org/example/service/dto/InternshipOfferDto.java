@@ -1,6 +1,5 @@
 package org.example.service.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
@@ -23,9 +22,9 @@ public class InternshipOfferDto {
     private String description;
     @NotBlank(message = "Le \"targeted programme\" est obligatoire")
     @NotEmpty
-    private String targeted_programme;
+    private String targetedProgramme;
 
-    @NotBlank(message = "Le \"employer\" est obligatoire")
+    @NotBlank(message = "Le \"employer email\" est obligatoire")
     @NotEmpty
     private Employer employer;
 
@@ -36,24 +35,24 @@ public class InternshipOfferDto {
     private LocalDateTime expirationDate;
 
     @Builder
-    public InternshipOfferDto(Long id, String title, String description, String target_programme,
+    public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.targeted_programme = target_programme;
+        this.targetedProgramme = targetedProgramme;
         this.employer = employer;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
     }
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
-    public InternshipOfferDto(Long id, String title, String description, String target_programme,
+    public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               EmployerResponseDto employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.targeted_programme = target_programme;
+        this.targetedProgramme = targetedProgramme;
         this.employer = Employer.builder()
                 .firstName(employer.getFirstName())
                 .lastName(employer.getLastName())
@@ -73,7 +72,7 @@ public class InternshipOfferDto {
                 .id(internshipOffer.getId())
                 .title(internshipOffer.getTitle())
                 .description(internshipOffer.getDescription())
-                .target_programme(internshipOffer.getTargeted_programme())
+                .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .employer(internshipOffer.getEmployer())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())

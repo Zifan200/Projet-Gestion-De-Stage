@@ -5,11 +5,9 @@ import org.example.model.InternshipOffer;
 import org.example.repository.InternshipOfferRepository;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.dto.InternshipOfferDto;
-import org.example.service.exception.DuplicateUserException;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +19,7 @@ public class InternshipOfferService {
 
 
 
-    public InternshipOfferResponseDto createInternshipOffer(InternshipOfferDto internshipOfferDto){
+    public InternshipOfferResponseDto saveInternshipOffer(InternshipOfferDto internshipOfferDto){
         if(internshipOfferDto.getTitle().isBlank() ||
             internshipOfferDto.getEmployer() == null ||
             internshipOfferDto.getPublishedDate() == null
@@ -32,7 +30,7 @@ public class InternshipOfferService {
         InternshipOffer internshipOffer = InternshipOffer.builder()
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())
-                .targeted_programme(internshipOfferDto.getTargeted_programme())
+                .targetedProgramme(internshipOfferDto.getTargetedProgramme())
                 .employer(internshipOfferDto.getEmployer())
                 .publishedDate(internshipOfferDto.getPublishedDate())
                 .expirationDate(internshipOfferDto.getExpirationDate())

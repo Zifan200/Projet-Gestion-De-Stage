@@ -18,10 +18,10 @@ public class InternshipOffer {
     private Long id;
     private String title;
     private String description;
-    private String targeted_programme;
+    private String targetedProgramme;
 
     @ManyToOne
-    @JoinColumn(name = "employer_id")
+    @JoinColumn(name = "employer_id", referencedColumnName = "id")
     private Employer employer;
 
     private LocalDateTime publishedDate;
@@ -29,13 +29,13 @@ public class InternshipOffer {
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targeted_programme, Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate
     ){
         this.id = id;
         this.title = title;
         this.description = description;
         this.employer = employer;
-        this.targeted_programme = targeted_programme;
+        this.targetedProgramme = targetedProgramme;
 
         this.publishedDate = publishedDate; // date when posted
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
