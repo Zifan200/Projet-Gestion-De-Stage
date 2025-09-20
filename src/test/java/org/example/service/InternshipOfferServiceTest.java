@@ -5,7 +5,6 @@ import org.example.model.InternshipOffer;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.service.dto.EmployerDto;
-import org.example.service.dto.EmployerResponseDto;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -34,6 +34,8 @@ public class InternshipOfferServiceTest {
     private EmployerRepository employerRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
     @InjectMocks
     private EmployerService employerService;
 
@@ -42,16 +44,8 @@ public class InternshipOfferServiceTest {
     @InjectMocks
     private InternshipOfferService internshipOfferService;
 
-
-    //TODO: implement EmployerCreatedInternshipOfferEvent in service
-    @Mock
-    private ApplicationEventPublisher eventPublisher;
-
-
-    @Test
-    void createInternshipOffer_shouldSaveInternshipOffer(){
-        //Arrange
-        EmployerDto employerDto = EmployerDto.builder()
+    private EmployerDto buildEmployerDto() {
+        return EmployerDto.builder()
                 .email("test@google.com")
                 .firstName("Test Firstname")
                 .lastName("Test LastName")
@@ -59,81 +53,92 @@ public class InternshipOfferServiceTest {
                 .since(LocalDate.now())
                 .enterpriseName("Test enterprise")
                 .build();
+    }
 
+    private Employer buildEmployer() {
+        return Employer.builder()
+                .email("test@google.com")
+                .firstName("Test Firstname")
+                .lastName("Test LastName")
+                .password("password")
+                .since(LocalDate.now())
+                .enterpriseName("Test enterprise")
+                .build();
+    }
 
-        when(employerRepository.save(any(Employer.class))).thenAnswer(invocation -> (Employer) invocation.getArgument(0));
-        when(passwordEncoder.encode(employerDto.getPassword())).thenReturn("encodedPassword123");
-        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenAnswer(invocation -> (InternshipOffer) invocation.getArgument(0));
-
-        LocalDateTime offerPublishDateTime = LocalDateTime.now();
-        //Act
-        EmployerResponseDto savedEmployer = employerService.saveEmployer(employerDto);
-        InternshipOfferDto internshipOfferDto = InternshipOfferDto.fromEmployerResponseDtoBuilder()
+    private InternshipOffer buildInternshipOffer(Employer employer, LocalDateTime offerPublishDateTime) {
+        return InternshipOffer.builder()
                 .title("recherche Scratch Developer")
                 .description("loremipsum")
-                .employer(savedEmployer)
+                .employer(employer)
                 .publishedDate(offerPublishDateTime)
                 .build();
+    }
 
+    private InternshipOfferDto buildInternshipOfferDto(String email, LocalDateTime offerPublishDateTime) {
+        return InternshipOfferDto.builder()
+                .title("recherche Scratch Developer")
+                .description("loremipsum")
+                .employerEmail(email)
+                .publishedDate(offerPublishDateTime)
+                .build();
+    }
+
+    @Test
+    void createInternshipOffer_shouldSaveInternshipOffer() {
+        //Arrange
+        Employer employer = buildEmployer();
+        EmployerDto employerDto = buildEmployerDto();
+        LocalDateTime offerPublishDateTime = LocalDateTime.now();
+        InternshipOffer createdOffer = buildInternshipOffer(employer, offerPublishDateTime);
+
+        when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
+                .thenReturn(Optional.of(employer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class)))
+                .thenReturn(createdOffer);
+
+        //Act
+        InternshipOfferDto internshipOfferDto = buildInternshipOfferDto(employerDto.getEmail(), offerPublishDateTime);
         InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(internshipOfferDto);
 
         //Assert
         assertNotNull(savedOffer);
         assertThat(savedOffer)
                 .extracting(InternshipOfferResponseDto::getTitle, InternshipOfferResponseDto::getPublishedDate)
-                .containsExactly("recherche Scratch Developer", offerPublishDateTime );
+                .containsExactly("recherche Scratch Developer", offerPublishDateTime);
 
         verify(internshipOfferRepository).save(any(InternshipOffer.class));
-
-        //TODO:implement this line of code below (related to events)
-        // verify(eventPubl1isher).publishEvent(any(UserCreatedEvent.class));
+        // TODO: verify(eventPublisher).publishEvent(any(UserCreatedEvent.class));
     }
 
-    //test publishing date is current time
     @Test
-    void createInternshipOffer_shouldHaveReferenceToEmployer(){
+    void createInternshipOffer_shouldHaveReferenceToEmployer() {
         //Arrange
-        EmployerDto employerDto = EmployerDto.builder()
-                .email("test@google.com")
-                .firstName("Test Firstname")
-                .lastName("Test LastName")
-                .password("password")
-                .since(LocalDate.now())
-                .enterpriseName("Test enterprise")
-                .build();
-
-        when(employerRepository.save(any(Employer.class)))
-                .thenAnswer(invocation -> (Employer) invocation.getArgument(0));
-        when(passwordEncoder.encode(employerDto.getPassword()))
-                .thenReturn("encodedPassword123");
-        when(internshipOfferRepository.save(any(InternshipOffer.class)))
-                .thenAnswer(invocation -> (InternshipOffer) invocation.getArgument(0));
-
+        Employer employer = buildEmployer();
+        EmployerDto employerDto = buildEmployerDto();
         LocalDateTime offerPublishDateTime = LocalDateTime.now();
-        //Act
-        EmployerResponseDto savedEmployer = employerService.saveEmployer(employerDto);
-        InternshipOfferDto internshipOfferDto = InternshipOfferDto.fromEmployerResponseDtoBuilder()
-                .title("recherche Scratch Developer")
-                .description("loremipsum")
-                .employer(savedEmployer)
-                .publishedDate(offerPublishDateTime)
-                .build();
+        InternshipOffer createdOffer = buildInternshipOffer(employer, offerPublishDateTime);
 
-        InternshipOfferResponseDto savedOffer =  internshipOfferService.saveInternshipOffer(internshipOfferDto);
+        when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
+                .thenReturn(Optional.of(employer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class)))
+                .thenReturn(createdOffer);
+
+        //Act
+        InternshipOfferDto internshipOfferDto = buildInternshipOfferDto(employerDto.getEmail(), offerPublishDateTime);
+        InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(internshipOfferDto);
 
         //Assert
         assertNotNull(savedOffer);
         assertNotNull(savedOffer.getEmployerEmail());
-
         assertTrue(savedOffer.getEmployerEmail().equalsIgnoreCase("test@google.com"));
         assertNotNull(employerRepository.findByCredentialsEmail("test@google.com"));
 
-        //TODO:implement this line of code below
-        // verify(eventPubl1isher).publishEvent(any(UserCreatedEvent.class));
+        // TODO: verify(eventPublisher).publishEvent(any(UserCreatedEvent.class));
     }
 
     @Test
-    public void createOfferWithMissingInformation_shouldNotSave(){
+    void createOfferWithMissingInformation_shouldNotSave() {
         InternshipOfferDto internshipOfferDto = InternshipOfferDto.builder()
                 .title("recherche Scratch Developer")
                 .description("loremipsum")
