@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "../styles/EtudiantForm.module.css";
+import { Link } from "react-router-dom";
 
 export default function EtudiantForm() {
     const [formData, setFormData] = useState({
@@ -74,7 +75,7 @@ export default function EtudiantForm() {
             <form className={styles.formulaire} onSubmit={handleSubmit}>
                 <h2 className={styles.titre}>Inscription Étudiant</h2>
 
-                {["nom","prenom","courriel","telephone","adresse","programme","age"].map(field => (
+                {["nom", "prenom", "courriel", "telephone", "adresse", "programme", "age"].map(field => (
                     <div key={field}>
                         <input
                             className={styles.inputField}
@@ -100,6 +101,11 @@ export default function EtudiantForm() {
 
                 <button type="submit" className={styles.submitButton}>Soumettre</button>
                 {message && <p className={styles.message}>{message}</p>}
+                <div className={styles.linkContainer}>
+                    <Link to="/connexion-etudiant" className="text-blue-600 hover:underline">
+                        Déjà inscrit ? Connectez-vous
+                    </Link>
+                </div>
             </form>
         </div>
     );

@@ -58,3 +58,17 @@
     margin-top: 1rem;
     font-weight: bold;
 }
+
+.linkContainer {
+    margin-top: 1.5rem;
+}
+
+.link {
+    color: #3b82f6;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #2563eb;
+}
