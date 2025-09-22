@@ -58,3 +58,5 @@ build/
 /.idea
 
 .env
+
+projetOseFE/bun.lock
