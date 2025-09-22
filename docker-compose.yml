@@ -18,12 +18,13 @@ services:
   web:
     container_name: react-frontend
     build:
-      context: ./react-frontend
+      context: ./projetOseFE
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:8080
+      - REACT_PUBLIC_API_URL=http://localhost:8080/api/v1
     stdin_open: true
     tty: true
     depends_on:
@@ -31,7 +32,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:16
+    image: postgres:17
     restart: always
     environment:
       - POSTGRES_DB=mydb

@@ -20,11 +20,13 @@ public class UserService {
         if(etudiantRepository.existsByCourriel(etudiantDTO.getCourriel())){
             throw new RuntimeException("Email already in use");
         }
+        System.out.println("service");
         Etudiant etudiant = EtudiantDTO.toEntity(etudiantDTO);
 
         etudiant.setMotDePasse(passwordEncoder.encode(etudiantDTO.getMotDePasse()));
 
         Etudiant etudiantSaved = etudiantRepository.save(etudiant);
+        System.out.println("service marche");
 
 
         return EtudiantDTO.fromEntity(etudiantSaved);
