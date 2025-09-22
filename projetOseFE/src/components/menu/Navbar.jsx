@@ -45,6 +45,7 @@ const Navbar = () => {
     return (
         <nav
             ref={wrapperRef}
+            onMouseLeave={scheduleClose}
             className="relative flex items-center px-8 py-4  border-b border-zinc-200 "
         >
             <div className="text-xl font-bold mr-8">OSE 2.0</div>

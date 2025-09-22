@@ -48,6 +48,8 @@ public class SecurityConfiguration {
     private static final String USER_PATH = "/user/**";
     private static final String EMPLOYER_PATH = "/employer/**";
 
+    private static final String ETUDIANT_PATH = "/api/etudiants/inscription";
+
 
 
     @Bean
@@ -62,6 +64,7 @@ public class SecurityConfiguration {
                         // Use Role enum names for authorities
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(POST, ETUDIANT_PATH).permitAll()
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console

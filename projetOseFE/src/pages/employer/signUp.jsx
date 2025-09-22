@@ -54,7 +54,7 @@ export const EmployerSignUpPage = () => {
     return <div className={"flex"}>
         <Image src={"/assets/img/1.jpg"} className={"w-1/2 max-h-[100vh]"}/>
         <div className={"flex flex-col p-22 m-auto w-4/10 "}>
-            <h1 className={"text-5xl mb-10"}>Créé un compte pour employer</h1>
+            <h1 className={"text-5xl mb-10 text-black"}>Créé un compte pour employer</h1>
             <h4 className={"text-lg text-zinc-500 mb-14"}>Rejoignez <span className="font-semibold">Ose</span> et commencez à publier vos offres de stage pour
                 connecter votre entreprise avec les étudiants talentueux.</h4>
             <FormProvider {...form}>
