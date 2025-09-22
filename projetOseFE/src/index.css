@@ -1,10 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    color-scheme: light dark;
+    color: #000;
     background-color: #ffffff;
 }
 
@@ -19,6 +17,5 @@ a:hover {
 
 body {
     margin: 0;
-    background-color: inherit;
     font-family: inherit;
 }
