@@ -16,6 +16,8 @@ import java.util.Date;
 public class JwtTokenProvider{
 	@Value("${application.security.jwt.expiration}")
 	private int expirationInMs;
+	@Value("${application.security.jwt.reset-expiration}")
+	private long resetExpirationInMs;
 	@Value("${application.security.jwt.secret-key}")
 	private final String jwtSecret = "2B7E151628AED2A6ABF7158809CF4F3C2B7E151628AED2A6ABF7158809CF4F3C";
 
@@ -27,6 +29,17 @@ public class JwtTokenProvider{
 			.setExpiration(new Date(nowMillis + expirationInMs))
 			.claim("authorities", authentication.getAuthorities())
 			.signWith(key());
+		return builder.compact();
+	}
+
+	public String generatePasswordResetToken(String email) {
+		long nowMillis = System.currentTimeMillis();
+		JwtBuilder builder = Jwts.builder()
+				.setSubject(email)
+				.setIssuedAt(new Date(nowMillis))
+				.setExpiration(new Date(nowMillis + resetExpirationInMs))
+				.claim("type", "password_reset")
+				.signWith(key());
 		return builder.compact();
 	}
 
