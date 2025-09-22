@@ -1,43 +1,34 @@
-<<<<<<< HEAD
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import EtudiantForm from "./components/EtudiantForm";
-import EtudiantConnection from "./components/EtudiantConnection";
-
-function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/inscription-etudiant" element={<EtudiantForm />} />
-                <Route path="/connexion-etudiant" element={<EtudiantConnection />} /> {/* <-- nouvelle route */}
-            </Routes>
-        </Router>
-    );
-}
-
-export default App;
-=======
-import React, { useEffect } from 'react'
-import { BrowserRouter,Routes,  Route, Link } from "react-router-dom";
-import { EmployerSignUpPage} from "./pages/employer/signUp.jsx";
-import {MegaMenu} from "./components/menu/Menu.jsx";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/menu/Navbar.jsx";
-import {EmployerLoginPage} from "./pages/employer/login.jsx";
 
+// Pages Étudiant
+import Home from "./components/Home.jsx";
+import EtudiantForm from "./components/EtudiantForm.jsx";
+import EtudiantConnection from "./components/EtudiantConnection.jsx";
+
+// Pages Employeur
+import { EmployerSignUpPage } from "./pages/employer/signUp.jsx";
+import { EmployerLoginPage } from "./pages/employer/login.jsx";
 
 function App() {
     return (
         <BrowserRouter>
-            <Navbar/>
+            <Navbar />
             <Routes>
-                <Route path="/" element={<h1 className="p-4">Welcome Home 🚀</h1>} />
+                {/* Pages principales */}
+                <Route path="/" element={<Home />} />
+
+                {/* Routes Étudiant */}
+                <Route path="/signup/etudiant" element={<EtudiantForm />} />
+                <Route path="/login/etudiant" element={<EtudiantConnection />} />
+
+                {/* Routes Employeur */}
                 <Route path="/signup/employer" element={<EmployerSignUpPage />} />
                 <Route path="/login/employer" element={<EmployerLoginPage />} />
             </Routes>
         </BrowserRouter>
-    )
+    );
 }
 
-export default App
->>>>>>> main
+export default App;

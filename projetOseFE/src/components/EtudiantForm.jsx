@@ -214,7 +214,7 @@ export default function EtudiantForm() {
                 {message && <p className={styles.message}>{message}</p>}
 
                 <div className={styles.linkContainer}>
-                    <Link to="/connexion-etudiant" className="text-blue-600 hover:underline">
+                    <Link to="/login/etudiant" className="text-blue-600 hover:underline">
                         Déjà inscrit ? Connectez-vous
                     </Link>
                 </div>
