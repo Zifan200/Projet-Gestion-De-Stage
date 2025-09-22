@@ -20,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -58,7 +57,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(POST, USER_LOGIN_PATH).permitAll()
                         .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
-
+                        .requestMatchers(POST, "user/password-reset/**").permitAll()
                         // Use Role enum names for authorities
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
