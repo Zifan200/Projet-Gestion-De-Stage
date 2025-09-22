@@ -23,7 +23,6 @@ public class InternshipOfferController {
 
     @PostMapping("/create_offer")
     public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(@RequestBody InternshipOfferDto internshipOfferDto) {
-        System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHH");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(internshipOfferService.saveInternshipOffer(internshipOfferDto));

@@ -49,7 +49,7 @@ public class InternshipOfferService {
                 .build();
 
         var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
-        eventPublisher.publishEvent(new EmployerCreatedInternshipOfferEvent(savedInternshipOffer));
+        eventPublisher.publishEvent(new EmployerCreatedInternshipOfferEvent());
         logger.info("InternshipOffer created = \"{}\"", internshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
