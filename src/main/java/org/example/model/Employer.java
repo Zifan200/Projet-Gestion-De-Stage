@@ -1,7 +1,6 @@
 package org.example.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,8 @@ import org.example.model.auth.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("E")
@@ -19,6 +20,10 @@ public class Employer extends UserApp {
     private LocalDate since;
     private String enterpriseName;
     private String phone;
+
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<InternshipOffer> internshipOffers;
+
     @Builder
     public Employer(
             Long id, String firstName, String lastName, String email, String password,
