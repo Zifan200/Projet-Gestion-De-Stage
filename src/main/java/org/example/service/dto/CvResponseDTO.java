@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class CvResponseDTO {
+    private Long id;
     private String fileName;
     private String fileType;
     private Long fileSize;
@@ -19,6 +20,7 @@ public class CvResponseDTO {
 
     public static CvResponseDTO fromEntity(CV cv) {
         return CvResponseDTO.builder()
+                .id(cv.getId())
                 .fileName(cv.getFileName())
                 .fileType(cv.getFileType())
                 .fileSize(cv.getFileSize())

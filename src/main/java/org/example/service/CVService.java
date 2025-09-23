@@ -83,6 +83,17 @@ public class CVService {
                 .toList();
     }
 
+    public void deleteCv(Long cvId, String email) {
+        CV cv = cvRepository.findById(cvId)
+                .orElseThrow(() -> new CvNotFoundException("CV introuvable avec id " + cvId));
+
+        if (!cv.getEtudiant().getEmail().equalsIgnoreCase(email)) {
+            throw new AccessDeniedException("Vous n'avez pas le droit de supprimer ce CV");
+        }
+
+        cvRepository.delete(cv);
+    }
+
     private void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new InvalidFileFormatException("Aucun fichier fourni.");

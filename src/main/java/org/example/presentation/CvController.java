@@ -63,4 +63,12 @@ public class CvController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + cv.getFileName() + "\"")
                 .body(cv.getData());
     }
+
+    @DeleteMapping("/{cvId}")
+    public ResponseEntity<Void> deleteCv(@PathVariable Long cvId,
+                                         HttpServletRequest request) {
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        cvService.deleteCv(cvId, email);
+        return ResponseEntity.noContent().build();
+    }
 }
