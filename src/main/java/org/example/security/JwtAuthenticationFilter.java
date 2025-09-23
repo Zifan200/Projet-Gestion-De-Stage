@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 tokenProvider.validateToken(token);
                 String email = tokenProvider.getEmailFromJWT(token);
-                UserApp user = userRepository.findUserAppByEmail(email).orElseThrow(UserNotFoundException::new);
+                UserApp user = userRepository.findUserAppByEmail(email).orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + email));
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         user.getEmail(), null, user.getAuthorities()
                 );

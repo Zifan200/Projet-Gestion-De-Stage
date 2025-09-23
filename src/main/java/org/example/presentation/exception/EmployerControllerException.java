@@ -4,6 +4,8 @@ package org.example.presentation.exception;
 import org.example.security.exception.APIException;
 import org.example.service.dto.ErrorResponseDTO;
 import org.example.service.exception.DuplicateUserException;
+import org.example.service.exception.FileProcessingException;
+import org.example.service.exception.InvalidFileFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -65,5 +67,21 @@ public class EmployerControllerException {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(InvalidFileFormatException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidFile(InvalidFileFormatException ex) {
+        return buildError(HttpStatus.BAD_REQUEST, "INVALID_FILE", ex.getMessage());
+    }
+
+    @ExceptionHandler(FileProcessingException.class)
+    public ResponseEntity<ErrorResponseDTO> handleFileProcessing(FileProcessingException ex) {
+        return buildError(HttpStatus.UNPROCESSABLE_ENTITY, "FILE_PROCESSING_ERROR", ex.getMessage());
+    }
+
+    private ResponseEntity<ErrorResponseDTO> buildError(HttpStatus status, String code, String message) {
+        return ResponseEntity.status(status).body(
+                new ErrorResponseDTO(status.value(), code, message, LocalDateTime.now())
+        );
     }
 }

@@ -1,4 +1,9 @@
 package org.example.service.exception;
 
-public class FileProcessingException {
+import java.io.IOException;
+
+public class FileProcessingException extends RuntimeException {
+    public FileProcessingException(String message, IOException e) {
+        super(message);
+    }
 }
