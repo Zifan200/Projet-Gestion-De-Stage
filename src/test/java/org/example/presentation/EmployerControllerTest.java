@@ -2,6 +2,7 @@ package org.example.presentation;
 
 import org.example.model.Employer;
 import org.example.service.EmployerService;
+import org.example.service.InternshipOfferService;
 import org.example.service.dto.EmployerDto;
 import org.example.service.dto.EmployerResponseDto;
 import org.example.service.exception.DuplicateUserException;
@@ -23,6 +24,9 @@ class EmployerControllerTest {
 
     @Mock
     private EmployerService employerService;
+    @Mock
+    private InternshipOfferService internshipOfferService;
+
 
     @InjectMocks
     private EmployerController employerController;
