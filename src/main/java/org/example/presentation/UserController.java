@@ -69,7 +69,7 @@ public class UserController {
 
 
 	@PostMapping("/password-reset/request")
-	public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
+	public ResponseEntity<String> requestPasswordReset(@RequestParam String email){
 		try {
 			authService.userPasswordResetRequest(email);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Email de réinitialisation envoyé.");
