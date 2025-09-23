@@ -1,25 +1,54 @@
 import {useState} from "react";
 
 export default function ConnectionForm() {
+    const api = "http://localhost:8080/user/signin";
+    const passwordMinSize = 8;
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
     const [errors, setErrors] = useState("");
-    const passwordMinSize = 8;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
 
       if (!isEmailValid() || !isPasswordValid()) {
           setErrors("Courriel ou mot de passe invalide");
           console.log("errors", formData.email, formData.password)
+          return;
       }
       else {
           setErrors("");
           console.log("connexion", formData.email, formData.password)
       }
+      await fetchUser();
     };
+
+    const fetchUser = async () => {
+        try {
+            const response = await fetch(api, {
+                method: "POST",
+                headers: {"Content-Type" : "application/json"},
+                body: JSON.stringify({
+                    email: formData.email.toLowerCase(),
+                    password: formData.password
+                })
+            });
+
+            if (response.ok) {
+                const token = response.json();
+                localStorage.setItem("token", token.accessToken);
+            }
+            else if (response.status === 401) {
+                setErrors("Erreur de validation");
+            }
+            else {
+                setErrors("Une erreur est survenue");
+            }
+        } catch (error) {
+            setErrors("Une erreur est survenue");
+        }
+    }
 
     const handleChanges = (e) => {
         e.preventDefault();
@@ -48,7 +77,7 @@ export default function ConnectionForm() {
                     Connexion
                 </h2>
 
-                <div>
+                <div className="pb-4">
                     <label className="block">Courriel : </label>
                     <input
                         type="email" name="email" onChange={handleChanges} placeholder="example@email.com" required
@@ -58,7 +87,7 @@ export default function ConnectionForm() {
                     />
                 </div>
 
-                <div>
+                <div className="pb-4">
                     <label className="block">Mot de passe : </label>
                     <input type="password" name="password" onChange={handleChanges}
                         minLength={passwordMinSize} required
@@ -69,7 +98,7 @@ export default function ConnectionForm() {
                 </div>
 
                 {errors &&
-                    <p className="text-red-500 text-sm mt-1">{errors}</p>
+                    <p className="text-red-500 text-sm mt-1 font-semibold pb-4">{errors}</p>
                 }
 
                 <button type="submit"

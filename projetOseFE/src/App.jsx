@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/menu/Navbar.jsx";
+import ConnectionForm from "./components/ConnectionForm.jsx";
 
 // Pages Étudiant
 import Home from "./components/Home.jsx";
@@ -21,7 +22,8 @@ function App() {
 
                 {/* Routes Étudiant */}
                 <Route path="/signup/etudiant" element={<EtudiantForm />} />
-                <Route path="/login/etudiant" element={<EtudiantConnection />} />
+                {/*<Route path="/login/etudiant" element={<EtudiantConnection />} />*/}
+                <Route path="/login/etudiant" element={<ConnectionForm />} />
 
                 {/* Routes Employeur */}
                 <Route path="/signup/employer" element={<EmployerSignUpPage />} />
