@@ -10,6 +10,8 @@ import EtudiantConnection from "./components/EtudiantConnection.jsx";
 // Pages Employeur
 import { EmployerSignUpPage } from "./pages/employer/signUp.jsx";
 import { EmployerLoginPage } from "./pages/employer/login.jsx";
+import AccueilEmployer from "./pages/employer/accueilEmployer.jsx";
+import AjoutStage from "./pages/employer/ajoutStage.jsx";
 
 function App() {
     return (
@@ -26,6 +28,9 @@ function App() {
                 {/* Routes Employeur */}
                 <Route path="/signup/employer" element={<EmployerSignUpPage />} />
                 <Route path="/login/employer" element={<EmployerLoginPage />} />
+                <Route path="/employer/accueil" element={<AccueilEmployer />} />
+                <Route path="/employer/ajout_stages" element={<AjoutStage />} />
+
             </Routes>
         </BrowserRouter>
     );
