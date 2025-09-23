@@ -1,6 +1,8 @@
 package org.example.presentation.exception;
 
 
+import org.example.security.exception.APIException;
+import org.example.service.dto.ErrorResponseDTO;
 import org.example.service.exception.DuplicateUserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -41,5 +43,27 @@ public class EmployerControllerException {
         body.put("timestamp", LocalDateTime.now());
 
         return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<ErrorResponseDTO> handleApiException(APIException ex) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                ex.getStatus().value(),
+                ex.getStatus().name(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(ex.getStatus()).body(error);
+    }
+
+    @ExceptionHandler(Exception.class) // fallback global
+    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "INTERNAL_ERROR",
+                "Une erreur inattendue est survenue",
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
