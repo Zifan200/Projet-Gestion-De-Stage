@@ -42,12 +42,10 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String H2_CONSOLE_PATH = "/h2-console/**";
-    private static final String USER_LOGIN_PATH = "/user/login";
+    private static final String USER_LOGIN_PATH = "/user/**";
     private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employer/register";
     private static final String USER_PATH = "/user/**";
     private static final String EMPLOYER_PATH = "/employer/**";
-
-
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/etudiants/inscription";
 
@@ -60,8 +58,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         // User
-                        .requestMatchers(POST, USER_LOGIN_PATH).permitAll()
-                        .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(USER_LOGIN_PATH).permitAll()
                         .requestMatchers(POST, "user/password-reset/**").permitAll()
                         // Employer
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
