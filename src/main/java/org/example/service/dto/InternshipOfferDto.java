@@ -22,6 +22,7 @@ public class InternshipOfferDto {
     private String title;
 
     @NotBlank(message = "required: description")
+    @Size(min = 12)
     @NotEmpty
     private String description;
 

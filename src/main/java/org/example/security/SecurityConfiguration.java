@@ -43,9 +43,9 @@ public class SecurityConfiguration {
 
     private static final String H2_CONSOLE_PATH = "/h2-console/**";
     private static final String USER_LOGIN_PATH = "/user/login";
-    private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employerEmail/register";
+    private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employer/register";
     private static final String USER_PATH = "/user/**";
-    private static final String EMPLOYER_PATH = "/employerEmail/**";
+    private static final String EMPLOYER_PATH = "/api/v1/employer/**";
 
     private static final String ETUDIANT_PATH = "/api/etudiants/inscription";
 
