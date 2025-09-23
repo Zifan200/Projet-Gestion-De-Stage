@@ -10,7 +10,7 @@ import lombok.Getter;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Data
@@ -33,13 +33,13 @@ public class InternshipOfferDto {
     @Email
     private String employerEmail;
 
-    private LocalDateTime publishedDate;
+    private LocalDate publishedDate;
 
-    private LocalDateTime expirationDate;
+    private LocalDate expirationDate;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -51,7 +51,7 @@ public class InternshipOfferDto {
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+                              Employer employer, LocalDate publishedDate, LocalDate expirationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -63,7 +63,7 @@ public class InternshipOfferDto {
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate) {
         this.id = id;
         this.title = title;
         this.description = description;

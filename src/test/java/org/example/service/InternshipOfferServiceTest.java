@@ -19,7 +19,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -68,7 +68,7 @@ public class InternshipOfferServiceTest {
                 .build();
     }
 
-    private InternshipOffer buildInternshipOffer(Employer employer, LocalDateTime offerPublishDateTime) {
+    private InternshipOffer buildInternshipOffer(Employer employer, LocalDate offerPublishDateTime) {
         return InternshipOffer.builder()
                 .title("recherche Scratch Developer")
                 .description("loremipsum")
@@ -77,7 +77,7 @@ public class InternshipOfferServiceTest {
                 .build();
     }
 
-    private InternshipOfferDto buildInternshipOfferDto(String email, LocalDateTime offerPublishDateTime) {
+    private InternshipOfferDto buildInternshipOfferDto(String email, LocalDate offerPublishDateTime) {
         return InternshipOfferDto.builder()
                 .title("recherche Scratch Developer")
                 .description("loremipsum")
@@ -91,7 +91,7 @@ public class InternshipOfferServiceTest {
         //Arrange
         Employer employer = buildEmployer();
         EmployerDto employerDto = buildEmployerDto();
-        LocalDateTime offerPublishDateTime = LocalDateTime.now();
+        LocalDate offerPublishDateTime = LocalDate.now();
         InternshipOffer createdOffer = buildInternshipOffer(employer, offerPublishDateTime);
 
         when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
@@ -118,7 +118,7 @@ public class InternshipOfferServiceTest {
         //Arrange
         Employer employer = buildEmployer();
         EmployerDto employerDto = buildEmployerDto();
-        LocalDateTime offerPublishDateTime = LocalDateTime.now();
+        LocalDate offerPublishDateTime = LocalDate.now();
         InternshipOffer createdOffer = buildInternshipOffer(employer, offerPublishDateTime);
 
         when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))

@@ -4,7 +4,8 @@ package org.example.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -24,12 +25,12 @@ public class InternshipOffer {
     @JoinColumn(name = "employer_id", referencedColumnName = "id")
     private Employer employer;
 
-    private LocalDateTime publishedDate;
-    private LocalDateTime expirationDate;
+    private LocalDate publishedDate;
+    private LocalDate expirationDate;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDateTime publishedDate, LocalDateTime expirationDate
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate
     ){
         this.id = id;
         this.title = title;
