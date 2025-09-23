@@ -3,8 +3,10 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.model.Employer;
+import org.example.model.Etudiant;
 import org.example.model.UserApp;
 import org.example.repository.EmployerRepository;
+import org.example.repository.EtudiantRepository;
 import org.example.repository.UserAppRepository;
 import org.example.security.JwtTokenProvider;
 import org.example.security.exception.UsedEmailAddressException;
@@ -26,6 +28,7 @@ public class UserAppService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userAppRepository;
     private final EmployerRepository employerRepository;
+    private final EtudiantRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -42,6 +45,8 @@ public class UserAppService {
         UserApp user = userAppRepository.findUserAppByEmail(email).orElseThrow(UserNotFoundException::new);
         return switch(user.getRole()){
             case EMPLOYER -> getEmployerDTO(user.getId());
+            case STUDENT -> getStudentDTO(user.getId());
+
         };
     }
 
@@ -50,6 +55,14 @@ public class UserAppService {
         return employerOptional.isPresent() ?
                 EmployerDto.create(employerOptional.get()) :
                 EmployerDto.empty();
+    }
+
+
+    private EtudiantDTO getStudentDTO(Long id) {
+        final Optional<Etudiant>  studentOptional = studentRepository.findById(id);
+        return studentOptional.isPresent() ?
+                EtudiantDTO.fromEntity(studentOptional.get()) :
+                EtudiantDTO.empty();
     }
 }
 
