@@ -37,11 +37,12 @@ public class CVService {
 
 
     public CvResponseDTO addCv(String email, MultipartFile cvFile) {
+        validateFile(cvFile);
+
         Etudiant student = studentRepository
                 .findByCredentialsEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + email));
 
-        validateFile(cvFile);
 
         try {
             CV cv = CV.builder()
