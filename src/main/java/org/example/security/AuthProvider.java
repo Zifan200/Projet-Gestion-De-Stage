@@ -37,7 +37,7 @@ public class AuthProvider implements AuthenticationProvider{
 
 	private UserApp loadUserByEmail(String email) throws UsernameNotFoundException{
 		return userAppRepository.findUserAppByEmail(email)
-			.orElseThrow(UserNotFoundException::new);
+			.orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + email));
 	}
 
 	private void validateAuthentication(Authentication authentication, UserApp user){

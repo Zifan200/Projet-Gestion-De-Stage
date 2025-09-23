@@ -2,7 +2,7 @@ package service;
 
 import org.example.model.Etudiant;
 import org.example.repository.EtudiantRepository;
-import org.example.service.UserService;
+import org.example.service.StudentService;
 import org.example.service.dto.EtudiantDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,24 +15,27 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     private EtudiantRepository etudiantRepository;
-    private UserService userService;
+    private StudentService studentService;
     private EtudiantDTO dto;
 
     @BeforeEach
     void setUp() {
         etudiantRepository = mock(EtudiantRepository.class);
-        userService = new UserService(etudiantRepository);
+        studentService = new StudentService(etudiantRepository);
 
-        dto = new EtudiantDTO();
-        dto.setId(1L);
-        dto.setPrenom("Woof");
-        dto.setNom("Miaou");
-        dto.setCourriel("nouveau@mail.com");
-        dto.setTelephone("1234567890");
-        dto.setAdresse("123 Rue Exemple");
-        dto.setMotDePasse("Password123!");
+        dto = EtudiantDTO
+                .builder()
+                .id(1L)
+                .firstName("Woof")
+                .lastName("Miaou")
+                .email("nouveau@mail.com")
+                .phone("1234567890")
+                .adresse("123 Rue Exemple")
+                .password("Password123!")
+                .build();
 
-        when(etudiantRepository.existsByCourriel(anyString())).thenReturn(false);
+
+        when(etudiantRepository.existsByCredentialsEmail(anyString())).thenReturn(false);
         when(etudiantRepository.save(any(Etudiant.class))).thenAnswer(i -> i.getArgument(0));
     }
 
@@ -44,13 +47,15 @@ class UserServiceTest {
 
     @Test
     void inscriptionEtudiant_emailDejaUtilise() {
-        EtudiantDTO dtoTest = new EtudiantDTO();
-        dtoTest.setCourriel("test@mail.com");
+        EtudiantDTO dtoTest = EtudiantDTO
+                .builder()
+                .email("test@mail.com")
+                .build();
 
-        when(etudiantRepository.existsByCourriel("test@mail.com")).thenReturn(true);
+        when(etudiantRepository.existsByCredentialsEmail("test@mail.com")).thenReturn(true);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.inscriptionEtudiant(dtoTest);
+            studentService.inscriptionEtudiant(dtoTest);
         });
 
         assertEquals("Email already in use", exception.getMessage());
@@ -58,22 +63,22 @@ class UserServiceTest {
 
     @Test
     void inscriptionEtudiant_Verification_champs() {
-        userService.inscriptionEtudiant(dto);
+        studentService.inscriptionEtudiant(dto);
         Etudiant saved = getSavedEtudiant();
 
-        assertEquals("Woof", saved.getPrenom());
-        assertEquals("Miaou", saved.getNom());
-        assertEquals("nouveau@mail.com", saved.getCourriel());
-        assertEquals("1234567890", saved.getTelephone());
+        assertEquals("Woof", saved.getFirstName());
+        assertEquals("Miaou", saved.getLastName());
+        assertEquals("nouveau@mail.com", saved.getEmail());
+        assertEquals("1234567890", saved.getPhone());
         assertEquals("123 Rue Exemple", saved.getAdresse());
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        assertTrue(encoder.matches("Password123!", saved.getMotDePasse()));
+        assertTrue(encoder.matches("Password123!", saved.getPassword()));
     }
 
     @Test
     void inscriptionEtudiant_Verification_motDePasse_regles() {
-        String mdp = dto.getMotDePasse();
+        String mdp = dto.getPassword();
 
         assertTrue(mdp.matches(".*[A-Z].*"), "Doit contenir au moins une majuscule");
         assertTrue(mdp.matches(".*[a-z].*"), "Doit contenir au moins une minuscule");
@@ -83,25 +88,25 @@ class UserServiceTest {
 
     @Test
     void inscriptionEtudiant_Verification_hashMotDePasse() {
-        userService.inscriptionEtudiant(dto);
+        studentService.inscriptionEtudiant(dto);
         Etudiant saved = getSavedEtudiant();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        assertTrue(encoder.matches("Password123!", saved.getMotDePasse()));
+        assertTrue(encoder.matches("Password123!", saved.getPassword()));
     }
 
     @Test
     void inscriptionEtudiant_Succes_utilisateurCreeCorrectement() {
-        when(etudiantRepository.existsByCourriel("nouveau@mail.com")).thenReturn(false);
+        when(etudiantRepository.existsByCredentialsEmail("nouveau@mail.com")).thenReturn(false);
         when(etudiantRepository.save(any(Etudiant.class))).thenAnswer(i -> i.getArgument(0));
 
-        EtudiantDTO savedDto = userService.inscriptionEtudiant(dto);
+        EtudiantDTO savedDto = studentService.inscriptionEtudiant(dto);
 
         assertNotNull(savedDto);
-        assertEquals("nouveau@mail.com", savedDto.getCourriel());
-        assertEquals("Miaou", savedDto.getNom());
-        assertEquals("Woof", savedDto.getPrenom());
-        assertEquals("1234567890", savedDto.getTelephone());
+        assertEquals("nouveau@mail.com", savedDto.getEmail());
+        assertEquals("Miaou", savedDto.getLastName());
+        assertEquals("Woof", savedDto.getFirstName());
+        assertEquals("1234567890", savedDto.getPhone());
         assertEquals("123 Rue Exemple", savedDto.getAdresse());
 
         ArgumentCaptor<Etudiant> captor = ArgumentCaptor.forClass(Etudiant.class);
@@ -109,7 +114,7 @@ class UserServiceTest {
         Etudiant savedEtudiant = captor.getValue();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        assertTrue(encoder.matches("Password123!", savedEtudiant.getMotDePasse()));
+        assertTrue(encoder.matches("Password123!", savedEtudiant.getPassword()));
     }
 
 

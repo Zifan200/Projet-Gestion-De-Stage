@@ -3,11 +3,12 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.model.Employer;
+import org.example.model.Etudiant;
 import org.example.model.UserApp;
 import org.example.repository.EmployerRepository;
+import org.example.repository.EtudiantRepository;
 import org.example.repository.UserAppRepository;
 import org.example.security.JwtTokenProvider;
-import org.example.security.exception.UsedEmailAddressException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,6 +26,7 @@ public class UserAppService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userAppRepository;
     private final EmployerRepository employerRepository;
+    private final EtudiantRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -39,9 +40,11 @@ public class UserAppService {
     public UserDTO getMe(String token) {
         token = token.startsWith("Bearer") ? token.substring(7) : token;
         String email = jwtTokenProvider.getEmailFromJWT(token);
-        UserApp user = userAppRepository.findUserAppByEmail(email).orElseThrow(UserNotFoundException::new);
+        UserApp user = userAppRepository.findUserAppByEmail(email).orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + email));
         return switch(user.getRole()){
             case EMPLOYER -> getEmployerDTO(user.getId());
+            case STUDENT -> getStudentDTO(user.getId());
+
         };
     }
 
@@ -50,6 +53,14 @@ public class UserAppService {
         return employerOptional.isPresent() ?
                 EmployerDto.create(employerOptional.get()) :
                 EmployerDto.empty();
+    }
+
+
+    private EtudiantDTO getStudentDTO(Long id) {
+        final Optional<Etudiant>  studentOptional = studentRepository.findById(id);
+        return studentOptional.isPresent() ?
+                EtudiantDTO.fromEntity(studentOptional.get()) :
+                EtudiantDTO.empty();
     }
 }
 

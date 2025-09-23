@@ -42,12 +42,13 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String H2_CONSOLE_PATH = "/h2-console/**";
-    private static final String USER_LOGIN_PATH = "/user/login";
+    private static final String USER_LOGIN_PATH = "/user/**";
     private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employer/register";
     private static final String USER_PATH = "/user/**";
-    private static final String EMPLOYER_PATH = "/api/v1/employer/**";
+    private static final String EMPLOYER_PATH = "/employer/**";
+    private static final String STUDENT_PATH = "/api/v1/student/**";
+    private static final String STUDENT_REGISTER_PATH = "/api/etudiants/inscription";
 
-    private static final String ETUDIANT_PATH = "/api/etudiants/inscription";
 
 
 
@@ -57,13 +58,17 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(POST, USER_LOGIN_PATH).permitAll()
-                        .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
+                        // User
+                        .requestMatchers(USER_LOGIN_PATH).permitAll()
                         .requestMatchers(POST, "user/password-reset/**").permitAll()
-                        // Use Role enum names for authorities
+                        // Employer
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
-                        .requestMatchers(POST, ETUDIANT_PATH).permitAll()
+                        .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
+                        // Student
+                        .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.STUDENT.name())
+                        .requestMatchers(POST, STUDENT_REGISTER_PATH).permitAll()
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console
