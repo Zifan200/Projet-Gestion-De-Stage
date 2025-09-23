@@ -1,4 +1,6 @@
-import {useState} from "react";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
+import { Toaster, toast } from 'sonner';
 
 export default function ConnectionForm() {
     const api = "http://localhost:8080/user/signin";
@@ -36,8 +38,9 @@ export default function ConnectionForm() {
             });
 
             if (response.ok) {
-                const token = response.json();
+                const token = await response.json();
                 localStorage.setItem("token", token.accessToken);
+                toast.info("Connexion réussie")
             }
             else if (response.status === 401) {
                 setErrors("Erreur de validation");
@@ -107,6 +110,11 @@ export default function ConnectionForm() {
                 >
                     Se connecter
                 </button>
+                <div className={"text-center mt-2 text-zinc-600"}>Mot de passe oublié ?
+                    <span className={"text-blue-400"}>
+                    <Link to={"/request-password"}> Cliquez ici</Link>
+                    </span>
+                </div>
             </form>
         </div>
     );

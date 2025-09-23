@@ -11,6 +11,8 @@ import EtudiantConnection from "./components/EtudiantConnection.jsx";
 // Pages Employeur
 import { EmployerSignUpPage } from "./pages/employer/signUp.jsx";
 import { EmployerLoginPage } from "./pages/employer/login.jsx";
+import {ResetPasswordPage} from "./pages/auth/resetPassword.jsx";
+import {RequestPassword} from "./pages/auth/requestPassword.jsx";
 
 function App() {
     return (
@@ -19,15 +21,15 @@ function App() {
             <Routes>
                 {/* Pages principales */}
                 <Route path="/" element={<Home />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/request-password" element={<RequestPassword />} />
 
                 {/* Routes Étudiant */}
                 <Route path="/signup/etudiant" element={<EtudiantForm />} />
-                {/*<Route path="/login/etudiant" element={<EtudiantConnection />} />*/}
-                <Route path="/login/etudiant" element={<ConnectionForm />} />
 
                 {/* Routes Employeur */}
                 <Route path="/signup/employer" element={<EmployerSignUpPage />} />
-                <Route path="/login/employer" element={<EmployerLoginPage />} />
+                <Route path="/login" element={<ConnectionForm />} />
             </Routes>
         </BrowserRouter>
     );
