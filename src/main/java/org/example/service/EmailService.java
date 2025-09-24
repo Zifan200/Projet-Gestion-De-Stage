@@ -30,7 +30,7 @@ public class EmailService {
     public void sendEmail(EmailMessage email) {
         Resend resend = new Resend(key);
         CreateEmailOptions createEmailOptions = CreateEmailOptions.builder()
-                .from("send@thibeault.cloud")
+                .from("send@veemdigital.com")
                 .to(email.getTo())
                 .subject(email.getSubject())
                 .html(email.getBody())

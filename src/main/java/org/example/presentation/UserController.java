@@ -6,10 +6,7 @@ import org.example.security.exception.InvalidJwtTokenException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.AuthService;
 import org.example.service.UserAppService;
-import org.example.service.dto.EmployerDto;
-import org.example.service.dto.JWTAuthResponse;
-import org.example.service.dto.LoginDTO;
-import org.example.service.dto.UserDTO;
+import org.example.service.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -84,9 +81,9 @@ public class UserController {
 	}
 
 	@PostMapping("/password-reset/confirm")
-	public ResponseEntity<String> confirmPasswordReset(@RequestParam String token, @RequestParam String newPassword) {
+	public ResponseEntity<String> confirmPasswordReset(@RequestBody PasswordRequestDTO passwordRequestDTO) {
 		try {
-			authService.userPasswordReset(token, newPassword);
+			authService.userPasswordReset(passwordRequestDTO);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Mot de passe réinitialisé.");
 		}
 		catch (InvalidJwtTokenException e) {
