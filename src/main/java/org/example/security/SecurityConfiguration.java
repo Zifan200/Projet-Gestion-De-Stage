@@ -49,11 +49,6 @@ public class SecurityConfiguration {
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/etudiants/inscription";
 
-
-    private static final String STUDENT_PATH = "/api/v1/student/**";
-    private static final String STUDENT_REGISTER_PATH = "/api/etudiants/inscription";
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
