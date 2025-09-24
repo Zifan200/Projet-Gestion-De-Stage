@@ -24,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
 	private final AuthService authService;
@@ -68,7 +69,7 @@ public class UserController {
 
 
 	@PostMapping("/password-reset/request")
-	public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
+	public ResponseEntity<String> requestPasswordReset(@RequestParam String email){
 		try {
 			authService.userPasswordResetRequest(email);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Email de réinitialisation envoyé.");

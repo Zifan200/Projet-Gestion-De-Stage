@@ -11,8 +11,15 @@ const programmes = [
 
 export default function EtudiantForm() {
     const [formData, setFormData] = useState({
-        nom: "", prenom: "", courriel: "", telephone: "",
-        adresse: "", programme: "", age: "", motDePasse: "", confirmerMotDePasse: ""
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        adresse: "",
+        program: "",
+        age: "",
+        password: "",
+        confirmPassword: ""
     });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
@@ -25,34 +32,32 @@ export default function EtudiantForm() {
     const validate = () => {
         const newErrors = {};
 
-        if (!formData.nom.trim()) newErrors.nom = "Le nom est obligatoire";
-        if (!formData.prenom.trim()) newErrors.prenom = "Le prénom est obligatoire";
+        if (!formData.firstName.trim()) newErrors.firstName = "Le nom est obligatoire";
+        if (!formData.lastName.trim()) newErrors.lastName = "Le prénom est obligatoire";
 
-        if (!formData.courriel.trim()) newErrors.courriel = "Le courriel est obligatoire";
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.courriel))
-            newErrors.courriel = "Le courriel doit être valide";
+        if (!formData.email.trim()) newErrors.email = "Le courriel est obligatoire";
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+            newErrors.email = "Le courriel doit être valide";
 
-        if (!formData.telephone.trim()) newErrors.telephone = "Le téléphone est obligatoire";
-        else if (!/^\d{3}-\d{3}-\d{4}$/.test(formData.telephone))
-            newErrors.telephone = "Le téléphone doit être au format 514-123-4567";
+        if (!formData.phone.trim()) newErrors.phone = "Le téléphone est obligatoire";
+        else if (!/^\d{3}-\d{3}-\d{4}$/.test(formData.phone))
+            newErrors.phone = "Le téléphone doit être au format 514-123-4567";
 
         if (!formData.adresse.trim()) newErrors.adresse = "L'adresse est obligatoire";
 
-        if (!formData.programme.trim()) newErrors.programme = "Le programme est obligatoire";
+        if (!formData.program.trim()) newErrors.program = "Le programme est obligatoire";
 
         if (!formData.age) newErrors.age = "L'âge est obligatoire";
         else if (parseInt(formData.age) < 16) newErrors.age = "L'étudiant doit avoir au moins 16 ans";
 
-        // Validation mot de passe
-        if (!formData.motDePasse.trim()) newErrors.motDePasse = "Le mot de passe est obligatoire";
-        else if (formData.motDePasse.length < 8) newErrors.motDePasse = "Au moins 8 caractères requis";
-        else if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).+$/.test(formData.motDePasse))
-            newErrors.motDePasse = "Doit contenir majuscule, minuscule, chiffre et caractère spécial";
+        if (!formData.password.trim()) newErrors.password = "Le mot de passe est obligatoire";
+        else if (formData.password.length < 8) newErrors.password = "Au moins 8 caractères requis";
+        else if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).+$/.test(formData.password))
+            newErrors.password = "Doit contenir majuscule, minuscule, chiffre et caractère spécial";
 
-        // Validation confirmation mot de passe
-        if (!formData.confirmerMotDePasse.trim()) newErrors.confirmerMotDePasse = "Veuillez confirmer le mot de passe";
-        else if (formData.motDePasse !== formData.confirmerMotDePasse)
-            newErrors.confirmerMotDePasse = "Les mots de passe ne correspondent pas";
+        if (!formData.confirmPassword.trim()) newErrors.confirmPassword = "Veuillez confirmer le mot de passe";
+        else if (formData.password !== formData.confirmPassword)
+            newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
 
         return newErrors;
     };
@@ -101,49 +106,49 @@ export default function EtudiantForm() {
                 <div className={styles.inputContainer}>
                     <input
                         type="text"
-                        name="nom"
+                        name="firstName"
                         placeholder="Nom"
-                        value={formData.nom}
+                        value={formData.firstName}
                         onChange={handleChange}
                         className={styles.inputField}
                     />
-                    {errors.nom && <p className={styles.error}>{errors.nom}</p>}
+                    {errors.firstName && <p className={styles.error}>{errors.firstName}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
                     <input
                         type="text"
-                        name="prenom"
+                        name="lastName"
                         placeholder="Prénom"
-                        value={formData.prenom}
+                        value={formData.lastName}
                         onChange={handleChange}
                         className={styles.inputField}
                     />
-                    {errors.prenom && <p className={styles.error}>{errors.prenom}</p>}
+                    {errors.lastName && <p className={styles.error}>{errors.lastName}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
                     <input
                         type="email"
-                        name="courriel"
+                        name="email"
                         placeholder="Courriel"
-                        value={formData.courriel}
+                        value={formData.email}
                         onChange={handleChange}
                         className={styles.inputField}
                     />
-                    {errors.courriel && <p className={styles.error}>{errors.courriel}</p>}
+                    {errors.email && <p className={styles.error}>{errors.email}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
                     <input
                         type="text"
-                        name="telephone"
+                        name="phone"
                         placeholder="Téléphone (514-123-4567)"
-                        value={formData.telephone}
+                        value={formData.phone}
                         onChange={handleChange}
                         className={styles.inputField}
                     />
-                    {errors.telephone && <p className={styles.error}>{errors.telephone}</p>}
+                    {errors.phone && <p className={styles.error}>{errors.phone}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
@@ -171,10 +176,10 @@ export default function EtudiantForm() {
                 </div>
 
                 <div className={styles.inputContainer}>
-                    <label htmlFor="programme" className={styles.label}>Programme</label>
+                    <label htmlFor="program" className={styles.label}>Programme</label>
                     <select
-                        name="programme"
-                        value={formData.programme}
+                        name="program"
+                        value={formData.program}
                         onChange={handleChange}
                         className={styles.inputField}
                     >
@@ -183,31 +188,31 @@ export default function EtudiantForm() {
                             <option key={index} value={prog}>{prog}</option>
                         ))}
                     </select>
-                    {errors.programme && <p className={styles.error}>{errors.programme}</p>}
+                    {errors.program && <p className={styles.error}>{errors.program}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
                     <input
                         type="password"
-                        name="motDePasse"
+                        name="password"
                         placeholder="Mot de passe"
-                        value={formData.motDePasse}
+                        value={formData.password}
                         onChange={handleChange}
                         className={styles.inputField}
                     />
-                    {errors.motDePasse && <p className={styles.error}>{errors.motDePasse}</p>}
+                    {errors.password && <p className={styles.error}>{errors.password}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
                     <input
                         type="password"
-                        name="confirmerMotDePasse"
+                        name="confirmPassword"
                         placeholder="Confirmer le mot de passe"
-                        value={formData.confirmerMotDePasse}
+                        value={formData.confirmPassword}
                         onChange={handleChange}
                         className={styles.inputField}
                     />
-                    {errors.confirmerMotDePasse && <p className={styles.error}>{errors.confirmerMotDePasse}</p>}
+                    {errors.confirmPassword && <p className={styles.error}>{errors.confirmPassword}</p>}
                 </div>
 
                 <button type="submit" className={styles.submitButton}>Soumettre</button>

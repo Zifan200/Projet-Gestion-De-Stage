@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class InternshipOfferService {
                 .description(internshipOfferDto.getDescription())
                 .targetedProgramme(internshipOfferDto.getTargetedProgramme())
                 .employer(savedEmployer.get())
-                .publishedDate(LocalDate.now())
+                .publishedDate(LocalDateTime.now())
                 .expirationDate(internshipOfferDto.getExpirationDate())
                 .build();
 

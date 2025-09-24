@@ -1,0 +1,12 @@
+import axios from 'axios'
+
+
+export const authService = {
+    async requestPasswordChange(email) {
+        return await axios.post(`http://localhost:8080/user/password-reset/request?email=${email}`, email)
+    },
+
+    async resetPasswordChange(token, password) {
+        return await axios.post(`http://localhost:8080/user/password-reset/confirm?token=${token}&newPassword=${password}`)
+    },
+}
