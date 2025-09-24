@@ -50,6 +50,8 @@ public class SecurityConfiguration {
     private static final String STUDENT_REGISTER_PATH = "/api/etudiants/inscription";
 
 
+    private static final String STUDENT_PATH = "/api/v1/student/**";
+    private static final String STUDENT_REGISTER_PATH = "/api/etudiants/inscription";
 
 
     @Bean
@@ -59,16 +61,17 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         // User
-                        .requestMatchers(USER_LOGIN_PATH).permitAll()
+                        .requestMatchers(USER_PATH).permitAll()
                         .requestMatchers(POST, "user/password-reset/**").permitAll()
+                        .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
                         // Employer
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
                         .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
+
                         // Student
-                        .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
-                        .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.STUDENT.name())
                         .requestMatchers(POST, STUDENT_REGISTER_PATH).permitAll()
+                        .requestMatchers(STUDENT_PATH).hasAnyAuthority(Role.STUDENT.name())
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console

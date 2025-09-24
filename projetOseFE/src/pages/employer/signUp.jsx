@@ -37,7 +37,7 @@ export const EmployerSignUpPage = () => {
                 { duration: 3000 }
             )
             setTimeout(() => {
-                navigate("/login/employer")
+                navigate("/login")
             }, 4500)
         } catch (err) {
             console.error("❌ Error creating employer:", err)
