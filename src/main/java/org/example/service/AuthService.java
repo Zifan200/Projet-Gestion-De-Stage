@@ -120,7 +120,7 @@ public class AuthService {
 
     public void userPasswordResetRequest(String email) {
         UserApp user = userAppRepository.findUserAppByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + email));
 
         UserDTO userDTO = new UserDTO(user);
 

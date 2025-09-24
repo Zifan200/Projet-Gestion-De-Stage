@@ -5,6 +5,7 @@ import java.util.Set;
 
 public enum Role{
 	EMPLOYER("ROLE_EMPLOYER"),
+    STUDENT("ROLE_STUDENT"),
 	;
 
 	private final String string;

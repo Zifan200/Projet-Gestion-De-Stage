@@ -1,7 +1,10 @@
 package org.example.presentation.exception;
 
 
-import org.example.service.exception.DuplicateUserException;
+import org.example.security.exception.APIException;
+import org.example.security.exception.UserNotFoundException;
+import org.example.service.dto.ErrorResponseDTO;
+import org.example.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +20,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class EmployerControllerException {
-    @ExceptionHandler(DuplicateUserException.class)
-    public ResponseEntity<ProblemDetail> handleDomain(DuplicateUserException ex, WebRequest req) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT,
-                ex.getMessage()
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(problemDetail);
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
@@ -41,5 +34,59 @@ public class EmployerControllerException {
         body.put("timestamp", LocalDateTime.now());
 
         return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<ProblemDetail> handleDuplicate(DuplicateUserException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserNotFound(UserNotFoundException ex) {
+        return buildError(HttpStatus.NOT_FOUND, "USER_NOT_FOUND", ex.getMessage());
+    }
+
+    @ExceptionHandler(CvNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCvNotFound(CvNotFoundException ex) {
+        return buildError(HttpStatus.NOT_FOUND, "CV_NOT_FOUND", ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccessDenied(AccessDeniedException ex) {
+        return buildError(HttpStatus.FORBIDDEN, "ACCESS_DENIED", ex.getMessage());
+    }
+
+
+    @ExceptionHandler(FileProcessingException.class)
+    public ResponseEntity<ErrorResponseDTO> handleFileProcessing(FileProcessingException ex) {
+        return buildError(HttpStatus.UNPROCESSABLE_ENTITY, "FILE_PROCESSING_ERROR", ex.getMessage());
+    }
+
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<ErrorResponseDTO> handleApi(APIException ex) {
+        return buildError(ex.getStatus(), "API_ERROR", ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFileFormatException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidFile(InvalidFileFormatException ex) {
+        return buildError(HttpStatus.BAD_REQUEST, "INVALID_FILE", ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "INTERNAL_ERROR",
+                "Une erreur inattendue est survenue",
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    private ResponseEntity<ErrorResponseDTO> buildError(HttpStatus status, String code, String message) {
+        return ResponseEntity.status(status).body(
+                new ErrorResponseDTO(status.value(), code, message, LocalDateTime.now())
+        );
     }
 }

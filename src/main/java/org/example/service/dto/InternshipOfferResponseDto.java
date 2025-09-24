@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
@@ -19,12 +19,12 @@ public class InternshipOfferResponseDto {
     private String description;
     private String targetedProgramme;
     private String employerEmail;
-    private LocalDateTime publishedDate;
-    private LocalDateTime expirationDate;
+    private LocalDate publishedDate;
+    private LocalDate expirationDate;
 
     @Builder
     public InternshipOfferResponseDto(String title, String description, String target_programme,
-                                      Employer employerEmail, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+                                      Employer employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
         this.title = title;
         this.description = description;
         this.targetedProgramme = target_programme;
@@ -35,7 +35,7 @@ public class InternshipOfferResponseDto {
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferResponseDto(String title, String description, String target_programme,
-                                      EmployerResponseDto employerEmail, LocalDateTime publishedDate, LocalDateTime expirationDate) {
+                                      EmployerResponseDto employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
         this.title = title;
         this.description = description;
         this.targetedProgramme = target_programme;

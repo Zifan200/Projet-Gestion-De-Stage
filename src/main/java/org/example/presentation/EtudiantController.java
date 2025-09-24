@@ -2,7 +2,7 @@ package org.example.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.service.UserService;
+import org.example.service.StudentService;
 import org.example.service.EmailService;
 import org.example.service.dto.EtudiantDTO;
 import org.example.model.EmailMessage;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EtudiantController {
 
-    private final UserService userService;
+    private final StudentService studentService;
     private final EmailService emailService;
 
     @PostMapping("/inscription")
@@ -24,18 +24,18 @@ public class EtudiantController {
         System.out.println("Données reçues : " + etudiantDTO);
 
         // Sauvegarde de l'étudiant
-        EtudiantDTO savedEtudiant = userService.inscriptionEtudiant(etudiantDTO);
+        EtudiantDTO savedEtudiant = studentService.inscriptionEtudiant(etudiantDTO);
 
         System.out.println("=== Après sauvegarde ===");
         System.out.println("Etudiant sauvegardé : " + savedEtudiant);
 
         EmailMessage emailEtudiant = new EmailMessage();
-        emailEtudiant.setTo(savedEtudiant.getCourriel());
-        System.out.println("Envoi de l'email à : " + savedEtudiant.getCourriel());
+        emailEtudiant.setTo(savedEtudiant.getEmail());
+        System.out.println("Envoi de l'email à : " + savedEtudiant.getEmail());
         emailEtudiant.setSubject("Confirmation d'inscription");
         emailEtudiant.setBody(
-                "<p>Bonjour <strong>" + savedEtudiant.getNom() + " " + savedEtudiant.getPrenom() + "</strong>,</p>" +
-                        "<p>Votre inscription au programme <strong>" + savedEtudiant.getProgramme() + "</strong> a été enregistrée avec succès.</p>"
+                "<p>Bonjour <strong>" + savedEtudiant.getLastName() + " " + savedEtudiant.getLastName() + "</strong>,</p>" +
+                        "<p>Votre inscription au programme <strong>" + savedEtudiant.getProgram() + "</strong> a été enregistrée avec succès.</p>"
         );
         System.out.println("Email à envoyer : " + emailEtudiant);
         emailService.sendEmail(emailEtudiant);
@@ -44,8 +44,8 @@ public class EtudiantController {
         emailAdmin.setTo("tonemail@example.com");
         emailAdmin.setSubject("Nouvelle inscription Étudiant");
         emailAdmin.setBody(
-                "<p>L'étudiant <strong>" + savedEtudiant.getNom() + " " + savedEtudiant.getPrenom() + "</strong> vient de s'inscrire.</p>" +
-                        "<p>Email : " + savedEtudiant.getCourriel() + "<br/>Programme : " + savedEtudiant.getProgramme() + "</p>"
+                "<p>L'étudiant <strong>" + savedEtudiant.getEmail() + " " + savedEtudiant.getEmail() + "</strong> vient de s'inscrire.</p>" +
+                        "<p>Email : " + savedEtudiant.getEmail() + "<br/>Programme : " + savedEtudiant.getProgram() + "</p>"
         );
         emailService.sendEmail(emailAdmin);
 
