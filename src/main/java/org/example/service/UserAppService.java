@@ -44,7 +44,6 @@ public class UserAppService {
         return switch(user.getRole()){
             case EMPLOYER -> getEmployerDTO(user.getId());
             case STUDENT -> getStudentDTO(user.getId());
-
         };
     }
 
