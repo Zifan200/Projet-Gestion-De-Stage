@@ -6,9 +6,9 @@ export const menuConfig = [
             {
                 title: "Choisir votre rôle",
                 links: [
-                    { label: "Étudiant", href: "/login/etudiant" },
+                    { label: "Étudiant", href: "/login" },
                     { label: "Gestionnaire", href: "/login/gs" },
-                    { label: "Employeur", href: "/login/employer" },
+                    { label: "Employeur", href: "/login" },
                 ],
             },
         ],
