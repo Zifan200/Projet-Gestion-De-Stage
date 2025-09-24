@@ -13,6 +13,7 @@ import { EmployerSignUpPage } from "./pages/employer/signUp.jsx";
 import { EmployerLoginPage } from "./pages/employer/login.jsx";
 import {ResetPasswordPage} from "./pages/auth/resetPassword.jsx";
 import {RequestPassword} from "./pages/auth/requestPassword.jsx";
+import {StudentDashboard} from "./pages/dashboard/studentDashboard.jsx";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
 
                 {/* Routes Étudiant */}
                 <Route path="/signup/etudiant" element={<EtudiantForm />} />
+                <Route path="/dashboard/student" element={<StudentDashboard />} />
 
                 {/* Routes Employeur */}
                 <Route path="/signup/employer" element={<EmployerSignUpPage />} />
