@@ -11,6 +11,8 @@ import EtudiantConnection from "./components/EtudiantConnection.jsx";
 // Pages Employeur
 import { EmployerSignUpPage } from "./pages/employer/signUp.jsx";
 import { EmployerLoginPage } from "./pages/employer/login.jsx";
+import AccueilEmployer from "./pages/employer/accueilEmployer.jsx";
+import AjoutStage from "./pages/employer/ajoutStage.jsx";
 import {ResetPasswordPage} from "./pages/auth/resetPassword.jsx";
 import {RequestPassword} from "./pages/auth/requestPassword.jsx";
 import {StudentDashboard} from "./pages/dashboard/studentDashboard.jsx";
@@ -27,11 +29,16 @@ function App() {
 
                 {/* Routes Étudiant */}
                 <Route path="/signup/etudiant" element={<EtudiantForm />} />
-                <Route path="/dashboard/student" element={<StudentDashboard />} />
 
+                <Route path="/dashboard/student" element={<StudentDashboard />} />
+                  
                 {/* Routes Employeur */}
                 <Route path="/signup/employer" element={<EmployerSignUpPage />} />
                 <Route path="/login" element={<ConnectionForm />} />
+                <Route path="/login/employer" element={<EmployerLoginPage />} />
+                <Route path="/employer/accueil" element={<AccueilEmployer />} />
+                <Route path="/employer/ajout_stages" element={<AjoutStage />} />
+
             </Routes>
         </BrowserRouter>
     );
