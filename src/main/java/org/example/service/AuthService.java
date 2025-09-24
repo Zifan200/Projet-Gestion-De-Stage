@@ -10,6 +10,7 @@ import org.example.security.JwtTokenProvider;
 import org.example.security.exception.InvalidJwtTokenException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.LoginDTO;
+import org.example.service.dto.PasswordRequestDTO;
 import org.example.service.dto.UserDTO;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -98,15 +99,15 @@ public class AuthService {
     }
 
     @Transactional
-    public void userPasswordReset(String token, String newPassword) {
+    public void userPasswordReset(PasswordRequestDTO passwordRequestDTO) {
         try {
-            String email = jwtTokenProvider.getEmailFromJWT(token);
+            String email = jwtTokenProvider.getEmailFromJWT(passwordRequestDTO.getToken());
             UserApp user = userAppRepository.findUserAppByEmail(email)
                     .orElseThrow();
 
             Credentials newCredentials = Credentials.builder()
                     .email(user.getEmail())
-                    .password(passwordEncoder.encode(newPassword))
+                    .password(passwordEncoder.encode(passwordRequestDTO.getNewPassword()))
                     .role(user.getRole())
                     .build();
 
