@@ -1,9 +1,15 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import { Toaster, toast } from 'sonner';
+import {useNavigate} from "react-router";
+import AccueilEmployer from "../pages/employer/accueilEmployer.jsx";
+import EtudiantConnection from "./EtudiantConnection.jsx";
 
 export default function ConnectionForm() {
     const api = "http://localhost:8080/user/signin";
+    const userInfos = "http://localhost:8080/user/me";
+    const navigate = useNavigate();
+
     const passwordMinSize = 8;
     const [formData, setFormData] = useState({
         email: "",
@@ -41,6 +47,30 @@ export default function ConnectionForm() {
                 const token = await response.json();
                 localStorage.setItem("token", token.accessToken);
                 toast.info("Connexion réussie")
+
+                const userResponse = await fetch(userInfos, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (userResponse.ok) {
+                    const user = await userResponse.json();
+                    console.log(user);
+
+                    if (user.role === "EMPLOYER") {
+                        navigate("/employer/accueil");
+                    }
+                    else if (user.role === "STUDENT") {
+                        navigate("/etudiant/accueil");
+                    }
+                }
+                else {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                }
             }
             else if (response.status === 401) {
                 setErrors("Erreur de validation");

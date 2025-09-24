@@ -13,6 +13,7 @@ export default function AjoutStage() {
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const token = localStorage.getItem("token");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -48,8 +49,15 @@ export default function AjoutStage() {
             };
 
             // J'ai essayé la variable baseURL, mais je me retrouve avec undefined.
-            await axios.post("http://localhost:8080/api/v1/employer/create-internship-offer", payload);
-
+            await axios.post(
+                "http://localhost:8080/api/v1/employer/create-internship-offer", payload,
+                {
+                    headers: {
+                        Authorization: token,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
             setSuccessMessage("Offre de stage publiée avec succès !");
             setFormData({
