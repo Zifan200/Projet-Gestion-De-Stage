@@ -5,83 +5,83 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.model.Etudiant;
+import org.example.model.UserApp;
+import org.example.model.auth.Role;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class EtudiantDTO {
-    private Long id;
+public class EtudiantDTO extends UserDTO {
 
-    @NotBlank(message = "Le nom est obligatoire")
-    private String nom;
-
-    @NotBlank(message = "Le prénom est obligatoire")
-    private String prenom;
-
-    @NotBlank(message = "Le courriel est obligatoire")
-    @Email(message = "Le courriel doit être valide")
-    private String courriel;
+    private LocalDate since;
 
     @NotBlank(message = "Le téléphone est obligatoire")
     @Pattern(regexp = "\\d{3}-\\d{3}-\\d{4}", message = "Le téléphone doit être au format 514-123-4567")
-    private String telephone;
+    private String phone;
 
     @NotBlank(message = "L'adresse est obligatoire")
     private String adresse;
 
     @NotBlank(message = "Le programme est obligatoire")
-    private String programme;
+    private String program;
 
     @Min(value = 16, message = "L'étudiant doit avoir au moins 16 ans")
     private int age;
 
-    @NotBlank(message = "Le mot de passe est obligatoire")
-    @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
-    @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&]).+$",
-            message = "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial"
-    )
-    private String motDePasse;
-
     private List<Long> ListCvId;
 
+    public EtudiantDTO() {
+
+    }
+
+    @Builder
+    public EtudiantDTO(Long id, String firstName, String lastName, String email, Role role,
+                       LocalDate since, String phone, String adresse, String program, int age, String password) {
+        super(id, firstName, lastName, email, password, role);
+        this.age = age;
+        this.phone = phone;
+        this.adresse = adresse;
+        this.program = program;
+    }
+
     public static Etudiant toEntity(EtudiantDTO dto) {
-        Etudiant etudiant = new Etudiant();
-        etudiant.setId(dto.getId());
-        etudiant.setNom(dto.getNom());
-        etudiant.setPrenom(dto.getPrenom());
-        etudiant.setCourriel(dto.getCourriel());
-        etudiant.setTelephone(dto.getTelephone());
-        etudiant.setAdresse(dto.getAdresse());
-        etudiant.setProgramme(dto.getProgramme());
-        etudiant.setAge(dto.getAge());
-        return etudiant;
+        return Etudiant.builder()
+                .id(dto.getId())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .phone(dto.getPhone())
+                .adresse(dto.getAdresse())
+                .age(dto.getAge())
+                .program(dto.getProgram())
+                .build();
     }
 
     public static EtudiantDTO fromEntity(Etudiant etudiant) {
-        EtudiantDTO dto = new EtudiantDTO();
-        dto.setId(etudiant.getId());
-        dto.setNom(etudiant.getNom());
-        dto.setPrenom(etudiant.getPrenom());
-        dto.setCourriel(etudiant.getCourriel());
-        dto.setTelephone(etudiant.getTelephone());
-        dto.setAdresse(etudiant.getAdresse());
-        dto.setProgramme(etudiant.getProgramme());
-        dto.setAge(etudiant.getAge());
-        if (etudiant.getCv() != null) {
-            dto.setListCvId(etudiant.getCv()
-                    .stream()
-                    .map(cv -> cv.getId())
-                    .toList());
-        }
-        return dto;
+        return EtudiantDTO
+                .builder()
+                .id(etudiant.getId())
+                .firstName(etudiant.getFirstName())
+                .lastName(etudiant.getLastName())
+                .email(etudiant.getEmail())
+                .password(etudiant.getPassword())
+                .role(etudiant.getRole())
+                .since(etudiant.getSince())
+                .phone(etudiant.getPhone())
+                .age(etudiant.getAge())
+                .program(etudiant.getProgram())
+                .adresse(etudiant.getAdresse())
+                .build();
+    }
+
+    public static EtudiantDTO empty() {
+        return new EtudiantDTO();
     }
 }
 
