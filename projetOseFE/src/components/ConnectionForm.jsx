@@ -1,9 +1,11 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
-import { Toaster, toast } from 'sonner';
+import {Link, useNavigate} from "react-router-dom";
+import {Toaster, toast} from 'sonner';
+import {authService} from "../services/authService.js";
 
 export default function ConnectionForm() {
     const api = "http://localhost:8080/user/signin";
+    const navigate = useNavigate()
     const passwordMinSize = 8;
     const [formData, setFormData] = useState({
         email: "",
@@ -12,25 +14,24 @@ export default function ConnectionForm() {
     const [errors, setErrors] = useState("");
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      if (!isEmailValid() || !isPasswordValid()) {
-          setErrors("Courriel ou mot de passe invalide");
-          console.log("errors", formData.email, formData.password)
-          return;
-      }
-      else {
-          setErrors("");
-          console.log("connexion", formData.email, formData.password)
-      }
-      await fetchUser();
+        if (!isEmailValid() || !isPasswordValid()) {
+            setErrors("Courriel ou mot de passe invalide");
+            console.log("errors", formData.email, formData.password)
+            return;
+        } else {
+            setErrors("");
+            console.log("connexion", formData.email, formData.password)
+        }
+        await fetchUser();
     };
 
     const fetchUser = async () => {
         try {
             const response = await fetch(api, {
                 method: "POST",
-                headers: {"Content-Type" : "application/json"},
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: formData.email.toLowerCase(),
                     password: formData.password
@@ -40,12 +41,16 @@ export default function ConnectionForm() {
             if (response.ok) {
                 const token = await response.json();
                 localStorage.setItem("token", token.accessToken);
+                if (token) {
+                    const data = await authService.getMe(token.accessToken);
+                    if (data.role === "STUDENT") {
+                        navigate("/dashboard/student")
+                    }
+                }
                 toast.info("Connexion réussie")
-            }
-            else if (response.status === 401) {
+            } else if (response.status === 401) {
                 setErrors("Erreur de validation");
-            }
-            else {
+            } else {
                 setErrors("Une erreur est survenue");
             }
         } catch (error) {
@@ -55,7 +60,7 @@ export default function ConnectionForm() {
 
     const handleChanges = (e) => {
         e.preventDefault();
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         setFormData({...formData, [name]: value.trim()});
         setErrors("");
@@ -74,7 +79,7 @@ export default function ConnectionForm() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900 dark:bg-gray-800">
             <form onSubmit={handleSubmit}
-                className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md w-full max-w-md"
+                  className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md w-full max-w-md"
             >
                 <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
                     Connexion
@@ -93,8 +98,8 @@ export default function ConnectionForm() {
                 <div className="pb-4">
                     <label className="block">Mot de passe : </label>
                     <input type="password" name="password" onChange={handleChanges}
-                        minLength={passwordMinSize} required
-                        className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2
+                           minLength={passwordMinSize} required
+                           className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2
                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none
                             focus:ring-2 focus:ring-blue-500"
                     />
@@ -105,7 +110,7 @@ export default function ConnectionForm() {
                 }
 
                 <button type="submit"
-                    className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700
+                        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700
                         focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     Se connecter
