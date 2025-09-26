@@ -43,31 +43,27 @@ const Navbar = () => {
     };
 
     return (
-        <nav
-            ref={wrapperRef}
-            onMouseLeave={scheduleClose}
-            className="relative flex items-center px-8 py-4  border-b border-zinc-200 "
-        >
+        <nav ref={wrapperRef} onMouseLeave={scheduleClose} className="relative flex items-center px-8 py-4 border-b border-zinc-200">
             <div className="text-xl font-bold mr-8">OSE 2.0</div>
-
             <div className="flex items-center gap-6">
-                {menuConfig.map((menu, idx) => (
-                    <button
-                        key={menu.id}
-                        ref={idx === 0 ? productsBtnRef : null}
-                        className={`flex items-center gap-1 px-4 py-2 font-medium transition ${
-                            activeMenu === menu.id ? "text-black" : "text-gray-700 hover:text-black"
-                        }`}
-                        onMouseEnter={() => scheduleOpen(menu.id)}
-                        onFocus={() => scheduleOpen(menu.id)}
-                        onBlur={scheduleClose}
-                    >
-                        {menu.label}
-                        <ChevronDown open={activeMenu === menu.id} />
-                    </button>
-                ))}
+                {menuConfig.map((menu, idx) => {
+                    const isDropdown = menu.sections && menu.sections.length > 0;
+                    return (
+                        <button
+                            key={menu.id}
+                            ref={idx === 0 ? productsBtnRef : null}
+                            className={`flex items-center gap-1 px-4 py-2 font-medium transition ${activeMenu === menu.id ? "text-black" : "text-gray-700 hover:text-black"}`}
+                            onMouseEnter={isDropdown ? () => scheduleOpen(menu.id) : undefined}
+                            onFocus={isDropdown ? () => scheduleOpen(menu.id) : undefined}
+                            onBlur={isDropdown ? scheduleClose : undefined}
+                            onClick={!isDropdown ? () => { if (menu.link && menu.link.href) window.location.assign(menu.link.href); } : undefined}
+                        >
+                            {menu.label}
+                            {isDropdown ? <ChevronDown open={activeMenu === menu.id} /> : null}
+                        </button>
+                    );
+                })}
             </div>
-
             <MegaMenu
                 activeMenu={activeMenu}
                 menuConfig={menuConfig}
