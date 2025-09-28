@@ -1,13 +1,11 @@
 package org.example.service.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 
 import java.time.LocalDate;
@@ -29,8 +27,8 @@ public class InternshipOfferDto {
     @NotEmpty
     private String targetedProgramme;
 
-    private LocalDate publishedDate;
 
+    private LocalDate publishedDate;
     private LocalDate expirationDate;
 
     @Builder

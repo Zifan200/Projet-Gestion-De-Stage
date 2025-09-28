@@ -23,19 +23,9 @@ public class InternshipOfferResponseDto {
     private LocalDate expirationDate;
 
     @Builder
-    public InternshipOfferResponseDto(String title, String description, String target_programme,
+    public InternshipOfferResponseDto(Long id,String title, String description, String target_programme,
                                       Employer employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
-        this.title = title;
-        this.description = description;
-        this.targetedProgramme = target_programme;
-        this.employerEmail = employerEmail.getEmail();
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
-    }
-
-    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
-    public InternshipOfferResponseDto(String title, String description, String target_programme,
-                                      EmployerResponseDto employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.targetedProgramme = target_programme;
@@ -46,6 +36,7 @@ public class InternshipOfferResponseDto {
 
     public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
         return InternshipOfferResponseDto.builder()
+                .id(internshipOffer.getId())
                 .title(internshipOffer.getTitle())
                 .description(internshipOffer.getDescription())
                 .target_programme(internshipOffer.getTargetedProgramme())
