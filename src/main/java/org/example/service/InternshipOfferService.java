@@ -28,8 +28,8 @@ public class InternshipOfferService {
 
 
 
-    public InternshipOfferResponseDto saveInternshipOffer(InternshipOfferDto internshipOfferDto){
-        Optional<Employer> savedEmployer = employerRepository.findByCredentialsEmail(internshipOfferDto.getEmployerEmail());
+    public InternshipOfferResponseDto saveInternshipOffer(String email, InternshipOfferDto internshipOfferDto){
+        Optional<Employer> savedEmployer = employerRepository.findByCredentialsEmail(email);
         if(internshipOfferDto.getTitle().isBlank()){
             throw new InvalidInternShipOffer("Invalid internship offer (missing critical information)");
         }

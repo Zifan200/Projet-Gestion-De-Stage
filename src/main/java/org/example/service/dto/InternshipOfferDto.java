@@ -29,49 +29,22 @@ public class InternshipOfferDto {
     @NotEmpty
     private String targetedProgramme;
 
-    @NotBlank(message = "required: employer email")
-    @Email
-    private String employerEmail;
-
     private LocalDate publishedDate;
 
     private LocalDate expirationDate;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
+                            LocalDate publishedDate, LocalDate expirationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.targetedProgramme = targetedProgramme;
-        this.employerEmail = employerEmail;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
     }
 
-    @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
-    public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDate publishedDate, LocalDate expirationDate) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.targetedProgramme = targetedProgramme;
-        this.employerEmail = employer.getEmail();
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
-    }
 
-    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
-    public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.targetedProgramme = targetedProgramme;
-        this.employerEmail = employer.getEmail();
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
-    }
 
     public InternshipOfferDto(){}
 
@@ -81,7 +54,6 @@ public class InternshipOfferDto {
                 .title(internshipOffer.getTitle())
                 .description(internshipOffer.getDescription())
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
-                .employerEmail(internshipOffer.getEmployer().getEmail())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
                 .build();
