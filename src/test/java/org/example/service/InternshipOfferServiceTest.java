@@ -8,6 +8,7 @@ import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.service.dto.EmployerDto;
 import org.example.service.dto.InternshipOfferDto;
+import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.Test;
@@ -17,12 +18,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 import java.time.LocalDate;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -150,4 +153,96 @@ public class InternshipOfferServiceTest {
                 .isInstanceOf(InvalidInternShipOffer.class);
         verify(internshipOfferRepository, never()).save(any());
     }
+    @Test
+    void getAllOffers_shouldReturnListOfOffers() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
+        InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now().plusDays(1));
+        offer2.setTitle("Frontend Developer");
+
+        when(internshipOfferRepository.findAll())
+                .thenReturn(List.of(offer1, offer2));
+
+        // Act
+        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffers();
+
+        // Assert
+        assertThat(offers).hasSize(2);
+        assertThat(offers.get(0).getTitle()).isEqualTo("recherche Scratch Developer");
+        assertThat(offers.get(1).getTitle()).isEqualTo("Frontend Developer");
+    }
+
+    @Test
+    void getOffersByProgramme_shouldReturnFilteredOffers() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
+        offer1.setTargetedProgramme("Informatique");
+        InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
+        offer2.setTitle("Frontend Developer");
+        offer2.setTargetedProgramme("Science de la nature");
+
+        when(internshipOfferRepository.findAll())
+                .thenReturn(List.of(offer1, offer2));
+
+        // Act
+        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme("Informatique");
+
+        // Assert
+        assertThat(filteredOffers).hasSize(1);
+        assertThat(filteredOffers.get(0).getTitle()).isEqualTo("recherche Scratch Developer");
+        assertThat(filteredOffers.get(0).getEnterpriseName()).isEqualTo(employer.getEnterpriseName());
+    }
+
+    @Test
+    void getAllTargetedProgrammes_shouldReturnDistinctSortedList() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
+        offer1.setTargetedProgramme("Informatique");
+        InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
+        offer2.setTargetedProgramme("Science de la nature");
+        InternshipOffer offer3 = buildInternshipOffer(employer, LocalDate.now());
+        offer3.setTargetedProgramme("Informatique"); // doublon
+
+        when(internshipOfferRepository.findAll())
+                .thenReturn(List.of(offer1, offer2, offer3));
+
+        // Act
+        List<String> programmes = internshipOfferService.getAllTargetedProgrammes();
+
+        // Assert
+        assertThat(programmes).hasSize(2);
+        assertThat(programmes).containsExactly("Informatique", "Science de la nature");
+    }
+
+    @Test
+    void getAllOffers_whenNoOffers_shouldReturnEmptyList() {
+        // Arrange
+        when(internshipOfferRepository.findAll()).thenReturn(List.of());
+
+        // Act
+        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffers();
+
+        // Assert
+        assertThat(offers).isEmpty();
+    }
+
+    @Test
+    void getOffersByProgramme_whenNoMatchingOffers_shouldReturnEmptyList() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
+        offer1.setTargetedProgramme("Informatique");
+        when(internshipOfferRepository.findAll()).thenReturn(List.of(offer1));
+
+        // Act
+        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme("Science de la nature");
+
+        // Assert
+        assertThat(filteredOffers).isEmpty();
+    }
+
+
 }
