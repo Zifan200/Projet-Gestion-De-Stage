@@ -38,4 +38,19 @@ public class InternshipOfferController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping("/programmes")
+    public ResponseEntity<List<String>> getAllProgrammes() {
+        return ResponseEntity.ok(internshipOfferService.getAllTargetedProgrammes());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<InternshipOfferListDto>> getOffersByProgramme(@RequestParam String programme) {
+        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme(programme);
+        if (filteredOffers.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+        return ResponseEntity.ok(filteredOffers);
+    }
+
 }

@@ -79,4 +79,25 @@ public class InternshipOfferService {
 
         return InternshipOfferResponseDto.create(offer);
     }
+    public List<String> getAllTargetedProgrammes() {
+        return internshipOfferRepository.findAll().stream()
+                .map(InternshipOffer::getTargetedProgramme)
+                .distinct()
+                .sorted()
+                .toList();
+    }
+
+    public List<InternshipOfferListDto> getOffersByProgramme(String programme) {
+        return internshipOfferRepository.findAll()
+                .stream()
+                .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .toList();
+    }
+
 }
