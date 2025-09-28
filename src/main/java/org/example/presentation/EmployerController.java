@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -37,16 +40,22 @@ public class EmployerController {
     }
 
     @PostMapping("/create-internship-offer")
-    public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(HttpServletRequest request, @Valid @RequestBody InternshipOfferDto internshipOfferDto) {
-        try {
+    public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(
+        HttpServletRequest request,
+        @RequestParam(required = false) MultipartFile file,
+        @Valid @RequestBody InternshipOfferDto internshipOfferDto) {
 
-            String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+
+        if(file != null) {
+            Optional<MultipartFile> option_attachment = Optional.of(file);
             return ResponseEntity
-                    .ok(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
+                    .ok(internshipOfferService.saveInternshipOfferWithAttachment(email, internshipOfferDto, option_attachment));
 
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
+        return ResponseEntity
+                .ok(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
+
     }
 }

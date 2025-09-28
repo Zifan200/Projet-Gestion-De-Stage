@@ -29,6 +29,8 @@ public class InternshipOfferDto {
 
     private LocalDate publishedDate;
     private LocalDate expirationDate;
+
+    @NotEmpty
     private boolean hasAttachment;
     //optional single file upload for the offer
     private String fileName;
@@ -65,7 +67,7 @@ public class InternshipOfferDto {
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
-                .hasAttachment(internshipOffer.isHasAttachment())
+                .hasAttachment(internshipOffer.isAttachmentPresent())
                 .fileName(internshipOffer.getFileName())
                 .fileType(internshipOffer.getFileType())
                 .fileSize(internshipOffer.getFileSize())

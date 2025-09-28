@@ -29,8 +29,8 @@ public class InternshipOffer {
 
     private LocalDate publishedDate =  LocalDate.now();
     private LocalDate expirationDate;
-    private boolean hasAttachment = false;
-    //optional single file upload for the offer
+    private boolean attachmentPresent = false;
+    //optional single file upload for the offer (simpler with one file 🙏)
     @Column(name = "file_name")
     private String fileName;
     @Column(name = "file_type")
@@ -46,7 +46,7 @@ public class InternshipOffer {
     @Builder
     public InternshipOffer(
             Long id, String title, String description, String targetedProgramme, Employer employer,
-            LocalDate publishedDate, LocalDate expirationDate,  String fileName, String fileType, Long fileSize, byte[] fileData
+            LocalDate publishedDate, LocalDate expirationDate,boolean attachmentPresent,  String fileName, String fileType, Long fileSize, byte[] fileData
     ) {
         this.id = id;
         this.title = title;
@@ -55,6 +55,7 @@ public class InternshipOffer {
         this.targetedProgramme = targetedProgramme;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
+        this.attachmentPresent = attachmentPresent;
         this.fileName = fileName;
         this.fileType = fileType;
         this.fileSize = fileSize;
