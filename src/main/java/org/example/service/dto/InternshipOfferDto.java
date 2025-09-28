@@ -30,7 +30,6 @@ public class InternshipOfferDto {
     private LocalDate publishedDate;
     private LocalDate expirationDate;
 
-    @NotEmpty
     private boolean hasAttachment;
     //optional single file upload for the offer
     private String fileName;
