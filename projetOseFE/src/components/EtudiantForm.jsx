@@ -17,7 +17,6 @@ export default function EtudiantForm() {
         phone: "",
         adresse: "",
         program: "",
-        age: "",
         password: "",
         confirmPassword: ""
     });
@@ -46,9 +45,6 @@ export default function EtudiantForm() {
         if (!formData.adresse.trim()) newErrors.adresse = "L'adresse est obligatoire";
 
         if (!formData.program.trim()) newErrors.program = "Le programme est obligatoire";
-
-        if (!formData.age) newErrors.age = "L'âge est obligatoire";
-        else if (parseInt(formData.age) < 16) newErrors.age = "L'étudiant doit avoir au moins 16 ans";
 
         if (!formData.password.trim()) newErrors.password = "Le mot de passe est obligatoire";
         else if (formData.password.length < 8) newErrors.password = "Au moins 8 caractères requis";
@@ -161,18 +157,6 @@ export default function EtudiantForm() {
                         className={styles.inputField}
                     />
                     {errors.adresse && <p className={styles.error}>{errors.adresse}</p>}
-                </div>
-
-                <div className={styles.inputContainer}>
-                    <input
-                        type="number"
-                        name="age"
-                        placeholder="Âge"
-                        value={formData.age}
-                        onChange={handleChange}
-                        className={styles.inputField}
-                    />
-                    {errors.age && <p className={styles.error}>{errors.age}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>
