@@ -1,10 +1,10 @@
 package org.example.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDate;
 import java.time.LocalDate;
 
 @Entity
@@ -17,6 +17,7 @@ public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String title;
     private String description;
     private String targetedProgramme;
@@ -30,15 +31,15 @@ public class InternshipOffer {
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate
-    ){
+            Long id, String title, String description, String targetedProgramme, Employer employer,
+            LocalDate publishedDate, LocalDate expirationDate
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.employer = employer;
         this.targetedProgramme = targetedProgramme;
-
-        this.publishedDate = publishedDate; // date when posted
-        this.expirationDate = expirationDate; // optional expiration date for application to the offer
+        this.publishedDate = publishedDate;
+        this.expirationDate = expirationDate;
     }
 }
