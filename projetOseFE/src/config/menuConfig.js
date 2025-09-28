@@ -1,16 +1,17 @@
 export const menuConfig = [
+
     {
         id: "connexion",
         label: "Connexion",
+        link: {href:"/login"},
         sections: [
-            {
-                title: "Choisir votre rôle",
-                links: [
-                    { label: "Étudiant", href: "/login" },
-                    { label: "Gestionnaire", href: "/login/gs" },
-                    { label: "Employeur", href: "/login" },
-                ],
-            },
+            // {
+            //     title: "Choisir votre rôle",
+            //     links: [
+            //         { label: "Utilisateurs", href: "/login" },
+            //         { label: "Gestionnaire", href: "/login/gs" },
+            //     ],
+            // },
         ],
     },
     {
