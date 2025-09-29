@@ -4,6 +4,7 @@ import org.example.model.Employer;
 import org.example.service.InternshipOfferService;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -99,7 +100,8 @@ public class InternshipOfferControllerTest {
     void getInternshipOfferById_shouldReturnNotFound_whenOfferDoesNotExist() {
         // Arrange
         Long offerId = 99L;
-        when(internshipOfferService.getOfferById(offerId)).thenThrow(new RuntimeException("Not found"));
+        when(internshipOfferService.getOfferById(offerId))
+                .thenThrow(new InvalidInternShipOffer("Offer not found with id: " + offerId));
 
         // Act
         ResponseEntity<InternshipOfferResponseDto> response = internshipOfferController.getInternshipOfferById(offerId);
@@ -108,6 +110,7 @@ public class InternshipOfferControllerTest {
         assertThat(response.getStatusCodeValue()).isEqualTo(404);
         assertThat(response.getBody()).isNull();
     }
+
 
     @Test
     void getAllProgrammes_shouldReturnListOfProgrammes() {
