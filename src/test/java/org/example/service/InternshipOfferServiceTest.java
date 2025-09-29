@@ -244,5 +244,35 @@ public class InternshipOfferServiceTest {
         assertThat(filteredOffers).isEmpty();
     }
 
+    @Test
+    void updateOfferStatus_shouldUpdateStatusSuccessfully() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer = buildInternshipOffer(employer, LocalDate.now());
+        offer.setId(1L);
+        offer.setStatus(null);
+
+        when(internshipOfferRepository.findById(1L)).thenReturn(Optional.of(offer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(offer);
+
+        // Act
+        internshipOfferService.updateOfferStatus(1L, org.example.model.enums.InternshipOfferStatus.ACCEPTED);
+
+        // Assert
+        assertThat(offer.getStatus()).isEqualTo(org.example.model.enums.InternshipOfferStatus.ACCEPTED);
+        verify(internshipOfferRepository).save(offer);
+    }
+
+    @Test
+    void updateOfferStatus_shouldThrowWhenOfferIdNotFound() {
+        // Arrange
+        when(internshipOfferRepository.findById(99L)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, org.example.model.enums.InternshipOfferStatus.ACCEPTED))
+                .isInstanceOf(InvalidInternShipOffer.class)
+                .hasMessageContaining("Offer not found");
+        verify(internshipOfferRepository, never()).save(any());
+    }
 
 }
