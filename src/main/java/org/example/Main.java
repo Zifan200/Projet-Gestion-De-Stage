@@ -1,12 +1,11 @@
 package org.example;
 
 import org.example.model.Employer;
-import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.service.InternshipOfferService;
+import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
-import org.example.service.dto.InternshipOfferDto;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -38,53 +37,51 @@ public class Main {
                 .build();
         employerRepository.save(employer);
 
-        // Créer des offres de stage
-        InternshipOfferDto offer1 = InternshipOfferDto.builder()
-                .title("Développeur Java")
-                .description("Stage backend Java Spring Boot")
-                .targetedProgramme("Informatique")
-                .employerEmail("alice@example.com")
-                .expirationDate(LocalDate.now().plusMonths(2))
-                .build();
-        InternshipOfferResponseDto savedOffer1 = internshipOfferService.saveInternshipOffer(offer1);
+        // Créer 3 offres de stage avec programmes différents
+        String[] titles = {"Développeur Java", "Frontend React", "Data Analyst"};
+        String[] descriptions = {
+                "Stage backend Java Spring Boot",
+                "Stage développement frontend React",
+                "Stage analyse de données et visualisation"
+        };
+        String[] programmes = {"Informatique", "Informatique", "Science de la nature"};
 
-        InternshipOfferDto offer2 = InternshipOfferDto.builder()
-                .title("Frontend React")
-                .description("Stage développement frontend React")
-                .targetedProgramme("Informatique")
-                .employerEmail("alice@example.com")
-                .expirationDate(LocalDate.now().plusMonths(3))
-                .build();
-        InternshipOfferResponseDto savedOffer2 = internshipOfferService.saveInternshipOffer(offer2);
+        for (int i = 0; i < 3; i++) {
+            InternshipOfferDto offerDto = InternshipOfferDto.builder()
+                    .title(titles[i])
+                    .description(descriptions[i])
+                    .targetedProgramme(programmes[i])
+                    .employerEmail("alice@example.com")
+                    .expirationDate(LocalDate.now().plusMonths(2 + i))
+                    .build();
 
-        InternshipOfferDto offer3 = InternshipOfferDto.builder()
-                .title("Data Analyst")
-                .description("Stage analyse de données et visualisation")
-                .targetedProgramme("Informatique")
-                .employerEmail("alice@example.com")
-                .expirationDate(LocalDate.now().plusMonths(4))
-                .build();
-        InternshipOfferResponseDto savedOffer3 = internshipOfferService.saveInternshipOffer(offer3);
+            internshipOfferService.saveInternshipOffer(offerDto);
+        }
 
-        InternshipOfferDto offer4 = InternshipOfferDto.builder()
-                .title("Soins infirmiers")
-                .description("Stage pratique soins infirmiers")
-                .targetedProgramme("Soins infirmiers")
-                .employerEmail("alice@example.com")
-                .expirationDate(LocalDate.now().plusMonths(2))
-                .build();
-        InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer(offer4);
+        // Afficher toutes les offres (comme un étudiant)
+        System.out.println("=== Toutes les offres de stage ===");
+        List<InternshipOfferListDto> allOffers = internshipOfferService.getAllOffers();
+        allOffers.forEach(o -> System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - " + o.getEnterpriseName()));
 
-        // Mettre à jour les statuts
-        internshipOfferService.updateOfferStatus(savedOffer1.getId(), InternshipOfferStatus.ACCEPTED);
-        internshipOfferService.updateOfferStatus(savedOffer2.getId(), InternshipOfferStatus.ACCEPTED);
-        internshipOfferService.updateOfferStatus(savedOffer3.getId(), InternshipOfferStatus.PENDING);
-        internshipOfferService.updateOfferStatus(savedOffer4.getId(), InternshipOfferStatus.REJECTED);
+        // Filtrage par programme (exemple : Informatique)
+        String programmeFilter = "Informatique";
+        System.out.println("\n=== Offres filtrées par programme : " + programmeFilter + " ===");
+        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme(programmeFilter);
+        if (filteredOffers.isEmpty()) {
+            System.out.println("Aucune offre disponible pour ce programme.");
+        } else {
+            filteredOffers.forEach(o -> System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - " + o.getEnterpriseName()));
+        }
 
-        // Afficher uniquement les offres ACCEPTED du programme "Informatique"
-        System.out.println("=== Offres ACCEPTED pour Informatique ===");
-        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffersByProgramme("Informatique");
-        acceptedOffers.forEach(o ->
-                System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - " + o.getEnterpriseName()));
+        // Afficher les détails complets pour chaque offre
+        System.out.println("\n=== Détails des offres ===");
+        allOffers.forEach(o -> {
+            InternshipOfferResponseDto details = internshipOfferService.getOfferById(o.getId());
+            System.out.println("\nTitre: " + details.getTitle());
+            System.out.println("Description: " + details.getDescription());
+            System.out.println("Programme visé: " + details.getTargetedProgramme());
+            System.out.println("Email de l'employer: " + details.getEmployerEmail());
+            System.out.println("Date limite: " + details.getExpirationDate());
+        });
     }
 }

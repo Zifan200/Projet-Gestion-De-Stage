@@ -104,7 +104,6 @@ public class InternshipOfferService {
         List<InternshipOffer> acceptedOffers =
                 internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
 
-        // On mappe en DTO pour éviter d’exposer directement les entités
         return acceptedOffers.stream()
                 .map(InternshipOfferDto::create)
                 .toList();
@@ -117,17 +116,4 @@ public class InternshipOfferService {
         internshipOfferRepository.save(offer);
     }
 
-    public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {
-        return internshipOfferRepository.findAll()
-                .stream()
-                .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
-                .filter(offer -> offer.getStatus() == InternshipOfferStatus.ACCEPTED) // filtre les acceptées
-                .map(offer -> InternshipOfferListDto.builder()
-                        .id(offer.getId())
-                        .title(offer.getTitle())
-                        .enterpriseName(offer.getEmployer().getEnterpriseName())
-                        .expirationDate(offer.getExpirationDate())
-                        .build())
-                .toList();
-    }
 }
