@@ -28,14 +28,13 @@ public class Etudiant extends UserApp {
     private String phone;
     private String adresse;
     private String program;
-    private int age;
     @OneToMany(mappedBy = "etudiant", cascade = jakarta.persistence.CascadeType.ALL)
     private List<CV> cv = new ArrayList<>();
 
 
     @Builder
     public Etudiant(Long id, String firstName, String lastName, String email, String password, boolean active
-    , String phone, String adresse, String program, int age, LocalDate since,
+    , String phone, String adresse, String program, LocalDate since,
                     LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         super(id, firstName, lastName, Credentials.builder()
                 .email(email)
@@ -46,6 +45,5 @@ public class Etudiant extends UserApp {
         this.phone = phone;
         this.adresse = adresse;
         this.program = program;
-        this.age = age;
     }
 }
