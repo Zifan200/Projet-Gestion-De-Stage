@@ -116,4 +116,18 @@ public class InternshipOfferService {
         internshipOfferRepository.save(offer);
     }
 
+    public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {
+        return internshipOfferRepository.findAll()
+                .stream()
+                .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
+                .filter(offer -> offer.getStatus() == InternshipOfferStatus.ACCEPTED)
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .toList();
+    }
+
 }
