@@ -3,6 +3,7 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDate;
@@ -27,6 +28,10 @@ public class InternshipOffer {
 
     private LocalDate publishedDate;
     private LocalDate expirationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
 
     @Builder
     public InternshipOffer(

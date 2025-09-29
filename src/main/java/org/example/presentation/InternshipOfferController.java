@@ -2,6 +2,7 @@ package org.example.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.InternshipOfferService;
+import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,11 @@ public class InternshipOfferController {
             return ResponseEntity.ok(List.of());
         }
         return ResponseEntity.ok(filteredOffers);
+    }
+
+    @GetMapping("/accepted")
+    public ResponseEntity<List<InternshipOfferDto>> getAcceptedOffers() {
+        return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 
 }

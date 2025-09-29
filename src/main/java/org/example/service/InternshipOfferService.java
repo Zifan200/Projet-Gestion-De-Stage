@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.service.dto.InternshipOfferListDto;
@@ -99,5 +100,34 @@ public class InternshipOfferService {
                         .build())
                 .toList();
     }
+    public List<InternshipOfferDto> getAcceptedOffers() {
+        List<InternshipOffer> acceptedOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
 
+        // On mappe en DTO pour éviter d’exposer directement les entités
+        return acceptedOffers.stream()
+                .map(InternshipOfferDto::create)
+                .toList();
+    }
+
+    public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
+        InternshipOffer offer = internshipOfferRepository.findById(offerId)
+                .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
+        offer.setStatus(status);
+        internshipOfferRepository.save(offer);
+    }
+
+    public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {
+        return internshipOfferRepository.findAll()
+                .stream()
+                .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
+                .filter(offer -> offer.getStatus() == InternshipOfferStatus.ACCEPTED) // filtre les acceptées
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .toList();
+    }
 }
