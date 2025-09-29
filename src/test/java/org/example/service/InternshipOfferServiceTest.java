@@ -275,4 +275,45 @@ public class InternshipOfferServiceTest {
         verify(internshipOfferRepository, never()).save(any());
     }
 
+    @Test
+    void getAcceptedOffers_shouldReturnOnlyAcceptedOffers() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
+        offer1.setId(1L);
+        offer1.setStatus(org.example.model.enums.InternshipOfferStatus.ACCEPTED);
+
+        InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
+        offer2.setId(2L);
+        offer2.setStatus(org.example.model.enums.InternshipOfferStatus.PENDING);
+
+        InternshipOffer offer3 = buildInternshipOffer(employer, LocalDate.now());
+        offer3.setId(3L);
+        offer3.setStatus(org.example.model.enums.InternshipOfferStatus.ACCEPTED);
+
+        when(internshipOfferRepository.findDistinctByStatus(org.example.model.enums.InternshipOfferStatus.ACCEPTED))
+                .thenReturn(List.of(offer1, offer3));
+
+        // Act
+        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+
+        // Assert
+        assertThat(acceptedOffers).hasSize(2);
+        assertThat(acceptedOffers).extracting("title")
+                .containsExactlyInAnyOrder(offer1.getTitle(), offer3.getTitle());
+    }
+
+    @Test
+    void getAcceptedOffers_whenNoAcceptedOffers_shouldReturnEmptyList() {
+        // Arrange
+        when(internshipOfferRepository.findDistinctByStatus(org.example.model.enums.InternshipOfferStatus.ACCEPTED))
+                .thenReturn(List.of());
+
+        // Act
+        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+
+        // Assert
+        assertThat(acceptedOffers).isEmpty();
+    }
+
 }
