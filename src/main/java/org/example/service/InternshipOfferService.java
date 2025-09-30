@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
+import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.exception.InvalidInternShipOffer;
@@ -15,7 +17,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,4 +57,79 @@ public class InternshipOfferService {
         logger.info("InternshipOffer created = \"{}\"", savedInternshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
+    public List<InternshipOfferListDto> getAllOffers() {
+        List<InternshipOfferListDto> offers = internshipOfferRepository.findAll()
+                .stream()
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .collect(Collectors.toList());
+
+        if (offers.isEmpty()) {
+            System.out.println("Aucune offre de stage disponible pour le moment.");
+        }
+
+        return offers;
+    }
+
+
+    public InternshipOfferResponseDto getOfferById(Long id) {
+        InternshipOffer offer = internshipOfferRepository.findById(id)
+                .orElseThrow(() -> new InvalidInternShipOffer("Internship offer not found with id: " + id));
+
+        return InternshipOfferResponseDto.create(offer);
+    }
+    public List<String> getAllTargetedProgrammes() {
+        return internshipOfferRepository.findAll().stream()
+                .map(InternshipOffer::getTargetedProgramme)
+                .distinct()
+                .sorted()
+                .toList();
+    }
+
+    public List<InternshipOfferListDto> getOffersByProgramme(String programme) {
+        return internshipOfferRepository.findAll()
+                .stream()
+                .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .toList();
+    }
+    public List<InternshipOfferDto> getAcceptedOffers() {
+        List<InternshipOffer> acceptedOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
+
+        return acceptedOffers.stream()
+                .map(InternshipOfferDto::create)
+                .toList();
+    }
+
+    public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
+        InternshipOffer offer = internshipOfferRepository.findById(offerId)
+                .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
+        offer.setStatus(status);
+        internshipOfferRepository.save(offer);
+    }
+
+    public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {
+        return internshipOfferRepository.findAll()
+                .stream()
+                .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
+                .filter(offer -> offer.getStatus() == InternshipOfferStatus.ACCEPTED)
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .toList();
+    }
+
 }

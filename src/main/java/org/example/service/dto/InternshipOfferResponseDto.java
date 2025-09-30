@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
 
@@ -21,10 +22,23 @@ public class InternshipOfferResponseDto {
     private String employerEmail;
     private LocalDate publishedDate;
     private LocalDate expirationDate;
+    private InternshipOfferStatus status;
 
     @Builder
-    public InternshipOfferResponseDto(Long id,String title, String description, String target_programme,
-                                      Employer employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
+    public InternshipOfferResponseDto(String title, String description, String target_programme,
+                                      Employer employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+        this.title = title;
+        this.description = description;
+        this.targetedProgramme = target_programme;
+        this.employerEmail = employerEmail.getEmail();
+        this.publishedDate = publishedDate;
+        this.expirationDate = expirationDate;
+        this.status = status;
+    }
+
+    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
+    public InternshipOfferResponseDto(String title, String description, String target_programme,
+                                      EmployerResponseDto employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,6 +46,7 @@ public class InternshipOfferResponseDto {
         this.employerEmail = employerEmail.getEmail();
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
+        this.status = status;
     }
 
     public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
@@ -43,6 +58,7 @@ public class InternshipOfferResponseDto {
                 .employerEmail(internshipOffer.getEmployer())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
+                .status(internshipOffer.getStatus())
                 .build();
     }
 
