@@ -49,9 +49,7 @@ public class InternshipOfferController {
     @GetMapping("/filter-by-program")
     public ResponseEntity<List<InternshipOfferListDto>> getOffersByProgramme(@RequestParam String programme) {
         List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme(programme);
-        if (filteredOffers.isEmpty()) {
-            return ResponseEntity.ok(List.of());
-        }
+
         return ResponseEntity.ok(filteredOffers);
     }
 
@@ -64,9 +62,7 @@ public class InternshipOfferController {
     @GetMapping("/filter-by-accepted-program")
     public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffersByProgramme(@RequestParam String programme) {
         List<InternshipOfferListDto> filteredOffers = internshipOfferService.getAcceptedOffersByProgramme(programme);
-        if (filteredOffers.isEmpty()) {
-            return ResponseEntity.ok(List.of());
-        }
+
         return ResponseEntity.ok(filteredOffers);
     }
 
