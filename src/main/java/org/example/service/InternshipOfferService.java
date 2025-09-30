@@ -118,6 +118,16 @@ public class InternshipOfferService {
                 .toList();
     }
 
+    public List<InternshipOfferDto> getPendingOffers() {
+        List<InternshipOffer> pendingOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
+
+        return pendingOffers.stream()
+                .map(InternshipOfferDto::create)
+                .toList();
+    }
+
+
 
     public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
         InternshipOffer offer = internshipOfferRepository.findById(offerId)
