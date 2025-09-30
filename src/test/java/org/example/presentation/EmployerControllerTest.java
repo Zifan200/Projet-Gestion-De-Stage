@@ -98,58 +98,6 @@ class EmployerControllerTest {
                 .isInstanceOf(DuplicateUserException.class);
     }
 
-    @Test
-    void createInternshipOffer_shouldReturn409() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
-                .build();
-
-        EmployerDto employerDto = EmployerDto.builder()
-                .email("test@google.com")
-                .firstName("John")
-                .lastName("Doe")
-                .password("password")
-                .since(LocalDate.now())
-                .build();
-
-        InternshipOfferDto internshipOfferDto = InternshipOfferDto.builder()
-                .title("Developer")
-                .description("programme stuff")
-                .employerEmail(employerDto.getEmail())
-                .targetedProgramme("Computer Science")
-                .build();
-
-        InternshipOfferResponseDto internshipResponseDto = InternshipOfferResponseDto.builder()
-                .title(internshipOfferDto.getTitle())
-                .description(internshipOfferDto.getDescription())
-                .employerEmail(employerDto.getEmail())
-                .target_programme(internshipOfferDto.getTargetedProgramme())
-                .build();
-
-        // Arrange mocks
-        when(userAppService.getMe(FAKE_JWT)).thenReturn(employerDto);
-        when(internshipOfferService.saveInternshipOffer(employerDto.getEmail(), internshipOfferDto)).thenThrow(new InvalidInternShipOffer(""));
-
-
-        // Serialize dto to JSON
-        ObjectMapper mapper = new ObjectMapper();
-        String requestBody = mapper.writeValueAsString(internshipOfferDto);
-
-        // Act
-        MvcResult result = mockMvc.perform(post("/api/v1/employer/create-internship-offer")
-                        .header("Authorization", "Bearer " + FAKE_JWT)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        // ✅ Assert the resolved exception type
-        Exception resolved = result.getResolvedException();
-        assertNotNull(resolved);
-        assertTrue(resolved instanceof InvalidInternShipOffer);
-    }
-
 
     @Test
     void createInternshipOffer_shouldReturn201() throws Exception {
@@ -198,5 +146,56 @@ class EmployerControllerTest {
                 .andExpect(jsonPath("$.title").value("Developer"))
                 .andExpect(jsonPath("$.description").value("programme stuff"))
                 .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"));
+    }
+
+    @Test
+    void createInternshipOffer_shouldReturn409() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(employerController)
+                .setControllerAdvice(new EmployerControllerException())
+                .build();
+
+        EmployerDto employerDto = EmployerDto.builder()
+                .email("test@google.com")
+                .firstName("John")
+                .lastName("Doe")
+                .password("password")
+                .since(LocalDate.now())
+                .build();
+
+        InternshipOfferDto internshipOfferDto = InternshipOfferDto.builder()
+                .title("Developer")
+                .description("programme stuff")
+                .employerEmail(employerDto.getEmail())
+                .targetedProgramme("Computer Science")
+                .build();
+
+        InternshipOfferResponseDto internshipResponseDto = InternshipOfferResponseDto.builder()
+                .title(internshipOfferDto.getTitle())
+                .description(internshipOfferDto.getDescription())
+                .employerEmail(employerDto.getEmail())
+                .target_programme(internshipOfferDto.getTargetedProgramme())
+                .build();
+
+        // Arrange mocks
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(employerDto);
+        when(internshipOfferService.saveInternshipOffer(employerDto.getEmail(), internshipOfferDto)).thenThrow(new InvalidInternShipOffer(""));
+
+
+        // Serialize dto to JSON
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBody = mapper.writeValueAsString(internshipOfferDto);
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/api/v1/employer/create-internship-offer")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternShipOffer);
     }
 }
