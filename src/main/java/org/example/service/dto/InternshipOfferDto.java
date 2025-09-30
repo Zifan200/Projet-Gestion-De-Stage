@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
 
@@ -37,9 +38,11 @@ public class InternshipOfferDto {
 
     private LocalDate expirationDate;
 
+    private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
+
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate) {
+                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -47,11 +50,12 @@ public class InternshipOfferDto {
         this.employerEmail = employerEmail;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
+        this.status = status;
     }
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDate publishedDate, LocalDate expirationDate) {
+                              Employer employer, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -59,11 +63,12 @@ public class InternshipOfferDto {
         this.employerEmail = employer.getEmail();
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
+        this.status = status;
     }
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate) {
+                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -71,6 +76,7 @@ public class InternshipOfferDto {
         this.employerEmail = employer.getEmail();
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
+        this.status = status;
     }
 
     public InternshipOfferDto(){}
@@ -84,6 +90,7 @@ public class InternshipOfferDto {
                 .employerEmail(internshipOffer.getEmployer().getEmail())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
+                .status(internshipOffer.getStatus())
                 .build();
     }
 
