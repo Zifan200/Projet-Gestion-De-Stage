@@ -40,13 +40,13 @@ public class InternshipOfferController {
         }
     }
 
-    @GetMapping("/AllProgrammes")
+    @GetMapping("/all-programs")
     public ResponseEntity<List<String>> getAllProgrammes() {
         return ResponseEntity.ok(internshipOfferService.getAllTargetedProgrammes());
     }
 
     // Utiliser par le GS
-    @GetMapping("/filterByProgramme")
+    @GetMapping("/filter-by-program")
     public ResponseEntity<List<InternshipOfferListDto>> getOffersByProgramme(@RequestParam String programme) {
         List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme(programme);
         if (filteredOffers.isEmpty()) {
@@ -55,13 +55,13 @@ public class InternshipOfferController {
         return ResponseEntity.ok(filteredOffers);
     }
 
-    @GetMapping("/acceptedOffers")
+    @GetMapping("/accepted-offers")
     public ResponseEntity<List<InternshipOfferDto>> getAcceptedOffers() {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 
     // Utiliser pour les etudiants
-    @GetMapping("/filterByAcceptedProgramme")
+    @GetMapping("/filter-by-accepted-program")
     public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffersByProgramme(@RequestParam String programme) {
         List<InternshipOfferListDto> filteredOffers = internshipOfferService.getAcceptedOffersByProgramme(programme);
         if (filteredOffers.isEmpty()) {
