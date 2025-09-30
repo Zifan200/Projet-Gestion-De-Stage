@@ -44,7 +44,8 @@ public class EmployerController {
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
 
         return ResponseEntity
-                .ok(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
+                .status(HttpStatus.CREATED)
+                .body(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
 
     }
 }
