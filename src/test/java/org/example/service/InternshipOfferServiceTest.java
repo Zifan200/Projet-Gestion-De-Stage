@@ -165,7 +165,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of(offer1, offer2));
 
         // Act
-        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffers();
+        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffersSummary();
 
         // Assert
         assertThat(offers).hasSize(2);
@@ -223,7 +223,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findAll()).thenReturn(List.of());
 
         // Act
-        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffers();
+        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffersSummary();
 
         // Assert
         assertThat(offers).isEmpty();

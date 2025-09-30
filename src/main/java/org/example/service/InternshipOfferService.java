@@ -55,7 +55,7 @@ public class InternshipOfferService {
         logger.info("InternshipOffer created = \"{}\"", internshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
-    public List<InternshipOfferListDto> getAllOffers() {
+    public List<InternshipOfferListDto> getAllOffersSummary() {
         List<InternshipOfferListDto> offers = internshipOfferRepository.findAll()
                 .stream()
                 .map(offer -> InternshipOfferListDto.builder()

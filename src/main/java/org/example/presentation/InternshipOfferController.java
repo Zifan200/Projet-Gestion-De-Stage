@@ -19,9 +19,10 @@ public class InternshipOfferController {
 
     private final InternshipOfferService internshipOfferService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffers() {
-        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffers();
+    // Utiliser par le GS et les etudiants pour regarder toutes les offres sans voir tous les details
+    @GetMapping("/all-offers-summary")
+    public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffersSummary() {
+        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffersSummary();
         if (offers.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -40,8 +41,9 @@ public class InternshipOfferController {
         }
     }
 
-    @GetMapping("/all-programs")
-    public ResponseEntity<List<String>> getAllProgrammes() {
+    // retourne les noms des programmes existants
+    @GetMapping("/all-programs-name")
+    public ResponseEntity<List<String>> getAllProgrammesName() {
         return ResponseEntity.ok(internshipOfferService.getAllTargetedProgrammes());
     }
 
