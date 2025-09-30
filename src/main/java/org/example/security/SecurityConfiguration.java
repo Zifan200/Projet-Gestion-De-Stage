@@ -48,6 +48,7 @@ public class SecurityConfiguration {
     private static final String EMPLOYER_PATH = "/employer/**";
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/v1/student/register";
+    private static final String INTERNSHIP_PATH = "/api/v1/internship-offers/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -59,7 +60,6 @@ public class SecurityConfiguration {
                         .requestMatchers(USER_PATH).permitAll()
                         .requestMatchers(POST, "user/password-reset/**").permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
-                        .requestMatchers(GET, "/api/v1/internship-offers/**").permitAll()
                         // Employer
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
@@ -68,6 +68,11 @@ public class SecurityConfiguration {
                         // Student
                         .requestMatchers(POST, STUDENT_REGISTER_PATH).permitAll()
                         .requestMatchers(STUDENT_PATH).hasAnyAuthority(Role.STUDENT.name())
+
+                        // Internships
+                        .requestMatchers(INTERNSHIP_PATH).permitAll()
+                        .requestMatchers(GET, INTERNSHIP_PATH).hasAnyAuthority(Role.STUDENT.name())
+
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console

@@ -47,8 +47,8 @@ public class InternshipOfferController {
 
     // Utiliser par le GS
     @GetMapping("/filter-by-program")
-    public ResponseEntity<List<InternshipOfferListDto>> getOffersByProgramme(@RequestParam String programme) {
-        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme(programme);
+    public ResponseEntity<List<InternshipOfferListDto>> getOffersByProgramme(@RequestParam String program) {
+        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getOffersByProgramme(program);
 
         return ResponseEntity.ok(filteredOffers);
     }
@@ -60,8 +60,8 @@ public class InternshipOfferController {
 
     // Utiliser pour les etudiants
     @GetMapping("/filter-by-accepted-program")
-    public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffersByProgramme(@RequestParam String programme) {
-        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getAcceptedOffersByProgramme(programme);
+    public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffersByProgramme(@RequestParam String program) {
+        List<InternshipOfferListDto> filteredOffers = internshipOfferService.getAcceptedOffersByProgramme(program);
 
         return ResponseEntity.ok(filteredOffers);
     }
