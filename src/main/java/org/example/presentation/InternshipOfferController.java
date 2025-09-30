@@ -58,6 +58,11 @@ public class InternshipOfferController {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 
+    @GetMapping("/filter-by-rejected-offers")
+    public ResponseEntity<List<InternshipOfferDto>> getRejectedOffers() {
+        return ResponseEntity.ok(internshipOfferService.getRejectedOffers());
+    }
+
     // Utiliser pour les etudiants
     @GetMapping("/filter-by-accepted-program")
     public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffersByProgramme(@RequestParam String program) {
