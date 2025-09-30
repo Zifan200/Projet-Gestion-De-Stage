@@ -26,25 +26,12 @@ public class InternshipOfferResponseDto {
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String target_programme,
-                                      Employer employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+                                      String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.targetedProgramme = target_programme;
-        this.employerEmail = employerEmail.getEmail();
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
-        this.status = status;
-    }
-
-    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
-    public InternshipOfferResponseDto(String title, String description, String target_programme,
-                                      EmployerResponseDto employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.targetedProgramme = target_programme;
-        this.employerEmail = employerEmail.getEmail();
+        this.employerEmail = employerEmail;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
@@ -56,7 +43,7 @@ public class InternshipOfferResponseDto {
                 .title(internshipOffer.getTitle())
                 .description(internshipOffer.getDescription())
                 .target_programme(internshipOffer.getTargetedProgramme())
-                .employerEmail(internshipOffer.getEmployer())
+                .employerEmail(internshipOffer.getEmployer().getEmail())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
