@@ -109,6 +109,16 @@ public class InternshipOfferService {
                 .toList();
     }
 
+    public List<InternshipOfferDto> getRejectedOffers() {
+        List<InternshipOffer> rejectedOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
+
+        return rejectedOffers.stream()
+                .map(InternshipOfferDto::create)
+                .toList();
+    }
+
+
     public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
         InternshipOffer offer = internshipOfferRepository.findById(offerId)
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
