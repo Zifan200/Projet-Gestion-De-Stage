@@ -25,8 +25,9 @@ public class InternshipOfferResponseDto {
     private InternshipOfferStatus status;
 
     @Builder
-    public InternshipOfferResponseDto(String title, String description, String target_programme,
+    public InternshipOfferResponseDto(Long id, String title, String description, String target_programme,
                                       Employer employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.targetedProgramme = target_programme;
