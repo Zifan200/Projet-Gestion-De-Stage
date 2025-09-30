@@ -4,8 +4,6 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.model.Employer;
-import org.example.security.exception.UsedEmailAddressException;
 import org.example.service.EmployerService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
@@ -14,7 +12,6 @@ import org.example.service.dto.EmployerResponseDto;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.utils.JwtTokenUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,17 +39,9 @@ public class EmployerController {
     @PostMapping("/create-internship-offer")
     public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(
         HttpServletRequest request,
-        @RequestParam(required = false) MultipartFile file,
         @Valid @RequestBody InternshipOfferDto internshipOfferDto) {
 
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-
-        if(file != null) {
-            Optional<MultipartFile> option_attachment = Optional.of(file);
-            return ResponseEntity
-                    .ok(internshipOfferService.saveInternshipOfferWithAttachment(email, internshipOfferDto, option_attachment));
-
-        }
 
         return ResponseEntity
                 .ok(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));

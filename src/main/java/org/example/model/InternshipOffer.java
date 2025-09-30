@@ -2,8 +2,6 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 
@@ -29,24 +27,12 @@ public class InternshipOffer {
 
     private LocalDate publishedDate =  LocalDate.now();
     private LocalDate expirationDate;
-    private boolean attachmentPresent = false;
-    //optional single file upload for the offer (simpler with one file 🙏)
-    @Column(name = "file_name")
-    private String fileName;
-    @Column(name = "file_type")
-    private String fileType;
-    @Column(name = "file_size")
-    private Long fileSize;
-    @Lob
-    @JdbcTypeCode(SqlTypes.BINARY)
-    @Column(name = "file_data")
-    private byte[] fileData;
 
 
     @Builder
     public InternshipOffer(
             Long id, String title, String description, String targetedProgramme, Employer employer,
-            LocalDate publishedDate, LocalDate expirationDate,boolean attachmentPresent,  String fileName, String fileType, Long fileSize, byte[] fileData
+            LocalDate publishedDate, LocalDate expirationDate
     ) {
         this.id = id;
         this.title = title;
@@ -55,10 +41,5 @@ public class InternshipOffer {
         this.targetedProgramme = targetedProgramme;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
-        this.attachmentPresent = attachmentPresent;
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-        this.fileData = fileData;
     }
 }
