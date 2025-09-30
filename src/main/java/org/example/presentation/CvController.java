@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/etudiants/cv")
+@RequestMapping("/api/v1/student/cv")
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class CvController {
@@ -31,14 +31,14 @@ public class CvController {
     @Autowired
     private final UserAppService userAppService;
 
-      @PostMapping("/me/cv")
+    @PostMapping("/me/cv")
     public ResponseEntity<CvResponseDTO> uploadMyCv(
             HttpServletRequest request,
             @RequestParam("file") MultipartFile file) {
-          String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-          return ResponseEntity
-                  .status(HttpStatus.CREATED)
-                  .body(cvService.addCv(email, file));
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(cvService.addCv(email, file));
     }
 
 

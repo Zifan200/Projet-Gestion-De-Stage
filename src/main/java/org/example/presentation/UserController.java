@@ -27,19 +27,6 @@ public class UserController {
 	private final AuthService authService;
 	private final UserAppService userService;
 
-	@PostMapping("/login")
-	public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody LoginDTO loginDto){
-		try {
-			String accessToken = userService.authenticateUser(loginDto);
-			final JWTAuthResponse authResponse = new JWTAuthResponse(accessToken);
-			return ResponseEntity.accepted()
-					.contentType(MediaType.APPLICATION_JSON)
-					.body(authResponse);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JWTAuthResponse());
-		}
-	}
-
 	@PostMapping("/signin")
 	public ResponseEntity<JWTAuthResponse> signIn(@RequestBody LoginDTO loginDTO) {
 		try {

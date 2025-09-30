@@ -33,7 +33,6 @@ public class StudentService {
                 .email(etudiantDTO.getEmail())
                 .password(passwordEncoder.encode(etudiantDTO.getPassword()))
                 .since(LocalDate.now())
-                .age(etudiantDTO.getAge())
                 .adresse(etudiantDTO.getAdresse())
                 .phone(etudiantDTO.getPhone())
                 .program(etudiantDTO.getProgram())

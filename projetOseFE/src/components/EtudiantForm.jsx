@@ -17,7 +17,6 @@ export default function EtudiantForm() {
         phone: "",
         adresse: "",
         program: "",
-        age: "",
         password: "",
         confirmPassword: ""
     });
@@ -47,9 +46,6 @@ export default function EtudiantForm() {
 
         if (!formData.program.trim()) newErrors.program = "Le programme est obligatoire";
 
-        if (!formData.age) newErrors.age = "L'âge est obligatoire";
-        else if (parseInt(formData.age) < 16) newErrors.age = "L'étudiant doit avoir au moins 16 ans";
-
         if (!formData.password.trim()) newErrors.password = "Le mot de passe est obligatoire";
         else if (formData.password.length < 8) newErrors.password = "Au moins 8 caractères requis";
         else if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).+$/.test(formData.password))
@@ -75,7 +71,7 @@ export default function EtudiantForm() {
         console.log("=== Envoi au back ===", JSON.stringify(formData));
 
         try {
-            const response = await fetch("http://localhost:8080/api/etudiants/inscription", {
+            const response = await fetch("http://localhost:8080/api/v1/student/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -161,18 +157,6 @@ export default function EtudiantForm() {
                         className={styles.inputField}
                     />
                     {errors.adresse && <p className={styles.error}>{errors.adresse}</p>}
-                </div>
-
-                <div className={styles.inputContainer}>
-                    <input
-                        type="number"
-                        name="age"
-                        placeholder="Âge"
-                        value={formData.age}
-                        onChange={handleChange}
-                        className={styles.inputField}
-                    />
-                    {errors.age && <p className={styles.error}>{errors.age}</p>}
                 </div>
 
                 <div className={styles.inputContainer}>

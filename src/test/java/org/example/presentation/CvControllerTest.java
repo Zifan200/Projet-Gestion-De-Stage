@@ -82,7 +82,7 @@ class CvControllerTest {
 
         when(cvService.addCv(eq(EMAIL), any())).thenReturn(dto);
 
-        mockMvc.perform(multipart("/api/v1/etudiants/cv/me/cv")
+        mockMvc.perform(multipart("/api/v1/student/cv/me/cv")
                         .file(file)
                         .header(AUTH_HEADER, "Bearer " + FAKE_JWT))
                 .andExpect(status().isCreated())
@@ -100,7 +100,7 @@ class CvControllerTest {
         when(cvService.addCv(eq(EMAIL), any(MultipartFile.class)))
                 .thenThrow(new InvalidFileFormatException("Seuls PDF ou Word sont acceptés"));
 
-        var k = mockMvc.perform(multipart("/api/v1/etudiants/cv/me/cv")
+        var k = mockMvc.perform(multipart("/api/v1/student/cv/me/cv")
                         .file(badFile)
                         .header("Authorization", "Bearer " + FAKE_JWT))
                 .andExpect(status().isBadRequest());
@@ -118,7 +118,7 @@ class CvControllerTest {
 
         when(cvService.listMyCvs(EMAIL)).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/api/v1/etudiants/cv/me")
+        mockMvc.perform(get("/api/v1/student/cv/me")
                         .header(AUTH_HEADER, "Bearer " + FAKE_JWT))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].fileName").value("cv.pdf"));
@@ -136,7 +136,7 @@ class CvControllerTest {
 
         when(cvService.downloadCv(1L, EMAIL)).thenReturn(cv);
 
-        mockMvc.perform(get("/api/v1/etudiants/cv/1/download")
+        mockMvc.perform(get("/api/v1/student/cv/1/download")
                         .header(AUTH_HEADER, "Bearer " + FAKE_JWT))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Disposition", "inline; filename=\"cv.pdf\""))
@@ -148,7 +148,7 @@ class CvControllerTest {
         mockUser();
         when(cvService.downloadCv(99L, EMAIL)).thenThrow(new CvNotFoundException(""));
 
-        mockMvc.perform(get("/api/v1/etudiants/cv/99/download")
+        mockMvc.perform(get("/api/v1/student/cv/99/download")
                         .header(AUTH_HEADER, "Bearer " + FAKE_JWT))
                 .andExpect(status().isNotFound());
     }
@@ -157,7 +157,7 @@ class CvControllerTest {
     void deleteCv_shouldReturn204() throws Exception {
         mockUser();
 
-        mockMvc.perform(delete("/api/v1/etudiants/cv/1")
+        mockMvc.perform(delete("/api/v1/student/cv/1")
                         .header(AUTH_HEADER, "Bearer " + FAKE_JWT))
                 .andExpect(status().isNoContent());
 
@@ -170,7 +170,7 @@ class CvControllerTest {
         Mockito.doThrow(new AccessDeniedException("pas le droit"))
                 .when(cvService).deleteCv(1L, EMAIL);
 
-        mockMvc.perform(delete("/api/v1/etudiants/cv/1")
+        mockMvc.perform(delete("/api/v1/student/cv/1")
                         .header(AUTH_HEADER, "Bearer " + FAKE_JWT))
                 .andExpect(status().isForbidden());
     }

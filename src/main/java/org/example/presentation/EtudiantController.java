@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/etudiants")
+@RequestMapping("/api/v1/student")
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class EtudiantController {
@@ -18,7 +18,7 @@ public class EtudiantController {
     private final StudentService studentService;
     private final EmailService emailService;
 
-    @PostMapping("/inscription")
+    @PostMapping("/register")
     public ResponseEntity<EtudiantDTO> inscription(@Valid @RequestBody EtudiantDTO etudiantDTO) {
         System.out.println("=== Requête reçue dans le controller ===");
         System.out.println("Données reçues : " + etudiantDTO);

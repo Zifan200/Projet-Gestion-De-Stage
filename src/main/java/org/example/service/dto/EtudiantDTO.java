@@ -30,9 +30,6 @@ public class EtudiantDTO extends UserDTO {
     @NotBlank(message = "Le programme est obligatoire")
     private String program;
 
-    @Min(value = 16, message = "L'étudiant doit avoir au moins 16 ans")
-    private int age;
-
     private List<Long> ListCvId;
 
     public EtudiantDTO() {
@@ -41,9 +38,8 @@ public class EtudiantDTO extends UserDTO {
 
     @Builder
     public EtudiantDTO(Long id, String firstName, String lastName, String email, Role role,
-                       LocalDate since, String phone, String adresse, String program, int age, String password) {
+                       LocalDate since, String phone, String adresse, String program, String password) {
         super(id, firstName, lastName, email, password, role);
-        this.age = age;
         this.phone = phone;
         this.adresse = adresse;
         this.program = program;
@@ -58,7 +54,6 @@ public class EtudiantDTO extends UserDTO {
                 .password(dto.getPassword())
                 .phone(dto.getPhone())
                 .adresse(dto.getAdresse())
-                .age(dto.getAge())
                 .program(dto.getProgram())
                 .build();
     }
@@ -74,7 +69,6 @@ public class EtudiantDTO extends UserDTO {
                 .role(etudiant.getRole())
                 .since(etudiant.getSince())
                 .phone(etudiant.getPhone())
-                .age(etudiant.getAge())
                 .program(etudiant.getProgram())
                 .adresse(etudiant.getAdresse())
                 .build();
