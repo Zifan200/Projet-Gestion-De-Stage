@@ -13,6 +13,12 @@ a:hover {
 }
 
 body {
-    margin: 0;
     font-family: inherit;
+    min-height: 100vh;
+}
+
+html {
+    background-image: url("/assets/img/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
