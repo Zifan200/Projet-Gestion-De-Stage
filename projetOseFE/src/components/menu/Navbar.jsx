@@ -90,7 +90,9 @@ const Navbar = () => {
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}
       />
-      <LanguageSwitcher />
+      <div className="ml-auto">
+        <LanguageSwitcher />
+      </div>
     </nav>
   );
 };

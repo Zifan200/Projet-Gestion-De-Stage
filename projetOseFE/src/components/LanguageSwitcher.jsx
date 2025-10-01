@@ -18,5 +18,5 @@ export const LanguageSwitcher = () => {
   // Affiche le code de la langue opposée
   const oppositeLang = i18n.language === "en" ? "fr" : "en";
 
-  return <button onClick={toggleLanguage}>{oppositeLang.toUpperCase()}</button>;
+  return <button onClick={toggleLanguage}>{oppositeLang}</button>;
 };
