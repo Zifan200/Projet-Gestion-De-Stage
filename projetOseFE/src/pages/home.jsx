@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 export default function Home() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <div
       style={{
@@ -13,7 +13,7 @@ export default function Home() {
         minHeight: "100vh",
       }}
     >
-      <h1>{t("Welcome to reacrt")}</h1>
+      <h1>{t("description")}</h1>
     </div>
   );
 }
