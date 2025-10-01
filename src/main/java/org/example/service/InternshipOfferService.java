@@ -24,23 +24,25 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class InternshipOfferService {
-
     private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
     private final EmployerRepository employerRepository;
     private final InternshipOfferRepository internshipOfferRepository;
     private final ApplicationEventPublisher eventPublisher;
 
 
+    public InternshipOfferResponseDto saveInternshipOffer(
+            String email,
+            InternshipOfferDto internshipOfferDto) {
+        Optional<Employer> savedEmployer = employerRepository.findByCredentialsEmail(email);
 
-    public InternshipOfferResponseDto saveInternshipOffer(InternshipOfferDto internshipOfferDto){
-        Optional<Employer> savedEmployer = employerRepository.findByCredentialsEmail(internshipOfferDto.getEmployerEmail());
-        if(internshipOfferDto.getTitle().isBlank()){
+        if(internshipOfferDto.getTitle().isBlank() && internshipOfferDto.getDescription().isBlank()){
             throw new InvalidInternShipOffer("Invalid internship offer (missing critical information)");
         }
         if(savedEmployer.isEmpty())
         {
             throw new InvalidInternShipOffer("Invalid internship offer (employer does not exist) " + savedEmployer);
         }
+
         InternshipOffer internshipOffer = InternshipOffer.builder()
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())
@@ -52,7 +54,7 @@ public class InternshipOfferService {
 
         var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
         eventPublisher.publishEvent(new EmployerCreatedInternshipOfferEvent());
-        logger.info("InternshipOffer created = \"{}\"", internshipOffer.getTitle());
+        logger.info("InternshipOffer created = \"{}\"", savedInternshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
     public List<InternshipOfferListDto> getAllOffersSummary() {

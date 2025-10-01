@@ -76,11 +76,12 @@ public class InternshipOfferControllerTest {
     @Test
     void getInternshipOfferById_shouldReturnOffer() {
         Long offerId = 1L;
+        Employer employer  =    Employer.builder().email("alice@example.com").build();
         InternshipOfferResponseDto offer = InternshipOfferResponseDto.builder()
                 .title("Dev Java")
                 .description("Stage backend Java")
                 .target_programme("Informatique")
-                .employerEmail(Employer.builder().email("alice@example.com").build())
+                .employerEmail(employer.getEmail())
                 .expirationDate(LocalDate.now().plusDays(30))
                 .build();
 

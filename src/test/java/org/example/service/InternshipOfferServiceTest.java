@@ -18,17 +18,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.assertj.core.api.Assertions.assertThat;
-
-
-import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+//import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -71,6 +68,17 @@ public class InternshipOfferServiceTest {
                 .build();
     }
 
+    private EmployerDto buildEmployerDto(Employer employer) {
+        return EmployerDto.builder()
+                .email(employer.getEmail())
+                .firstName(employer.getFirstName())
+                .lastName(employer.getLastName())
+                .password(employer.getPassword())
+                .since(LocalDate.now())
+                .enterpriseName(employer.getEnterpriseName())
+                .build();
+    }
+
     private InternshipOffer buildInternshipOffer(Employer employer, LocalDate offerPublishDateTime) {
         return InternshipOffer.builder()
                 .title("recherche Scratch Developer")
@@ -104,16 +112,16 @@ public class InternshipOfferServiceTest {
 
         //Act
         InternshipOfferDto internshipOfferDto = buildInternshipOfferDto(employerDto.getEmail(), offerPublishDateTime);
-        InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(internshipOfferDto);
+        InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(employerDto.getEmail(), internshipOfferDto);
 
         //Assert
         assertNotNull(savedOffer);
-        assertThat(savedOffer)
-                .extracting(InternshipOfferResponseDto::getTitle, InternshipOfferResponseDto::getPublishedDate)
+        assertThat(savedOffer).extracting(InternshipOfferResponseDto::getTitle, InternshipOfferResponseDto::getPublishedDate)
                 .containsExactly("recherche Scratch Developer", offerPublishDateTime);
 
         verify(internshipOfferRepository).save(any(InternshipOffer.class));
         verify(eventPublisher).publishEvent(any(EmployerCreatedInternshipOfferEvent.class));
+        assertSame(savedOffer.getPublishedDate(), offerPublishDateTime);
     }
 
     @Test
@@ -131,12 +139,13 @@ public class InternshipOfferServiceTest {
 
         //Act
         InternshipOfferDto internshipOfferDto = buildInternshipOfferDto(employerDto.getEmail(), offerPublishDateTime);
-        InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(internshipOfferDto);
+        InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(internshipOfferDto.getEmployerEmail(),internshipOfferDto);
 
         //Assert
         assertNotNull(savedOffer);
         assertNotNull(savedOffer.getEmployerEmail());
         assertTrue(savedOffer.getEmployerEmail().equalsIgnoreCase("test@google.com"));
+        assertSame(savedOffer.getPublishedDate(), offerPublishDateTime);
         assertNotNull(employerRepository.findByCredentialsEmail("test@google.com"));
 
         verify(eventPublisher).publishEvent(any(EmployerCreatedInternshipOfferEvent.class));
@@ -144,13 +153,21 @@ public class InternshipOfferServiceTest {
 
     @Test
     void createOfferWithMissingInformation_shouldNotSave() {
+        Employer employer = buildEmployer();
+        EmployerDto employerDto = buildEmployerDto(employer);
+
         InternshipOfferDto internshipOfferDto = InternshipOfferDto.builder()
                 .title("recherche Scratch Developer")
                 .description("loremipsum")
                 .build();
 
-        assertThatThrownBy(() -> internshipOfferService.saveInternshipOffer(internshipOfferDto))
+        when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
+                .thenReturn(Optional.empty());
+
+        //Act/ Assert
+        assertThatThrownBy(() -> internshipOfferService.saveInternshipOffer(employer.getEmail(), internshipOfferDto))
                 .isInstanceOf(InvalidInternShipOffer.class);
+
         verify(internshipOfferRepository, never()).save(any());
     }
     @Test
@@ -191,8 +208,8 @@ public class InternshipOfferServiceTest {
 
         // Assert
         assertThat(filteredOffers).hasSize(1);
-        assertThat(filteredOffers.get(0).getTitle()).isEqualTo("recherche Scratch Developer");
-        assertThat(filteredOffers.get(0).getEnterpriseName()).isEqualTo(employer.getEnterpriseName());
+        assertThat(filteredOffers.getFirst().getTitle()).isEqualTo("recherche Scratch Developer");
+        assertThat(filteredOffers.getFirst().getEnterpriseName()).isEqualTo(employer.getEnterpriseName());
     }
 
     @Test

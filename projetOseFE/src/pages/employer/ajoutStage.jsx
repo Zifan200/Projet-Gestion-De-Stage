@@ -53,7 +53,7 @@ export default function AjoutStage() {
                 "http://localhost:8080/api/v1/employer/create-internship-offer", payload,
                 {
                     headers: {
-                        Authorization: token,
+                        Authorization: "Bearer "+token,
                         "Content-Type": "application/json",
                     },
                 }
