@@ -50,7 +50,7 @@ const Navbar = () => {
     <nav
       ref={wrapperRef}
       onMouseLeave={scheduleClose}
-      className="relative flex items-center px-8 py-4 border-b border-zinc-200"
+      className="relative flex items-center px-8 py-4 border-b border-zinc-200 bg-white"
     >
       <div className="text-xl font-bold mr-8">OSE 2.0</div>
       <div className="flex items-center gap-6">
