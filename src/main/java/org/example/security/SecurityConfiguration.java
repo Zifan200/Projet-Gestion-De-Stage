@@ -42,9 +42,9 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String H2_CONSOLE_PATH = "/h2-console/**";
-    private static final String USER_LOGIN_PATH = "/user/**";
     private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employer/register";
-    private static final String USER_PATH = "/user/**";
+    private static final String USER_PATH = "/api/v1/user/**";
+    private static final String USER_PASSWORD_RESET_PATH = "/api/v1/user/password-reset/**";
     private static final String EMPLOYER_PATH = "/employer/**";
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/v1/student/register";
@@ -58,7 +58,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         // User
                         .requestMatchers(USER_PATH).permitAll()
-                        .requestMatchers(POST, "user/password-reset/**").permitAll()
+                        .requestMatchers(POST, USER_PASSWORD_RESET_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
                         // Employer
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())

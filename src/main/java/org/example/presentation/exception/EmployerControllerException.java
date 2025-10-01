@@ -52,6 +52,11 @@ public class EmployerControllerException {
         return buildError(HttpStatus.NOT_FOUND, "CV_NOT_FOUND", ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidInternShipOffer.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidInternShip(InvalidInternShipOffer ex) {
+        return buildError(HttpStatus.BAD_REQUEST, "Invalid Internship offer", ex.getMessage());
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponseDTO> handleAccessDenied(AccessDeniedException ex) {
         return buildError(HttpStatus.FORBIDDEN, "ACCESS_DENIED", ex.getMessage());
