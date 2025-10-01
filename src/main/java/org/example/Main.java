@@ -47,7 +47,8 @@ public class Main {
                 .employerEmail("alice@example.com")
                 .expirationDate(LocalDate.now().plusMonths(2))
                 .build();
-        InternshipOfferResponseDto savedOffer1 = internshipOfferService.saveInternshipOffer(offer1);
+        InternshipOfferResponseDto savedOffer1 = internshipOfferService.saveInternshipOffer(
+                "alice@example.com", offer1);
 
         InternshipOfferDto offer2 = InternshipOfferDto.builder()
                 .title("Frontend React")
@@ -56,7 +57,8 @@ public class Main {
                 .employerEmail("alice@example.com")
                 .expirationDate(LocalDate.now().plusMonths(3))
                 .build();
-        InternshipOfferResponseDto savedOffer2 = internshipOfferService.saveInternshipOffer(offer2);
+        InternshipOfferResponseDto savedOffer2 = internshipOfferService.saveInternshipOffer(
+                "alice@example.com", offer2);
 
         InternshipOfferDto offer3 = InternshipOfferDto.builder()
                 .title("Data Analyst")
@@ -65,7 +67,8 @@ public class Main {
                 .employerEmail("alice@example.com")
                 .expirationDate(LocalDate.now().plusMonths(4))
                 .build();
-        InternshipOfferResponseDto savedOffer3 = internshipOfferService.saveInternshipOffer(offer3);
+        InternshipOfferResponseDto savedOffer3 = internshipOfferService.saveInternshipOffer(
+                "alice@example.com", offer3);
 
         InternshipOfferDto offer4 = InternshipOfferDto.builder()
                 .title("Soins infirmiers")
@@ -74,7 +77,8 @@ public class Main {
                 .employerEmail("alice@example.com")
                 .expirationDate(LocalDate.now().plusMonths(2))
                 .build();
-        InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer(offer4);
+        InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer(
+                "alice@example.com", offer4);
 
         // Mettre à jour les statuts
         internshipOfferService.updateOfferStatus(savedOffer1.getId(), InternshipOfferStatus.ACCEPTED);
