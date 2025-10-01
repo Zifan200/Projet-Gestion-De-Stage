@@ -7,8 +7,8 @@ import EtudiantConnection from "./EtudiantConnection.jsx";
 import {authService} from "../services/authService.js";
 
 export default function ConnectionForm() {
-    const api = "http://localhost:8080/user/signin";
-    const userInfos = "http://localhost:8080/user/me";
+    const api = "http://localhost:8080/api/v1/user/signin";
+    const userInfos = "http://localhost:8080/api/v1/user/me";
     const navigate = useNavigate();
 
     const passwordMinSize = 8;
