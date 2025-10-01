@@ -1,5 +1,19 @@
-FROM node:20-slim AS build-env
+# Étape 1 : Build de l'application
+FROM node:18-alpine AS build
+
 WORKDIR /app
+
+# Copie les fichiers de configuration
+COPY package*.json ./
+
+# Installe les dépendances
+RUN npm install
+
+# Copie le reste des fichiers
 COPY . .
-RUN npm ci
+
+# Affiche la liste des fichiers avant le build (pour débogage)
+RUN ls -la
+
+# Build l'application
 RUN npm run build
