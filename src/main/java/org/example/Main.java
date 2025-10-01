@@ -82,10 +82,22 @@ public class Main {
         internshipOfferService.updateOfferStatus(savedOffer3.getId(), InternshipOfferStatus.PENDING);
         internshipOfferService.updateOfferStatus(savedOffer4.getId(), InternshipOfferStatus.REJECTED);
 
+        // === Tests ===
+
         // Afficher uniquement les offres ACCEPTED du programme "Informatique"
         System.out.println("=== Offres ACCEPTED pour Informatique ===");
         List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getOffersByProgramme("Informatique");
         acceptedOffers.forEach(o ->
                 System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - " + o.getEnterpriseName()));
+
+        // Afficher toutes les offres PENDING
+        System.out.println("\n=== Offres PENDING ===");
+        internshipOfferService.getPendingOffers().forEach(o ->
+                System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - "));
+
+        // Afficher toutes les offres REFUSED
+        System.out.println("\n=== Offres REFUSED ===");
+        internshipOfferService.getRejectedOffers().forEach(o ->
+                System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - "));
     }
 }

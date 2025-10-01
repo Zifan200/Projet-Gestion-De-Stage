@@ -316,4 +316,48 @@ public class InternshipOfferServiceTest {
         assertThat(acceptedOffers).isEmpty();
     }
 
+    @Test
+    void getPendingOffers_shouldReturnOnlyPendingOffers() {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
+        offer1.setId(1L);
+        offer1.setStatus(org.example.model.enums.InternshipOfferStatus.PENDING);
+
+        InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
+        offer2.setId(2L);
+        offer2.setStatus(org.example.model.enums.InternshipOfferStatus.ACCEPTED);
+
+        InternshipOffer offer3 = buildInternshipOffer(employer, LocalDate.now());
+        offer3.setId(3L);
+        offer3.setStatus(org.example.model.enums.InternshipOfferStatus.PENDING);
+
+        when(internshipOfferRepository.findDistinctByStatus(org.example.model.enums.InternshipOfferStatus.PENDING))
+                .thenReturn(List.of(offer1, offer3));
+
+        // Act
+        List<InternshipOfferDto> pendingOffers = internshipOfferService.getPendingOffers();
+
+        // Assert
+        assertThat(pendingOffers).hasSize(2);
+        assertThat(pendingOffers).extracting("title")
+                .containsExactlyInAnyOrder(offer1.getTitle(), offer3.getTitle());
+    }
+
+    @Test
+    void getPendingOffers_whenNoPendingOffers_shouldReturnEmptyList() {
+        // Arrange
+        when(internshipOfferRepository.findDistinctByStatus(org.example.model.enums.InternshipOfferStatus.PENDING))
+                .thenReturn(List.of());
+
+        // Act
+        List<InternshipOfferDto> pendingOffers = internshipOfferService.getPendingOffers();
+
+        // Assert
+        assertThat(pendingOffers).isEmpty();
+    }
+
+
+
+
 }
