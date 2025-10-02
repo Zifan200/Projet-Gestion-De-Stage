@@ -5,8 +5,8 @@ import {menuConfig} from "../../config/menuConfig.js";
 import {LanguageSwitcher} from "../LanguageSwitcher.jsx";
 import useAuthStore from "../../stores/authStore";
 import {Link} from "react-router-dom";
-import {Popover, PopoverTrigger, PopoverContent, PopoverClose} from "../ui/Popover";
 import {useTranslation} from "react-i18next";
+import {Popover, PopoverClose, PopoverContent, PopoverTrigger} from "../ui/popover.jsx";
 
 const HOVER_OPEN_DELAY = 40;
 const HOVER_CLOSE_DELAY = 180;
