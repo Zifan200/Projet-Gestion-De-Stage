@@ -1,16 +1,16 @@
-import axios from "axios";
+import { api } from "../lib/api.js";
 
 export const authService = {
   async requestPasswordChange(email) {
-    return await axios.post(
-      `http://localhost:8080/user/password-reset/request?email=${email}`,
+    return await api.post(
+      `/user/password-reset/request?email=${email}`,
       email,
     );
   },
 
   async resetPasswordChange(token, newPassword) {
-    return await axios.post(
-      `http://localhost:8080/user/password-reset/confirm`,
+    return await api.post(
+      `/user/password-reset/confirm`,
       {
         token,
         newPassword,
@@ -19,7 +19,7 @@ export const authService = {
   },
 
   async getMe(token) {
-    const res = await axios.get(`http://localhost:8080/user/me`, {
+    const res = await api.get(`/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,8 +28,8 @@ export const authService = {
   },
 
   async login(userCredential) {
-    const res = await axios.post(
-      `http://localhost:8080/user/signin`,
+    const res = await api.post(
+      `/user/signin`,
       userCredential,
       {
         headers: {},
