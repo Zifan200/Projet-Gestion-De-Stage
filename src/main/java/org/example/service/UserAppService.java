@@ -4,9 +4,11 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.model.Employer;
 import org.example.model.Etudiant;
+import org.example.model.Gestionnaire;
 import org.example.model.UserApp;
 import org.example.repository.EmployerRepository;
 import org.example.repository.EtudiantRepository;
+import org.example.repository.GestionnaireRepository;
 import org.example.repository.UserAppRepository;
 import org.example.security.JwtTokenProvider;
 import org.example.security.exception.UserNotFoundException;
@@ -27,6 +29,7 @@ public class UserAppService {
     private final UserAppRepository userAppRepository;
     private final EmployerRepository employerRepository;
     private final EtudiantRepository studentRepository;
+    private final GestionnaireRepository gestionnaireRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -44,6 +47,7 @@ public class UserAppService {
         return switch(user.getRole()){
             case EMPLOYER -> getEmployerDTO(user.getId());
             case STUDENT -> getStudentDTO(user.getId());
+            case GESTIONNAIRE -> getGestionnaireDTO(user.getId());
         };
     }
 
@@ -60,6 +64,13 @@ public class UserAppService {
         return studentOptional.isPresent() ?
                 EtudiantDTO.fromEntity(studentOptional.get()) :
                 EtudiantDTO.empty();
+    }
+
+    private GestionnaireDTO getGestionnaireDTO(Long id) {
+        final Optional<Gestionnaire> gestionnaireOptional = gestionnaireRepository.findById(id);
+        return gestionnaireOptional.isPresent() ?
+                GestionnaireDTO.fromEntity(gestionnaireOptional.get()) :
+                GestionnaireDTO.empty();
     }
 }
 
