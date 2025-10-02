@@ -1,5 +1,6 @@
 import { api } from "../lib/api.js";
 
+
 export const cvService = {
   async upload(file) {
     const formData = new FormData();
