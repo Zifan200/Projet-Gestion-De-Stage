@@ -23,11 +23,6 @@ public class InternshipOfferController {
     @GetMapping("/all-offers-summary")
     public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffersSummary() {
         List<InternshipOfferListDto> offers = internshipOfferService.getAllOffersSummary();
-        if (offers.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(List.of());
-        }
         return ResponseEntity.ok(offers);
     }
 
