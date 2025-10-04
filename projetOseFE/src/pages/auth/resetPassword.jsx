@@ -66,7 +66,7 @@ export const ResetPasswordPage = () => {
                 name="confirmPassword"
                 label={t("form.fields.passwordConfirm")}
               />
-              <Input name="confirmPassword" placeholder="confirmPassword" />
+              <Input name="confirmPassword" type="password" placeholder={t("form.fields.passwordConfirm")} />
             </div>
 
             <Button className={"p-2"} label={t("form.passwordReset.button")} />
