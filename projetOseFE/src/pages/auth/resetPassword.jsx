@@ -59,7 +59,7 @@ export const ResetPasswordPage = () => {
           <form onSubmit={form.handleSubmit(onSubmit, onError)} className="">
             <div className={"flex flex-col mb-7"}>
               <Label name="password" label={t("form.fields.password")} />
-              <Input name="password" placeholder="Password" />
+              <Input name="password" type="password" placeholder={t("form.fields.password")} />
             </div>
             <div className={"flex flex-col mb-7"}>
               <Label
