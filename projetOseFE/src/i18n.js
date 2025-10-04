@@ -23,7 +23,7 @@ export const resources = {
                 close : "Close",
                 connexion: "Login",
                 signup: "Sign up",
-                signupTitle: "Create an accounte",
+                signupTitle: "Create an account",
                 student: "Student",
                 manager: "Manager",
                 employer: "Employer"
