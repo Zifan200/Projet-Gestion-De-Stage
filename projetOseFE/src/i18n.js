@@ -55,7 +55,7 @@ export const resources = {
                     enterprise: "*Enter the name of the company you represent",
                 },
                 student: {
-                    title: "Create an student account",
+                    title: "Create a student account",
                     description:
                         "Create your student account to access the OSE 2.0 platform, manage your profile, and find an internship that matches your program.",
                     adress: "*Enter you adress",
