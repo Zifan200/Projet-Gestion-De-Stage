@@ -14,7 +14,7 @@ export const resources = {
                 emailSent: "A password reset email has been sent",
                 passwordChange: "Password changed successfully!",
                 registerStudentSuccess:
-                    "Welcome {{firstName}} 🎉! You have successfully registered for the platform ose 2.0 with the porgramme : {{program}}.",
+                    "Welcome {{firstName}} 🎉! You have successfully registered for the platform OSE 2.0 with the program : {{program}}.",
             },
             menu: {
                 hello : "Hello",
