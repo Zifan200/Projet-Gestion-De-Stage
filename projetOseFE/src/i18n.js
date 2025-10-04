@@ -59,7 +59,7 @@ export const resources = {
                     description:
                         "Create your student account to access the OSE 2.0 platform, manage your profile, and find an internship that matches your program.",
                     adress: "*Enter your address",
-                    programmes: "*Enter you program",
+                    programmes: "*Enter your program",
                     selectProgram: "Select a program from the following:",
                 },
                 register: {
