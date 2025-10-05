@@ -8,6 +8,13 @@ import "./i18n";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
-    <Toaster position="top-right" />
+    <Toaster
+      toastOptions={{
+        style: {
+          background: "#B3FE3B",
+        },
+      }}
+      position="top-right"
+    />
   </React.StrictMode>,
 );

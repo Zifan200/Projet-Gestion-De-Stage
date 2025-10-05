@@ -1,6 +1,7 @@
 package org.example.presentation.exception;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.security.exception.APIException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.ErrorResponseDTO;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class EmployerControllerException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,6 +46,7 @@ public class EmployerControllerException {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleUserNotFound(UserNotFoundException ex) {
+        log.error("e: ", ex);
         return buildError(HttpStatus.NOT_FOUND, "USER_NOT_FOUND", ex.getMessage());
     }
 

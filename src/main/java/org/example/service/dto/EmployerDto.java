@@ -19,8 +19,7 @@ public class EmployerDto extends UserDTO {
     @NotBlank(message = "Enterprise name is mandatory")
     @NotEmpty
     private String enterpriseName;
-    @Min(8)
-    @Pattern(regexp = "^[0-9]{10}$", message = "Phone is not valid")
+    @Pattern(regexp = "\\d{3}-\\d{3}-\\d{4}", message = "Le téléphone doit être au format 514-123-4567")
     private String phone;
 
     @Builder
