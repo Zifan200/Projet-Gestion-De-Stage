@@ -36,7 +36,7 @@ export const ResetPasswordPage = () => {
         return;
       }
       form.reset();
-      toast.success(`Mot de passe changé avec succès!`, { duration: 3000 });
+      toast.success(t("success.passwordChanged"), { duration: 3000 });
       setTimeout(() => {
         navigate("/login");
       }, 4500);
