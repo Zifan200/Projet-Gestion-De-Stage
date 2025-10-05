@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
-import { useOfferStore } from "../../stores/offerStore.js"; // à créer pour gérer les offres
+import { useOfferStore } from "../../stores/offerStore.js";
 
 export const StudentOffers = () => {
     const { t } = useTranslation();
@@ -25,9 +25,9 @@ export const StudentOffers = () => {
     const handleApply = async (offerId) => {
         try {
             await applyToOffer(offerId);
-            toast.success(t("studentDashboard.success.applyOffer"));
+            toast.success(t("studentOffers.success.applyOffer"));
         } catch {
-            toast.error(t("studentDashboard.errors.applyOffer"));
+            toast.error(t("studentOffers.errors.applyOffer"));
         }
     };
 
@@ -35,17 +35,17 @@ export const StudentOffers = () => {
 
     return (
         <div className="p-10">
-            <h2 className="text-xl font-semibold mb-4">{t("studentDashboard.internshipOffers")}</h2>
+            <h2 className="text-xl font-semibold mb-4">{t("studentOffers.title")}</h2>
             {loading ? (
-                <p>{t("loading")}</p>
+                <p>{t("studentOffers.loading")}</p>
             ) : (
                 <div className="overflow-x-auto bg-white shadow rounded">
                     <table className="w-full text-sm text-left border-collapse">
                         <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
                         <tr>
-                            <th className="px-4 py-3">{t("studentDashboard.table.title")}</th>
-                            <th className="px-4 py-3">{t("studentDashboard.table.company")}</th>
-                            <th className="px-4 py-3">{t("studentDashboard.table.actions")}</th>
+                            <th className="px-4 py-3">{t("studentOffers.table.title")}</th>
+                            <th className="px-4 py-3">{t("studentOffers.table.company")}</th>
+                            <th className="px-4 py-3">{t("studentOffers.table.actions")}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -58,7 +58,7 @@ export const StudentOffers = () => {
                                         className="px-3 py-1 bg-[#B3FE3B] rounded"
                                         onClick={() => handleApply(offer.id)}
                                     >
-                                        {t("studentDashboard.actions.apply")}
+                                        {t("studentOffers.actions.apply")}
                                     </button>
                                 </td>
                             </tr>
@@ -66,7 +66,7 @@ export const StudentOffers = () => {
                         {offers.length === 0 && (
                             <tr>
                                 <td colSpan="3" className="text-center py-4 text-gray-500">
-                                    {t("studentDashboard.noOffers")}
+                                    {t("studentOffers.noOffers")}
                                 </td>
                             </tr>
                         )}

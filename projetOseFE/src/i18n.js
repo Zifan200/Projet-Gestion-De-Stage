@@ -160,13 +160,11 @@ export const resources = {
         title: "Dashboard",
         menu: "Menu",
         cvs: "Resumes",
-        internshipOffers: "Internship Offers",
         myCvs: "My Resumes",
         addCv: "Add a Resume",
         description:
           "Here you can manage your resumes: add one, view them, download or delete them.",
         noCvs: "No resumes yet",
-        noOffers: "No internship offers yet",
         table: {
           fileName: "File Name",
           type: "Type",
@@ -194,6 +192,25 @@ export const resources = {
           deleteCv: "Error deleting resume",
           previewCv: "Unable to preview resume",
           unsupportedFormat: "Unsupported format",
+        },
+      },
+      studentOffers: {
+        title: "Internship Offers",
+        table: {
+          title: "Title",
+          company: "Company",
+          actions: "Actions",
+        },
+        actions: {
+          apply: "Apply",
+        },
+        noOffers: "No internship offers available",
+        loading: "Loading offers...",
+        success: {
+          applyOffer: "You have successfully applied to this offer",
+        },
+        errors: {
+          applyOffer: "Failed to apply to the offer",
         },
       },
     },
@@ -397,6 +414,25 @@ export const resources = {
           deleteCv: "Erreur lors de la suppression du CV",
           previewCv: "Impossible d’afficher le CV",
           unsupportedFormat: "Format non supporté",
+        },
+      },
+      studentOffers: {
+        title: "Offres de stage",
+        table: {
+          title: "Titre",
+          company: "Entreprise",
+          actions: "Actions",
+        },
+        actions: {
+          apply: "Postuler",
+        },
+        noOffers: "Aucune offre de stage disponible",
+        loading: "Chargement des offres...",
+        success: {
+          applyOffer: "Vous avez postulé à cette offre avec succès",
+        },
+        errors: {
+          applyOffer: "Échec de la postulation à l'offre",
         },
       },
     },
