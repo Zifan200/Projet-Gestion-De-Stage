@@ -57,7 +57,7 @@ public class InternshipOfferService {
         logger.info("InternshipOffer created = \"{}\"", savedInternshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
-    public List<InternshipOfferListDto> getAllOffers() {
+    public List<InternshipOfferListDto> getAllOffersSummary() {
         List<InternshipOfferListDto> offers = internshipOfferRepository.findAll()
                 .stream()
                 .map(offer -> InternshipOfferListDto.builder()
@@ -110,6 +110,26 @@ public class InternshipOfferService {
                 .map(InternshipOfferDto::create)
                 .toList();
     }
+
+    public List<InternshipOfferDto> getRejectedOffers() {
+        List<InternshipOffer> rejectedOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
+
+        return rejectedOffers.stream()
+                .map(InternshipOfferDto::create)
+                .toList();
+    }
+
+    public List<InternshipOfferDto> getPendingOffers() {
+        List<InternshipOffer> pendingOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
+
+        return pendingOffers.stream()
+                .map(InternshipOfferDto::create)
+                .toList();
+    }
+
+
 
     public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
         InternshipOffer offer = internshipOfferRepository.findById(offerId)

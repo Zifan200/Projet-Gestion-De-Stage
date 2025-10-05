@@ -48,10 +48,10 @@ public class InternshipOfferControllerTest {
                 .expirationDate(LocalDate.now().plusDays(25))
                 .build();
 
-        when(internshipOfferService.getAllOffers()).thenReturn(List.of(offer1, offer2));
+        when(internshipOfferService.getAllOffersSummary()).thenReturn(List.of(offer1, offer2));
 
         // Act
-        ResponseEntity<List<InternshipOfferListDto>> response = internshipOfferController.getAllInternshipOffers();
+        ResponseEntity<List<InternshipOfferListDto>> response = internshipOfferController.getAllInternshipOffersSummary();
 
         // Assert
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
@@ -63,10 +63,10 @@ public class InternshipOfferControllerTest {
     @Test
     void getAllInternshipOffers_shouldReturnEmptyList_whenNoOffers() {
         // Arrange
-        when(internshipOfferService.getAllOffers()).thenReturn(List.of());
+        when(internshipOfferService.getAllOffersSummary()).thenReturn(List.of());
 
         // Act
-        ResponseEntity<List<InternshipOfferListDto>> response = internshipOfferController.getAllInternshipOffers();
+        ResponseEntity<List<InternshipOfferListDto>> response = internshipOfferController.getAllInternshipOffersSummary();
 
         // Assert
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
@@ -120,7 +120,7 @@ public class InternshipOfferControllerTest {
                 .thenReturn(List.of("Informatique", "Science de la nature"));
 
         // Act
-        ResponseEntity<List<String>> response = internshipOfferController.getAllProgrammes();
+        ResponseEntity<List<String>> response = internshipOfferController.getAllProgrammesName();
 
         // Assert
         assertThat(response.getStatusCodeValue()).isEqualTo(200);

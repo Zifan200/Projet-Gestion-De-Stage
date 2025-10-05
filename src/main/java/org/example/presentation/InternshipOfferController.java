@@ -19,14 +19,10 @@ public class InternshipOfferController {
 
     private final InternshipOfferService internshipOfferService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffers() {
-        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffers();
-        if (offers.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(List.of());
-        }
+    // Utiliser par le GS et les etudiants pour regarder toutes les offres sans voir tous les details
+    @GetMapping("/all-offers-summary")
+    public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffersSummary() {
+        List<InternshipOfferListDto> offers = internshipOfferService.getAllOffersSummary();
         return ResponseEntity.ok(offers);
     }
 
@@ -40,8 +36,9 @@ public class InternshipOfferController {
         }
     }
 
-    @GetMapping("/all-programs")
-    public ResponseEntity<List<String>> getAllProgrammes() {
+    // retourne les noms des programmes existants
+    @GetMapping("/all-programs-name")
+    public ResponseEntity<List<String>> getAllProgrammesName() {
         return ResponseEntity.ok(internshipOfferService.getAllTargetedProgrammes());
     }
 
@@ -53,9 +50,19 @@ public class InternshipOfferController {
         return ResponseEntity.ok(filteredOffers);
     }
 
-    @GetMapping("/accepted-offers")
+    @GetMapping("/filter-by-accepted-offers")
     public ResponseEntity<List<InternshipOfferDto>> getAcceptedOffers() {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
+    }
+
+    @GetMapping("/filter-by-rejected-offers")
+    public ResponseEntity<List<InternshipOfferDto>> getRejectedOffers() {
+        return ResponseEntity.ok(internshipOfferService.getRejectedOffers());
+    }
+
+    @GetMapping("/filter-by-pending-offers")
+    public ResponseEntity<List<InternshipOfferDto>> getPendingOffers() {
+        return ResponseEntity.ok(internshipOfferService.getPendingOffers());
     }
 
     // Utiliser pour les etudiants
