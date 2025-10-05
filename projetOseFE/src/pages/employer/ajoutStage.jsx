@@ -2,15 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function AjoutStage() {
-
-    const programmes = [
-        "Technique de l'informatique",
-        "Science de la nature",
-        "Cinéma",
-        "Soins infirmiers",
-    ];
-
-
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -34,6 +25,8 @@ export default function AjoutStage() {
         if (!formData.title.trim()) tempErrors.title = "Un titre est obligatoire.";
         if (!formData.description.trim()) tempErrors.description = "Une description est obligatoire.";
         if (!formData.targetedProgramme.trim()) tempErrors.targetedProgramme = "Un programme est obligatoire.";
+        if (!formData.employerEmail.trim()) tempErrors.employerEmail = "Courriel est obligatoire.";
+        else if (!/\S+@\S+\.\S+/.test(formData.employerEmail)) tempErrors.employerEmail = "Courriel est invalide.";
         if (!formData.expirationDate) tempErrors.expirationDate = "Une date limite est obligatoire.";
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
@@ -47,27 +40,20 @@ export default function AjoutStage() {
         if (!validate()) return;
 
         try {
-
-            const response = await axios.get("http://localhost:8080/api/v1/user/me", {
-                headers: {Authorization: "Bearer " + token}
-            });
-
-            const employerEmail = response.data.email;
-            console.log(employerEmail);
-
             const payload = {
                 title: formData.title,
                 description: formData.description,
                 targetedProgramme: formData.targetedProgramme,
-                employerEmail: employerEmail,
+                employerEmail: formData.employerEmail,
                 expirationDate: formData.expirationDate,
             };
 
+            // J'ai essayé la variable baseURL, mais je me retrouve avec undefined.
             await axios.post(
                 "http://localhost:8080/api/v1/employer/create-internship-offer", payload,
                 {
                     headers: {
-                        Authorization: "Bearer "+ token,
+                        Authorization: "Bearer "+token,
                         "Content-Type": "application/json",
                     },
                 }
@@ -121,26 +107,27 @@ export default function AjoutStage() {
 
                 <div className={"flex flex-col mb-7"}>
                     <label className="text-xl font-semibold mb-2">Programme visé</label>
-                    <select
-                        name="targetedProgramme"
-                        placeholder="Ex : Informatique"
-                        onChange={handleChange}
-                        className={"border-1 shadow rounded-sm mb-1 px-2 py-2"}
-                        >
-                        <option value="">Sélectionnez un programme</option>
-                        {programmes.map((prog, index) => (
-                            <option key={index} value={prog}>{prog}</option>
-                        ))}
-                    </select>
+                    <input className="border-1 shadow rounded-sm mb-1 px-2 py-2" type="text" name="targetedProgramme"
+                           placeholder="Ex : Informatique"
+                           value={formData.targetedProgramme} onChange={handleChange} />
                     {errors.targetedProgramme && <p className="text-md font-bold text-yellow-500">{errors.targetedProgramme}</p>}
                 </div>
 
                 <div className={"flex flex-col mb-7"}>
-                    <label className="text-xl font-semibold mb-2">Date limite de postulation</label>
+                    <label className="text-xl font-semibold mb-2">Courriel associé à l'offre</label>
+                    <input className="border-1 shadow rounded-sm mb-1 px-2 py-2" type="email" name="employerEmail"
+                           placeholder="Ex : stage@info.com"
+                           value={formData.employerEmail} onChange={handleChange} />
+                    {errors.employerEmail && <p className="text-md font-bold text-yellow-500">{errors.employerEmail}</p>}
+                </div>
+
+                <div className={"flex flex-col mb-7"}>
+                    <label className="text-xl font-semibold mb-2">Date limite</label>
                     <input className="border-1 shadow uppercase rounded-sm mb-1 text-gray-700 px-2 py-2" type="date"
                            name="expirationDate" value={formData.expirationDate} onChange={handleChange} />
                     {errors.expirationDate && <p className="text-md font-bold text-yellow-500">{errors.expirationDate}</p>}
                 </div>
+
 
                 <button className="w-sm cursor-pointer p-4 bg-black rounded-xl  text-white text-xl
                                    shadow duration-500 hover:border-1 hover:font-semibold

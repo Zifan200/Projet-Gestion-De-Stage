@@ -1,7 +1,11 @@
+import { useTranslation } from "react-i18next";
+
 export const MegaMenuColumn = ({ title, links }) => {
+    const { t } = useTranslation();
+
     return (
         <div className="space-y-3 ">
-            <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+            <h3 className="text-sm font-semibold text-gray-800">{t(title)}</h3>
             <ul className="space-y-3">
                 {links.map((link) => (
                     <li key={link.label}>
@@ -13,11 +17,11 @@ export const MegaMenuColumn = ({ title, links }) => {
 
                             <div className="flex flex-col">
                 <span className="text-sm font-medium text-gray-900">
-                  {link.label}
+                  {t(link.label)}
                 </span>
                                 {link.description && (
                                     <span className="text-xs text-gray-500">
-                    {link.description}
+                    {t(link.description)}
                   </span>
                                 )}
                             </div>

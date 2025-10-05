@@ -1,23 +1,27 @@
-import * as z from 'zod'
-export const employerSchema = z.object({
-    email: z.email("Email est invalide"),
-    firstName: z.string().min(4, "Prénom minimum 4 charactères"),
-    lastName: z.string().min(2, "Nom de famille minimum 4 charactères"),
+import * as z from "zod";
+
+export const employerSchema = z
+  .object({
+    email: z.string().email("errors.email.invalid"),
+    firstName: z.string().min(4, "errors.firstName.min"),
+    lastName: z.string().min(2, "errors.lastName.min"),
     password: z
-        .string()
-        .regex(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/,
-            "Le mot de passe doit contenir entre 8 et 50 caractères, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)"
-        ),
+      .string()
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/,
+        "errors.password.regex",
+      ),
     confirmPassword: z.string(),
-    enterpriseName: z.string().min(2),
-    phone : z.union([
-        z.string().regex(/^\d{10}$/, "Le numéro doit contenir exactement 10 chiffres"),
+    enterpriseName: z.string().min(2, "errors.enterpriseName.min"),
+    phone: z
+      .union([
+        z.string().regex(/^\d{3}-\d{3}-\d{4}$/, "errors.phone.invalid"),
         z.literal(""),
         z.null(),
-    ])
-        .transform((val) => (val === "" ? null : val)),
-}).refine((data) => data.password === data.confirmPassword, {
-        message: "Les mots de passe ne correspondent pas",
-        path: ["confirmPassword"],
-    })
+      ])
+      .transform((val) => (val === "" ? null : val)),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "errors.password.match",
+    path: ["confirmPassword"],
+  });

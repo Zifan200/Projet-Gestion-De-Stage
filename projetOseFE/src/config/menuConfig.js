@@ -1,29 +1,20 @@
 export const menuConfig = [
-
     {
         id: "connexion",
-        label: "Connexion",
-        link: {href:"/login"},
-        sections: [
-            // {
-            //     title: "Choisir votre rôle",
-            //     links: [
-            //         { label: "Utilisateurs", href: "/login" },
-            //         { label: "Gestionnaire", href: "/login/gs" },
-            //     ],
-            // },
-        ],
+        label: "menu.connexion",
+        link: {href: "/login"},
+        sections: [],
     },
     {
         id: "signup",
-        label: "Créer un compte",
+        label: "menu.signup",
         sections: [
             {
-                title: "Créer un compte",
+                title: "menu.signupTitle",
                 links: [
-                    { label: "Étudiant", href: "/signup/etudiant" },
-                    { label: "Gestionnaire", href: "/signup/gs" },
-                    { label: "Employeur", href: "/signup/employer" },
+                    {label: "menu.student", href: "/signup/student"},
+                    {label: "menu.manager", href: "/signup/gs"},
+                    {label: "menu.employer", href: "/signup/employer"},
                 ],
             },
         ],

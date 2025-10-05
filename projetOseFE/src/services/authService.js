@@ -1,24 +1,40 @@
-import axios from 'axios'
-
+import { api } from "../lib/api.js";
 
 export const authService = {
-    async requestPasswordChange(email) {
-        return await axios.post(`http://localhost:8080/api/v1/user/password-reset/request?email=${email}`, email)
-    },
+  async requestPasswordChange(email) {
+    return await api.post(
+      `/user/password-reset/request?email=${email}`,
+      email,
+    );
+  },
 
-    async resetPasswordChange (token, newPassword) {
-        return await axios.post(`http://localhost:8080/api/v1/user/password-reset/confirm`, {
-            token,
-            newPassword,
-        });
-    },
+  async resetPasswordChange(token, newPassword) {
+    return await api.post(
+      `/user/password-reset/confirm`,
+      {
+        token,
+        newPassword,
+      },
+    );
+  },
 
-    async getMe(token) {
-        const res = await axios.get(`http://localhost:8080/api/v1/user/me`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return res.data;
-    },
-}
+  async getMe(token) {
+    const res = await api.get(`/user/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
+
+  async login(userCredential) {
+    const res = await api.post(
+      `/user/signin`,
+      userCredential,
+      {
+        headers: {},
+      },
+    );
+    return res.data;
+  },
+};
