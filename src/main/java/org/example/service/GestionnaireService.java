@@ -6,7 +6,7 @@ import org.example.service.dto.GestionnaireDTO;
 import org.example.service.exception.DuplicateUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +15,11 @@ public class GestionnaireService {
 
     private static final Logger logger = LoggerFactory.getLogger(GestionnaireService.class);
     private final GestionnaireRepository gestionnaireRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public GestionnaireService(GestionnaireRepository gestionnaireRepository) {
+    public GestionnaireService(GestionnaireRepository gestionnaireRepository, PasswordEncoder passwordEncoder) {
         this.gestionnaireRepository = gestionnaireRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -35,11 +35,12 @@ public class GestionnaireService {
                 .email(gestionnaireDTO.getEmail())
                 .password(passwordEncoder.encode(gestionnaireDTO.getPassword()))
                 .phone(gestionnaireDTO.getPhone())
+                .since(gestionnaireDTO.getSince())
                 .build();
 
         Gestionnaire gestionnaireSaved = gestionnaireRepository.save(nouveauGestionnaire);
         logger.info("Gestionnaire saved = {}", gestionnaireSaved.getEmail());
 
-        return GestionnaireDTO.fromEntity(gestionnaireSaved);
+       return GestionnaireDTO.fromEntity(gestionnaireSaved);
     }
 }
