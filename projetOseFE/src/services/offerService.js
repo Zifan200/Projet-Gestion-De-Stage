@@ -26,4 +26,8 @@ export const offerService = {
       },
     });
   },
+  async getOffersSummary() {
+    const res = await api.get("/api/v1/internship-offers/all-offers-summary");
+    return res.data;
+  },
 };

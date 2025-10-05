@@ -29,7 +29,7 @@ export const resources = {
         employer: "Employer",
         cvs: "My cv's",
         post: "Postulation",
-        myOffer: "My offer",
+        //myOffer: "My offer",
         lastActivity: "Last activity",
         offerReceive: "Offer receive",
         myOffer: "My offers",
@@ -160,11 +160,13 @@ export const resources = {
         title: "Dashboard",
         menu: "Menu",
         cvs: "Resumes",
+        internshipOffers: "Internship Offers",
         myCvs: "My Resumes",
         addCv: "Add a Resume",
         description:
           "Here you can manage your resumes: add one, view them, download or delete them.",
         noCvs: "No resumes yet",
+        noOffers: "No internship offers yet",
         table: {
           fileName: "File Name",
           type: "Type",

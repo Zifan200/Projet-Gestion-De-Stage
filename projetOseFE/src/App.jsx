@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/menu/Navbar.jsx";
 
+import { StudentOffers } from "./pages/student/studentOffers.jsx";
+
 import { LoginPage } from "./pages/login.jsx";
 
 // Pages Employeur
@@ -76,6 +78,12 @@ function App() {
       icon: FileTextIcon,
     },
     {
+      key: "offers",
+      label: t("menu.myOffer"),
+      href: "/dashboard/student/offers",
+      icon: EnvelopeOpenIcon,
+    },
+    {
       key: "applications",
       label: t("menu.post"),
       href: "/dashboard/student/applications",
@@ -105,6 +113,7 @@ function App() {
           >
             <Route index element={<StudentDashboard />} />
             <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
+            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
           </Route>
 
           <Route
