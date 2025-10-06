@@ -6,15 +6,16 @@ import {authService} from "../../services/authService.js";
 import {offerService} from "../../services/offerService.js";
 
 const offerStatuses = [
+  "STATUS",
   "PENDING",
   "ACCEPTED",
-  "REFUSED"
+  "REJECTED"
 ];
 
 export const AllOffers = () => {
     const { t } = useTranslation();
     const [user, setUser] = useState(null);
-    const [allOffers, setAllOffers] = useState([]);
+    const [currentOffers, setCurrentOffers] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,7 +24,7 @@ export const AllOffers = () => {
                 const token = localStorage.getItem("token");
                 if (token)
                     setUser(authService.getMe(token));
-                await loadInternshipOffers();
+                await loadAllOffers();
             } catch (err) {
                 console.error(err);
             }
@@ -31,19 +32,60 @@ export const AllOffers = () => {
         fetchData();
     }, []);
 
-    const loadInternshipOffers = async () => {
+    const loadAllOffers = async () => {
         setLoading(true);
-        setAllOffers(await offerService.getAllOffers());
+        setCurrentOffers(await offerService.getAllOffers());
         setLoading(false);
     };
 
+    const loadPendingOffers = async () => {
+        setLoading(true);
+        setCurrentOffers(await offerService.getPendingOffers());
+        setLoading(false);
+    };
+
+    const loadAcceptedOffers = async () => {
+        setLoading(true);
+        setCurrentOffers(await offerService.getAcceptedOffers());
+        setLoading(false);
+    };
+
+    const loadRejectedOffers = async () => {
+        setLoading(true);
+        setCurrentOffers(await offerService.getRejectedOffers());
+        setLoading(false);
+    };
+
+    const handleChange = (e) => {
+        console.log(e.target.value);
+
+        switch (e.target.value) {
+            case "PENDING":
+                loadPendingOffers();
+                break;
+            case "ACCEPTED":
+                loadAcceptedOffers();
+                break;
+            case "REJECTED":
+                loadRejectedOffers();
+                break;
+            case "STATUS":
+                loadAllOffers();
+                break;
+        }
+    }
+
     return (
         <div className="space-y-6">
-            <select>
-                <option>All statuses</option>
+            <select onChange={handleChange}>
                 {
                     offerStatuses.map((offerStatus) => (
-                        <option key={offerStatus}>{offerStatus}</option>
+                        <option
+                            key={offerStatus}
+                            value={offerStatus}
+                        >
+                            {offerStatus}
+                        </option>
                     ))
                 }
             </select>
@@ -59,7 +101,7 @@ export const AllOffers = () => {
                     t("offer.table.deadline"),
                 ]}
                 rows={
-                    allOffers.map((offer) => (
+                    currentOffers.map((offer) => (
                         <tr key={offer.id} className="border-t border-gray-300">
                             <td className="px-4 py-2">{offer.title}</td>
                             <td className="px-4 py-2">{offer.enterpriseName}</td>
