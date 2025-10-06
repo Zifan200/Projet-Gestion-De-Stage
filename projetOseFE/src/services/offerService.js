@@ -26,8 +26,13 @@ export const offerService = {
       },
     });
   },
-  async getOffersSummary() {
-    const res = await api.get("/api/v1/internship-offers/all-offers-summary");
+
+  async getAcceptedOffersSummary(token) {
+    const res = await api.get("/internship-offers/filter-by-accepted-offers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
-  },
-};
+  }
+}

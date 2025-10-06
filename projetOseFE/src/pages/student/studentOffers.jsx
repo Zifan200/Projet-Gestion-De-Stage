@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
@@ -12,30 +11,51 @@ export const StudentOffers = () => {
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-    const { offers, loading, loadOffers, applyToOffer } = useOfferStore();
+    const { offers, loading, loadOffersSummary } = useOfferStore();
+    const [filter, setFilter] = useState("all");
+    const [filteredOffers, setFilteredOffers] = useState([]);
 
     useEffect(() => {
         if (!isAuthenticated || !user) {
             navigate("/");
         } else {
-            loadOffers(); // récupère les offres via l'API
+            loadOffersSummary();
         }
-    }, [isAuthenticated, user, navigate, loadOffers]);
+    }, [isAuthenticated, user, navigate, loadOffersSummary]);
 
-    const handleApply = async (offerId) => {
-        try {
-            await applyToOffer(offerId);
-            toast.success(t("studentOffers.success.applyOffer"));
-        } catch {
-            toast.error(t("studentOffers.errors.applyOffer"));
+    // Filtrer les offres
+    useEffect(() => {
+        if (filter === "all") {
+            console.log(offers)
+            setFilteredOffers(offers);
+        } else if (filter === "expired") {
+            setFilteredOffers(offers.filter(o => new Date(o.expirationDate) < new Date()));
+        } else if (filter === "active") {
+            setFilteredOffers(offers.filter(o => new Date(o.expirationDate) >= new Date()));
         }
-    };
+    }, [offers, filter]);
 
     if (!isAuthenticated || !user) return null;
 
     return (
         <div className="p-10">
-            <h2 className="text-xl font-semibold mb-4">{t("studentOffers.title")}</h2>
+            {/* Titre et dropdown sur la même ligne */}
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">{t("studentOffers.title")}</h2>
+                <div>
+                    <label className="mr-2 font-medium">{t("studentOffers.filterLabel") || "Filter:"}</label>
+                    <select
+                        value={filter}
+                        onChange={(e) => setFilter(e.target.value)}
+                        className="border rounded px-2 py-1"
+                    >
+                        <option value="all">All</option>
+                        <option value="active">Active</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+            </div>
+
             {loading ? (
                 <p>{t("studentOffers.loading")}</p>
             ) : (
@@ -45,25 +65,23 @@ export const StudentOffers = () => {
                         <tr>
                             <th className="px-4 py-3">{t("studentOffers.table.title")}</th>
                             <th className="px-4 py-3">{t("studentOffers.table.company")}</th>
-                            <th className="px-4 py-3">{t("studentOffers.table.actions")}</th>
+                            <th className="px-4 py-3">{t("studentOffers.table.deadline") || "Deadline"}</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {offers.map((offer) => (
-                            <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
-                                <td className="px-4 py-2">{offer.title}</td>
-                                <td className="px-4 py-2">{offer.companyName}</td>
-                                <td className="px-4 py-2">
-                                    <button
-                                        className="px-3 py-1 bg-[#B3FE3B] rounded"
-                                        onClick={() => handleApply(offer.id)}
-                                    >
-                                        {t("studentOffers.actions.apply")}
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {offers.length === 0 && (
+                        {filteredOffers.length > 0 ? (
+                            filteredOffers.map((offer) => (
+                                <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
+                                    <td className="px-4 py-2">{offer.title}</td>
+                                    <td className="px-4 py-2">{offer.enterpriseName}</td>
+                                    <td className="px-4 py-2">
+                                        {offer.expirationDate
+                                            ? new Date(offer.expirationDate).toLocaleDateString()
+                                            : "-"}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
                             <tr>
                                 <td colSpan="3" className="text-center py-4 text-gray-500">
                                     {t("studentOffers.noOffers")}

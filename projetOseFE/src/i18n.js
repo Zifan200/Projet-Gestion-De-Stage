@@ -199,20 +199,23 @@ export const resources = {
         table: {
           title: "Title",
           company: "Company",
-          actions: "Actions",
+          deadline: "Deadline"
         },
         actions: {
-          apply: "Apply",
+          apply: "Apply"
         },
         noOffers: "No internship offers available",
+        filterLabel: "Filter:",
         loading: "Loading offers...",
         success: {
-          applyOffer: "You have successfully applied to this offer",
+          applyOffer: "You have successfully applied to this offer"
         },
         errors: {
           applyOffer: "Failed to apply to the offer",
-        },
-      },
+          loadOffers: "Failed to load offers"
+        }
+      }
+
     },
   },
   fr: {
@@ -421,20 +424,22 @@ export const resources = {
         table: {
           title: "Titre",
           company: "Entreprise",
-          actions: "Actions",
+          deadline: "Date limite"
         },
         actions: {
-          apply: "Postuler",
+          apply: "Postuler"
         },
         noOffers: "Aucune offre de stage disponible",
+        filterLabel: "Filtrer",
         loading: "Chargement des offres...",
         success: {
-          applyOffer: "Vous avez postulé à cette offre avec succès",
+          applyOffer: "Vous avez postulé à cette offre avec succès"
         },
         errors: {
           applyOffer: "Échec de la postulation à l'offre",
-        },
-      },
+          loadOffers: "Impossible de charger les offres"
+        }
+      }
     },
   },
 };
