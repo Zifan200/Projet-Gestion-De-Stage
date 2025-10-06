@@ -59,4 +59,25 @@ class GestionnaireServiceTest {
         verify(gestionnaireRepository).existsByCredentialsEmail(gestionnaireDTO.getEmail());
         verify(gestionnaireRepository).save(any(Gestionnaire.class));
     }
+    
+    @Test
+    void testGestionnaireCreation_shouldNotSaveGestionnaire() {
+        GestionnaireDTO gestionnaireDTO = GestionnaireDTO.builder()
+                .lastName("Doe")
+                .firstName("John")
+                .email("john.doe@example.com")
+                .password("password")
+                .role(Role.GESTIONNAIRE)
+                .phone("123-456-7890")
+                .since(LocalDate.now())
+                .build();
+
+        when(gestionnaireRepository.existsByCredentialsEmail(gestionnaireDTO.getEmail()))
+                .thenThrow(new DuplicateUserException("Le courriel " + gestionnaireDTO.getEmail()
+                        + " est déjà utilisé. Avez-vous oublié votre mot de passe ?"));
+
+        assertThatThrownBy(() -> gestionnaireService.saveGestionnaire(gestionnaireDTO))
+                .isInstanceOf(DuplicateUserException.class);
+        verify(gestionnaireRepository, never()).save(any());
+    }
 }
