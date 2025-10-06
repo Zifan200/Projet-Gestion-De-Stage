@@ -19,6 +19,16 @@ export const useOfferStore = create(
         }
       },
 
+      loadAllOffers: async (token) => {
+          try {
+              set({ loading: true, error: null });
+              const data = await offerService.getAllOffers(token);
+              set({ offers: data, loading: false });
+          } catch (err) {
+              set({ error: err, loading: false });
+          }
+      },
+
       createOffer: async (token, payload) => {
         const data = await offerService.createOffer(token, payload);
         set({ offers: [...get().offers, data] });

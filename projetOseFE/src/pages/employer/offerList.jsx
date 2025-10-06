@@ -5,10 +5,12 @@ import { Table } from "../../components/ui/table.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { toast } from "sonner";
+import {useNavigate} from "react-router";
 
-export const OfferList = ({ navigate }) => {
+export const OfferList = () => {
   const { t } = useTranslation();
   const { offers, loadOffers, deleteOffer } = useOfferStore();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     loadOffers();

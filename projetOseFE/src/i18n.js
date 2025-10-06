@@ -29,7 +29,7 @@ export const resources = {
         employer: "Employer",
         cvs: "My cv's",
         post: "Postulation",
-        myOffer: "My offer",
+        // myOffer: "My offer",
         lastActivity: "Last activity",
         offerReceive: "Offer receive",
         myOffer: "My offers",
@@ -40,6 +40,7 @@ export const resources = {
         seeOffer: "My offers",
         createOffer: "Create an offer",
         applicationSend: "Application send",
+        allOffers: "All offers",
       },
       errors: {
         email: { invalid: "Invalid email address" },
@@ -99,6 +100,7 @@ export const resources = {
           deadline: "Deadline",
           actions: "Actions",
           noOffers: "No offers available yet.",
+          enterprise: "Enterprise name",
         },
         actions: {
           create_another: "Add New Offer",
@@ -233,6 +235,7 @@ export const resources = {
         activeOffer: "Offres actives",
         studentOffer: "Étudiants",
         offerConfirm: "Offres signer",
+        allOffers: "Toutes les offres",
       },
       errors: {
         email: { invalid: "Email est invalide" },
@@ -302,6 +305,7 @@ export const resources = {
           deadline: "Date limite",
           actions: "Actions",
           noOffers: "Aucune offre pour le moment.",
+          enterprise: "Nom de l'entreprise",
         },
         actions: {
           create_another: "Ajouter une nouvelle offre",

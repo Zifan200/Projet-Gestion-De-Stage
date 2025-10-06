@@ -19,6 +19,15 @@ export const offerService = {
     return res.data;
   },
 
+  async getAllOffers(token) {
+    const res = await api.get("/internship-offers/all-offers-summary", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
+
   async deleteOffer(token, id) {
     await api.delete(`/employer/offers/${id}`, {
       headers: {

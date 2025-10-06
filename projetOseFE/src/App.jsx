@@ -26,6 +26,8 @@ import AddIntership from "./pages/employer/addIntership.jsx";
 import { StudentCVs } from "./pages/student/cvs.jsx";
 import { useTranslation } from "react-i18next";
 import { OfferList } from "./pages/employer/offerList.jsx";
+import {ManagerDashboard} from "./pages/manager/ManagerDashboard.jsx";
+import {AllOffers} from "./pages/manager/allOffers.jsx";
 
 function App() {
   const { t } = useTranslation();
@@ -82,6 +84,20 @@ function App() {
       icon: EnvelopeClosedIcon,
     },
   ];
+  const managerDashboardSidebarLinks = [
+    {
+      key: "dashboard",
+      label: t("menu.dashboard"),
+      href: "/dashboard/manager/",
+      icon: BackpackIcon,
+    },
+    {
+      key: "seeOffers",
+      label: t("menu.allOffers"),
+      href: "/dashboard/manager/internships",
+      icon: EnvelopeClosedIcon,
+    },
+  ];
   return (
     <div className="min-h-screen">
       <BrowserRouter>
@@ -130,6 +146,20 @@ function App() {
           <Route path="/signup/employer" element={<EmployerSignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/employer/ajout_stages" element={<AjoutStage />} />
+
+          {/* Routes GS */}
+          <Route
+              path="/dashboard/manager/"
+              element={
+                <DashboardLayout
+                    sidebarLinks={managerDashboardSidebarLinks}
+                    title="Manager"
+                />
+              }>
+              <Route index element={<ManagerDashboard />} />
+              <Route path="/dashboard/manager/internships" element={<AllOffers />} />
+          </Route>
+
         </Routes>
       </BrowserRouter>
     </div>
