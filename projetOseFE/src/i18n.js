@@ -199,10 +199,22 @@ export const resources = {
         table: {
           title: "Title",
           company: "Company",
-          deadline: "Deadline"
+          deadline: "Deadline",
+          action: "Action"
         },
+        modal: {
+        //companyName: "Company Name",
+        companyEmail: "Company Email",
+        targetedProgramme: "Targeted Programme",
+        publishedDate: "Published Date",
+        deadline: "Deadline",
+        status: "Status",
+        description: "Description",
+        close: "Close"
+      },
         actions: {
-          apply: "Apply"
+          apply: "Apply",
+          view: "View"
         },
         noOffers: "No internship offers available",
         filterLabel: "Filter:",
@@ -424,10 +436,22 @@ export const resources = {
         table: {
           title: "Titre",
           company: "Entreprise",
-          deadline: "Date limite"
+          deadline: "Date limite",
+          action: "Action"
+        },
+        modal: {
+          //companyName: Nom de l'entreprise,
+          companyEmail: "Email de l'entreprise",
+          targetedProgramme: "Programme ciblé",
+          publishedDate: "Date de publication",
+          deadline: "Date limite",
+          status: "Statut",
+          description: "Description",
+          close: "Fermer"
         },
         actions: {
-          apply: "Postuler"
+          apply: "Postuler",
+          view: "Voir"
         },
         noOffers: "Aucune offre de stage disponible",
         filterLabel: "Filtrer",
