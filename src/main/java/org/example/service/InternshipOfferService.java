@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.event.EmployerCreatedInternshipOfferEvent;
+import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
@@ -136,6 +137,7 @@ public class InternshipOfferService {
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
         internshipOfferRepository.save(offer);
+        eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
         return InternshipOfferResponseDto.create(offer);
     }
 
