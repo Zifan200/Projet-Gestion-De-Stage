@@ -4,17 +4,18 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import org.example.model.CV;
 import org.example.model.Etudiant;
-import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.CvResponseDTO;
-import org.example.service.exception.*;
+import org.example.service.exception.AccessDeniedException;
+import org.example.service.exception.CvNotFoundException;
+import org.example.service.exception.FileProcessingException;
+import org.example.service.exception.InvalidFileFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,9 +28,13 @@ import java.util.List;
 public class CVService {
     private static final long MAX_SIZE = 5 * 1024 * 1024;
     private static final Logger logger = LoggerFactory.getLogger(CVService.class);
+    @Autowired
     private final UserAppService userAppService;
+    @Autowired
     private final EtudiantRepository studentRepository;
+    @Autowired
     private final CvRepository cvRepository;
+
 
     public CvResponseDTO addCv(String email, MultipartFile cvFile) {
         validateFile(cvFile);
@@ -109,47 +114,5 @@ public class CVService {
         }
     }
 
-    public List<CvResponseDTO> listAllCvs() {
-        List <CV> allCvs = cvRepository.findAll();
 
-        return allCvs.stream()
-                .map(CvResponseDTO::fromEntity)
-                .toList();
-    }
-
-    @Transactional
-    public CvResponseDTO updateCvStatus(Long cvId, InternshipOfferStatus newStatus, String reason) {
-        CV cv = cvRepository.findById(cvId)
-                .orElseThrow(() -> new CvNotFoundException("CV introuvable. Veuillez réessayer."));
-
-        if (cv.getStatus() == newStatus) {
-            throw new InvalidInternShipOffer("Le CV possède déjà le statut " + newStatus + ".");
-        }
-
-        cv.setStatus(newStatus);
-
-        if (newStatus == InternshipOfferStatus.REJECTED) {
-            cv.setReason(reason);
-        }
-        else {
-            cv.setReason(reason);
-        }
-
-        if (newStatus == InternshipOfferStatus.REJECTED && (reason == null || reason.isEmpty())) {
-            throw new InvalidInternShipOffer("Vous devez spécifier la raison du refus.");
-        }
-
-        CV updatedCv = cvRepository.save(cv);
-        return CvResponseDTO.fromEntity(updatedCv);
-    }
-
-    @Transactional
-    public CvResponseDTO approveCv(Long cvId) {
-        return updateCvStatus(cvId, InternshipOfferStatus.ACCEPTED, null);
-    }
-
-    @Transactional
-    public CvResponseDTO refuseCv(Long cvId, String reason) {
-        return updateCvStatus(cvId, InternshipOfferStatus.REJECTED, reason);
-    }
 }

@@ -7,13 +7,18 @@ import org.example.model.CV;
 import org.example.service.CVService;
 import org.example.service.UserAppService;
 import org.example.service.dto.CvResponseDTO;
+import org.example.service.dto.UserDTO;
 import org.example.utils.JwtTokenUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -21,8 +26,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class CvController {
-
+    @Autowired
     private final CVService cvService;
+    @Autowired
     private final UserAppService userAppService;
 
     @PostMapping("/me/cv")
