@@ -6,6 +6,9 @@ export const useOfferStore = create(
   persist(
     (set, get) => ({
       offers: [],
+      pendingOffers: [],
+      acceptedOffers: [],
+      rejectedOffers: [],
       loading: false,
       error: null,
 
@@ -24,6 +27,36 @@ export const useOfferStore = create(
               set({ loading: true, error: null });
               const data = await offerService.getAllOffers(token);
               set({ offers: data, loading: false });
+          } catch (err) {
+              set({ error: err, loading: false });
+          }
+      },
+
+      loadPendingOffers: async (token) => {
+          try {
+              set({ loading: true, error: null });
+              const data = await offerService.getPendingOffers(token);
+              set({ pendingOffers: data, loading: false });
+          } catch (err) {
+              set({ error: err, loading: false });
+          }
+      },
+
+      loadRejectedOffers: async (token) => {
+          try {
+              set({ loading: true, error: null });
+              const data = await offerService.getRejectedOffers(token);
+              set({ rejectedOffers: data, loading: false });
+          } catch (err) {
+              set({ error: err, loading: false });
+          }
+      },
+
+      loadAcceptedOffers: async (token) => {
+          try {
+              set({ loading: true, error: null });
+              const data = await offerService.getAcceptedOffers(token);
+              set({ acceptedOffers: data, loading: false });
           } catch (err) {
               set({ error: err, loading: false });
           }
