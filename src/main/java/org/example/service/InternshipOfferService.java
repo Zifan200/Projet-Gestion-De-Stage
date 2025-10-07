@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -130,12 +131,12 @@ public class InternshipOfferService {
     }
 
 
-
-    public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
+    public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status) {
         InternshipOffer offer = internshipOfferRepository.findById(offerId)
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
         internshipOfferRepository.save(offer);
+        return InternshipOfferResponseDto.create(offer);
     }
 
     public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {
