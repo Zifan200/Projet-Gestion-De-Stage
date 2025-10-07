@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface CvRepository extends JpaRepository<CV, Long> {
     Optional<CV> findByEtudiantId(Long etudiantId);
     List<CV> findAllByEtudiantId(Long etudiantId);
-    List<CV> findAll();
 }

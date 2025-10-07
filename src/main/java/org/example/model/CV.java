@@ -2,7 +2,6 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.model.enums.InternshipOfferStatus;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
@@ -35,13 +34,6 @@ public class CV {
 
     @Column(name = "uploaded_at", nullable = false)
     private LocalDateTime uploadedAt;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
-
-    @Column(name = "reason")
-    private String reason;
 
     @Lob
     @JdbcTypeCode(SqlTypes.BINARY)
