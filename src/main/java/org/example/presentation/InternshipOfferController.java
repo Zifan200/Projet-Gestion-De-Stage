@@ -19,7 +19,7 @@ public class InternshipOfferController {
 
     private final InternshipOfferService internshipOfferService;
 
-    // Utiliser par le GS et les etudiants pour regarder toutes les offres sans voir tous les details
+    // Utiliser par le GS pour regarder toutes les offres sans voir tous les details
     @GetMapping("/all-offers-summary")
     public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffersSummary() {
         List<InternshipOfferListDto> offers = internshipOfferService.getAllOffersSummary();
@@ -51,7 +51,7 @@ public class InternshipOfferController {
     }
 
     @GetMapping("/filter-by-accepted-offers")
-    public ResponseEntity<List<InternshipOfferDto>> getAcceptedOffers() {
+    public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffers() {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 

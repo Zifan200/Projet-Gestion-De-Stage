@@ -29,7 +29,7 @@ export const resources = {
         employer: "Employer",
         cvs: "My cv's",
         post: "Postulation",
-        myOffer: "My offer",
+        //myOffer: "My offer",
         lastActivity: "Last activity",
         offerReceive: "Offer receive",
         myOffer: "My offers",
@@ -194,6 +194,40 @@ export const resources = {
           unsupportedFormat: "Unsupported format",
         },
       },
+      studentOffers: {
+        title: "Internship Offers",
+        table: {
+          title: "Title",
+          company: "Company",
+          deadline: "Deadline",
+          action: "Action"
+        },
+        modal: {
+        //companyName: "Company Name",
+        companyEmail: "Company Email",
+        targetedProgramme: "Targeted Programme",
+        publishedDate: "Published Date",
+        deadline: "Deadline",
+        status: "Status",
+        description: "Description",
+        close: "Close"
+      },
+        actions: {
+          apply: "Apply",
+          view: "View"
+        },
+        noOffers: "No internship offers available",
+        filterLabel: "Filter:",
+        loading: "Loading offers...",
+        success: {
+          applyOffer: "You have successfully applied to this offer"
+        },
+        errors: {
+          applyOffer: "Failed to apply to the offer",
+          loadOffers: "Failed to load offers"
+        }
+      }
+
     },
   },
   fr: {
@@ -397,6 +431,39 @@ export const resources = {
           unsupportedFormat: "Format non supporté",
         },
       },
+      studentOffers: {
+        title: "Offres de stage",
+        table: {
+          title: "Titre",
+          company: "Entreprise",
+          deadline: "Date limite",
+          action: "Action"
+        },
+        modal: {
+          //companyName: Nom de l'entreprise,
+          companyEmail: "Email de l'entreprise",
+          targetedProgramme: "Programme ciblé",
+          publishedDate: "Date de publication",
+          deadline: "Date limite",
+          status: "Statut",
+          description: "Description",
+          close: "Fermer"
+        },
+        actions: {
+          apply: "Postuler",
+          view: "Voir"
+        },
+        noOffers: "Aucune offre de stage disponible",
+        filterLabel: "Filtrer",
+        loading: "Chargement des offres...",
+        success: {
+          applyOffer: "Vous avez postulé à cette offre avec succès"
+        },
+        errors: {
+          applyOffer: "Échec de la postulation à l'offre",
+          loadOffers: "Impossible de charger les offres"
+        }
+      }
     },
   },
 };

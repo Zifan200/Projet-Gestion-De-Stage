@@ -26,4 +26,23 @@ export const offerService = {
       },
     });
   },
-};
+
+  async getAcceptedOffersSummary(token) {
+    const res = await api.get("/internship-offers/filter-by-accepted-offers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
+
+  async getOfferById(token, id) {
+    const res = await api.get(`/internship-offers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  }
+
+}
