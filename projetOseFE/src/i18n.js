@@ -112,16 +112,24 @@ export const resources = {
           close: "Close"
         },
         filter: {
-          allPrograms: "All programs",
-          status: "Status",
-          pending: "Pending",
-          accepted: "Accepted",
-          rejected: "Rejected",
+          status: {
+            all: "Status",
+            pending: "Pending",
+            accepted: "Accepted",
+            rejected: "Rejected",
+          },
+          program: {
+            all: "All programs",
+          },
         },
         actions: {
           create_another: "Add New Offer",
           view: "View",
           delete: "Delete",
+        },
+        errors: {
+          loadOffer: "Unable to get offer",
+          loadOffers: "Error while loading offers",
         },
       },
       description: "Welcome to React and react-i18next",
@@ -333,16 +341,24 @@ export const resources = {
           close: "Fermer"
         },
         filter: {
-          allPrograms: "Tous les programmes",
-          status: "Statut",
-          pending: "En attente",
-          accepted: "Accepté",
-          rejected: "Rejeté",
+          status: {
+            all: "Statut",
+            pending: "En attente",
+            accepted: "Accepté",
+            rejected: "Rejeté",
+          },
+          program: {
+            all: "Tous les programmes",
+          },
         },
         actions: {
           create_another: "Ajouter une nouvelle offre",
           view: "Voir",
           delete: "Supprimer",
+        },
+        errors: {
+          loadOffer: "Impossible de récupérer l'offre",
+          loadOffers: "Erreur lors du chargement des offres",
         },
       },
       form: {

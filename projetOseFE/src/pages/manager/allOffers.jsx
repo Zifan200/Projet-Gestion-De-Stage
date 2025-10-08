@@ -11,12 +11,25 @@ import {toast} from "sonner";
 export const AllOffers = () => {
     const { t } = useTranslation();
     const user = useAuthStore((s) => s.user);
-
     const [ selectedOffer, setSelectedOffer ] = useState(null);
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ currentOffers, setCurrentOffers ] = useState([]);
-    const [ currentOfferStatus, setCurrentOfferStatus ] = useState(t("offer.filter.status"));
-    const [ currentProgram, setCurrentProgram ] = useState("All programs");
+
+    const offerStatuses = {
+        ALL: t("offer.filter.status.all"),
+        PENDING: t("offer.filter.status.pending"),
+        ACCEPTED: t("offer.filter.status.accepted"),
+        REJECTED: t("offer.filter.status.rejected"),
+    };
+
+    const [
+        currentOfferStatus,
+        setCurrentOfferStatus
+    ] = useState(offerStatuses.ALL);
+    const [
+        currentProgram,
+        setCurrentProgram
+    ] = useState(t("offer.filter.program.all"));
 
     const {
         offers, loadAllOffers,
@@ -26,13 +39,6 @@ export const AllOffers = () => {
         programs, loadPrograms,
         loadOffer, loading
     } = useOfferStore();
-
-    const offerStatuses = [
-        t("offer.filter.status"),
-        t("offer.filter.pending"),
-        t("offer.filter.accepted"),
-        t("offer.filter.rejected"),
-    ];
 
 
     useEffect(() => {
@@ -53,7 +59,7 @@ export const AllOffers = () => {
 
     const handleProgramNameOnChange = async () => {
         try {
-            if (currentProgram !== "All programs") {
+            if (currentProgram !== t("offer.filter.program.all")) {
                 const res = await fetch(
                     `http://localhost:8080/api/v1/internship-offers/filter-by-program?program=${currentProgram}`,
                     {
@@ -70,33 +76,33 @@ export const AllOffers = () => {
             }
         } catch (err) {
             console.error(err);
-            toast.error(`Erreur lors du chargement des offres pour le programme ${currentProgram}`);
+            toast.error(t("offer.errors.loadOffers"));
         }
     };
 
     const handleOfferStatusChange = () => {
         try {
             switch (currentOfferStatus) {
-                case t("offer.filter.pending"):
+                case offerStatuses.PENDING:
                     loadPendingOffers();
                     setCurrentOffers(pendingOffers);
                     break;
-                case t("offer.filter.accepted"):
+                case offerStatuses.ACCEPTED:
                     loadAcceptedOffers();
                     setCurrentOffers(acceptedOffers);
                     break;
-                case t("offer.filter.rejected"):
+                case offerStatuses.REJECTED:
                     loadRejectedOffers();
                     setCurrentOffers(rejectedOffers);
                     break;
-                case t("offer.filter.status"):
+                case offerStatuses.ALL:
                     loadAllOffers();
                     setCurrentOffers(offers);
                     break;
             }
         } catch (err) {
             console.error(err);
-            toast.error(`Erreur lors du chargement des offres avec le statut ${currentOfferStatus}`);
+            toast.error(t("offer.errors.loadOffers"));
         }
     };
 
@@ -108,7 +114,7 @@ export const AllOffers = () => {
             setIsModalOpen(isModalOpen);
         } catch (err) {
             console.error(err);
-            toast.error("Erreur lors de l'ouverture de l'offre");
+            toast.error(t("offer.errors.loadOffer"));
         }
     };
 
@@ -121,7 +127,9 @@ export const AllOffers = () => {
                 value={currentProgram}
                 onChange={(e) => setCurrentProgram(e.target.value)}
             >
-                <option value="All programs">{t("offer.filter.allPrograms")}</option>
+                <option value={t("offer.filter.program.all")}>
+                    {t("offer.filter.program.all")}
+                </option>
                 {
                     programs.map((programName) => (
                         <option key={programName} value={programName}>
@@ -137,7 +145,7 @@ export const AllOffers = () => {
                 onChange={(e) => setCurrentOfferStatus(e.target.value)}
             >
                 {
-                    offerStatuses.map((offerStatus) => (
+                    Object.values(offerStatuses).map((offerStatus) => (
                         <option key={offerStatus} value={offerStatus}>
                             {offerStatus}
                         </option>
