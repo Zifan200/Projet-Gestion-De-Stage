@@ -102,6 +102,22 @@ export const resources = {
           noOffers: "No offers available yet.",
           enterprise: "Enterprise name",
         },
+        modal: {
+          description: "Description",
+          targetedProgramme: "Targeted program",
+          companyEmail: "Company email",
+          publishedDate: "Published date",
+          deadline: "Deadline",
+          status: "Status",
+          close: "Close"
+        },
+        filter: {
+          allPrograms: "All programs",
+          status: "Status",
+          pending: "Pending",
+          accepted: "Accepted",
+          rejected: "Rejected",
+        },
         actions: {
           create_another: "Add New Offer",
           view: "View",
@@ -306,6 +322,22 @@ export const resources = {
           actions: "Actions",
           noOffers: "Aucune offre pour le moment.",
           enterprise: "Nom de l'entreprise",
+        },
+        modal: {
+          description: "Description",
+          targetedProgramme: "Programme ciblé",
+          companyEmail: "Email de l'entreprise",
+          publishedDate: "Date de publication",
+          deadline: "Date limite",
+          status: "Statut",
+          close: "Fermer"
+        },
+        filter: {
+          allPrograms: "Tous les programmes",
+          status: "Statut",
+          pending: "En attente",
+          accepted: "Accepté",
+          rejected: "Rejeté",
         },
         actions: {
           create_another: "Ajouter une nouvelle offre",

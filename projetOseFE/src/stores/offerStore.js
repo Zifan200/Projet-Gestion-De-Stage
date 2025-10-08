@@ -11,6 +11,7 @@ export const useOfferStore = create(
             rejectedOffers: [],
             offersByProgram: [],
             programs: [],
+            selectedOffer: null,
             loading: false,
             error: null,
 
@@ -33,6 +34,18 @@ export const useOfferStore = create(
                     set({ error: err, loading: false });
                 }
             },
+
+            loadOffer: async (token, offerId) => {
+                try {
+                    const data = await offerService.getOfferById(token, offerId);
+                    set({ selectedOffer: data, isModalOpen: true });
+                } catch (err) {
+                    console.error(err);
+                    set({ error: err, loading: false});
+                }
+            },
+
+            closeModal: () => set({ selectedOffer: null, isModalOpen: false }),
 
             loadPendingOffers: async (token) => {
                 try {

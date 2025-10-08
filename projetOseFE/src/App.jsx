@@ -153,7 +153,7 @@ function App() {
               element={
                 <DashboardLayout
                     sidebarLinks={managerDashboardSidebarLinks}
-                    title="Manager"
+                    title={t("menu.manager")}
                 />
               }>
               <Route index element={<ManagerDashboard />} />
