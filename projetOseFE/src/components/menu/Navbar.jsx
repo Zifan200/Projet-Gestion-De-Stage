@@ -65,6 +65,7 @@ const Navbar = () => {
     if (isAuthenticated) {
       if (user.role === "STUDENT") navigate("/dashboard/student/");
       if (user.role === "EMPLOYER") navigate("/dashboard/employer/");
+      if (user.role === "GESTIONNAIRE") navigate("/dashboard/gs/");
     }
   };
 

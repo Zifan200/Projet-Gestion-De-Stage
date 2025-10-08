@@ -6,7 +6,7 @@ export const Header = ({ title, actionLabel, onAction }) => (
     {actionLabel && (
       <button
         onClick={onAction}
-        className="px-4 py-2 bg-green-400 text-black rounded-lg hover:bg-green-500 transition"
+        className="px-4 py-2 bg-[#B3FE3B] text-black rounded-lg hover:bg-lime-200 transition"
       >
         {actionLabel}
       </button>
