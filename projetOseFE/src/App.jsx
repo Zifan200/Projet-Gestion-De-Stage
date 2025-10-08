@@ -26,7 +26,7 @@ import AddIntership from "./pages/employer/addIntership.jsx";
 import { StudentCVs } from "./pages/student/cvs.jsx";
 import { useTranslation } from "react-i18next";
 import { OfferList } from "./pages/employer/offerList.jsx";
-import {ManagerDashboard} from "./pages/manager/ManagerDashboard.jsx";
+import {ManagerDashboard} from "./pages/manager/dashboard.jsx";
 import {AllOffers} from "./pages/manager/allOffers.jsx";
 
 function App() {
