@@ -3,6 +3,7 @@ package org.example.presentation;
 import lombok.RequiredArgsConstructor;
 import org.example.service.CVService;
 import org.example.service.GestionnaireService;
+import org.example.service.dto.CvDownloadDTO;
 import org.example.service.dto.CvResponseDTO;
 import org.example.service.dto.CvStatusDTO;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,15 @@ public class GestionnaireController {
     public ResponseEntity<CvResponseDTO> rejectCv(@PathVariable Long cvId, @RequestBody CvStatusDTO request) {
         CvResponseDTO response = cvService.refuseCv(cvId, request.getReason());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cvId}/download")
+    public ResponseEntity<byte[]> downloadCv(@PathVariable Long cvId) {
+        CvDownloadDTO dto = cvService.downloadCvById(cvId);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "inline; filename=\"" + dto.getFileName() + "\"")
+                .header("Content-Type", dto.getFileType())
+                .body(dto.getData());
     }
 }
