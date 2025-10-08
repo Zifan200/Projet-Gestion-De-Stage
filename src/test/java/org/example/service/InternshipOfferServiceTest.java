@@ -297,6 +297,7 @@ public class InternshipOfferServiceTest {
     void getAcceptedOffers_shouldReturnOnlyAcceptedOffers() {
         // Arrange
         Employer employer = buildEmployer();
+
         InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
         offer1.setId(1L);
         offer1.setStatus(InternshipOfferStatus.ACCEPTED);
@@ -313,13 +314,19 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
-        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
 
         // Assert
         assertThat(acceptedOffers).hasSize(2);
         assertThat(acceptedOffers).extracting("title")
                 .containsExactlyInAnyOrder(offer1.getTitle(), offer3.getTitle());
+        assertThat(acceptedOffers).extracting("enterpriseName")
+                .containsExactlyInAnyOrder(
+                        offer1.getEmployer().getEnterpriseName(),
+                        offer3.getEmployer().getEnterpriseName()
+                );
     }
+
 
     @Test
     void getAcceptedOffers_whenNoAcceptedOffers_shouldReturnEmptyList() {
@@ -328,11 +335,12 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of());
 
         // Act
-        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
 
         // Assert
         assertThat(acceptedOffers).isEmpty();
     }
+
 
     @Test
     void getPendingOffers_shouldReturnOnlyPendingOffers() {

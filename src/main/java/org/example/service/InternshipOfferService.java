@@ -104,13 +104,17 @@ public class InternshipOfferService {
                         .build())
                 .toList();
     }
-    public List<InternshipOfferDto> getAcceptedOffers() {
-        List<InternshipOffer> acceptedOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
-
-        return acceptedOffers.stream()
-                .map(InternshipOfferDto::create)
-                .toList();
+    public List<InternshipOfferListDto> getAcceptedOffers() {
+        List<InternshipOfferListDto> acceptedOffers = internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED)
+                .stream()
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .build())
+                .collect(Collectors.toList());
+        return acceptedOffers;
     }
 
     public List<InternshipOfferDto> getRejectedOffers() {

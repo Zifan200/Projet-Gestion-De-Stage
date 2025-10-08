@@ -39,15 +39,15 @@ export default function AddIntership() {
       console.log(data);
       await createOffer(token, data);
       toast.success(t("offer.success.create"));
-      navigate("/dashboard/employer/my-offers", {
-        state: { status: "success", message: t("offer.success.create") },
-      });
+      // navigate("/dashboard/employer/my-offers", {
+      // state: { status: "success", message: t("offer.success.create") },
+      // });
       form.reset();
     } catch (err) {
       toast.error(t("offer.error.create"));
-      navigate("/dashboard/employer/my-offers", {
-        state: { status: "error", message: t("offer.error.create") },
-      });
+      // navigate("/dashboard/employer/my-offers", {
+      // state: { status: "error", message: t("offer.error.create") },
+      // });
     }
   };
 

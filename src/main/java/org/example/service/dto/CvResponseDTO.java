@@ -2,6 +2,7 @@ package org.example.service.dto;
 
 import lombok.*;
 import org.example.model.CV;
+import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,10 @@ public class CvResponseDTO {
     private String fileType;
     private Long fileSize;
     private LocalDateTime uploadedAt;
+    private InternshipOfferStatus status;
+    private String reason;
+    private  String firstName;
+    private String lastName;
 
     public static CvResponseDTO fromEntity(CV cv) {
         return CvResponseDTO.builder()
@@ -25,6 +30,10 @@ public class CvResponseDTO {
                 .fileType(cv.getFileType())
                 .fileSize(cv.getFileSize())
                 .uploadedAt(cv.getUploadedAt())
+                .status(cv.getStatus())
+                .reason(cv.getReason())
+                .firstName(cv.getEtudiant().getFirstName())
+                .lastName(cv.getEtudiant().getLastName())
                 .build();
     }
 }

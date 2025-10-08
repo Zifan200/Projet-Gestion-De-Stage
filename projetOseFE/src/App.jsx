@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/menu/Navbar.jsx";
 
+import { StudentOffers } from "./pages/student/studentOffers.jsx";
+
 import { LoginPage } from "./pages/login.jsx";
 
 // Pages Employeur
@@ -26,9 +28,26 @@ import AddIntership from "./pages/employer/addIntership.jsx";
 import { StudentCVs } from "./pages/student/cvs.jsx";
 import { useTranslation } from "react-i18next";
 import { OfferList } from "./pages/employer/offerList.jsx";
+import { GsDashboard } from "./pages/gs/dashboard.jsx";
+import { GsManageCvs } from "./pages/gs/cvs.jsx";
 
 function App() {
   const { t } = useTranslation();
+  const gsDashboardSidebarLinks = [
+    {
+      key: "dashboard",
+      label: t("menu.dashboard"),
+      href: "/dashboard/gs/",
+      icon: BackpackIcon,
+    },
+    {
+      key: "manageCvs",
+      label: t("menu.manageCvs"),
+      href: "/dashboard/gs/manage-students-cvs",
+      icon: BackpackIcon,
+    },
+  ];
+
   const employerDashboardSidebarLinks = [
     {
       key: "dashboard",
@@ -48,18 +67,18 @@ function App() {
       href: "/dashboard/employer/my-offers",
       icon: EnvelopeOpenIcon,
     },
-    {
-      key: "applications",
-      label: t("menu.post"),
-      href: "/employer/applications",
-      icon: PersonIcon,
-    },
-    {
-      key: "students",
-      label: t("menu.student"),
-      href: "/employer/students",
-      icon: CheckIcon,
-    },
+    // {
+    //   key: "applications",
+    //   label: t("menu.post"),
+    //   href: "/employer/applications",
+    //   icon: PersonIcon,
+    // },
+    // {
+    //   key: "students",
+    //   label: t("menu.student"),
+    //   href: "/employer/students",
+    //   icon: CheckIcon,
+    // },
   ];
 
   const studentDashboardSidebarLinks = [
@@ -74,6 +93,12 @@ function App() {
       label: t("menu.cvs"),
       href: "/dashboard/student/cvs",
       icon: FileTextIcon,
+    },
+    {
+      key: "offers",
+      label: t("menu.myOffer"),
+      href: "/dashboard/student/offers",
+      icon: EnvelopeOpenIcon,
     },
     {
       key: "applications",
@@ -92,6 +117,23 @@ function App() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/request-password" element={<RequestPassword />} />
 
+          {/* Routes Ge */}
+          <Route
+            path="/dashboard/gs/"
+            element={
+              <DashboardLayout
+                sidebarLinks={gsDashboardSidebarLinks}
+                title={t("dashboardLayout.gs")}
+              />
+            }
+          >
+            <Route index element={<GsDashboard />} />
+            <Route
+              path="/dashboard/gs/manage-students-cvs"
+              element={<GsManageCvs />}
+            />
+          </Route>
+
           {/* Routes Étudiant */}
           <Route path="/signup/student" element={<StudentSignUpPage />} />
           <Route
@@ -99,12 +141,13 @@ function App() {
             element={
               <DashboardLayout
                 sidebarLinks={studentDashboardSidebarLinks}
-                title="Student"
+                title={t("dashboardLayout.student")}
               />
             }
           >
             <Route index element={<StudentDashboard />} />
             <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
+            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
           </Route>
 
           <Route
@@ -112,7 +155,7 @@ function App() {
             element={
               <DashboardLayout
                 sidebarLinks={employerDashboardSidebarLinks}
-                title="Employeur"
+                title={t("dashboardLayout.employer")}
               />
             }
           >

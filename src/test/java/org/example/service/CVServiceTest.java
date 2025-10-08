@@ -2,14 +2,12 @@ package org.example.service;
 
 import org.example.model.CV;
 import org.example.model.Etudiant;
+import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.CvResponseDTO;
-import org.example.service.exception.AccessDeniedException;
-import org.example.service.exception.CvNotFoundException;
-import org.example.service.exception.FileProcessingException;
-import org.example.service.exception.InvalidFileFormatException;
+import org.example.service.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +22,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -35,9 +32,6 @@ class CVServiceTest {
 
     @Mock
     private CvRepository cvRepository;
-
-    @Mock
-    private UserAppService userAppService;
 
     @InjectMocks
     private CVService cvService;
@@ -118,7 +112,7 @@ class CVServiceTest {
 
 
         // Act + Assert
-        assertThatThrownBy(() -> cvService.addCv("student@mail.com", file))
+        assertThatThrownBy(() -> cvService.addCv(etudiant.getEmail(), file))
                 .isInstanceOf(InvalidFileFormatException.class);
     }
 
@@ -209,7 +203,7 @@ class CVServiceTest {
 
         List<CvResponseDTO> result = cvService.listMyCvs("student@mail.com");
 
-        assertThat(result.get(0).getFileName()).isEqualTo("cv1.pdf");
+        assertThat(result.getFirst().getFileName()).isEqualTo("cv1.pdf");
     }
 
     @Test
@@ -259,4 +253,106 @@ class CVServiceTest {
                 .isInstanceOf(AccessDeniedException.class);
     }
 
+    @Test
+    void approveCv_shouldApprove() {
+        Etudiant etudiant = Etudiant.builder()
+                .id(1L)
+                .email("student@mail.com")
+                .build();
+
+        CV cv = CV.builder().id(1L).etudiant(etudiant).build();
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(cvRepository.save(any(CV.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        CvResponseDTO response = cvService.approveCv(1L);
+
+        assertThat(response.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
+        assertThat(cv.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
+
+        verify(cvRepository).findById(1L);
+        verify(cvRepository).save(cv);
+    }
+
+    @Test
+    void rejectCv_shouldReject() {
+        Etudiant etudiant = Etudiant.builder()
+                .id(1L)
+                .email("student@mail.com")
+                .build();
+
+        CV cv = CV.builder().id(1L).etudiant(etudiant).build();
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(cvRepository.save(any(CV.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        CvResponseDTO response = cvService.refuseCv(1L, "Le CV est insuffisant.");
+
+        assertThat(response.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
+        assertThat(cv.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
+
+        verify(cvRepository).findById(1L);
+        verify(cvRepository).save(cv);
+    }
+
+
+    @Test
+    void updateCv_shouldModify() {
+        Etudiant etudiant = Etudiant.builder()
+                .id(1L)
+                .email("student@mail.com")
+                .build();
+
+        CV cv = CV.builder().id(1L).etudiant(etudiant).build();
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(cvRepository.save(any(CV.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        cvService.approveCv(1L);
+        CvResponseDTO response = cvService.updateCvStatus(1L, InternshipOfferStatus.REJECTED,
+                                                    "Contenu insuffisant.");
+
+        assertThat(response.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
+        assertThat(cv.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
+
+        verify(cvRepository, times(2)).findById(1L);
+        verify(cvRepository, times(2)).save(cv);
+    }
+
+    @Test
+    void updateCv_shouldThrowInvalid() {
+        Etudiant etudiant = Etudiant.builder()
+                .id(1L)
+                .email("owner@mail.com")
+                .build();
+
+        CV cv = CV.builder()
+                .id(1L)
+                .etudiant(etudiant)
+                .build();
+
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(cvRepository.save(any(CV.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        cvService.approveCv(1L);
+
+        assertThatThrownBy(() -> cvService.updateCvStatus(1L, InternshipOfferStatus.ACCEPTED, null))
+                .isInstanceOf(InvalidInternShipOffer.class);
+    }
+
+    @Test
+    void updateCv_shouldThrowNotFound() {
+        Etudiant etudiant = Etudiant.builder()
+                .id(1L)
+                .email("owner@mail.com")
+                .build();
+
+        CV cv = CV.builder()
+                .id(1L)
+                .etudiant(etudiant)
+                .build();
+
+
+        when(cvRepository.findById(cv.getId() + 1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> cvService.updateCvStatus(2L, InternshipOfferStatus.ACCEPTED, null))
+                    .isInstanceOf(CvNotFoundException.class);
+    }
 }
