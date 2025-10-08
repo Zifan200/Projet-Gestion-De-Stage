@@ -2,12 +2,14 @@ package org.example.service;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.example.model.CV;
 import org.example.model.Etudiant;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
+import org.example.service.dto.CvDownloadDTO;
 import org.example.service.dto.CvResponseDTO;
 import org.example.service.exception.*;
 import org.slf4j.Logger;
@@ -20,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @AllArgsConstructor
 @Service
@@ -47,6 +48,7 @@ public class CVService {
                     .fileSize(cvFile.getSize())
                     .uploadedAt(LocalDateTime.now())
                     .data(cvFile.getBytes())
+                    .status(InternshipOfferStatus.PENDING)
                     .build();
 
             cvRepository.save(cv);
@@ -97,7 +99,8 @@ public class CVService {
 
         List<String> allowedTypes = List.of(
                 "application/pdf",
-                "application/msword"
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         );
 
         if (!allowedTypes.contains(file.getContentType())) {
@@ -151,5 +154,21 @@ public class CVService {
     @Transactional
     public CvResponseDTO refuseCv(Long cvId, String reason) {
         return updateCvStatus(cvId, InternshipOfferStatus.REJECTED, reason);
+    }
+
+    @Transactional(readOnly = true)
+    public CvDownloadDTO downloadCvById(Long cvId) {
+        CV cv = cvRepository.findById(cvId)
+                .orElseThrow(() -> new CvNotFoundException("CV introuvable avec id " + cvId));
+
+        if (cv.getData() == null || cv.getData().length == 0) {
+            throw new FileProcessingException("Aucun contenu trouvé pour ce CV.");
+        }
+
+        return CvDownloadDTO.builder()
+                .fileName(cv.getFileName())
+                .fileType(cv.getFileType())
+                .data(cv.getData())
+                .build();
     }
 }

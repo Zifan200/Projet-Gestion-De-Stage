@@ -20,6 +20,8 @@ public class CvResponseDTO {
     private LocalDateTime uploadedAt;
     private InternshipOfferStatus status;
     private String reason;
+    private  String firstName;
+    private String lastName;
 
     public static CvResponseDTO fromEntity(CV cv) {
         return CvResponseDTO.builder()
@@ -30,6 +32,8 @@ public class CvResponseDTO {
                 .uploadedAt(cv.getUploadedAt())
                 .status(cv.getStatus())
                 .reason(cv.getReason())
+                .firstName(cv.getEtudiant().getFirstName())
+                .lastName(cv.getEtudiant().getLastName())
                 .build();
     }
 }

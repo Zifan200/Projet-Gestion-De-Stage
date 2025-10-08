@@ -40,24 +40,6 @@ export const StudentDashboard = () => {
       change: `+${thisMonthCount} ce mois`,
       icon: FileTextIcon,
     },
-    {
-      title: t("menu.applicationSend"),
-      value: 12,
-      change: "+3%",
-      icon: DownloadIcon,
-    },
-    {
-      title: t("menu.offerReceive"),
-      value: 3,
-      change: "+1",
-      icon: EyeOpenIcon,
-    },
-    {
-      title: t("menu.confirmations"),
-      value: 2,
-      change: "+0",
-      icon: CheckIcon,
-    },
   ];
 
   return (
@@ -74,11 +56,11 @@ export const StudentDashboard = () => {
         ))}
       </div>
 
-      <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          {t("menu.lastActivity")}
-        </h2>
-      </section>
+      {/* <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"> */}
+      {/*   <h2 className="text-lg font-semibold text-gray-800 mb-4"> */}
+      {/*     {t("menu.lastActivity")} */}
+      {/*   </h2> */}
+      {/* </section> */}
     </div>
   );
 };

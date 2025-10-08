@@ -1,6 +1,5 @@
 import { api } from "../lib/api.js";
 
-
 export const cvService = {
   async upload(file) {
     const formData = new FormData();
@@ -34,5 +33,11 @@ export const cvService = {
       responseType: "blob",
     });
     return window.URL.createObjectURL(res.data);
+  },
+  async downloadCv(cvId) {
+    const res = await api.get(`/student/cv/${cvId}/download`, {
+      responseType: "blob",
+    });
+    return res.data; // 👈 blob binaire
   },
 };
