@@ -21,27 +21,23 @@ public class InternshipApplicationDto {
     @NotBlank(message = "required: student email")
     @NotEmpty
     private String studentEmail;
-
     @NotBlank(message = "required: CV id")
     @NotEmpty
-    private Long cvId;
-
+    private Long selectedCvID;
     @NotBlank(message = "required: internship offer id")
     @NotEmpty
     private Long  internshipOfferId;
 
-    @NotEmpty
     private ApprovalStatus status =  ApprovalStatus.PENDING;
-    @NotEmpty
     private LocalDateTime createdAt;
 
     @Builder
     public InternshipApplicationDto(
-            Long id, String studentEmail, Long cvId, Long internshipOfferId, ApprovalStatus status, LocalDateTime createdAt
+            Long id, String studentEmail, Long selectedCvID, Long internshipOfferId, ApprovalStatus status, LocalDateTime createdAt
     ){
         this.id = id;
         this.studentEmail = studentEmail;
-        this.cvId = cvId;
+        this.selectedCvID = selectedCvID;
         this.internshipOfferId = internshipOfferId;
         this.status = status;
         this.createdAt = createdAt;
@@ -51,7 +47,7 @@ public class InternshipApplicationDto {
         return InternshipApplicationDto.builder()
                 .id(internshipApplication.getId())
                 .studentEmail(internshipApplication.getStudent().getEmail())
-                .cvId(internshipApplication.getSelectedStudentCV().getId())
+                .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
                 .status(internshipApplication.getStatus())
                 .build();
     }

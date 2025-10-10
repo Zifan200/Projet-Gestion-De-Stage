@@ -36,10 +36,10 @@ public class InternshipApplicaitonService {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public InternshipApplicationResponseDto saveInternshipApplicaiton(String userEmail, Long selectedCvID, Long internshipOfferID){
+    public InternshipApplicationResponseDto saveInternshipApplicaiton(String userEmail, InternshipApplicationDto internshipApplicaitonDto) {
         Optional<Etudiant> student = studentRepository.findByCredentialsEmail(userEmail);
-        Optional<CV> selectedCV = cvRepository.findById(selectedCvID);
-        Optional<InternshipOffer> offer = internshipOfferRepository.findById(internshipOfferID);
+        Optional<CV> selectedCV = cvRepository.findById(internshipApplicaitonDto.getSelectedCvID());
+        Optional<InternshipOffer> offer = internshipOfferRepository.findById(internshipApplicaitonDto.getInternshipOfferId());
         if(student.isEmpty()){
             throw new InvalidInternshipApplicaiton("Invalid internship offer : student does not exist");
         }
@@ -52,6 +52,7 @@ public class InternshipApplicaitonService {
         if(offer.isEmpty()){
             throw new InvalidInternshipApplicaiton("Invalid internship offer : internship offer does not exist");
         }
+
         InternshipApplication applicaiton = InternshipApplication.builder()
                 .student(student.get())
                 .selectedStudentCV(selectedCV.get())

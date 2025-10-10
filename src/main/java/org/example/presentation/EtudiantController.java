@@ -1,11 +1,21 @@
 package org.example.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.model.InternshipApplication;
+import org.example.service.InternshipApplicaitonService;
 import org.example.service.StudentService;
 import org.example.service.EmailService;
+import org.example.service.UserAppService;
 import org.example.service.dto.EtudiantDTO;
 import org.example.model.EmailMessage;
+import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDto;
+import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDto;
+import org.example.service.dto.InternshipOfferDto;
+import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.utils.JwtTokenUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +25,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EtudiantController {
 
+    private final UserAppService userAppService;
     private final StudentService studentService;
     private final EmailService emailService;
+    private final InternshipApplicaitonService internshipApplicaitonService;
 
     @PostMapping("/register")
     public ResponseEntity<EtudiantDTO> inscription(@Valid @RequestBody EtudiantDTO etudiantDTO) {
@@ -50,5 +62,15 @@ public class EtudiantController {
         emailService.sendEmail(emailAdmin);
 
         return ResponseEntity.ok(savedEtudiant);
+    }
+
+    @PostMapping("/apply-to-internship-offer")
+    public ResponseEntity<InternshipApplicationResponseDto> applyToInternShipOffer(
+            HttpServletRequest request,
+            @Valid @RequestBody InternshipApplicationDto internshipApplicationDtoDto) {
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(internshipApplicaitonService.saveInternshipApplicaiton(email, internshipApplicationDtoDto));
     }
 }
