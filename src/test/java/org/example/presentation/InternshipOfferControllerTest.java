@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -194,50 +195,6 @@ public class InternshipOfferControllerTest {
     void updateSelectedInternshipOfferStatus_shouldReturnSelectedInternshipOfferWithNewStatus() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
                 .standaloneSetup(internshipOfferController)
-                .setControllerAdvice(new InvalidInternShipOffer(""))
-                .build();
-
-        Employer employer = Employer.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("johndoes@gmail.com")
-                .phone("123-456-7890")
-                .enterpriseName("TechCorp")
-                .password("12345")
-                .build();
-
-        InternshipOffer offer = InternshipOffer.builder()
-                .id(0L)
-                .title("Java Dev")
-                .description("N/A")
-                .employer(employer)
-                .targetedProgramme("Computer Science")
-                .build();
-
-        InternshipOfferResponseDto offerResponse = InternshipOfferResponseDto.create(offer);
-        offerResponse.setStatus(InternshipOfferStatus.PENDING);
-
-        InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
-        updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
-
-        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED, "the offfer looks good"))
-                .thenReturn(updatedResponse);
-
-        mockMvc.perform(post("/api/v1/internship-offers/update-status")
-                        .param("id", offerResponse.getId().toString())
-                        .param("status", "ACCEPTED")
-                        .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Java Dev"))
-                .andExpect(jsonPath("$.description").value("N/A"))
-                .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"))
-                .andExpect(jsonPath("$.status").value("ACCEPTED"));
-    }
-
-    @Test
-    void updateSelectedInternshipOfferStatusThatdoesntExist_shouldReturnError() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(internshipOfferController)
                 .setControllerAdvice(new InternshipOfferControllerException())
                 .build();
 
@@ -264,14 +221,36 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
         updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
 
-        when(internshipOfferService.updateOfferStatus(1000L, InternshipOfferStatus.ACCEPTED, "looks good to me"))
-                .thenThrow(new InvalidInternShipOffer(""));
+        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED, "the offer looks good"))
+                .thenReturn(updatedResponse);
 
-        mockMvc.perform(post("/api/v1/internship-offers/update-status")
-                        .param("id", "1000")
+        mockMvc.perform(post("/api/v1/internship-offers/{id}/update-status", offerResponse.getId())
                         .param("status", "ACCEPTED")
+                        .param("reason", "the offer looks good")
                         .contentType("application/json"))
-                .andExpect(status().isBadRequest());
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Java Dev"))
+                .andExpect(jsonPath("$.description").value("N/A"))
+                .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"))
+                .andExpect(jsonPath("$.status").value("ACCEPTED"));
     }
+
+    @Test
+    void updateSelectedInternshipOfferStatusThatDoesntExist_shouldReturnError() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipOfferController)
+                .setControllerAdvice(new InternshipOfferControllerException())
+                .build();
+
+        when(internshipOfferService.updateOfferStatus(eq(100L), eq(InternshipOfferStatus.ACCEPTED), anyString()))
+                .thenThrow(new InvalidInternShipOffer("Offer not found"));
+
+        mockMvc.perform(post("/api/v1/internship-offers/100/update-status")
+                        .param("status","ACCEPTED")
+                        .param("reason", "None")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
 }

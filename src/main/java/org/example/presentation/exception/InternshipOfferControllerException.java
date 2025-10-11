@@ -22,6 +22,8 @@ public class InternshipOfferControllerException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
+        ex.printStackTrace();
+
         body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("error", "Validation Failed");
 

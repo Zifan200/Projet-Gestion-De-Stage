@@ -137,6 +137,10 @@ public class InternshipOfferService {
 
 
     public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status, String reasons) {
+        if (status == null || reasons == null) {
+            throw new InvalidInternShipOffer("Offer not found");
+        }
+        System.out.println(offerId);
         InternshipOffer offer = internshipOfferRepository.findById(offerId)
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
