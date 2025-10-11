@@ -220,7 +220,7 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
         updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
 
-        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED))
+        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED, "the offfer looks good"))
                 .thenReturn(updatedResponse);
 
         mockMvc.perform(post("/api/v1/internship-offers/update-status")
@@ -264,7 +264,7 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
         updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
 
-        when(internshipOfferService.updateOfferStatus(1000L, InternshipOfferStatus.ACCEPTED))
+        when(internshipOfferService.updateOfferStatus(1000L, InternshipOfferStatus.ACCEPTED, "looks good to me"))
                 .thenThrow(new InvalidInternShipOffer(""));
 
         mockMvc.perform(post("/api/v1/internship-offers/update-status")

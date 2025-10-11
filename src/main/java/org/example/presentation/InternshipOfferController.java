@@ -76,13 +76,15 @@ public class InternshipOfferController {
     }
 
 
-    @PostMapping("/update-status")
+    @PostMapping("/{id}/update-status")
     public ResponseEntity<InternshipOfferResponseDto> updateOfferStatus(
-            @RequestParam Long id,
-            @RequestParam String status) {
+            @PathVariable Long id,
+            @RequestParam String status,
+            @RequestParam String reason
+    ) {
 
         InternshipOfferStatus newStatus = InternshipOfferStatus.valueOf(status.toUpperCase());
-        InternshipOfferResponseDto responseOffer = internshipOfferService.updateOfferStatus(id, newStatus);
+        InternshipOfferResponseDto responseOffer = internshipOfferService.updateOfferStatus(id, newStatus, reason);
         return ResponseEntity.ok(responseOffer);
     }
 

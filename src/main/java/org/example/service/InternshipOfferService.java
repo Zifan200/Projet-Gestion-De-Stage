@@ -136,10 +136,11 @@ public class InternshipOfferService {
     }
 
 
-    public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status) {
+    public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status, String reasons) {
         InternshipOffer offer = internshipOfferRepository.findById(offerId)
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
+        offer.setReason(reasons);
         internshipOfferRepository.save(offer);
         eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
         return InternshipOfferResponseDto.create(offer);
