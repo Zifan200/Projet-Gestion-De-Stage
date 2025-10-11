@@ -103,9 +103,9 @@ class EmployerControllerTest {
     @Test
     void createInternshipOffer_shouldReturn201() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new InternshipOfferControllerException())
-                .build();
+            .standaloneSetup(employerController)
+            .setControllerAdvice(new InternshipOfferControllerException())
+            .build();
 
         EmployerDto employerDto = EmployerDto.builder()
                 .email("test@google.com")
@@ -152,9 +152,9 @@ class EmployerControllerTest {
     @Test
     void createInternshipOffer_shouldReturn409() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new InternshipOfferControllerException())
-                .build();
+            .standaloneSetup(employerController)
+            .setControllerAdvice(new InternshipOfferControllerException())
+            .build();
 
         EmployerDto employerDto = EmployerDto.builder()
                 .email("test@google.com")
