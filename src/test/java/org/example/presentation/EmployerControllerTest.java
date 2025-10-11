@@ -2,6 +2,7 @@ package org.example.presentation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.presentation.exception.EmployerControllerException;
+import org.example.presentation.exception.InternshipOfferControllerException;
 import org.example.service.EmployerService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
@@ -103,7 +104,7 @@ class EmployerControllerTest {
     void createInternshipOffer_shouldReturn201() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
                 .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
+                .setControllerAdvice(new InternshipOfferControllerException())
                 .build();
 
         EmployerDto employerDto = EmployerDto.builder()
@@ -152,7 +153,7 @@ class EmployerControllerTest {
     void createInternshipOffer_shouldReturn409() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
                 .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
+                .setControllerAdvice(new InternshipOfferControllerException())
                 .build();
 
         EmployerDto employerDto = EmployerDto.builder()
