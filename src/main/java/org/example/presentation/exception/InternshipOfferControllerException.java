@@ -19,7 +19,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class InternshipOfferControllerException {
 
-    @ExceptionHandler(MethodArgumentNotValidException .class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", HttpStatus.BAD_REQUEST.value());
