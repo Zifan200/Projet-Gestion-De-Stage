@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
-import { useCvStore } from "../../stores/cvStore.js"; // <- import du store CV
+import { useCvStore } from "../../stores/cvStore.js";
 
 export const StudentOffers = () => {
     const { t } = useTranslation();
@@ -16,7 +16,7 @@ export const StudentOffers = () => {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
     const { offers, loading, loadOffersSummary, viewOffer } = useOfferStore();
-    const { cvs, loadCvs, applyCv } = useCvStore(); // <- récupérer la fonction loadCvs et applyCv
+    const { cvs, loadCvs, applyCvStore } = useCvStore(); // <- ici le nom correspond au store
 
     const [selectedCv, setSelectedCv] = useState(null); // CV choisi pour postuler
 
@@ -48,9 +48,8 @@ export const StudentOffers = () => {
             alert("Veuillez sélectionner un CV");
             return;
         }
-
         try {
-            await applyCv(selectedOffer.id, selectedCv.id);
+            await applyCvStore(selectedOffer.id, selectedCv.id); // <- utiliser applyCvStore ici
             alert("Candidature envoyée !");
             setIsModalOpen(false);
             setSelectedOffer(null);
@@ -122,18 +121,16 @@ export const StudentOffers = () => {
                                     .filter(cv => cv.status === "ACCEPTED")
                                     .map(cv => (
                                         <option key={cv.id} value={cv.id}>
-                                            {cv.name || cv.fileName} {/* Assure-toi que CvResponseDTO a un champ "name" ou "fileName" */}
+                                            {cv.name || cv.fileName}
                                         </option>
                                     ))}
                             </select>
                         </div>
 
-                        {/* Bouton Apply */}
+                        {/* Boutons Apply et Close */}
                         <div className="mt-6 flex justify-between">
                             <button
-                                className={`px-4 py-2 rounded text-white ${
-                                    selectedCv ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
-                                }`}
+                                className={`px-4 py-2 rounded text-white ${selectedCv ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"}`}
                                 onClick={handleApply}
                                 disabled={!selectedCv}
                             >
@@ -154,7 +151,6 @@ export const StudentOffers = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
