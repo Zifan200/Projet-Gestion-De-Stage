@@ -29,11 +29,6 @@ public class InternshipOfferControllerTest {
     @InjectMocks
     private InternshipOfferController internshipOfferController;
 
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void getAllInternshipOffers_shouldReturnOffers() {
         // Arrange
