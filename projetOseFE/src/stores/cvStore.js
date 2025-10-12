@@ -66,6 +66,15 @@ export const useCvStore = create((set, get) => ({
     }
   },
 
+  applyCv: async (offerId, cvId) => {
+    try {
+      await cvService.apply(offerId, cvId);
+    } catch (err) {
+      set({ error: err.message });
+      throw err;
+    }
+  },
+
   closePreview: () => set({ previewUrl: null, previewType: null }),
 }));
 
