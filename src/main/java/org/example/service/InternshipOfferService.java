@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.event.EmployerCreatedInternshipOfferEvent;
+import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -134,12 +136,18 @@ public class InternshipOfferService {
     }
 
 
-
-    public void updateOfferStatus(Long offerId, InternshipOfferStatus status) {
+    public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status, String reasons) {
+        if (status == null || reasons == null) {
+            throw new InvalidInternShipOffer("Offer not found");
+        }
+        System.out.println(offerId);
         InternshipOffer offer = internshipOfferRepository.findById(offerId)
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
+        offer.setReason(reasons);
         internshipOfferRepository.save(offer);
+        eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
+        return InternshipOfferResponseDto.create(offer);
     }
 
     public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {

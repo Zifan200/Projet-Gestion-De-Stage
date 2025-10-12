@@ -274,7 +274,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(offer);
 
         // Act
-        internshipOfferService.updateOfferStatus(1L, InternshipOfferStatus.ACCEPTED);
+        internshipOfferService.updateOfferStatus(1L, InternshipOfferStatus.ACCEPTED, "valid offer");
 
         // Assert
         assertThat(offer.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
@@ -287,7 +287,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findById(99L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, InternshipOfferStatus.ACCEPTED))
+        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, InternshipOfferStatus.ACCEPTED, "offer looks valid :3"))
                 .isInstanceOf(InvalidInternShipOffer.class)
                 .hasMessageContaining("Offer not found");
         verify(internshipOfferRepository, never()).save(any());

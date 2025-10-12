@@ -2,6 +2,7 @@ package org.example.presentation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.presentation.exception.EmployerControllerException;
+import org.example.presentation.exception.InternshipOfferControllerException;
 import org.example.service.EmployerService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
@@ -102,9 +103,9 @@ class EmployerControllerTest {
     @Test
     void createInternshipOffer_shouldReturn201() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
-                .build();
+            .standaloneSetup(employerController)
+            .setControllerAdvice(new InternshipOfferControllerException())
+            .build();
 
         EmployerDto employerDto = EmployerDto.builder()
                 .email("test@google.com")
@@ -125,7 +126,7 @@ class EmployerControllerTest {
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())
                 .employerEmail(employerDto.getEmail())
-                .target_programme(internshipOfferDto.getTargetedProgramme())
+                .targetedProgramme(internshipOfferDto.getTargetedProgramme())
                 .build();
 
         // Arrange mocks
@@ -151,9 +152,9 @@ class EmployerControllerTest {
     @Test
     void createInternshipOffer_shouldReturn409() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
-                .build();
+            .standaloneSetup(employerController)
+            .setControllerAdvice(new InternshipOfferControllerException())
+            .build();
 
         EmployerDto employerDto = EmployerDto.builder()
                 .email("test@google.com")
@@ -174,7 +175,7 @@ class EmployerControllerTest {
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())
                 .employerEmail(employerDto.getEmail())
-                .target_programme(internshipOfferDto.getTargetedProgramme())
+                .targetedProgramme(internshipOfferDto.getTargetedProgramme())
                 .build();
 
         // Arrange mocks
