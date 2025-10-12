@@ -277,7 +277,9 @@ export const resources = {
         status: "Status",
         description: "Description",
         close: "Close",
-        apply: "Apply"
+        apply: "Apply",
+        selectCv: "Your CV(s)",
+        chooseCv: "Choose a CV"
       },
         actions: {
           apply: "Apply",
@@ -581,7 +583,9 @@ export const resources = {
           status: "Statut",
           description: "Description",
           close: "Fermer",
-          apply: "Postuler"
+          apply: "Postuler",
+          selectCv: "Votre(s) CV(s)",
+          chooseCv: "Choisir un CV"
         },
         actions: {
           apply: "Postuler",
