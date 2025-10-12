@@ -126,7 +126,7 @@ class EmployerControllerTest {
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())
                 .employerEmail(employerDto.getEmail())
-                .target_programme(internshipOfferDto.getTargetedProgramme())
+                .targetedProgramme(internshipOfferDto.getTargetedProgramme())
                 .build();
 
         // Arrange mocks
@@ -175,7 +175,7 @@ class EmployerControllerTest {
                 .title(internshipOfferDto.getTitle())
                 .description(internshipOfferDto.getDescription())
                 .employerEmail(employerDto.getEmail())
-                .target_programme(internshipOfferDto.getTargetedProgramme())
+                .targetedProgramme(internshipOfferDto.getTargetedProgramme())
                 .build();
 
         // Arrange mocks

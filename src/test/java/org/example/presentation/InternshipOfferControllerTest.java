@@ -14,9 +14,11 @@ import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,19 +33,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 public class InternshipOfferControllerTest {
 
 
     @InjectMocks
     private InternshipOfferController internshipOfferController;
-
-    @Mock
-    private InternshipOfferService internshipOfferService;
-
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void getAllInternshipOffers_shouldReturnOffers() {
@@ -94,7 +89,7 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto offer = InternshipOfferResponseDto.builder()
                 .title("Dev Java")
                 .description("Stage backend Java")
-                .target_programme("Informatique")
+                .targetedProgramme("Informatique")
                 .employerEmail(employer.getEmail())
                 .expirationDate(LocalDate.now().plusDays(30))
                 .build();
@@ -103,7 +98,7 @@ public class InternshipOfferControllerTest {
 
         ResponseEntity<InternshipOfferResponseDto> response =
                 internshipOfferController.getInternshipOfferById(offerId);
-
+        System.out.println(response.getBody());
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody().getTitle()).isEqualTo("Dev Java");
         assertThat(response.getBody().getTargetedProgramme()).isEqualTo("Informatique");

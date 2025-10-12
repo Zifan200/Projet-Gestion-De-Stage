@@ -6,7 +6,9 @@ import lombok.*;
 import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -28,6 +30,9 @@ public class InternshipOffer {
 
     private LocalDate publishedDate;
     private LocalDate expirationDate;
+
+    @OneToMany(mappedBy = "offer")
+    private Set<InternshipApplication> applications = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

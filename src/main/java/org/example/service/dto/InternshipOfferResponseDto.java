@@ -26,12 +26,13 @@ public class InternshipOfferResponseDto {
     private String reason;
 
     @Builder
+ 
     public InternshipOfferResponseDto(Long id, String title, String description, String target_programme,
                                       String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.targetedProgramme = target_programme;
+        this.targetedProgramme = targetedProgramme;
         this.employerEmail = employerEmail;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
@@ -44,7 +45,7 @@ public class InternshipOfferResponseDto {
                 .id(internshipOffer.getId())
                 .title(internshipOffer.getTitle())
                 .description(internshipOffer.getDescription())
-                .target_programme(internshipOffer.getTargetedProgramme())
+                .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .employerEmail(internshipOffer.getEmployer().getEmail())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
