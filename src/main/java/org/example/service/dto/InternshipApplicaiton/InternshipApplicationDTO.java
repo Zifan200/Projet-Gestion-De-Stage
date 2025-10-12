@@ -9,14 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.InternshipApplication;
 import org.example.model.enums.ApprovalStatus;
-import org.example.service.dto.InternshipOfferDto;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
 @Data
-public class InternshipApplicationDto {
+public class InternshipApplicationDTO {
     private Long id;
 
     @NotBlank(message = "required: student email")
@@ -31,7 +30,7 @@ public class InternshipApplicationDto {
     private LocalDateTime createdAt;
 
     @Builder
-    public InternshipApplicationDto(
+    public InternshipApplicationDTO(
             Long id, String studentEmail, Long selectedCvID, Long internshipOfferId, ApprovalStatus status, LocalDateTime createdAt
     ){
         this.id = id;
@@ -42,8 +41,8 @@ public class InternshipApplicationDto {
         this.createdAt = createdAt;
     }
 
-    public static InternshipApplicationDto create(InternshipApplication internshipApplication) {
-        return InternshipApplicationDto.builder()
+    public static InternshipApplicationDTO create(InternshipApplication internshipApplication) {
+        return InternshipApplicationDTO.builder()
                 .id(internshipApplication.getId())
                 .studentEmail(internshipApplication.getStudent().getEmail())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
@@ -51,7 +50,7 @@ public class InternshipApplicationDto {
                 .build();
     }
 
-    public static InternshipApplicationDto empty(){
-        return new InternshipApplicationDto();
+    public static InternshipApplicationDTO empty(){
+        return new InternshipApplicationDTO();
     }
 }

@@ -10,10 +10,10 @@ import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
-import org.example.repository.InternshipApplicaitonRepository;
+import org.example.repository.InternshipApplicationRepository;
 import org.example.repository.InternshipOfferRepository;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDto;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDto;
+import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +30,12 @@ public class InternshipApplicationService {
     private final EtudiantRepository studentRepository;
     private final CvRepository  cvRepository;
     private final InternshipOfferRepository internshipOfferRepository;
-    private final InternshipApplicaitonRepository internshipApplicaitonRepository;
+    private final InternshipApplicationRepository internshipApplicationRepository;
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public InternshipApplicationResponseDto saveInternshipApplicaiton(String userEmail, InternshipApplicationDto internshipApplicationDto) {
-        Optional<Etudiant> student = studentRepository.findByCredentialsEmail(userEmail);
+    public InternshipApplicationResponseDTO saveInternshipApplicaiton(InternshipApplicationDTO internshipApplicationDto) {
+        Optional<Etudiant> student = studentRepository.findByCredentialsEmail(internshipApplicationDto.getStudentEmail());
         Optional<CV> selectedCV = cvRepository.findById(internshipApplicationDto.getSelectedCvID());
         Optional<InternshipOffer> offer = internshipOfferRepository.findById(internshipApplicationDto.getInternshipOfferId());
         if(student.isEmpty()){
@@ -57,9 +57,9 @@ public class InternshipApplicationService {
                 .offer(offer.get())
                 .build();
 
-        var savedInternshipApplicaiton = internshipApplicaitonRepository.save(applicaiton);
+        var savedInternshipApplicaiton = internshipApplicationRepository.save(applicaiton);
         eventPublisher.publishEvent(new StudentCreatedInternshipApplicationCreatedEvent());
         logger.info("InternshipApplicaiton created = \"{}\"", savedInternshipApplicaiton.getId());
-        return InternshipApplicationResponseDto.create(savedInternshipApplicaiton);
+        return InternshipApplicationResponseDTO.create(savedInternshipApplicaiton);
     }
 }
