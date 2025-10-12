@@ -52,7 +52,7 @@ public class InternshipOffer {
 
         this.publishedDate = publishedDate; // date when posted
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
-        this.status = status;
+        this.status = status != null ? status : InternshipOfferStatus.PENDING;
         this.reason = reason;
     }
 }
