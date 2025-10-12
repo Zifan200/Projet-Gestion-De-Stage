@@ -1,6 +1,8 @@
 package org.example.presentation;
 
 import lombok.RequiredArgsConstructor;
+import org.example.model.InternshipOffer;
+import org.example.model.enums.InternshipOfferStatus;
 import org.example.service.InternshipOfferService;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
@@ -71,6 +73,19 @@ public class InternshipOfferController {
         List<InternshipOfferListDto> filteredOffers = internshipOfferService.getAcceptedOffersByProgramme(program);
 
         return ResponseEntity.ok(filteredOffers);
+    }
+
+
+    @PostMapping("/{id}/update-status")
+    public ResponseEntity<InternshipOfferResponseDto> updateOfferStatus(
+            @PathVariable Long id,
+            @RequestParam String status,
+            @RequestParam String reason
+    ) {
+
+        InternshipOfferStatus newStatus = InternshipOfferStatus.valueOf(status.toUpperCase());
+        InternshipOfferResponseDto responseOffer = internshipOfferService.updateOfferStatus(id, newStatus, reason);
+        return ResponseEntity.ok(responseOffer);
     }
 
 }
