@@ -7,6 +7,7 @@ import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
+import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
@@ -36,7 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class InternshipOfferControllerTest {
 
-
+    @Mock
+    private InternshipOfferService internshipOfferService;
     @InjectMocks
     private InternshipOfferController internshipOfferController;
 
