@@ -35,8 +35,8 @@ public class InvalidStudentControllerException {
 
         return ResponseEntity.badRequest().body(body);
     }
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUserNotFound(InvalidInternshipApplicationException ex) {
+    @ExceptionHandler(InvalidInternshipApplicationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidInternshipApplication(InvalidInternshipApplicationException ex) {
         log.error("e: ", ex);
         return buildError(HttpStatus.BAD_REQUEST, "INVALID_INTERNSHIP_APPLICATION", ex.getMessage());
     }
