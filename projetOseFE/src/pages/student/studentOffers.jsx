@@ -100,12 +100,23 @@ export const StudentOffers = () => {
                         <p><strong>{t("studentOffers.modal.publishedDate")}:</strong> {selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
                         <p><strong>{t("studentOffers.modal.deadline")}:</strong> {selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}</p>
                         <p><strong>{t("studentOffers.modal.description")}:</strong> {selectedOffer.description}</p>
-                        <button
-                            className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                            onClick={() => { setIsModalOpen(false); setSelectedOffer(null); }}
-                        >
-                            {t("studentOffers.modal.close")}
-                        </button>
+
+                        {/* Ligne des boutons */}
+                        <div className="mt-6 flex justify-between">
+                            <button
+                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                onClick={() => alert(`Postuler à l'offre : ${selectedOffer.title}`)}
+                            >
+                                {t("studentOffers.modal.apply")}
+                            </button>
+
+                            <button
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                onClick={() => { setIsModalOpen(false); setSelectedOffer(null); }}
+                            >
+                                {t("studentOffers.modal.close")}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

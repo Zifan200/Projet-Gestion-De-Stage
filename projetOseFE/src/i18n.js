@@ -276,7 +276,8 @@ export const resources = {
         deadline: "Deadline",
         status: "Status",
         description: "Description",
-        close: "Close"
+        close: "Close",
+        apply: "Apply"
       },
         actions: {
           apply: "Apply",
@@ -579,7 +580,8 @@ export const resources = {
           deadline: "Date limite",
           status: "Statut",
           description: "Description",
-          close: "Fermer"
+          close: "Fermer",
+          apply: "Postuler"
         },
         actions: {
           apply: "Postuler",
