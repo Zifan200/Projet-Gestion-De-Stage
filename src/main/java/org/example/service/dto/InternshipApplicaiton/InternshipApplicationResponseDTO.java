@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Data
-public class InternshipApplicationResponseDto {
+public class InternshipApplicationResponseDTO {
 
     private Long id;
     private String studentEmail;
@@ -33,7 +33,7 @@ public class InternshipApplicationResponseDto {
     private LocalDateTime createdAt;
 
     @Builder
-    public InternshipApplicationResponseDto(
+    public InternshipApplicationResponseDTO(
             Long id, String studentEmail, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
             LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, ApprovalStatus status, LocalDateTime createdAt
@@ -53,8 +53,8 @@ public class InternshipApplicationResponseDto {
         this.createdAt = createdAt;
     }
 
-    public static InternshipApplicationResponseDto create(InternshipApplication internshipApplication){
-        return InternshipApplicationResponseDto.builder()
+    public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication){
+        return InternshipApplicationResponseDTO.builder()
                 .studentEmail(internshipApplication.getStudent().getEmail())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
