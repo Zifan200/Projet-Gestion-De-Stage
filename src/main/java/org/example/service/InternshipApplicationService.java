@@ -2,13 +2,11 @@ package org.example.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.StudentCreatedInternshipApplicationCreatedEvent;
 import org.example.model.CV;
 import org.example.model.Etudiant;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
@@ -16,7 +14,7 @@ import org.example.repository.InternshipApplicaitonRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDto;
 import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDto;
-import org.example.service.exception.InvalidInternshipApplicaiton;
+import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -26,7 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class InternshipApplicaitonService {
+public class InternshipApplicationService {
     private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
 
     private final EtudiantRepository studentRepository;
@@ -36,21 +34,21 @@ public class InternshipApplicaitonService {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public InternshipApplicationResponseDto saveInternshipApplicaiton(String userEmail, InternshipApplicationDto internshipApplicaitonDto) {
+    public InternshipApplicationResponseDto saveInternshipApplicaiton(String userEmail, InternshipApplicationDto internshipApplicationDto) {
         Optional<Etudiant> student = studentRepository.findByCredentialsEmail(userEmail);
-        Optional<CV> selectedCV = cvRepository.findById(internshipApplicaitonDto.getSelectedCvID());
-        Optional<InternshipOffer> offer = internshipOfferRepository.findById(internshipApplicaitonDto.getInternshipOfferId());
+        Optional<CV> selectedCV = cvRepository.findById(internshipApplicationDto.getSelectedCvID());
+        Optional<InternshipOffer> offer = internshipOfferRepository.findById(internshipApplicationDto.getInternshipOfferId());
         if(student.isEmpty()){
-            throw new InvalidInternshipApplicaiton("Invalid internship offer : student does not exist");
+            throw new InvalidInternshipApplicationException("Invalid internship offer : student does not exist");
         }
         if(selectedCV.isEmpty()){
-            throw new InvalidInternshipApplicaiton("Invalid internship offer : cv does not exist");
+            throw new InvalidInternshipApplicationException("Invalid internship offer : cv does not exist");
         }
         if(selectedCV.get().getStatus() == InternshipOfferStatus.PENDING || selectedCV.get().getStatus() == InternshipOfferStatus.REJECTED){
-            throw  new InvalidInternshipApplicaiton("Invalid internship offer : cv is not a acceptable status");
+            throw  new InvalidInternshipApplicationException("Invalid internship offer : cv is not a acceptable status");
         }
         if(offer.isEmpty()){
-            throw new InvalidInternshipApplicaiton("Invalid internship offer : internship offer does not exist");
+            throw new InvalidInternshipApplicationException("Invalid internship offer : internship offer does not exist");
         }
 
         InternshipApplication applicaiton = InternshipApplication.builder()

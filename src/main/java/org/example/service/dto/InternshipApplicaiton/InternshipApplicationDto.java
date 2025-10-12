@@ -2,6 +2,7 @@ package org.example.service.dto.InternshipApplicaiton;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -21,11 +22,9 @@ public class InternshipApplicationDto {
     @NotBlank(message = "required: student email")
     @NotEmpty
     private String studentEmail;
-    @NotBlank(message = "required: CV id")
-    @NotEmpty
+    @NotNull(message = "required: CV id")
     private Long selectedCvID;
-    @NotBlank(message = "required: internship offer id")
-    @NotEmpty
+    @NotNull(message = "required: internship offer id")
     private Long  internshipOfferId;
 
     private ApprovalStatus status =  ApprovalStatus.PENDING;
