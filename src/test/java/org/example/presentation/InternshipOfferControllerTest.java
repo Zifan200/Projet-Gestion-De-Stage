@@ -83,7 +83,7 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto offer = InternshipOfferResponseDto.builder()
                 .title("Dev Java")
                 .description("Stage backend Java")
-                .target_programme("Informatique")
+                .targetedProgramme("Informatique")
                 .employerEmail(employer.getEmail())
                 .expirationDate(LocalDate.now().plusDays(30))
                 .build();
@@ -92,7 +92,7 @@ public class InternshipOfferControllerTest {
 
         ResponseEntity<InternshipOfferResponseDto> response =
                 internshipOfferController.getInternshipOfferById(offerId);
-
+        System.out.println(response.getBody());
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody().getTitle()).isEqualTo("Dev Java");
         assertThat(response.getBody().getTargetedProgramme()).isEqualTo("Informatique");
