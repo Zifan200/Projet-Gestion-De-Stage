@@ -7,6 +7,7 @@ import org.example.model.CV;
 import org.example.model.Etudiant;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
@@ -55,11 +56,12 @@ public class InternshipApplicationService {
                 .student(student.get())
                 .selectedStudentCV(selectedCV.get())
                 .offer(offer.get())
+                .status(ApprovalStatus.PENDING)
                 .build();
 
-        var savedInternshipApplicaiton = internshipApplicationRepository.save(applicaiton);
+        var savedInternshipApplication = internshipApplicationRepository.save(applicaiton);
         eventPublisher.publishEvent(new StudentCreatedInternshipApplicationCreatedEvent());
-        logger.info("InternshipApplicaiton created = \"{}\"", savedInternshipApplicaiton.getId());
-        return InternshipApplicationResponseDTO.create(savedInternshipApplicaiton);
+        logger.info("InternshipApplicaiton created = \"{}\"", savedInternshipApplication.getStudent().getEmail());
+        return InternshipApplicationResponseDTO.create(savedInternshipApplication);
     }
 }

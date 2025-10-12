@@ -46,6 +46,7 @@ public class InternshipApplicationDTO {
                 .id(internshipApplication.getId())
                 .studentEmail(internshipApplication.getStudent().getEmail())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
+                .internshipOfferId(internshipApplication.getOffer().getId())
                 .status(internshipApplication.getStatus())
                 .build();
     }
