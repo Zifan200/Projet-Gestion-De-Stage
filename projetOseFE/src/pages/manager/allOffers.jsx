@@ -52,66 +52,36 @@ export const AllOffers = () => {
     }, []);
 
     useEffect(() => {
-        handleOfferStatusChange()
-    }, [currentOfferStatus]);
+        handleFilterChange();
+    }, [currentOfferStatus, currentProgram]);
 
-    useEffect(() => {
-        handleProgramNameOnChange();
-    }, [currentProgram]);
+    const handleFilterChange = async () => {
+        if (currentOfferStatus === offerStatuses.PENDING)
+            filterByStatus(pendingOffers);
 
-    const handleProgramNameOnChange = async () => {
-        try {
-            if (currentProgram !== t("offer.filter.program.all")) {
-                const data = await loadOffersByProgram(user.token, currentProgram);
-                console.log(data)
-                setCurrentOffers(data);
-            }
-            else {
-                await loadAllOffers();
+        if (currentOfferStatus === offerStatuses.ACCEPTED)
+            filterByStatus(acceptedOffers);
+
+        if (currentOfferStatus === offerStatuses.REJECTED)
+            filterByStatus(rejectedOffers);
+
+        if (currentOfferStatus === offerStatuses.ALL) {
+            if (currentProgram === t("offer.filter.program.all")) {
+                loadAllOffers();
                 setCurrentOffers(offers);
             }
-        } catch (err) {
-            console.error(err);
-            toast.error(t("offer.errors.loadOffers"));
+            else {
+                const data = await loadOffersByProgram(user.token, currentProgram);
+                setCurrentOffers(data);
+            }
         }
     };
 
-    const handleOfferStatusChange = () => {
-        try {
-            let filteredOffers;
-            switch (currentOfferStatus) {
-                case offerStatuses.PENDING:
-                    loadPendingOffers();
-                    filteredOffers =
-                        currentProgram === t("offer.filter.program.all") ? pendingOffers :
-                        pendingOffers.filter((offer) => offer.targetedProgramme === currentProgram);
-                    setCurrentOffers(filteredOffers);
-                    break;
-                case offerStatuses.ACCEPTED:
-                    loadAcceptedOffers();
-                    filteredOffers =
-                        currentProgram === t("offer.filter.program.all") ? acceptedOffers :
-                            acceptedOffers.filter((offer) => offer.targetedProgramme === currentProgram);
-                    setCurrentOffers(filteredOffers);
-                    break;
-                case offerStatuses.REJECTED:
-                    loadRejectedOffers();
-                    filteredOffers =
-                        currentProgram === t("offer.filter.program.all") ? rejectedOffers :
-                            rejectedOffers.filter((offer) => offer.targetedProgramme === currentProgram);
-                    setCurrentOffers(filteredOffers);
-                    break;
-                case offerStatuses.ALL:
-                    loadAllOffers();
-                    filteredOffers =
-                        currentProgram === t("offer.filter.program.all") ? offers : offersByProgram
-                    setCurrentOffers(filteredOffers);
-                    break;
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error(t("offer.errors.loadOffers"));
-        }
+    const filterByStatus = (offerList) => {
+        let filteredOffers =
+            currentProgram === t("offer.filter.program.all") ? offerList :
+                offerList.filter((offer) => offer.targetedProgramme === currentProgram);
+        setCurrentOffers(filteredOffers);
     };
 
     const openOffer = async (offerId) => {
