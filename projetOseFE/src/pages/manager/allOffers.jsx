@@ -38,6 +38,7 @@ export const AllOffers = () => {
         pendingOffers, loadPendingOffers,
         programs, loadPrograms,
         loadOffersByProgram,
+        offersByProgram,
         loadOffer, loading
     } = useOfferStore();
 
@@ -62,6 +63,7 @@ export const AllOffers = () => {
         try {
             if (currentProgram !== t("offer.filter.program.all")) {
                 const data = await loadOffersByProgram(user.token, currentProgram);
+                console.log(data)
                 setCurrentOffers(data);
             }
             else {
@@ -76,22 +78,34 @@ export const AllOffers = () => {
 
     const handleOfferStatusChange = () => {
         try {
+            let filteredOffers;
             switch (currentOfferStatus) {
                 case offerStatuses.PENDING:
                     loadPendingOffers();
-                    setCurrentOffers(pendingOffers);
+                    filteredOffers =
+                        currentProgram === t("offer.filter.program.all") ? pendingOffers :
+                        pendingOffers.filter((offer) => offer.targetedProgramme === currentProgram);
+                    setCurrentOffers(filteredOffers);
                     break;
                 case offerStatuses.ACCEPTED:
                     loadAcceptedOffers();
-                    setCurrentOffers(acceptedOffers);
+                    filteredOffers =
+                        currentProgram === t("offer.filter.program.all") ? acceptedOffers :
+                            acceptedOffers.filter((offer) => offer.targetedProgramme === currentProgram);
+                    setCurrentOffers(filteredOffers);
                     break;
                 case offerStatuses.REJECTED:
                     loadRejectedOffers();
-                    setCurrentOffers(rejectedOffers);
+                    filteredOffers =
+                        currentProgram === t("offer.filter.program.all") ? rejectedOffers :
+                            rejectedOffers.filter((offer) => offer.targetedProgramme === currentProgram);
+                    setCurrentOffers(filteredOffers);
                     break;
                 case offerStatuses.ALL:
                     loadAllOffers();
-                    setCurrentOffers(offers);
+                    filteredOffers =
+                        currentProgram === t("offer.filter.program.all") ? offers : offersByProgram
+                    setCurrentOffers(filteredOffers);
                     break;
             }
         } catch (err) {
