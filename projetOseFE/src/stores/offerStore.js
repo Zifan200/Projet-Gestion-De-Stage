@@ -82,6 +82,7 @@ export const useOfferStore = create(
                     set({ loading: true, error: null });
                     const data = await offerService.getOffersByProgram(token, program);
                     set({ offersByProgram: data, loading: false });
+                    return data;
                 } catch (err) {
                     set({ error: err, loading: false });
                 }

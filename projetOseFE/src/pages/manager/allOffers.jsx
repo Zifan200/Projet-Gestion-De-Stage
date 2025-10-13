@@ -37,6 +37,7 @@ export const AllOffers = () => {
         rejectedOffers, loadRejectedOffers,
         pendingOffers, loadPendingOffers,
         programs, loadPrograms,
+        loadOffersByProgram,
         loadOffer, loading
     } = useOfferStore();
 
@@ -60,14 +61,7 @@ export const AllOffers = () => {
     const handleProgramNameOnChange = async () => {
         try {
             if (currentProgram !== t("offer.filter.program.all")) {
-                const res = await fetch(
-                    `http://localhost:8080/api/v1/internship-offers/filter-by-program?program=${currentProgram}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        }
-                });
-                const data = await res.json();
+                const data = await loadOffersByProgram(user.token, currentProgram);
                 setCurrentOffers(data);
             }
             else {
