@@ -101,6 +101,7 @@ export const resources = {
           actions: "Actions",
           noOffers: "No offers available yet.",
           enterprise: "Enterprise name",
+          loading: "Loading...",
         },
         modal: {
           description: "Description",
@@ -330,6 +331,7 @@ export const resources = {
           actions: "Actions",
           noOffers: "Aucune offre pour le moment.",
           enterprise: "Nom de l'entreprise",
+          loading: "Chargement...",
         },
         modal: {
           description: "Description",

@@ -22,14 +22,8 @@ export const AllOffers = () => {
         REJECTED: t("offer.filter.status.rejected"),
     };
 
-    const [
-        currentOfferStatus,
-        setCurrentOfferStatus
-    ] = useState(offerStatuses.ALL);
-    const [
-        currentProgram,
-        setCurrentProgram
-    ] = useState(t("offer.filter.program.all"));
+    const [currentOfferStatus, setCurrentOfferStatus] = useState(offerStatuses.ALL);
+    const [currentProgram, setCurrentProgram] = useState(t("offer.filter.program.all"));
 
     const {
         offers, loadAllOffers,
@@ -38,7 +32,6 @@ export const AllOffers = () => {
         pendingOffers, loadPendingOffers,
         programs, loadPrograms,
         loadOffersByProgram,
-        offersByProgram,
         loadOffer, loading
     } = useOfferStore();
 
@@ -96,6 +89,25 @@ export const AllOffers = () => {
         }
     };
 
+    const tableRows = () => {
+        return currentOffers.map((offer) => (
+            <tr key={offer.id} className="border-t border-gray-300">
+                <td className="px-4 py-2">{offer.title}</td>
+                <td className="px-4 py-2">{offer.enterpriseName}</td>
+                <td className="px-4 py-2">
+                    {new Date(offer.expirationDate).toLocaleDateString()}
+                </td>
+                <td>
+                    <Button
+                        label={t("offer.actions.view")}
+                        className="w-1/2"
+                        onClick={() => openOffer(offer.id)}
+                    />
+                </td>
+            </tr>
+        ));
+    };
+
 
     return (
         <div className="space-y-6">
@@ -132,7 +144,8 @@ export const AllOffers = () => {
             </select>
 
             {
-                loading ? <p>Chargement...</p> :
+                loading ?
+                    <p>{t("offer.table.loading")}</p> :
                     <>
                         <Header
                             title={t("menu.allOffers")}
@@ -144,24 +157,7 @@ export const AllOffers = () => {
                                 t("offer.table.deadline"),
                                 t("offer.actions.view")
                             ]}
-                            rows={
-                                currentOffers.map((offer) => (
-                                    <tr key={offer.id} className="border-t border-gray-300">
-                                        <td className="px-4 py-2">{offer.title}</td>
-                                        <td className="px-4 py-2">{offer.enterpriseName}</td>
-                                        <td className="px-4 py-2">
-                                            {new Date(offer.expirationDate).toLocaleDateString()}
-                                        </td>
-                                        <td>
-                                            <Button
-                                                label={t("offer.actions.view")}
-                                                className="w-1/2"
-                                                onClick={() => openOffer(offer.id)}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))
-                            }
+                            rows={tableRows()}
                             emptyMessage={t("offer.table.noOffers")}
                         />
                     </>
