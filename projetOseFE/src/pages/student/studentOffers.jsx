@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
+import { toast } from "sonner";
 
 export const StudentOffers = () => {
     const { t } = useTranslation();
@@ -39,13 +40,13 @@ export const StudentOffers = () => {
             setIsModalOpen(isModalOpen);
         } catch (error) {
             console.error(error);
-            alert("Impossible de récupérer l'offre");
+            toast.error(t("studentOffers.errors.viewOffer"));
         }
     };
 
     const handleApply = async () => {
         if (!selectedCv) {
-            alert("Veuillez sélectionner un CV");
+            toast.warning(t("studentOffers.errors.selectCv"));
             return;
         }
         try {
@@ -56,7 +57,7 @@ export const StudentOffers = () => {
             setSelectedCv(null);
         } catch (err) {
             console.error(err);
-            alert("Impossible de postuler");
+            toast.error(t("studentOffers.errors.applyOffer"))
         }
     };
 

@@ -293,7 +293,9 @@ export const resources = {
         },
         errors: {
           applyOffer: "Failed to apply to the offer",
-          loadOffers: "Failed to load offers"
+          loadOffers: "Failed to load offers",
+          viewOffers: "Failed to view offers",
+          selectOffers: "Failed to select an offer"
         }
       }
 
@@ -599,7 +601,9 @@ export const resources = {
         },
         errors: {
           applyOffer: "Échec de la postulation à l'offre",
-          loadOffers: "Impossible de charger les offres"
+          loadOffers: "Impossible de charger les offres",
+          viewOffers: "Impossible de voir les offres",
+          selectOffers: "Impossible de sélectionner une offre"
         }
       }
     },
