@@ -43,6 +43,18 @@ export const offerService = {
       },
     });
     return res.data;
+  },
+
+  async updateOfferStatus(token, id, status, reason) {
+    const res = await api.post(
+        `/api/v1/internship-offers/${id}/update-status`,
+        null,
+        {
+          params: { status, reason },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+    );
+    return res.data;
   }
 
 }
