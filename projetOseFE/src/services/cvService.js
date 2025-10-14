@@ -16,6 +16,32 @@ export const cvService = {
     return res.data;
   },
 
+  async download(cvId) {
+    const res = await api.get(`/student/cv/${cvId}/download`, {
+      responseType: "blob",
+    });
+    return res.data;
+  },
+
+  async remove(cvId) {
+    const res = await api.delete(`/student/cv/${cvId}`);
+    return res.status === 204;
+  },
+
+  async preview(cvId) {
+    const res = await api.get(`/student/cv/${cvId}/download`, {
+      responseType: "blob",
+    });
+    return window.URL.createObjectURL(res.data);
+  },
+
+  async downloadCv(cvId) {
+    const res = await api.get(`/student/cv/${cvId}/download`, {
+      responseType: "blob",
+    });
+    return res.data; // blob binaire
+  },
+  
   async applyCVService(token, offerId, cvId, studentEmail) {
     const payload = {
       studentEmail,
@@ -31,6 +57,5 @@ export const cvService = {
     });
 
     return res.data;
-  }
-
+  },
 };
