@@ -314,17 +314,12 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
-        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
 
         // Assert
         assertThat(acceptedOffers).hasSize(2);
         assertThat(acceptedOffers).extracting("title")
                 .containsExactlyInAnyOrder(offer1.getTitle(), offer3.getTitle());
-        assertThat(acceptedOffers).extracting("enterpriseName")
-                .containsExactlyInAnyOrder(
-                        offer1.getEmployer().getEnterpriseName(),
-                        offer3.getEmployer().getEnterpriseName()
-                );
     }
 
 
@@ -335,7 +330,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of());
 
         // Act
-        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
 
         // Assert
         assertThat(acceptedOffers).isEmpty();

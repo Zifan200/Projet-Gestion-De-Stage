@@ -53,7 +53,7 @@ public class InternshipOfferController {
     }
 
     @GetMapping("/filter-by-accepted-offers")
-    public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffers() {
+    public ResponseEntity<List<InternshipOfferDto>> getAcceptedOffers() {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 
