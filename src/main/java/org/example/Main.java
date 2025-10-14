@@ -21,7 +21,6 @@ import java.util.List;
 
 @SpringBootApplication
 public class Main {
-
     private final GestionnaireService gestionnaireService;
 
     public Main(GestionnaireService gestionnaireService) {
