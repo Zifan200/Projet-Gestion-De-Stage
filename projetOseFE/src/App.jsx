@@ -28,6 +28,7 @@ import AddIntership from "./pages/employer/addIntership.jsx";
 import { StudentCVs } from "./pages/student/cvs.jsx";
 import { useTranslation } from "react-i18next";
 import { OfferList } from "./pages/employer/offerList.jsx";
+import {AllOffers} from "./pages/gs/allOffers.jsx";
 import { GsDashboard } from "./pages/gs/dashboard.jsx";
 import { GsManageCvs } from "./pages/gs/cvs.jsx";
 
@@ -45,6 +46,12 @@ function App() {
       label: t("menu.manageCvs"),
       href: "/dashboard/gs/manage-students-cvs",
       icon: BackpackIcon,
+    },
+    {
+      key: "seeOffers",
+      label: t("menu.allOffers"),
+      href: "/dashboard/gs/internships",
+      icon: EnvelopeClosedIcon,
     },
   ];
 
@@ -132,6 +139,10 @@ function App() {
               path="/dashboard/gs/manage-students-cvs"
               element={<GsManageCvs />}
             />
+            <Route
+                path="/dashboard/gs/internships"
+                element={<AllOffers />}
+            />
           </Route>
 
           {/* Routes Étudiant */}
@@ -173,6 +184,7 @@ function App() {
           <Route path="/signup/employer" element={<EmployerSignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/employer/ajout_stages" element={<AjoutStage />} />
+
         </Routes>
       </BrowserRouter>
     </div>

@@ -6,6 +6,12 @@ export const useOfferStore = create(
     persist(
         (set, get) => ({
             offers: [],
+            pendingOffers: [],
+            acceptedOffers: [],
+            rejectedOffers: [],
+            offersByProgram: [],
+            programs: [],
+            selectedOffer: null,
             loading: false,
             error: null,
 
@@ -14,6 +20,16 @@ export const useOfferStore = create(
                 try {
                     set({ loading: true, error: null });
                     const data = await offerService.getOffers(token);
+                    set({ offers: data, loading: false });
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            loadAllOffersSummary: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getAllOffersSummary(token);
                     set({ offers: data, loading: false });
                 } catch (err) {
                     set({ error: err, loading: false });
@@ -53,6 +69,57 @@ export const useOfferStore = create(
             },
 
             closeModal: () => set({ selectedOffer: null, isModalOpen: false }),
+
+            loadPendingOffers: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getPendingOffers(token);
+                    set({ pendingOffers: data, loading: false });
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            loadRejectedOffers: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getRejectedOffers(token);
+                    set({ rejectedOffers: data, loading: false });
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            loadAcceptedOffers: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getAcceptedOffers(token);
+                    set({ acceptedOffers: data, loading: false });
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            loadOffersByProgram: async (token, program) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getOffersByProgram(token, program);
+                    set({ offersByProgram: data, loading: false });
+                    return data;
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            loadPrograms: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getProgramNames(token);
+                    set({ programs: data, loading: false });
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
         }),
         { name: "offer-storage" }
     )

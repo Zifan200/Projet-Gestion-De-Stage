@@ -40,6 +40,7 @@ export const resources = {
         seeOffer: "My offers",
         createOffer: "Create an offer",
         applicationSend: "Application send",
+        allOffers: "All offers",
         manageCvs: "Submitted CV",
       },
       errors: {
@@ -163,11 +164,37 @@ export const resources = {
           deadline: "Deadline",
           actions: "Actions",
           noOffers: "No offers available yet.",
+          enterprise: "Enterprise name",
+          loading: "Loading...",
+        },
+        modal: {
+          description: "Description",
+          targetedProgramme: "Targeted program",
+          companyEmail: "Company email",
+          publishedDate: "Published date",
+          deadline: "Deadline",
+          status: "Status",
+          close: "Close"
+        },
+        filter: {
+          status: {
+            all: "Status",
+            pending: "Pending",
+            accepted: "Accepted",
+            rejected: "Rejected",
+          },
+          program: {
+            all: "All programs",
+          },
         },
         actions: {
           create_another: "Add New Offer",
           view: "View",
           delete: "Delete",
+        },
+        errors: {
+          loadOffer: "Unable to get offer",
+          loadOffers: "Error while loading offers",
         },
       },
       description: "Welcome to React and react-i18next",
@@ -333,6 +360,7 @@ export const resources = {
         activeOffer: "Offres actives",
         studentOffer: "Étudiants",
         offerConfirm: "Offres signer",
+        allOffers: "Toutes les offres",
         manageCvs: "CV soumis",
       },
       errors: {
@@ -466,11 +494,37 @@ export const resources = {
           deadline: "Date limite",
           actions: "Actions",
           noOffers: "Aucune offre pour le moment.",
+          enterprise: "Nom de l'entreprise",
+          loading: "Chargement...",
+        },
+        modal: {
+          description: "Description",
+          targetedProgramme: "Programme ciblé",
+          companyEmail: "Email de l'entreprise",
+          publishedDate: "Date de publication",
+          deadline: "Date limite",
+          status: "Statut",
+          close: "Fermer"
+        },
+        filter: {
+          status: {
+            all: "Statut",
+            pending: "En attente",
+            accepted: "Accepté",
+            rejected: "Rejeté",
+          },
+          program: {
+            all: "Tous les programmes",
+          },
         },
         actions: {
           create_another: "Ajouter une nouvelle offre",
           view: "Voir",
           delete: "Supprimer",
+        },
+        errors: {
+          loadOffer: "Impossible de récupérer l'offre",
+          loadOffers: "Erreur lors du chargement des offres",
         },
       },
       form: {
