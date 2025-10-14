@@ -1,35 +1,46 @@
 package org.example.presentation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.Employer;
+import org.example.model.InternshipOffer;
+import org.example.model.enums.InternshipOfferStatus;
+import org.example.presentation.exception.EmployerControllerException;
+import org.example.presentation.exception.InternshipOfferControllerException;
+import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
+import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 public class InternshipOfferControllerTest {
 
     @Mock
     private InternshipOfferService internshipOfferService;
-
     @InjectMocks
     private InternshipOfferController internshipOfferController;
-
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void getAllInternshipOffers_shouldReturnOffers() {
@@ -80,7 +91,7 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto offer = InternshipOfferResponseDto.builder()
                 .title("Dev Java")
                 .description("Stage backend Java")
-                .target_programme("Informatique")
+                .targetedProgramme("Informatique")
                 .employerEmail(employer.getEmail())
                 .expirationDate(LocalDate.now().plusDays(30))
                 .build();
@@ -89,7 +100,7 @@ public class InternshipOfferControllerTest {
 
         ResponseEntity<InternshipOfferResponseDto> response =
                 internshipOfferController.getInternshipOfferById(offerId);
-
+        System.out.println(response.getBody());
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody().getTitle()).isEqualTo("Dev Java");
         assertThat(response.getBody().getTargetedProgramme()).isEqualTo("Informatique");
@@ -176,4 +187,67 @@ public class InternshipOfferControllerTest {
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEmpty();
     }
+
+    @Test
+    void updateSelectedInternshipOfferStatus_shouldReturnSelectedInternshipOfferWithNewStatus() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipOfferController)
+                .setControllerAdvice(new InternshipOfferControllerException())
+                .build();
+
+        Employer employer = Employer.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("johndoes@gmail.com")
+                .phone("123-456-7890")
+                .enterpriseName("TechCorp")
+                .password("12345")
+                .build();
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(0L)
+                .title("Java Dev")
+                .description("N/A")
+                .employer(employer)
+                .targetedProgramme("Computer Science")
+                .build();
+
+        InternshipOfferResponseDto offerResponse = InternshipOfferResponseDto.create(offer);
+        offerResponse.setStatus(InternshipOfferStatus.PENDING);
+
+        InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
+        updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
+
+        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED, "the offer looks good"))
+                .thenReturn(updatedResponse);
+
+        mockMvc.perform(post("/api/v1/internship-offers/{id}/update-status", offerResponse.getId())
+                        .param("status", "ACCEPTED")
+                        .param("reason", "the offer looks good")
+                        .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Java Dev"))
+                .andExpect(jsonPath("$.description").value("N/A"))
+                .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"))
+                .andExpect(jsonPath("$.status").value("ACCEPTED"));
+    }
+
+    @Test
+    void updateSelectedInternshipOfferStatusThatDoesntExist_shouldReturnError() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipOfferController)
+                .setControllerAdvice(new InternshipOfferControllerException())
+                .build();
+
+        when(internshipOfferService.updateOfferStatus(eq(100L), eq(InternshipOfferStatus.ACCEPTED), anyString()))
+                .thenThrow(new InvalidInternShipOffer("Offer not found"));
+
+        mockMvc.perform(post("/api/v1/internship-offers/100/update-status")
+                        .param("status","ACCEPTED")
+                        .param("reason", "None")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
 }

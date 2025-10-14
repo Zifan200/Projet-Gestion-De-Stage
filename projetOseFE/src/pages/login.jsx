@@ -33,7 +33,7 @@ export const LoginPage = () => {
       setTimeout(() => {
         if (user.role === "STUDENT") navigate("/dashboard/student");
         if (user.role === "EMPLOYER") navigate("/dashboard/employer");
-        if (user.role === "GESTIONNAIRE") navigate("/dashboard/manager");
+        if (user.role === "GESTIONNAIRE") navigate("/dashboard/gs/");
       }, 1500);
     } catch (e) {
       if (e.response?.status === 500 || e.response?.status === 401) {

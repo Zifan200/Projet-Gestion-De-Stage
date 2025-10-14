@@ -29,7 +29,7 @@ export const resources = {
         employer: "Employer",
         cvs: "My cv's",
         post: "Postulation",
-        // myOffer: "My offer",
+        //myOffer: "My offer",
         lastActivity: "Last activity",
         offerReceive: "Offer receive",
         myOffer: "My offers",
@@ -41,6 +41,7 @@ export const resources = {
         createOffer: "Create an offer",
         applicationSend: "Application send",
         allOffers: "All offers",
+        manageCvs: "Submitted CV",
       },
       errors: {
         email: { invalid: "Invalid email address" },
@@ -59,6 +60,69 @@ export const resources = {
         invalidCredentials: "Invalid email or password",
         genericError: "An error occurred, please try again",
         userNotFound: "Error: User not found",
+      },
+      dashboardLayout: {
+        student: "Student",
+        employer: "Employer",
+        gs: "Internship Manager",
+      },
+      gsDashboard: {
+        title: "Internship Manager Dashboard",
+        stats: {
+          pending: "Pending CVs",
+          accepted: "Approved CVs",
+          rejected: "Rejected CVs",
+          total: "Total CVs",
+          thisMonth: "+ this month",
+          all: "All CVs",
+        },
+      },
+      reasonModal: {
+        title: "Reason for Rejection",
+        description: "Explain why you are rejecting this resume.",
+        label: "Reason",
+        placeholder:
+          "Ex: The profile does not meet the requirements of the position...",
+        cancel: "Cancel",
+        confirm: "Confirm",
+        errors: {
+          required: "A reason is required before confirming.",
+          min: "The reason must be at least 10 characters long.",
+        },
+      },
+      gsManageCvs: {
+        title: "Student Resume Management",
+        filter: "Filter",
+        unknownStudent: "Unknown",
+        status: {
+          pending: "Pending",
+          accepted: "Accepted",
+          rejected: "Rejected",
+        },
+        table: {
+          student: "Student",
+          fileName: "File Name",
+          status: "Status",
+          size: "Size",
+          date: "Date",
+          actions: "Actions",
+        },
+        actions: {
+          preview: "Preview",
+          download: "Download",
+          accept: "Approve",
+          reject: "Reject",
+        },
+        empty: "No resumes to display",
+        toast: {
+          accepted: "{{fileName}} approved",
+          acceptError: "Error while approving the resume",
+          rejected: "{{fileName}} rejected",
+          rejectError: "Error while rejecting the resume",
+          missingReason: "Please provide a reason before rejecting this resume",
+          downloadSuccess: "{{fileName}} downloaded",
+          downloadError: "Error while downloading the resume",
+        },
       },
       offer: {
         title: "Create an Internship Offer",
@@ -219,8 +283,44 @@ export const resources = {
           deleteCv: "Error deleting resume",
           previewCv: "Unable to preview resume",
           unsupportedFormat: "Unsupported format",
+          fileExists:
+            "A resume with this name already exists. Please rename the file before uploading.",
         },
       },
+      studentOffers: {
+        title: "Internship Offers",
+        table: {
+          title: "Title",
+          company: "Company",
+          deadline: "Deadline",
+          action: "Action"
+        },
+        modal: {
+        //companyName: "Company Name",
+        companyEmail: "Company Email",
+        targetedProgramme: "Targeted Programme",
+        publishedDate: "Published Date",
+        deadline: "Deadline",
+        status: "Status",
+        description: "Description",
+        close: "Close"
+      },
+        actions: {
+          apply: "Apply",
+          view: "View"
+        },
+        noOffers: "No internship offers available",
+        filterLabel: "Filter:",
+        loading: "Loading offers...",
+        success: {
+          applyOffer: "You have successfully applied to this offer"
+        },
+        errors: {
+          applyOffer: "Failed to apply to the offer",
+          loadOffers: "Failed to load offers"
+        }
+      }
+
     },
   },
   fr: {
@@ -261,6 +361,7 @@ export const resources = {
         studentOffer: "Étudiants",
         offerConfirm: "Offres signer",
         allOffers: "Toutes les offres",
+        manageCvs: "CV soumis",
       },
       errors: {
         email: { invalid: "Email est invalide" },
@@ -289,7 +390,70 @@ export const resources = {
         previewCv: "Impossible d’afficher le CV",
         unsupportedFormat: "Format non supporté",
       },
+      dashboardLayout: {
+        student: "Étudiant",
+        employer: "Employeur / Représentant",
+        gs: "Gestionnaire",
+      },
 
+      gsDashboard: {
+        title: "Tableau de bord du gestionnaire",
+        stats: {
+          pending: "CV en attente",
+          accepted: "CV approuvés",
+          rejected: "CV rejetés",
+          total: "Total des CVs",
+          thisMonth: "+ ce mois",
+          all: "Tous les CVs",
+        },
+      },
+      reasonModal: {
+        title: "Raison du refus",
+        description: "Explique pourquoi tu refuses ce CV.",
+        label: "Raison",
+        placeholder:
+          "Ex: Le profil ne correspond pas aux exigences du poste...",
+        cancel: "Annuler",
+        confirm: "Confirmer",
+        errors: {
+          required: "Une raison est requise avant de confirmer.",
+          min: "La raison doit contenir au moins 10 caractères.",
+        },
+      },
+      gsManageCvs: {
+        title: "Gestion des CVs étudiants",
+        filter: "Filtrer",
+        unknownStudent: "Inconnu",
+        status: {
+          pending: "En attente",
+          accepted: "Accepté",
+          rejected: "Rejeté",
+        },
+        table: {
+          student: "Étudiant",
+          fileName: "Nom du fichier",
+          status: "Statut",
+          size: "Taille",
+          date: "Date",
+          actions: "Actions",
+        },
+        actions: {
+          preview: "Visualiser",
+          download: "Télécharger",
+          accept: "Approuver",
+          reject: "Rejeter",
+        },
+        empty: "Aucun CV à afficher",
+        toast: {
+          accepted: "{{fileName}} approuvé",
+          acceptError: "Erreur lors de l’approbation du CV",
+          rejected: "{{fileName}} rejeté",
+          rejectError: "Erreur lors du rejet du CV",
+          missingReason: "Veuillez ajouter une raison avant de rejeter ce CV",
+          downloadSuccess: "{{fileName}} téléchargé",
+          downloadError: "Erreur lors du téléchargement du CV",
+        },
+      },
       offer: {
         title: "Créer une offre de stage",
         description:
@@ -449,8 +613,43 @@ export const resources = {
           deleteCv: "Erreur lors de la suppression du CV",
           previewCv: "Impossible d’afficher le CV",
           unsupportedFormat: "Format non supporté",
+          fileExists:
+            "Un CV avec ce nom existe déjà. Veuillez renommer le fichier avant de le téléverser.",
         },
       },
+      studentOffers: {
+        title: "Offres de stage",
+        table: {
+          title: "Titre",
+          company: "Entreprise",
+          deadline: "Date limite",
+          action: "Action"
+        },
+        modal: {
+          //companyName: Nom de l'entreprise,
+          companyEmail: "Email de l'entreprise",
+          targetedProgramme: "Programme ciblé",
+          publishedDate: "Date de publication",
+          deadline: "Date limite",
+          status: "Statut",
+          description: "Description",
+          close: "Fermer"
+        },
+        actions: {
+          apply: "Postuler",
+          view: "Voir"
+        },
+        noOffers: "Aucune offre de stage disponible",
+        filterLabel: "Filtrer",
+        loading: "Chargement des offres...",
+        success: {
+          applyOffer: "Vous avez postulé à cette offre avec succès"
+        },
+        errors: {
+          applyOffer: "Échec de la postulation à l'offre",
+          loadOffers: "Impossible de charger les offres"
+        }
+      }
     },
   },
 };

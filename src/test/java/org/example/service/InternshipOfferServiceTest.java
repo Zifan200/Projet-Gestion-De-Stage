@@ -274,7 +274,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(offer);
 
         // Act
-        internshipOfferService.updateOfferStatus(1L, InternshipOfferStatus.ACCEPTED);
+        internshipOfferService.updateOfferStatus(1L, InternshipOfferStatus.ACCEPTED, "valid offer");
 
         // Assert
         assertThat(offer.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
@@ -287,7 +287,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findById(99L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, InternshipOfferStatus.ACCEPTED))
+        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, InternshipOfferStatus.ACCEPTED, "offer looks valid :3"))
                 .isInstanceOf(InvalidInternShipOffer.class)
                 .hasMessageContaining("Offer not found");
         verify(internshipOfferRepository, never()).save(any());
@@ -297,6 +297,7 @@ public class InternshipOfferServiceTest {
     void getAcceptedOffers_shouldReturnOnlyAcceptedOffers() {
         // Arrange
         Employer employer = buildEmployer();
+
         InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
         offer1.setId(1L);
         offer1.setStatus(InternshipOfferStatus.ACCEPTED);
@@ -321,6 +322,7 @@ public class InternshipOfferServiceTest {
                 .containsExactlyInAnyOrder(offer1.getTitle(), offer3.getTitle());
     }
 
+
     @Test
     void getAcceptedOffers_whenNoAcceptedOffers_shouldReturnEmptyList() {
         // Arrange
@@ -333,6 +335,7 @@ public class InternshipOfferServiceTest {
         // Assert
         assertThat(acceptedOffers).isEmpty();
     }
+
 
     @Test
     void getPendingOffers_shouldReturnOnlyPendingOffers() {

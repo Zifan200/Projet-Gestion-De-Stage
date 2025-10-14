@@ -38,11 +38,13 @@ public class InternshipOfferDto {
 
     private LocalDate expirationDate;
 
+
     private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
+    private String reason;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -51,6 +53,7 @@ public class InternshipOfferDto {
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.reason = reason;
     }
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
@@ -91,6 +94,7 @@ public class InternshipOfferDto {
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
+                .reason(internshipOffer.getReason())
                 .build();
     }
 

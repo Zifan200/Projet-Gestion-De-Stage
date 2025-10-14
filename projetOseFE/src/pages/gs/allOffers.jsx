@@ -26,19 +26,19 @@ export const AllOffers = () => {
     const [currentProgram, setCurrentProgram] = useState(t("offer.filter.program.all"));
 
     const {
-        offers, loadAllOffers,
+        offers, loadAllOffersSummary,
         acceptedOffers, loadAcceptedOffers,
         rejectedOffers, loadRejectedOffers,
         pendingOffers, loadPendingOffers,
         programs, loadPrograms,
         loadOffersByProgram,
-        loadOffer, loading
+        viewOffer, loading
     } = useOfferStore();
 
 
     useEffect(() => {
         loadPrograms();
-        loadAllOffers();
+        loadAllOffersSummary();
         loadPendingOffers();
         loadAcceptedOffers();
         loadRejectedOffers();
@@ -46,6 +46,7 @@ export const AllOffers = () => {
 
     useEffect(() => {
         handleFilterChange();
+        console.log(currentOffers)
     }, [currentOfferStatus, currentProgram]);
 
     const handleFilterChange = async () => {
@@ -60,7 +61,7 @@ export const AllOffers = () => {
 
         if (currentOfferStatus === offerStatuses.ALL) {
             if (currentProgram === t("offer.filter.program.all")) {
-                loadAllOffers();
+                loadAllOffersSummary();
                 setCurrentOffers(offers);
             }
             else {
@@ -79,7 +80,7 @@ export const AllOffers = () => {
 
     const openOffer = async (offerId) => {
         try {
-            await loadOffer(user.token, offerId);
+            await viewOffer(user.token, offerId);
             const { selectedOffer, isModalOpen } = useOfferStore.getState();
             setSelectedOffer(selectedOffer);
             setIsModalOpen(isModalOpen);

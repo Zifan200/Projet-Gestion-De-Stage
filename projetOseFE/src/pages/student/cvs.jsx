@@ -19,6 +19,22 @@ export const StudentCVs = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    const alreadyExists = cvs.some(
+      (cv) =>
+        cv.fileName.trim().toLowerCase() === file.name.trim().toLowerCase(),
+    );
+
+    if (alreadyExists) {
+      toast.error(
+        t("studentDashboard.errors.fileExists", {
+          fileName: file.name,
+        }),
+      );
+      e.target.value = "";
+      return;
+    }
+
     try {
       await uploadCv(file);
       toast.success(
@@ -28,15 +44,31 @@ export const StudentCVs = () => {
       toast.error(t("studentDashboard.errors.uploadCv"));
     }
   };
-
   const handlePreview = (cv) => {
-    setPreviewId(cv.id);
+    if (cv.fileType === "application/pdf") {
+      setPreviewId(cv.id);
+    } else {
+      toast.error(t("studentDashboard.errors.prewviewNotSupported"));
+    }
+  };
+
+  const getFriendlyType = (mime) => {
+    switch (mime) {
+      case "application/pdf":
+        return "PDF (.pdf)";
+      case "application/msword":
+        return "Word 97-2003 (.doc)";
+      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        return "Word (.docx)";
+      default:
+        return mime || "Inconnu";
+    }
   };
 
   const rows = cvs.map((cv) => (
     <tr key={cv.id} className="border-t border-gray-300">
       <td className="px-4 py-2">{cv.fileName}</td>
-      <td className="px-4 py-2">{cv.fileType}</td>
+      <td className="px-4 py-2">{getFriendlyType(cv.fileType)}</td>
       <td className="px-4 py-2">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
       <td className="px-4 py-2">
         {new Date(cv.uploadedAt).toLocaleDateString()}
@@ -45,15 +77,17 @@ export const StudentCVs = () => {
         <Button
           onClick={() => handlePreview(cv)}
           label={t("studentDashboard.actions.preview")}
+          className={"bg-indigo-300 hover:bg-indigo-100 p-1 rounded-lg"}
         />
         <Button
           onClick={() => downloadCv(cv.id, cv.fileName)}
           label={t("studentDashboard.actions.download")}
+          className={"bg-blue-300 hover:bg-blue-100 rounded-lg"}
         />
         <Button
           onClick={() => deleteCv(cv.id)}
           label={t("studentDashboard.actions.delete")}
-          className="bg-red-400"
+          className="bg-red-300 hover:bg-red-100 rounded-lg"
         />
       </td>
     </tr>
@@ -89,10 +123,10 @@ export const StudentCVs = () => {
             <Button
               onClick={() => setPreviewId(null)}
               label={t("menu.close")}
-              className="bg-gray-400"
+              className="bg-zinc-200 hover:bg-zinc-100 p-1 rounded-lg"
             />
           </div>
-          <PdfViewer cvId={previewId} />
+          <PdfViewer cvId={previewId} role="student" />
         </div>
       )}{" "}
     </div>

@@ -23,18 +23,21 @@ public class InternshipOfferResponseDto {
     private LocalDate publishedDate;
     private LocalDate expirationDate;
     private InternshipOfferStatus status;
+    private String reason;
 
     @Builder
-    public InternshipOfferResponseDto(Long id, String title, String description, String target_programme,
-                                      String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+ 
+    public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
+                                      String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.targetedProgramme = target_programme;
+        this.targetedProgramme = targetedProgramme;
         this.employerEmail = employerEmail;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.reason = reason;
     }
 
     public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
@@ -42,11 +45,12 @@ public class InternshipOfferResponseDto {
                 .id(internshipOffer.getId())
                 .title(internshipOffer.getTitle())
                 .description(internshipOffer.getDescription())
-                .target_programme(internshipOffer.getTargetedProgramme())
+                .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .employerEmail(internshipOffer.getEmployer().getEmail())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
+                .reason(internshipOffer.getReason())
                 .build();
     }
 

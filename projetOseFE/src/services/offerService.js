@@ -19,17 +19,8 @@ export const offerService = {
     return res.data;
   },
 
-  async getAllOffers(token) {
+  async getAllOffersSummary(token) {
     const res = await api.get("/internship-offers/all-offers-summary", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data;
-  },
-
-  async getOfferById(token, id) {
-    const res = await api.get(`/internship-offers/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -39,15 +30,6 @@ export const offerService = {
 
   async getPendingOffers(token) {
     const res = await api.get("/internship-offers/filter-by-pending-offers", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data;
-  },
-
-  async getAcceptedOffers(token) {
-    const res = await api.get("/internship-offers/filter-by-accepted-offers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -81,6 +63,33 @@ export const offerService = {
     });
   },
 
+  async getAcceptedOffers(token) {
+    const res = await api.get("/internship-offers/filter-by-accepted-offers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
+
+  async getAcceptedOffersSummary(token) {
+    const res = await api.get("/internship-offers/filter-by-accepted-offers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
+
+  async getOfferById(token, id) {
+    const res = await api.get(`/internship-offers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
+
   async getProgramNames(token) {
     const res = await api.get("/internship-offers/all-programs-name", {
       headers: {
@@ -89,4 +98,4 @@ export const offerService = {
     });
     return res.data;
   },
-};
+}

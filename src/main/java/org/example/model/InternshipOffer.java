@@ -6,7 +6,9 @@ import lombok.*;
 import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -29,13 +31,18 @@ public class InternshipOffer {
     private LocalDate publishedDate;
     private LocalDate expirationDate;
 
+    @OneToMany(mappedBy = "offer")
+    private Set<InternshipApplication> applications = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
 
+    private String reason;
+
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason
     ){
         this.id = id;
         this.title = title;
@@ -45,5 +52,7 @@ public class InternshipOffer {
 
         this.publishedDate = publishedDate; // date when posted
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
+        this.status = status;
+        this.reason = reason;
     }
 }
