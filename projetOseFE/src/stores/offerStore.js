@@ -52,8 +52,35 @@ export const useOfferStore = create(
                 }
             },
 
+            updateOfferStatus: async (token, id, status, reason) => {
+                try {
+                    set({ loading: true, error: null });
+                    const updatedOffer = await offerService.updateOfferStatus(
+                        token,
+                        id,
+                        status,
+                        reason
+                    );
+
+                    // Mettre à jour l'offre correspondante dans le store
+                    set({
+                        offers: get().offers.map((o) =>
+                            o.id === updatedOffer.id ? updatedOffer : o
+                        ),
+                        loading: false,
+                    });
+
+                    return updatedOffer;
+                } catch (err) {
+                    set({ error: err, loading: false });
+                    throw err;
+                }
+            },
+
             closeModal: () => set({ selectedOffer: null, isModalOpen: false }),
         }),
+
         { name: "offer-storage" }
     )
+
 );
