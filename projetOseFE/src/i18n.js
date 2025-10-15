@@ -303,7 +303,7 @@ export const resources = {
           action: "Action"
         },
         modal: {
-        //companyName: "Company Name",
+        companyName: "Company Name",
         companyEmail: "Company Email",
         targetedProgramme: "Targeted Programme",
         publishedDate: "Published Date",
@@ -645,7 +645,7 @@ export const resources = {
           action: "Action"
         },
         modal: {
-          //companyName: Nom de l'entreprise,
+          companyName: "Nom de l'entreprise",
           companyEmail: "Email de l'entreprise",
           targetedProgramme: "Programme ciblé",
           publishedDate: "Date de publication",
