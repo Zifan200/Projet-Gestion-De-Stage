@@ -303,7 +303,10 @@ export const resources = {
         deadline: "Deadline",
         status: "Status",
         description: "Description",
-        close: "Close"
+        close: "Close",
+        apply: "Apply",
+        selectCv: "Your CV(s)",
+        chooseCv: "Choose a CV"
       },
         actions: {
           apply: "Apply",
@@ -317,7 +320,9 @@ export const resources = {
         },
         errors: {
           applyOffer: "Failed to apply to the offer",
-          loadOffers: "Failed to load offers"
+          loadOffers: "Failed to load offers",
+          viewOffers: "Failed to view offers",
+          selectOffers: "Failed to select an offer"
         }
       }
 
@@ -633,7 +638,10 @@ export const resources = {
           deadline: "Date limite",
           status: "Statut",
           description: "Description",
-          close: "Fermer"
+          close: "Fermer",
+          apply: "Postuler",
+          selectCv: "Votre(s) CV(s)",
+          chooseCv: "Choisir un CV"
         },
         actions: {
           apply: "Postuler",
@@ -647,7 +655,9 @@ export const resources = {
         },
         errors: {
           applyOffer: "Échec de la postulation à l'offre",
-          loadOffers: "Impossible de charger les offres"
+          loadOffers: "Impossible de charger les offres",
+          viewOffers: "Impossible de voir les offres",
+          selectOffers: "Impossible de sélectionner une offre"
         }
       }
     },

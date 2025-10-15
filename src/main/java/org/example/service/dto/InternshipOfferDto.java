@@ -15,6 +15,7 @@ import java.time.LocalDate;
 
 @Getter
 @Data
+@Builder
 public class InternshipOfferDto {
     private Long id;
     @NotBlank(message = "required: title")
@@ -38,7 +39,7 @@ public class InternshipOfferDto {
 
     private LocalDate expirationDate;
 
-
+    @Builder.Default
     private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
     private String reason;
 

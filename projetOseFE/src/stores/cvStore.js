@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { cvService } from "../services/cvService.js";
+import useAuthStore from "./authStore.js";
 
 export const useCvStore = create((set, get) => ({
   cvs: [],
@@ -60,6 +61,19 @@ export const useCvStore = create((set, get) => ({
     try {
       const url = await cvService.preview(cvId);
       set({ previewUrl: url, previewType: fileType });
+    } catch (err) {
+      set({ error: err.message });
+      throw err;
+    }
+  },
+
+  applyCvStore: async (offerId, cvId) => {
+    try {
+      const { user, token } = useAuthStore.getState();
+      if (!user || !user.email) throw new Error("Student email is required");
+      if (!token) throw new Error("Token is required");
+
+      await cvService.applyCVService(token, offerId, cvId, user.email);
     } catch (err) {
       set({ error: err.message });
       throw err;

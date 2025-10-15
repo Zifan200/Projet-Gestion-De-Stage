@@ -34,10 +34,28 @@ export const cvService = {
     });
     return window.URL.createObjectURL(res.data);
   },
+
   async downloadCv(cvId) {
     const res = await api.get(`/student/cv/${cvId}/download`, {
       responseType: "blob",
     });
-    return res.data; // 👈 blob binaire
+    return res.data; // blob binaire
+  },
+  
+  async applyCVService(token, offerId, cvId, studentEmail) {
+    const payload = {
+      studentEmail,
+      selectedCvID: Number(cvId),
+      internshipOfferId: Number(offerId),
+    };
+
+    const res = await api.post("/student/apply-to-internship-offer", payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return res.data;
   },
 };
