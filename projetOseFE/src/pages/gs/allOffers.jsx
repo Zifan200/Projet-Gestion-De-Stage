@@ -233,12 +233,25 @@ export const AllOffers = () => {
                                 >
                                     {t("offer.modal.accept")}
                                 </button>
-                                <button
-                                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                                    onClick={handleReject}
-                                >
-                                    {t("offer.modal.reject")}
-                                </button>
+                                <Button
+                                    label={t("offer.actions.reject")}
+                                    className="bg-yellow-500 text-white hover:bg-yellow-600 px-4 py-2 rounded"
+                                    onClick={async () => {
+                                        const reason = prompt(t("offer.modal.rejectReason"));
+                                        if (!reason) {
+                                            toast.error(t("offer.modal.reasonRequired"));
+                                            return;
+                                        }
+                                        try {
+                                            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", reason);
+                                            toast.success(t("offer.modal.reject"));
+                                            setIsModalOpen(false);
+                                        } catch (err) {
+                                            console.error(err);
+                                            toast.error(t("offer.errors.rejectFailed"));
+                                        }
+                                    }}
+                                />
                             </div>
 
                             <button

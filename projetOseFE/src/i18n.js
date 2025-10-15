@@ -178,7 +178,9 @@ export const resources = {
           accept: "Accept",
           reject: "Reject",
           accepted: "Internship offer accepted",
-          rejected: "Internship offer rejected"
+          rejected: "Internship offer rejected",
+          rejectReason: "Please specify a reason",
+          reasonRequired: "A reason is required"
         },
         filter: {
           status: {
@@ -195,6 +197,7 @@ export const resources = {
           create_another: "Add New Offer",
           view: "View",
           delete: "Delete",
+          reject: "Reject"
         },
         errors: {
           loadOffer: "Unable to get offer",
@@ -517,7 +520,9 @@ export const resources = {
           accept: "Accepter",
           reject: "Rejecter",
           accepted: "Offre de stage acceptée",
-          rejected: "Offre de stage rejetée"
+          rejected: "Offre de stage rejetée",
+          rejectReason: "Veuillez spécifier une raison",
+          reasonRequired: "Une raison est requise"
         },
         filter: {
           status: {
@@ -534,6 +539,7 @@ export const resources = {
           create_another: "Ajouter une nouvelle offre",
           view: "Voir",
           delete: "Supprimer",
+          reject: "Rejeter"
         },
         errors: {
           loadOffer: "Impossible de récupérer l'offre",
