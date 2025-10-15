@@ -174,7 +174,11 @@ export const resources = {
           publishedDate: "Published date",
           deadline: "Deadline",
           status: "Status",
-          close: "Close"
+          close: "Close",
+          accept: "Accept",
+          reject: "Reject",
+          accepted: "Internship offer accepted",
+          rejected: "Internship offer rejected"
         },
         filter: {
           status: {
@@ -306,7 +310,7 @@ export const resources = {
         close: "Close",
         apply: "Apply",
         selectCv: "Your CV(s)",
-        chooseCv: "Choose a CV"
+        chooseCv: "Choose a CV",
       },
         actions: {
           apply: "Apply",
@@ -509,7 +513,11 @@ export const resources = {
           publishedDate: "Date de publication",
           deadline: "Date limite",
           status: "Statut",
-          close: "Fermer"
+          close: "Fermer",
+          accept: "Accepter",
+          reject: "Rejecter",
+          accepted: "Offre de stage acceptée",
+          rejected: "Offre de stage rejetée"
         },
         filter: {
           status: {
@@ -641,7 +649,7 @@ export const resources = {
           close: "Fermer",
           apply: "Postuler",
           selectCv: "Votre(s) CV(s)",
-          chooseCv: "Choisir un CV"
+          chooseCv: "Choisir un CV",
         },
         actions: {
           apply: "Postuler",

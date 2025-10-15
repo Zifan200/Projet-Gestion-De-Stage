@@ -7,7 +7,6 @@ import useAuthStore from "../../stores/authStore.js";
 import {Button} from "../../components/ui/button.jsx";
 import {toast} from "sonner";
 
-
 export const AllOffers = () => {
     const { t } = useTranslation();
     const user = useAuthStore((s) => s.user);
@@ -32,7 +31,8 @@ export const AllOffers = () => {
         pendingOffers, loadPendingOffers,
         programs, loadPrograms,
         loadOffersByProgram,
-        viewOffer, loading
+        viewOffer, loading,
+        updateOfferStatus
     } = useOfferStore();
 
 
@@ -87,6 +87,30 @@ export const AllOffers = () => {
         } catch (err) {
             console.error(err);
             toast.error(t("offer.errors.loadOffer"));
+        }
+    };
+
+    const handleAccept = async () => {
+        try {
+            await updateOfferStatus(user.token, selectedOffer.id, "ACCEPTED", "");
+            toast.success(t("offer.modal.accepted"));
+            setIsModalOpen(false);
+            loadAllOffersSummary();
+        } catch (err) {
+            console.error(err);
+            toast.error(t("offer.errors.updateStatus"));
+        }
+    };
+
+    const handleReject = async () => {
+        try {
+            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", "Rejected by admin");
+            toast.info(t("offer.modal.rejected"));
+            setIsModalOpen(false);
+            loadAllOffersSummary();
+        } catch (err) {
+            console.error(err);
+            toast.error(t("offer.errors.updateStatus"));
         }
     };
 
@@ -199,18 +223,37 @@ export const AllOffers = () => {
                             <strong>{t("offer.modal.status")}: </strong>
                             {selectedOffer.status}
                         </p>
-                        <button
-                            className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                            onClick={() => {
-                                setIsModalOpen(false);
-                                setSelectedOffer(null);
-                            }}
-                        >
-                            {t("offer.modal.close")}
-                        </button>
+
+                        {/* Boutons */}
+                        <div className="flex justify-between mt-6">
+                            <div className="flex space-x-2">
+                                <button
+                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                    onClick={handleAccept}
+                                >
+                                    {t("offer.modal.accept")}
+                                </button>
+                                <button
+                                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                    onClick={handleReject}
+                                >
+                                    {t("offer.modal.reject")}
+                                </button>
+                            </div>
+
+                            <button
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                onClick={() => {
+                                    setIsModalOpen(false);
+                                    setSelectedOffer(null);
+                                }}
+                            >
+                                {t("offer.modal.close")}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
         </div>
     );
-}
+};

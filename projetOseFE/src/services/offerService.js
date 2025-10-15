@@ -92,11 +92,12 @@ export const offerService = {
 
   async updateOfferStatus(token, id, status, reason) {
     const res = await api.post(
-        `/api/v1/internship-offers/${id}/update-status`,
-        null,
+        `/internship-offers/${id}/update-status?status=${status}&reason=${encodeURIComponent(reason)}`,
+        {}, // pas de corps, juste une requête vide
         {
-          params: { status, reason },
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
     );
     return res.data;
