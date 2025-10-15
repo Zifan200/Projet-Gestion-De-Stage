@@ -5,6 +5,7 @@ import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
@@ -52,6 +53,7 @@ public class InternshipOfferService {
                 .employer(savedEmployer.get())
                 .publishedDate(LocalDate.now())
                 .expirationDate(internshipOfferDto.getExpirationDate())
+                .status(InternshipOfferStatus.PENDING)
                 .build();
 
         var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
