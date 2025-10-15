@@ -1,4 +1,7 @@
 package org.example.service.exception;
 
-public class UserSettingsNotFoundException {
+public class UserSettingsNotFoundException extends RuntimeException {
+    public UserSettingsNotFoundException(String message) {
+        super(message);
+    }
 }
