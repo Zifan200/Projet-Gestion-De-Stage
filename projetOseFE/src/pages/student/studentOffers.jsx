@@ -51,7 +51,7 @@ export const StudentOffers = () => {
         }
         try {
             await applyCvStore(selectedOffer.id, selectedCv.id); // <- utiliser applyCvStore ici
-            alert("Candidature envoyée !");
+            toast.success(t("studentOffers.success.applyOffer"));
             setIsModalOpen(false);
             setSelectedOffer(null);
             setSelectedCv(null);
