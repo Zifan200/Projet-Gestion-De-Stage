@@ -49,8 +49,9 @@ public class SecurityConfiguration {
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/v1/student/register";
     private static final String INTERNSHIP_PATH = "/api/v1/internship-offers/**";
-    private static final String INTERNSHIP_STUDENT_APPLICATION_PATH = "/api/v1/internship-applications/**";
-    private static final String EMPLOYER_INTERNSHIP_APPLICATIONS = "/api/v1/internship-applications/internship-offer/**";
+    private static final String EMPLOYER_INTERNSHIP_STUDENT_APPLICATIONS_PATH = "/api/v1/internship-applications/internship-offer/**";
+    private static final String INTERNSHIP_APPLICATION_PATH = "/api/v1/internship-applications/**";
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -73,10 +74,6 @@ public class SecurityConfiguration {
                         // Internships
                         .requestMatchers(INTERNSHIP_PATH).permitAll()
                         .requestMatchers(GET, INTERNSHIP_PATH).hasAnyAuthority(Role.STUDENT.name())
-
-                        //Internship applications
-                        .requestMatchers(EMPLOYER_INTERNSHIP_APPLICATIONS).hasAnyAuthority(Role.GESTIONNAIRE.name(), Role.STUDENT.name(), Role.EMPLOYER.name())
-                        .requestMatchers(INTERNSHIP_STUDENT_APPLICATION_PATH).hasAnyAuthority(Role.GESTIONNAIRE.name(), Role.STUDENT.name())
 
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
