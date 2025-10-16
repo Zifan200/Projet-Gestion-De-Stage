@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.service.InternshipApplicationService;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class InternshipApplicationController {
 
     private final InternshipApplicationService  internshipApplicationService;
 
+//    @PreAuthorize("hasAnyAuthority('ROLE_ROLE_GESTIONNAIRE','ROLE_ROLE_STUDENT')")
     @GetMapping("/get-all")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplications(){
         return ResponseEntity.ok(internshipApplicationService.getAllApplications());
@@ -39,6 +41,6 @@ public class InternshipApplicationController {
             @PathVariable Long id,
             @PathVariable String status
     ){
-        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer(id));
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOfferWithStatus(id, status));
     }
 }

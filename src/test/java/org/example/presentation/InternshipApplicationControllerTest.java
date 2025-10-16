@@ -1,9 +1,11 @@
 package org.example.presentation;
 
+import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.service.InternshipApplicationService;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidApprovalStatus;
+import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -100,6 +102,116 @@ class InternshipApplicationControllerTest {
         //assert
         assertNotNull(resolved);
         assertInstanceOf(InvalidApprovalStatus.class, resolved);
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOffer_shouldReturn200() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Java Developer")
+                .build();
+
+        when(internshipApplicationService.getAllApplicationsFromOffer(10L))
+                .thenReturn(List.of(responseDto));
+
+        mockMvc.perform(get("/api/v1/internship-applications/internship-offer/10/get-all-applications")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Java Developer"));
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOffer_shouldReturn400_whenOfferDoesNotExist() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        when(internshipApplicationService.getAllApplicationsFromOffer(999L))
+                .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
+
+        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/internship-offer/999/get-all-applications")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertInstanceOf(InvalidInternshipApplicationException.class, resolved);
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOfferWithStatus_shouldReturn200() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Backend Developer")
+                .status(ApprovalStatus.PENDING)
+                .build();
+
+        when(internshipApplicationService.getAllApplicationsFromOfferWithStatus(10L, "PENDING"))
+                .thenReturn(List.of(responseDto));
+
+        mockMvc.perform(get("/api/v1/internship-applications/internship-offer/10/get-all-applications/PENDING")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"))
+                .andExpect(jsonPath("$[0].status").value("PENDING"));
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOfferWithStatus_shouldReturn400_whenInvalidStatus() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        when(internshipApplicationService.getAllApplicationsFromOfferWithStatus(10L, "INVALID"))
+                .thenThrow(new InvalidApprovalStatus("Invalid status"));
+
+        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/internship-offer/10/get-all-applications/INVALID")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertInstanceOf(InvalidApprovalStatus.class, resolved);
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOfferWithStatus_shouldReturn400_whenOfferDoesNotExist() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        when(internshipApplicationService.getAllApplicationsFromOfferWithStatus(999L, "PENDING"))
+                .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
+
+        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/internship-offer/999/get-all-applications/PENDING")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertInstanceOf(InvalidInternshipApplicationException.class, resolved);
     }
 }
 

@@ -256,6 +256,135 @@ public class InternshipApplicationServiceTest {
 
     }
 
+    @Test
+    void getAllApplicationsFromOffer_shouldReturnApplicationsForGivenOffer() {
+        // Arrange
+        Long offerId = 1L;
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .phone("123-456-7890")
+                .program("Program")
+                .build();
+
+        CV cv = CV.builder().id(1L).build();
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(offerId)
+                .title("Java Developer")
+                .build();
+
+        InternshipApplication app1 = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        InternshipApplication app2 = InternshipApplication.builder()
+                .id(2L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(offer));
+        when(internshipApplicationRepository.findAllByOffer(offer)).thenReturn(List.of(app1, app2));
+
+        // Act
+        List<InternshipApplicationResponseDTO> result = internshipApplicationService.getAllApplicationsFromOffer(offerId);
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertEquals(2, result.size(), "Should return two applications for the offer");
+
+        assertEquals(app1.getId(), result.get(0).getId(), "First application ID should match");
+        assertEquals(app2.getId(), result.get(1).getId(), "Second application ID should match");
+    }
+
+    @Test
+    void getAllApplicationsFromOffer_whenOfferDoesNotExist_shouldThrowException() {
+        // Arrange
+        Long offerId = 999L;
+        when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllApplicationsFromOffer(offerId));
+    }
+
+    @Test
+    void getAllApplicationsFromOfferWithStatus_shouldReturnApplicationsForOfferWithGivenStatus() {
+        // Arrange
+        Long offerId = 1L;
+        String status = "PENDING";
+
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .phone("123-456-7890")
+                .program("Program")
+                .build();
+
+        CV cv = CV.builder().id(1L).build();
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(offerId)
+                .title("Java Developer")
+                .build();
+
+        InternshipApplication app = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .status(ApprovalStatus.PENDING)
+                .build();
+
+        when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(offer));
+        when(internshipApplicationRepository.findAllByOfferAndStatus(offer, ApprovalStatus.PENDING))
+                .thenReturn(List.of(app));
+
+        // Act
+        List<InternshipApplicationResponseDTO> result =
+                internshipApplicationService.getAllApplicationsFromOfferWithStatus(offerId, status);
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertEquals(1, result.size(), "Should return one application with the given status");
+
+        InternshipApplicationResponseDTO response = result.get(0);
+        assertEquals(app.getId(), response.getId(), "Application ID should match");
+        assertEquals(ApprovalStatus.PENDING, response.getStatus(), "Status should match 'PENDING'");
+    }
+
+    @Test
+    void getAllApplicationsFromOfferWithStatus_whenInvalidStatus_shouldThrowInvalidApprovalStatus() {
+        // Arrange
+        Long offerId = 1L;
+        String invalidStatus = "INVALID_STATUS";
+
+        // Act & Assert
+        assertThrows(InvalidApprovalStatus.class,
+                () -> internshipApplicationService.getAllApplicationsFromOfferWithStatus(offerId, invalidStatus));
+    }
+
+    @Test
+    void getAllApplicationsFromOfferWithStatus_whenOfferDoesNotExist_shouldThrowException() {
+        // Arrange
+        Long offerId = 999L;
+        String status = "PENDING";
+
+        when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllApplicationsFromOfferWithStatus(offerId, status));
+    }
 
 }
 
