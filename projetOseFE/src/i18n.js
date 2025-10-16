@@ -180,7 +180,8 @@ export const resources = {
           accepted: "Internship offer accepted",
           rejected: "Internship offer rejected",
           rejectReason: "Please specify a reason",
-          reasonRequired: "A reason is required"
+          reasonRequired: "A reason is required",
+          reasonPlaceholder: "Ex: The profile does not meet the requirements of the position...",
         },
         filter: {
           status: {
@@ -522,7 +523,8 @@ export const resources = {
           accepted: "Offre de stage acceptée",
           rejected: "Offre de stage rejetée",
           rejectReason: "Veuillez spécifier une raison",
-          reasonRequired: "Une raison est requise"
+          reasonRequired: "Une raison est requise",
+          reasonPlaceholder: "Ex : Le profil ne correspond pas aux exigences du poste...",
         },
         filter: {
           status: {

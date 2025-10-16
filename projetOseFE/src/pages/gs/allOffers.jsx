@@ -13,6 +13,7 @@ export const AllOffers = () => {
     const [ selectedOffer, setSelectedOffer ] = useState(null);
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ currentOffers, setCurrentOffers ] = useState([]);
+    const [ rejectReason, setRejectReason ] = useState(""); // 🔹 nouvelle state pour la raison du rejet
 
     const offerStatuses = {
         ALL: t("offer.filter.status.all"),
@@ -46,7 +47,6 @@ export const AllOffers = () => {
 
     useEffect(() => {
         handleFilterChange();
-        console.log(currentOffers)
     }, [currentOfferStatus, currentProgram]);
 
     const handleFilterChange = async () => {
@@ -103,14 +103,20 @@ export const AllOffers = () => {
     };
 
     const handleReject = async () => {
+        if (!rejectReason.trim()) {
+            toast.error(t("offer.modal.reasonRequired"));
+            return;
+        }
+
         try {
-            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", "Rejected by admin");
-            toast.info(t("offer.modal.rejected"));
+            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", rejectReason);
+            toast.success(t("offer.modal.reject"));
             setIsModalOpen(false);
+            setRejectReason(""); // Réinitialiser le champ
             loadAllOffersSummary();
         } catch (err) {
             console.error(err);
-            toast.error(t("offer.errors.updateStatus"));
+            toast.error(t("offer.errors.rejectFailed"));
         }
     };
 
@@ -224,6 +230,20 @@ export const AllOffers = () => {
                             {selectedOffer.status}
                         </p>
 
+                        {/* Champ de raison du rejet */}
+                        <div className="mt-4">
+                            <label className="block font-medium mb-1">
+                                {t("offer.modal.rejectReason")}
+                            </label>
+                            <textarea
+                                value={rejectReason}
+                                onChange={(e) => setRejectReason(e.target.value)}
+                                placeholder={t("offer.modal.reasonPlaceholder")}
+                                className="w-full border rounded p-2"
+                                rows={3}
+                            />
+                        </div>
+
                         {/* Boutons */}
                         <div className="flex justify-between mt-6">
                             <div className="flex space-x-2">
@@ -233,25 +253,14 @@ export const AllOffers = () => {
                                 >
                                     {t("offer.modal.accept")}
                                 </button>
-                                <Button
-                                    label={t("offer.actions.reject")}
-                                    className="bg-yellow-500 text-white hover:bg-yellow-600 px-4 py-2 rounded"
-                                    onClick={async () => {
-                                        const reason = prompt(t("offer.modal.rejectReason"));
-                                        if (!reason) {
-                                            toast.error(t("offer.modal.reasonRequired"));
-                                            return;
-                                        }
-                                        try {
-                                            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", reason);
-                                            toast.success(t("offer.modal.reject"));
-                                            setIsModalOpen(false);
-                                        } catch (err) {
-                                            console.error(err);
-                                            toast.error(t("offer.errors.rejectFailed"));
-                                        }
-                                    }}
-                                />
+
+                                <button
+                                    className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
+                                    disabled={!rejectReason.trim()}
+                                    onClick={handleReject}
+                                >
+                                    {t("offer.actions.reject")}
+                                </button>
                             </div>
 
                             <button
@@ -259,6 +268,7 @@ export const AllOffers = () => {
                                 onClick={() => {
                                     setIsModalOpen(false);
                                     setSelectedOffer(null);
+                                    setRejectReason("");
                                 }}
                             >
                                 {t("offer.modal.close")}
