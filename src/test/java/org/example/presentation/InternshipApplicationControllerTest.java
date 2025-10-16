@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class InternshipApplicationControllerTest {
 
-
     @Mock
     private InternshipApplicationService internshipApplicationService;
 
