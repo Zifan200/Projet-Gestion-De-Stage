@@ -1,4 +1,4 @@
-package org.example.service.dto.InternshipApplicaiton;
+package org.example.service.dto.InternshipApplication;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

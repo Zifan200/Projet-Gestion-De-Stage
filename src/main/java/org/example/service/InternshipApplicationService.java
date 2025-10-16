@@ -13,15 +13,17 @@ import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.repository.InternshipApplicationRepository;
 import org.example.repository.InternshipOfferRepository;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +37,7 @@ public class InternshipApplicationService {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public InternshipApplicationResponseDTO saveInternshipApplicaiton(InternshipApplicationDTO internshipApplicationDto) {
+    public InternshipApplicationResponseDTO saveInternshipApplication(InternshipApplicationDTO internshipApplicationDto) {
         Optional<Etudiant> student = studentRepository.findByCredentialsEmail(internshipApplicationDto.getStudentEmail());
         Optional<CV> selectedCV = cvRepository.findById(internshipApplicationDto.getSelectedCvID());
         Optional<InternshipOffer> offer = internshipOfferRepository.findById(internshipApplicationDto.getInternshipOfferId());
@@ -52,16 +54,20 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : internship offer does not exist");
         }
 
-        InternshipApplication applicaiton = InternshipApplication.builder()
+        InternshipApplication application = InternshipApplication.builder()
                 .student(student.get())
                 .selectedStudentCV(selectedCV.get())
                 .offer(offer.get())
                 .status(ApprovalStatus.PENDING)
                 .build();
 
-        var savedInternshipApplication = internshipApplicationRepository.save(applicaiton);
+        var savedInternshipApplication = internshipApplicationRepository.save(application);
         eventPublisher.publishEvent(new StudentCreatedInternshipApplicationCreatedEvent());
-        logger.info("InternshipApplicaiton created = \"{}\"", savedInternshipApplication.getStudent().getEmail());
+        logger.info("InternshipApplication created = \"{}\"", savedInternshipApplication.getStudent().getEmail());
         return InternshipApplicationResponseDTO.create(savedInternshipApplication);
+    }
+
+    public List<InternshipApplicationResponseDTO> getAllApplications(){
+        return internshipApplicationRepository.findAll().stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 }
