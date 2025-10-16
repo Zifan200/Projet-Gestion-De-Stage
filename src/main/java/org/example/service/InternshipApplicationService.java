@@ -76,7 +76,7 @@ public class InternshipApplicationService {
 
     public List<InternshipApplicationResponseDTO> getAllApplicationWithStatus(String status) throws InvalidInternshipApplicationException
     {
-        if(SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){
+        if(!SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){
             throw new InvalidApprovalStatus("a application with invalid status was found");
         }
         List<InternshipApplication> applicationList = internshipApplicationRepository.findAllByStatus(SimpleEnumUtils.findEnumValue(ApprovalStatus.class, status));
