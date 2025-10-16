@@ -5,8 +5,8 @@ import org.example.model.Etudiant;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
 import org.example.repository.*;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,7 +71,7 @@ public class InternshipApplicationServiceTest {
                 .thenReturn(application);
 
         // Act
-        InternshipApplicationResponseDTO response = internshipApplicationService.saveInternshipApplicaiton(
+        InternshipApplicationResponseDTO response = internshipApplicationService.saveInternshipApplication(
                 applicationDTO
         );
 
@@ -117,7 +117,7 @@ public class InternshipApplicationServiceTest {
 
         // Act & Assert
                 assertThrows(InvalidInternshipApplicationException.class,
-                        () -> internshipApplicationService.saveInternshipApplicaiton(applicationDTO)
+                        () -> internshipApplicationService.saveInternshipApplication(applicationDTO)
                 );
     }
 }
