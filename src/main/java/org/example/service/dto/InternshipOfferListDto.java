@@ -2,6 +2,7 @@ package org.example.service.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
 
@@ -12,4 +13,7 @@ public class InternshipOfferListDto {
     private String title;
     private String enterpriseName;
     private LocalDate expirationDate;
+    private String targetedProgramme;
+    private InternshipOfferStatus status;
+    private String reason;
 }

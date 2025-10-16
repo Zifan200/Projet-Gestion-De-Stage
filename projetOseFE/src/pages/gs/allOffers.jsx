@@ -1,3 +1,5 @@
+allOffers.jsx
+
 import {useTranslation} from "react-i18next";
 import {Table} from "../../components/ui/table.jsx";
 import {Header} from "../../components/ui/header.jsx";
@@ -13,7 +15,6 @@ export const AllOffers = () => {
     const [ selectedOffer, setSelectedOffer ] = useState(null);
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ currentOffers, setCurrentOffers ] = useState([]);
-    const [ rejectReason, setRejectReason ] = useState(""); // 🔹 nouvelle state pour la raison du rejet
 
     const offerStatuses = {
         ALL: t("offer.filter.status.all"),
@@ -43,22 +44,29 @@ export const AllOffers = () => {
         loadPendingOffers();
         loadAcceptedOffers();
         loadRejectedOffers();
-    }, []);
+    }, [currentOffers, loadAllOffersSummary]);
 
     useEffect(() => {
         handleFilterChange();
-    }, [currentOfferStatus, currentProgram]);
+        console.log("selectedOffer", selectedOffer)
+        console.log(acceptedOffers)
+
+    }, [currentOfferStatus, currentProgram, isModalOpen, selectedOffer]);
 
     const handleFilterChange = async () => {
-        if (currentOfferStatus === offerStatuses.PENDING)
+        if (currentOfferStatus === offerStatuses.PENDING) {
+            loadPendingOffers()
             filterByStatus(pendingOffers);
-
-        if (currentOfferStatus === offerStatuses.ACCEPTED)
+        }
+        if (currentOfferStatus === offerStatuses.ACCEPTED) {
+            loadAcceptedOffers()
             filterByStatus(acceptedOffers);
-
-        if (currentOfferStatus === offerStatuses.REJECTED)
+        }
+        if (currentOfferStatus === offerStatuses.REJECTED) {
+            loadRejectedOffers()
             filterByStatus(rejectedOffers);
 
+        }
         if (currentOfferStatus === offerStatuses.ALL) {
             if (currentProgram === t("offer.filter.program.all")) {
                 loadAllOffersSummary();
@@ -74,7 +82,9 @@ export const AllOffers = () => {
     const filterByStatus = (offerList) => {
         let filteredOffers =
             currentProgram === t("offer.filter.program.all") ? offerList :
-                offerList.filter((offer) => offer.targetedProgramme === currentProgram);
+                offerList.filter(
+                    (offer) => offer.targetedProgramme === currentProgram
+                );
         setCurrentOffers(filteredOffers);
     };
 
@@ -92,10 +102,13 @@ export const AllOffers = () => {
 
     const handleAccept = async () => {
         try {
-            await updateOfferStatus(user.token, selectedOffer.id, "ACCEPTED", "");
+            const updatedOffer = await updateOfferStatus(user.token, selectedOffer.id, "ACCEPTED", "");
             toast.success(t("offer.modal.accepted"));
             setIsModalOpen(false);
+
+            loadAcceptedOffers();
             loadAllOffersSummary();
+            setCurrentOffers(acceptedOffers);
         } catch (err) {
             console.error(err);
             toast.error(t("offer.errors.updateStatus"));
@@ -103,20 +116,17 @@ export const AllOffers = () => {
     };
 
     const handleReject = async () => {
-        if (!rejectReason.trim()) {
-            toast.error(t("offer.modal.reasonRequired"));
-            return;
-        }
-
         try {
-            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", rejectReason);
-            toast.success(t("offer.modal.reject"));
+            await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", "Rejected by admin");
+            toast.info(t("offer.modal.rejected"));
             setIsModalOpen(false);
-            setRejectReason(""); // Réinitialiser le champ
+
+            loadRejectedOffers();
             loadAllOffersSummary();
+            setCurrentOffers(rejectedOffers);
         } catch (err) {
             console.error(err);
-            toast.error(t("offer.errors.rejectFailed"));
+            toast.error(t("offer.errors.updateStatus"));
         }
     };
 
@@ -125,6 +135,8 @@ export const AllOffers = () => {
             <tr key={offer.id} className="border-t border-gray-300">
                 <td className="px-4 py-2">{offer.title}</td>
                 <td className="px-4 py-2">{offer.enterpriseName}</td>
+                <td className="px-4 py-2">{offer.targetedProgramme}</td>
+                <td className="px-4 py-2">{offer.status}</td>
                 <td className="px-4 py-2">
                     {new Date(offer.expirationDate).toLocaleDateString()}
                 </td>
@@ -185,6 +197,8 @@ export const AllOffers = () => {
                             headers={[
                                 t("offer.table.offerTitle"),
                                 t("offer.table.enterprise"),
+                                t("offer.table.program"),
+                                t("offer.table.status"),
                                 t("offer.table.deadline"),
                                 t("offer.actions.view")
                             ]}
@@ -230,20 +244,6 @@ export const AllOffers = () => {
                             {selectedOffer.status}
                         </p>
 
-                        {/* Champ de raison du rejet */}
-                        <div className="mt-4">
-                            <label className="block font-medium mb-1">
-                                {t("offer.modal.rejectReason")}
-                            </label>
-                            <textarea
-                                value={rejectReason}
-                                onChange={(e) => setRejectReason(e.target.value)}
-                                placeholder={t("offer.modal.reasonPlaceholder")}
-                                className="w-full border rounded p-2"
-                                rows={3}
-                            />
-                        </div>
-
                         {/* Boutons */}
                         <div className="flex justify-between mt-6">
                             <div className="flex space-x-2">
@@ -253,13 +253,11 @@ export const AllOffers = () => {
                                 >
                                     {t("offer.modal.accept")}
                                 </button>
-
                                 <button
-                                    className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
-                                    disabled={!rejectReason.trim()}
+                                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                                     onClick={handleReject}
                                 >
-                                    {t("offer.actions.reject")}
+                                    {t("offer.modal.reject")}
                                 </button>
                             </div>
 
@@ -268,7 +266,6 @@ export const AllOffers = () => {
                                 onClick={() => {
                                     setIsModalOpen(false);
                                     setSelectedOffer(null);
-                                    setRejectReason("");
                                 }}
                             >
                                 {t("offer.modal.close")}

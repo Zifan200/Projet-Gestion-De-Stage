@@ -53,17 +53,17 @@ public class InternshipOfferController {
     }
 
     @GetMapping("/filter-by-accepted-offers")
-    public ResponseEntity<List<InternshipOfferDto>> getAcceptedOffers() {
+    public ResponseEntity<List<InternshipOfferListDto>> getAcceptedOffers() {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 
     @GetMapping("/filter-by-rejected-offers")
-    public ResponseEntity<List<InternshipOfferDto>> getRejectedOffers() {
+    public ResponseEntity<List<InternshipOfferListDto>> getRejectedOffers() {
         return ResponseEntity.ok(internshipOfferService.getRejectedOffers());
     }
 
     @GetMapping("/filter-by-pending-offers")
-    public ResponseEntity<List<InternshipOfferDto>> getPendingOffers() {
+    public ResponseEntity<List<InternshipOfferListDto>> getPendingOffers() {
         return ResponseEntity.ok(internshipOfferService.getPendingOffers());
     }
 

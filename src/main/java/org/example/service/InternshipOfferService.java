@@ -5,7 +5,6 @@ import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
@@ -53,7 +52,6 @@ public class InternshipOfferService {
                 .employer(savedEmployer.get())
                 .publishedDate(LocalDate.now())
                 .expirationDate(internshipOfferDto.getExpirationDate())
-                .status(InternshipOfferStatus.PENDING)
                 .build();
 
         var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
@@ -69,6 +67,9 @@ public class InternshipOfferService {
                         .title(offer.getTitle())
                         .enterpriseName(offer.getEmployer().getEnterpriseName())
                         .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .reason(offer.getReason())
+                        .status(offer.getStatus())
                         .build())
                 .collect(Collectors.toList());
 
@@ -103,35 +104,90 @@ public class InternshipOfferService {
                         .title(offer.getTitle())
                         .enterpriseName(offer.getEmployer().getEnterpriseName())
                         .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .reason(offer.getReason())
+                        .status(offer.getStatus())
                         .build())
                 .toList();
     }
-    public List<InternshipOfferDto> getAcceptedOffers() {
+
+    public List<InternshipOfferListDto> getAcceptedOffers() {
+        List<InternshipOffer> acceptedOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
+
+        return acceptedOffers.stream()
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .reason(offer.getReason())
+                        .status(offer.getStatus())
+                        .build())
+                .toList();
+    }
+
+    /*public List<InternshipOfferDto> getAcceptedOffers() {
         List<InternshipOffer> acceptedOffers =
                 internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
 
         return acceptedOffers.stream()
                 .map(InternshipOfferDto::create)
                 .toList();
+    }*/
+
+    public List<InternshipOfferListDto> getRejectedOffers() {
+        List<InternshipOffer> rejectedOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
+
+        return rejectedOffers.stream()
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .reason(offer.getReason())
+                        .status(offer.getStatus())
+                        .build())
+                .toList();
     }
 
-    public List<InternshipOfferDto> getRejectedOffers() {
+    /*public List<InternshipOfferDto> getRejectedOffers() {
         List<InternshipOffer> rejectedOffers =
                 internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
 
         return rejectedOffers.stream()
                 .map(InternshipOfferDto::create)
                 .toList();
+    }*/
+
+    public List<InternshipOfferListDto> getPendingOffers() {
+        List<InternshipOffer> pendingOffers =
+                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
+
+        return pendingOffers.stream()
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .reason(offer.getReason())
+                        .status(offer.getStatus())
+                        .build())
+                .toList();
     }
 
-    public List<InternshipOfferDto> getPendingOffers() {
+    /*public List<InternshipOfferDto> getPendingOffers() {
         List<InternshipOffer> pendingOffers =
                 internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
 
         return pendingOffers.stream()
                 .map(InternshipOfferDto::create)
                 .toList();
-    }
+    }*/
 
 
     public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status, String reasons) {
