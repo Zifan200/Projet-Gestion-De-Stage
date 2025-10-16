@@ -8,6 +8,7 @@ import org.example.model.Etudiant;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.SimpleEnumUtils;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
@@ -15,12 +16,14 @@ import org.example.repository.InternshipApplicationRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,4 +73,18 @@ public class InternshipApplicationService {
     public List<InternshipApplicationResponseDTO> getAllApplications(){
         return internshipApplicationRepository.findAll().stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
+
+    public List<InternshipApplicationResponseDTO> getAllApplicationWithStatus(String status) throws InvalidInternshipApplicationException
+    {
+        if(!SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){
+            throw new InvalidApprovalStatus("a application with invalid status was found");
+        }
+        List<InternshipApplication> applicaitonList = internshipApplicationRepository.findAllByStatus(SimpleEnumUtils.findEnumValue(ApprovalStatus.class, status));
+        List<InternshipApplicationResponseDTO> response  = new ArrayList<>();
+        for (InternshipApplication application : applicaitonList){
+            response.add(InternshipApplicationResponseDTO.create(application));
+        }
+        return response;
+    }
+
 }
