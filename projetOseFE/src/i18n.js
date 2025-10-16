@@ -174,7 +174,14 @@ export const resources = {
           publishedDate: "Published date",
           deadline: "Deadline",
           status: "Status",
-          close: "Close"
+          close: "Close",
+          accept: "Accept",
+          reject: "Reject",
+          accepted: "Internship offer accepted",
+          rejected: "Internship offer rejected",
+          rejectReason: "Please specify a reason",
+          reasonRequired: "A reason is required",
+          reasonPlaceholder: "Ex: The profile does not meet the requirements of the position...",
         },
         filter: {
           status: {
@@ -191,6 +198,7 @@ export const resources = {
           create_another: "Add New Offer",
           view: "View",
           delete: "Delete",
+          reject: "Reject"
         },
         errors: {
           loadOffer: "Unable to get offer",
@@ -296,7 +304,7 @@ export const resources = {
           action: "Action"
         },
         modal: {
-        //companyName: "Company Name",
+        companyName: "Company Name",
         companyEmail: "Company Email",
         targetedProgramme: "Targeted Programme",
         publishedDate: "Published Date",
@@ -306,7 +314,7 @@ export const resources = {
         close: "Close",
         apply: "Apply",
         selectCv: "Your CV(s)",
-        chooseCv: "Choose a CV"
+        chooseCv: "Choose a CV",
       },
         actions: {
           apply: "Apply",
@@ -509,7 +517,14 @@ export const resources = {
           publishedDate: "Date de publication",
           deadline: "Date limite",
           status: "Statut",
-          close: "Fermer"
+          close: "Fermer",
+          accept: "Accepter",
+          reject: "Rejecter",
+          accepted: "Offre de stage acceptée",
+          rejected: "Offre de stage rejetée",
+          rejectReason: "Veuillez spécifier une raison",
+          reasonRequired: "Une raison est requise",
+          reasonPlaceholder: "Ex : Le profil ne correspond pas aux exigences du poste...",
         },
         filter: {
           status: {
@@ -526,6 +541,7 @@ export const resources = {
           create_another: "Ajouter une nouvelle offre",
           view: "Voir",
           delete: "Supprimer",
+          reject: "Rejeter"
         },
         errors: {
           loadOffer: "Impossible de récupérer l'offre",
@@ -631,7 +647,7 @@ export const resources = {
           action: "Action"
         },
         modal: {
-          //companyName: Nom de l'entreprise,
+          companyName: "Nom de l'entreprise",
           companyEmail: "Email de l'entreprise",
           targetedProgramme: "Programme ciblé",
           publishedDate: "Date de publication",
@@ -641,7 +657,7 @@ export const resources = {
           close: "Fermer",
           apply: "Postuler",
           selectCv: "Votre(s) CV(s)",
-          chooseCv: "Choisir un CV"
+          chooseCv: "Choisir un CV",
         },
         actions: {
           apply: "Postuler",

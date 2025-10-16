@@ -90,6 +90,19 @@ export const offerService = {
     return res.data;
   },
 
+  async updateOfferStatus(token, id, status, reason) {
+    const res = await api.post(
+        `/internship-offers/${id}/update-status?status=${status}&reason=${encodeURIComponent(reason)}`,
+        {}, // pas de corps, juste une requête vide
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+    );
+    return res.data;
+  },
+
   async getProgramNames(token) {
     const res = await api.get("/internship-offers/all-programs-name", {
       headers: {
