@@ -1,5 +1,3 @@
-allOffers.jsx
-
 import {useTranslation} from "react-i18next";
 import {Table} from "../../components/ui/table.jsx";
 import {Header} from "../../components/ui/header.jsx";

@@ -145,6 +145,18 @@ export const useOfferStore = create(
                     set({ error: err, loading: false });
                 }
             },
+
+            reloadOffers: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await offerService.getAllOffersSummary(token);
+                    set({ offers: data, loading: false });
+                } catch (e) {
+                    console.error("Erreur rechargement offres:", e);
+                    set({ loading: false, error: e });
+                }
+            },
+
         }),
 
         { name: "offer-storage" }
