@@ -1,9 +1,6 @@
 package org.example.service;
 
-import org.example.model.CV;
-import org.example.model.Etudiant;
-import org.example.model.InternshipApplication;
-import org.example.model.InternshipOffer;
+import org.example.model.*;
 import org.example.model.enums.ApprovalStatus;
 import org.example.repository.*;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
@@ -34,6 +31,8 @@ public class InternshipApplicationServiceTest {
     private CvRepository cvRepository;
     @Mock
     private InternshipApplicationRepository internshipApplicationRepository;
+    @Mock
+    private EmployerRepository employerRepository;
     @Mock
     private ApplicationEventPublisher eventPublisher;
     @Mock
@@ -384,6 +383,114 @@ public class InternshipApplicationServiceTest {
         // Act & Assert
         assertThrows(InvalidInternshipApplicationException.class,
                 () -> internshipApplicationService.getAllApplicationsFromOfferWithStatus(offerId, status));
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromEmployer_shouldReturnApplicationsForEmployer() {
+        // Arrange
+        String employerEmail = "employer@test.com";
+        Employer employer = Employer.builder().email(employerEmail).build();
+
+        CV cv = CV.builder().id(1L).build();
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        InternshipOffer offer = InternshipOffer.builder().id(1L).title("Java Dev").employer(employer).build();
+
+        InternshipApplication app1 = InternshipApplication.builder().id(1L).student(student).selectedStudentCV(cv).offer(offer).build();
+        InternshipApplication app2 = InternshipApplication.builder().id(2L).student(student).selectedStudentCV(cv).offer(offer).build();
+
+        when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
+        when(internshipApplicationRepository.findAllByOffer_EmployerEmail(employerEmail))
+                .thenReturn(List.of(app1, app2));
+
+        // Act
+        List<InternshipApplicationResponseDTO> result =
+                internshipApplicationService.getAllInternshipApplicationsFromEmployer(employerEmail);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(app1.getId(), result.get(0).getId());
+        assertEquals(app2.getId(), result.get(1).getId());
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
+        // Arrange
+        String invalidEmail = "nonexistent@company.com";
+        when(employerRepository.findByCredentialsEmail(invalidEmail)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllInternshipApplicationsFromEmployer(invalidEmail)
+        );
+
+        assertTrue(exception.getMessage().contains("employer does not exist"));
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOfferFromEmployer_shouldReturnApplicationsForOfferAndEmployer() {
+        // Arrange
+        String employerEmail = "employer@test.com";
+        Long offerId = 1L;
+
+        Employer employer = Employer.builder().email(employerEmail).build();
+        InternshipOffer offer = InternshipOffer.builder().id(offerId).employer(employer).build();
+
+        CV cv = CV.builder().id(1L).build();
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        InternshipApplication app1 = InternshipApplication.builder().id(1L).student(student).selectedStudentCV(cv).offer(offer).build();
+        InternshipApplication app2 = InternshipApplication.builder().id(2L).student(student).selectedStudentCV(cv).offer(offer).build();
+
+        when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
+        when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(offer));
+        when(internshipApplicationRepository.findAllByOffer_EmployerEmail(employerEmail))
+                .thenReturn(List.of(app1, app2));
+
+        // Act
+        List<InternshipApplicationResponseDTO> result =
+                internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(offerId, employerEmail);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(app1.getId(), result.get(0).getId());
+        assertEquals(app2.getId(), result.get(1).getId());
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOfferFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
+        // Arrange
+        String invalidEmail = "nonexistent@company.com";
+        Long offerId = 1L;
+        when(employerRepository.findByCredentialsEmail(invalidEmail)).thenReturn(Optional.empty());
+        when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(new InternshipOffer()));
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(offerId, invalidEmail)
+        );
+
+        assertTrue(exception.getMessage().contains("employer does not exist"));
+    }
+
+    @Test
+    void getAllInternshipApplicationsFromOfferFromEmployer_whenOfferDoesNotExist_shouldThrowException() {
+        // Arrange
+        String email = "employer@example.com";
+        Long invalidOfferId = 999L;
+        when(employerRepository.findByCredentialsEmail(email)).thenReturn(Optional.of(new Employer()));
+        when(internshipOfferRepository.findById(invalidOfferId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(invalidOfferId, email)
+        );
+
+        assertTrue(exception.getMessage().contains("offer does not exist"));
     }
 
 }

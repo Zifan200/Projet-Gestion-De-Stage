@@ -52,4 +52,22 @@ public class EmployerController {
                 .body(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
 
     }
+
+    @GetMapping("/get-all-internship-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForEmployer(
+            HttpServletRequest request
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        internshipApplicationService.getAllInternshipApplicationsFromEmployer(email);
+        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+    }
+
+    @GetMapping("/get-all-internship-applications/internship-offer/{id}")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForOfferForEmployer(
+            HttpServletRequest request,
+            @PathVariable Long id){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(id, email);
+        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+    }
 }

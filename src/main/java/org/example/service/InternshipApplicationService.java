@@ -3,19 +3,14 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.event.StudentCreatedInternshipApplicationCreatedEvent;
-import org.example.model.CV;
-import org.example.model.Etudiant;
-import org.example.model.InternshipApplication;
-import org.example.model.InternshipOffer;
+import org.example.model.*;
 import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.SimpleEnumUtils;
 import org.example.model.enums.InternshipOfferStatus;
-import org.example.repository.CvRepository;
-import org.example.repository.EtudiantRepository;
-import org.example.repository.InternshipApplicationRepository;
-import org.example.repository.InternshipOfferRepository;
+import org.example.repository.*;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
@@ -32,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InternshipApplicationService {
     private static final Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
-
+    private final EmployerRepository employerRepository;
     private final EtudiantRepository studentRepository;
     private final CvRepository  cvRepository;
     private final InternshipOfferRepository internshipOfferRepository;
@@ -112,4 +107,28 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
+
+    public List<InternshipApplicationResponseDTO> getAllInternshipApplicationsFromEmployer(String email){
+        Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
+        if(employer.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
+        }
+        List<InternshipApplication> applicationList = internshipApplicationRepository.findAllByOffer_EmployerEmail(email);
+        return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
+    }
+
+    public List<InternshipApplicationResponseDTO> getAllInternshipApplicationsFromOfferFromEmployer(Long id, String email){
+        Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
+        Optional<InternshipOffer> offer = internshipOfferRepository.findById(id);
+
+        if(employer.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
+        }
+        if(offer.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship offer : offer does not exist");
+        }
+
+        List<InternshipApplication> applicationList = internshipApplicationRepository.findAllByOffer_EmployerEmail(email);
+        return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
+    }
 }
