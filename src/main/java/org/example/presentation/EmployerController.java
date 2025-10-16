@@ -16,7 +16,7 @@ import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.example.service.dto.InternshipApplication.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,12 +52,4 @@ public class EmployerController {
                 .body(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
 
     }
-
-//    @GetMapping("internship-offer/{id}/get-al-applications")
-//    public ResponseEntity<List<InternshipOfferResponseDto>> getAllInternshipOffers(
-//            @PathVariable Long internshipOfferId
-//    ){
-//
-//        ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer());
-//    }
 }
