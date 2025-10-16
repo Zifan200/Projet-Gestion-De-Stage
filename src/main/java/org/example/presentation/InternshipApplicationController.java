@@ -26,4 +26,19 @@ public class InternshipApplicationController {
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplications(@PathVariable String status){
         return ResponseEntity.ok(internshipApplicationService.getAllApplicationsWithStatus(status));
     }
+
+    @GetMapping("internship-offer/{id}/get-all-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsFromOffer(
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer(id));
+    }
+
+    @GetMapping("internship-offer/{id}/get-all-applications/{status}")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsFromOffer(
+            @PathVariable Long id,
+            @PathVariable String status
+    ){
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer(id));
+    }
 }
