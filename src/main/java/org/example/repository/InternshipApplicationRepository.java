@@ -18,6 +18,7 @@ public interface InternshipApplicationRepository extends JpaRepository<Internshi
     List<InternshipApplication> findAllByStudentEmail(String studentEmail);
     List<InternshipApplication> findAllByStatus(ApprovalStatus status);
 
+    List<InternshipApplication> findAllByOffer_EmployerEmail(String email);
     List<InternshipApplication> findAllByOffer(InternshipOffer offer);
     List<InternshipApplication> findAllByOfferAndStatus(InternshipOffer offer, ApprovalStatus status);
 }

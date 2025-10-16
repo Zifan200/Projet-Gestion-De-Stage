@@ -1,9 +1,12 @@
 package org.example.presentation;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.service.InternshipApplicationService;
+import org.example.service.UserAppService;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.utils.JwtTokenUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,28 +18,27 @@ import java.util.List;
 @RequestMapping("/api/v1/internship-applications")
 @CrossOrigin(origins = "http://localhost:5173")
 public class InternshipApplicationController {
-
+    private final UserAppService userAppService;
     private final InternshipApplicationService  internshipApplicationService;
 
-//    @PreAuthorize("hasAnyAuthority('ROLE_ROLE_GESTIONNAIRE','ROLE_ROLE_STUDENT')")
     @GetMapping("/get-all")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplications(){
         return ResponseEntity.ok(internshipApplicationService.getAllApplications());
     }
 
-    @GetMapping("get-all/{status}")
+    @GetMapping("/get-all/{status}")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplications(@PathVariable String status){
         return ResponseEntity.ok(internshipApplicationService.getAllApplicationsWithStatus(status));
     }
 
-    @GetMapping("internship-offer/{id}/get-all-applications")
+    @GetMapping("/get-all/internship-offer/{id}")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsFromOffer(
             @PathVariable Long id
     ){
         return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer(id));
     }
 
-    @GetMapping("internship-offer/{id}/get-all-applications/{status}")
+    @GetMapping("/get-all/{status}/internship-offer/{id}")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsFromOffer(
             @PathVariable Long id,
             @PathVariable String status

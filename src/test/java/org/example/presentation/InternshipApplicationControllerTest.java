@@ -32,7 +32,7 @@ class InternshipApplicationControllerTest {
 
     @InjectMocks
     private InternshipApplicationController internshipApplicationController;
-
+    private final String path = "/api/v1/internship-applications";
     @Test
     void getAllInternshipApplications_shouldReturn200() throws Exception {
         MockMvc mockMvc = MockMvcBuilders
@@ -49,7 +49,7 @@ class InternshipApplicationControllerTest {
 
         when(internshipApplicationService.getAllApplications()).thenReturn(List.of(responseDto));
 
-        mockMvc.perform(get("/api/v1/internship-applications/get-all")
+        mockMvc.perform(get(path+"/get-all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
@@ -73,7 +73,7 @@ class InternshipApplicationControllerTest {
         when(internshipApplicationService.getAllApplicationsWithStatus("PENDING"))
                 .thenReturn(List.of(responseDto));
 
-        mockMvc.perform(get("/api/v1/internship-applications/get-all/PENDING")
+        mockMvc.perform(get(path+"/get-all/PENDING")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
@@ -93,7 +93,7 @@ class InternshipApplicationControllerTest {
 
 
         //act
-        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/get-all/REJECTED")
+        MvcResult result = mockMvc.perform(get(path+"/get-all/REJECTED")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -121,7 +121,7 @@ class InternshipApplicationControllerTest {
         when(internshipApplicationService.getAllApplicationsFromOffer(10L))
                 .thenReturn(List.of(responseDto));
 
-        mockMvc.perform(get("/api/v1/internship-applications/internship-offer/10/get-all-applications")
+        mockMvc.perform(get(path+"/get-all/internship-offer/10")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
@@ -138,7 +138,7 @@ class InternshipApplicationControllerTest {
         when(internshipApplicationService.getAllApplicationsFromOffer(999L))
                 .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
 
-        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/internship-offer/999/get-all-applications")
+        MvcResult result = mockMvc.perform(get(path+"/get-all/internship-offer/999")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -166,7 +166,7 @@ class InternshipApplicationControllerTest {
         when(internshipApplicationService.getAllApplicationsFromOfferWithStatus(10L, "PENDING"))
                 .thenReturn(List.of(responseDto));
 
-        mockMvc.perform(get("/api/v1/internship-applications/internship-offer/10/get-all-applications/PENDING")
+        mockMvc.perform(get(path+"/get-all/PENDING/internship-offer/10")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
@@ -184,7 +184,7 @@ class InternshipApplicationControllerTest {
         when(internshipApplicationService.getAllApplicationsFromOfferWithStatus(10L, "INVALID"))
                 .thenThrow(new InvalidApprovalStatus("Invalid status"));
 
-        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/internship-offer/10/get-all-applications/INVALID")
+        MvcResult result = mockMvc.perform(get(path+"/get-all/INVALID/internship-offer/10")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -204,7 +204,7 @@ class InternshipApplicationControllerTest {
         when(internshipApplicationService.getAllApplicationsFromOfferWithStatus(999L, "PENDING"))
                 .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
 
-        MvcResult result = mockMvc.perform(get("/api/v1/internship-applications/internship-offer/999/get-all-applications/PENDING")
+        MvcResult result = mockMvc.perform(get(path+"/get-all/PENDING/internship-offer/999")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
