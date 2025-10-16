@@ -8,6 +8,7 @@ import org.example.model.enums.ApprovalStatus;
 import org.example.repository.*;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,13 +41,13 @@ public class InternshipApplicationServiceTest {
     @InjectMocks
     private StudentService studentService;
     @InjectMocks
-    private InternshipApplicationService internshipApplicationService ;
+    private InternshipApplicationService internshipApplicationService;
 
     private String STUDENT_EMAIL = "student@gmail.com";
 
 
     @Test
-    void createInternShipApplication_shouldSaveApplication(){
+    void createInternShipApplication_shouldSaveApplication() {
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
                 .firstName("firstName")
@@ -88,7 +89,7 @@ public class InternshipApplicationServiceTest {
 
 
     @Test
-    void createInternShipApplicationWithWrongValues_shouldNOTSaveApplication(){
+    void createInternShipApplicationWithWrongValues_shouldNOTSaveApplication() {
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
                 .firstName("firstName")
@@ -113,14 +114,14 @@ public class InternshipApplicationServiceTest {
                 .build();
 
         // Repositories return empty for wrong IDs
-                when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
-                when(cvRepository.findById(999L)).thenReturn(Optional.empty());
-                when(internshipOfferRepository.findById(888L)).thenReturn(Optional.empty());
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
+        when(cvRepository.findById(999L)).thenReturn(Optional.empty());
+        when(internshipOfferRepository.findById(888L)).thenReturn(Optional.empty());
 
         // Act & Assert
-                assertThrows(InvalidInternshipApplicationException.class,
-                        () -> internshipApplicationService.saveInternshipApplication(applicationDTO)
-                );
+        assertThrows(InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.saveInternshipApplication(applicationDTO)
+        );
     }
 
     @Test
@@ -226,17 +227,38 @@ public class InternshipApplicationServiceTest {
 
         // Act
         var result = internshipApplicationService.getAllApplicationWithStatus(status);
+        var response = result.getFirst();
 
         // Assert
         assertNotNull(result, "Result should not be null");
         assertEquals(1, result.size(), "Should return one application with the given status");
 
-        var response = result.get(0);
         assertEquals(app.getId(), response.getId(), "Application ID should match");
         assertEquals(STUDENT_EMAIL, response.getStudentEmail(), "Student email should match");
         assertEquals(ApprovalStatus.PENDING, response.getStatus(), "Status should match 'PENDING'");
+    }
+
+    @Test
+    void getAllApplicationWithStatus_whenInvalidStatus_shouldThrowInvalidApprovalStatus() {
+        // Arrange
+        String invalidStatus = "NOT_A_VALID_STATUS";
+
+        // Act
+        Exception exception = assertThrows(
+                InvalidApprovalStatus.class,
+                () -> internshipApplicationService.getAllApplicationWithStatus(invalidStatus)
+        );
+
+        // Assert
+        assertNotNull(exception, "Exception should not be null");
+        assertTrue(exception.getMessage().contains("invalid"),
+                "Exception message should indicate an invalid status");
 
     }
 
 
 }
+
+
+
+
