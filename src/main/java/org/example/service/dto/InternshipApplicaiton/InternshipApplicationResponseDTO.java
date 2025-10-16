@@ -56,6 +56,7 @@ public class InternshipApplicationResponseDTO {
     public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication){
         return InternshipApplicationResponseDTO.builder()
                 .id(internshipApplication.getId())
+                .status(internshipApplication.getStatus())
                 .studentEmail(internshipApplication.getStudent().getEmail())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())

@@ -4,6 +4,7 @@ import org.example.model.CV;
 import org.example.model.Etudiant;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.*;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,4 +122,121 @@ public class InternshipApplicationServiceTest {
                         () -> internshipApplicationService.saveInternshipApplication(applicationDTO)
                 );
     }
+
+    @Test
+    void getAllInternshipApplications_itReturnListOfSavedInternshipApplication() {
+        // Arrange
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .phone("123-456-7890")
+                .program("Program")
+                .build();
+        CV cv = CV.builder()
+                .id(1L)
+                .fileName("cv.pdf")
+                .fileSize(2000L)
+                .build();
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Java Developer")
+                .build();
+
+        InternshipApplication app1 = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        InternshipApplication app2 = InternshipApplication.builder()
+                .id(2L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        when(internshipApplicationRepository.findAll()).thenReturn(List.of(app1, app2));
+
+        // Act
+        var result = internshipApplicationService.getAllApplications();
+
+        // Assert
+        assertNotNull(result, "Result list should not be null");
+        assertEquals(2, result.size(), "There should be two internship applications returned");
+
+        InternshipApplicationResponseDTO first = result.getFirst();
+        assertEquals(app1.getId(), first.getId(), "First application's ID should match");
+        assertEquals(STUDENT_EMAIL, first.getStudentEmail(), "Student email should match");
+        assertEquals(offer.getId(), first.getInternshipOfferId(), "Offer ID should match");
+        assertEquals(cv.getId(), first.getSelectedCvID(), "CV ID should match");
+    }
+
+    @Test
+    void getAllInternshipApplications_whenRepositoryReturnsEmptyList_shouldReturnEmptyList() {
+        // Arrange
+        when(internshipApplicationRepository.findAll()).thenReturn(List.of());
+
+        // Act
+        var result = internshipApplicationService.getAllApplications();
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertTrue(result.isEmpty(), "Result list should be empty when no internship applications are found");
+    }
+
+    @Test
+    void getAllApplicationWithStatus_itReturnsApplicationsWithGivenStatus() {
+        // Arrange
+        String status = "PENDING";
+
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .phone("123-456-7890")
+                .program("Program")
+                .build();
+
+        CV cv = CV.builder()
+                .id(1L)
+                .fileName("cv.pdf")
+                .fileSize(1000L)
+                .build();
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Java Developer")
+                .build();
+
+        InternshipApplication app = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .status(ApprovalStatus.PENDING)
+                .build();
+
+        when(internshipApplicationRepository.findAllByStatus(ApprovalStatus.PENDING))
+                .thenReturn(List.of(app));
+
+        // Act
+        var result = internshipApplicationService.getAllApplicationWithStatus(status);
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertEquals(1, result.size(), "Should return one application with the given status");
+
+        var response = result.get(0);
+        assertEquals(app.getId(), response.getId(), "Application ID should match");
+        assertEquals(STUDENT_EMAIL, response.getStudentEmail(), "Student email should match");
+        assertEquals(ApprovalStatus.PENDING, response.getStatus(), "Status should match 'PENDING'");
+
+    }
+
+
 }
