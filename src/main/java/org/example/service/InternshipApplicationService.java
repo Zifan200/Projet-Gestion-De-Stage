@@ -107,6 +107,18 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
+    public InternshipApplicationResponseDTO getApplicationByEmployerAndId(String email, Long id){
+        Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
+        if(employer.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
+        }
+        Optional<InternshipApplication>  application = internshipApplicationRepository.findById(id);
+        if(application.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship offer : application does not exist");
+        }
+        InternshipApplication savedApplication =  application.get();
+        return InternshipApplicationResponseDTO.create(savedApplication);
+    }
 
     public List<InternshipApplicationResponseDTO> getAllInternshipApplicationsFromEmployer(String email){
         Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);

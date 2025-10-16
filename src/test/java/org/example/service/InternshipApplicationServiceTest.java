@@ -493,6 +493,63 @@ public class InternshipApplicationServiceTest {
         assertTrue(exception.getMessage().contains("offer does not exist"));
     }
 
+    @Test
+    void getApplicationByEmployerAndId_shouldReturnApplicationResponseDTO() {
+        //Arrange
+        String employerEmail = "employer@test.com";
+        Long offerId = 1L;
+        Long id = 1L;
+
+        Employer employer = Employer.builder().email(employerEmail).build();
+        InternshipOffer offer = InternshipOffer.builder().id(offerId).employer(employer).build();
+
+        CV cv = CV.builder().id(1L).build();
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        InternshipApplication application = InternshipApplication.builder().id(1L).student(student).selectedStudentCV(cv).offer(offer).build();
+        when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
+
+
+        when(internshipApplicationRepository.findById(id)).thenReturn(Optional.of(application));
+
+        // Act
+        InternshipApplicationResponseDTO response = internshipApplicationService.getApplicationByEmployerAndId(employerEmail, id);
+
+        // When
+        assertNotNull(response);
+        assertEquals(id, response.getId());
+    }
+
+    @Test
+    void getApplicationByEmployerAndId_shouldThrowException_whenEmployerNotFound() {
+        // given
+        String email = "unknown@email.com";
+        Long id = 1L;
+        when(employerRepository.findByCredentialsEmail(email)).thenReturn(Optional.empty());
+
+        // when + then
+        assertThrows(InvalidInternshipApplicationException.class, () ->
+                internshipApplicationService.getApplicationByEmployerAndId(email, id)
+        );
+    }
+
+    @Test
+    void getApplicationByEmployerAndId_shouldThrowException_whenApplicationNotFound() {
+        // given
+        String email = "employer@email.com";
+        Long id = 1L;
+
+        Employer employer = new Employer();
+        when(employerRepository.findByCredentialsEmail(email)).thenReturn(Optional.of(employer));
+        when(internshipApplicationRepository.findById(id)).thenReturn(Optional.empty());
+
+        // when + then
+        assertThrows(InvalidInternshipApplicationException.class, () ->
+                internshipApplicationService.getApplicationByEmployerAndId(email, id)
+        );
+    }
+
+
 }
 
 

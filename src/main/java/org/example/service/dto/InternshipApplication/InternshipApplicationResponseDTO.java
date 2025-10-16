@@ -52,7 +52,9 @@ public class InternshipApplicationResponseDTO {
         this.status = status;
         this.createdAt = createdAt;
     }
-
+    //
+    //added application details for the next backend prog or front end warrior (idk if it helps)
+    //
     public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication){
         return InternshipApplicationResponseDTO.builder()
                 .id(internshipApplication.getId())

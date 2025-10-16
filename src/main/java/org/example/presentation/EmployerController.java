@@ -53,6 +53,16 @@ public class EmployerController {
 
     }
 
+    @GetMapping("/get-internship-application/{id}")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForEmployer(
+            HttpServletRequest request,
+            @PathVariable Long id
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        internshipApplicationService.getApplicationByEmployerAndId(email, id);
+        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+    }
+
     @GetMapping("/get-all-internship-applications")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForEmployer(
             HttpServletRequest request
