@@ -226,7 +226,7 @@ public class InternshipApplicationServiceTest {
                 .thenReturn(List.of(app));
 
         // Act
-        var result = internshipApplicationService.getAllApplicationWithStatus(status);
+        var result = internshipApplicationService.getAllApplicationsWithStatus(status);
         var response = result.getFirst();
 
         // Assert
@@ -246,7 +246,7 @@ public class InternshipApplicationServiceTest {
         // Act
         Exception exception = assertThrows(
                 InvalidApprovalStatus.class,
-                () -> internshipApplicationService.getAllApplicationWithStatus(invalidStatus)
+                () -> internshipApplicationService.getAllApplicationsWithStatus(invalidStatus)
         );
 
         // Assert

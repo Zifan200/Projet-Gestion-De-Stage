@@ -74,7 +74,7 @@ public class InternshipApplicationService {
         return internshipApplicationRepository.findAll().stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
-    public List<InternshipApplicationResponseDTO> getAllApplicationWithStatus(String status){
+    public List<InternshipApplicationResponseDTO> getAllApplicationsWithStatus(String status){
         //check if status is a valid status
         if(!SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){
             throw new InvalidApprovalStatus("a application with invalid status was found");
@@ -84,7 +84,7 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
-    public List<InternshipApplicationResponseDTO> getAllApplicationFromOffer(Long offer_id){
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOffer(Long offer_id){
         //check if offer exists
         Optional<InternshipOffer> offer = internshipOfferRepository.findById(offer_id);
         if(offer.isEmpty()){
@@ -95,7 +95,7 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).toList();
     }
 
-    public List<InternshipApplicationResponseDTO> getAllApplicaitonFromOfferWithStatus(Long offer_id, String status)
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOfferWithStatus(Long offer_id, String status)
     {
         //check if status is a valid status
         if(!SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){

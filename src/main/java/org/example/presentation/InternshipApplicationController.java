@@ -24,6 +24,6 @@ public class InternshipApplicationController {
 
     @GetMapping("get-all/{status}")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplications(@PathVariable String status){
-        return ResponseEntity.ok(internshipApplicationService.getAllApplicationWithStatus(status));
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsWithStatus(status));
     }
 }

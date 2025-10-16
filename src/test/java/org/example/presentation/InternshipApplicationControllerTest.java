@@ -68,7 +68,7 @@ class InternshipApplicationControllerTest {
                 .internshipOfferTitle("Backend Developer")
                 .build();
 
-        when(internshipApplicationService.getAllApplicationWithStatus("PENDING"))
+        when(internshipApplicationService.getAllApplicationsWithStatus("PENDING"))
                 .thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/api/v1/internship-applications/get-all/PENDING")
@@ -86,7 +86,7 @@ class InternshipApplicationControllerTest {
                 .setControllerAdvice(new InternshipApplicationControllerException())
                 .build();
 
-        when(internshipApplicationService.getAllApplicationWithStatus("REJECTED"))
+        when(internshipApplicationService.getAllApplicationsWithStatus("REJECTED"))
                 .thenThrow(new InvalidApprovalStatus("Invalid status"));
 
 

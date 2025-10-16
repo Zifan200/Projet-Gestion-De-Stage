@@ -25,10 +25,10 @@ public class SimpleEnumUtils {
         for (E enumConstant : enumType.getEnumConstants()) {
             if (enumConstant.name().equalsIgnoreCase(valueName)) {
                 logger.warn("{} is present in enum {}", enumConstant.name(), valueName);
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -42,7 +42,7 @@ public class SimpleEnumUtils {
      *         otherwise an empty Optional.
      */
     public static <E extends Enum<E>> E findEnumValue(Class<E> enumType, String valueName) {
-        if (isValuePresentInEnum(enumType, valueName)) {
+        if (!isValuePresentInEnum(enumType, valueName)) {
             throw new NoSuchElementException("The value " + valueName + " is not present in the enum " + enumType.getName());
         }
         // If the value is present, we can safely perform a case-sensitive lookup

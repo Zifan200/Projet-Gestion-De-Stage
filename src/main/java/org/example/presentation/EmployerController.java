@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.service.EmployerService;
+import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
 import org.example.service.dto.EmployerDto;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,6 +30,7 @@ public class EmployerController {
     private final UserAppService userAppService;
     private final EmployerService employerService;
     private final InternshipOfferService internshipOfferService;
+    private final InternshipApplicationService internshipApplicationService;
 
     @PostMapping("/register")
     public ResponseEntity<EmployerResponseDto> registerEmployer(@Valid @RequestBody EmployerDto employerDto) {
@@ -49,4 +52,12 @@ public class EmployerController {
                 .body(internshipOfferService.saveInternshipOffer(email, internshipOfferDto));
 
     }
+
+//    @GetMapping("internship-offer/{id}/get-al-applications")
+//    public ResponseEntity<List<InternshipOfferResponseDto>> getAllInternshipOffers(
+//            @PathVariable Long internshipOfferId
+//    ){
+//
+//        ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer());
+//    }
 }
