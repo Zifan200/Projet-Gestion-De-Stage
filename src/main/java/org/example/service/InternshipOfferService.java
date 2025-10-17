@@ -196,6 +196,10 @@ public class InternshipOfferService {
         Text programme = new Text(offerDto.getTargetedProgramme()).setFont(boldFont);
         Text datePostulation = new Text(offerDto.getPublishedDate() + " au "
                 + offerDto.getExpirationDate() + ". ").setFont(boldFont);
+
+        Text datePostulation_en = new Text(offerDto.getPublishedDate() + " to "
+                + offerDto.getExpirationDate() + ". ").setFont(boldFont);
+
         Text email = new Text(offerDto.getEmployerEmail()).setFont(boldFont);
 
         Paragraph title = new Paragraph(offerDto.getTitle())
@@ -213,7 +217,7 @@ public class InternshipOfferService {
                 .setMarginBottom(20f);
         document.add(intro);
 
-        Paragraph description = new Paragraph("Voici une un petit aperçu de ce qui serait à s'attendre :" + "\n")
+        Paragraph description = new Paragraph("Voici un petit aperçu de ce qui serait à s'attendre :" + "\n")
                 .setFontSize(15);
         document.add(description);
 
@@ -241,6 +245,51 @@ public class InternshipOfferService {
                 .setFont(boldFont)
                 .setFontSize(15);
         document.add(salutations);
+
+        pdf.addNewPage();
+
+        Paragraph titleEn = new Paragraph(offerDto.getTitle())
+                .setFont(boldFont)
+                .setFontSize(25)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginTop(60f)
+                .setMarginBottom(40f);
+        document.add(titleEn);
+
+        Paragraph introEn = new Paragraph("\n Our internship offer is mainly targeting students in ")
+                .add(programme)
+                .add(".")
+                .setFontSize(15)
+                .setMarginBottom(20f);
+        document.add(introEn);
+
+        Paragraph descriptionEn = new Paragraph("Here's a quick glance of what will be expected from this internship :" + "\n")
+                .setFontSize(15);
+        document.add(descriptionEn);
+
+        Paragraph stageInfosEn = new Paragraph(offerDto.getDescription())
+                .setFontSize(15)
+                .setMarginTop(20f)
+                .setMarginBottom(20f);
+        document.add(stageInfosEn);
+
+        Paragraph dateEn = new Paragraph("This internship offer will be available from ")
+                .add(datePostulation_en)
+                .setFontSize(15)
+                .setMarginBottom(20f);
+        document.add(dateEn);
+
+        Paragraph contactEn = new Paragraph("For more informations, dont hesitate to contact us at : ")
+                .add(email)
+                .add(".")
+                .setFontSize(15)
+                .setMarginBottom(40f);
+        document.add(contactEn);
+
+        Paragraph salutationsEn = new Paragraph("We hope to hear back from you," + "\n" + employerCompany)
+                .setFont(boldFont)
+                .setFontSize(15);
+        document.add(salutationsEn);
 
         document.close();
         return outputStream.toByteArray();
