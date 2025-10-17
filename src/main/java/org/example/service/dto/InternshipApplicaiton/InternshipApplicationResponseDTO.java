@@ -1,4 +1,4 @@
-package org.example.service.dto.InternshipApplication;
+package org.example.service.dto.InternshipApplicaiton;
 
 
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class InternshipApplicationResponseDTO {
     private String internshipOfferEmployerEmail;
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
-    private String employerEmail;
+
     private ApprovalStatus status =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
 
@@ -36,7 +36,7 @@ public class InternshipApplicationResponseDTO {
     public InternshipApplicationResponseDTO(
             Long id, String studentEmail, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
-            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
+            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, ApprovalStatus status, LocalDateTime createdAt
 
             ){
         this.id = id;
@@ -49,18 +49,15 @@ public class InternshipApplicationResponseDTO {
         this.internshipOfferEmployerEmail = internshipOfferEmployerEmail;
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
-        this.employerEmail = employerEmail;
         this.status = status;
         this.createdAt = createdAt;
     }
-    //
-    //added application details for the next backend prog or front end warrior (idk if it helps)
-    //
+
     public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication){
         return InternshipApplicationResponseDTO.builder()
                 .id(internshipApplication.getId())
+                .status(internshipApplication.getStatus())
                 .studentEmail(internshipApplication.getStudent().getEmail())
-                .employerEmail(internshipApplication.getOffer().getEmployer().getEmail())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
                 .selectedCvFileName(internshipApplication.getSelectedStudentCV().getFileName())
@@ -69,7 +66,6 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
-                .status(internshipApplication.getStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .build();
     }
