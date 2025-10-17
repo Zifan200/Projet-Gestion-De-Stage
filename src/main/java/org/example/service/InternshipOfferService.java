@@ -1,5 +1,14 @@
 package org.example.service;
 
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.TextAlignment;
 import lombok.RequiredArgsConstructor;
 import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.InternshipOfferStatusChangeEvent;
@@ -19,6 +28,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -161,5 +172,78 @@ public class InternshipOfferService {
                         .build())
                 .toList();
     }
+    @Transactional(readOnly = true)
+    public byte[] generateInternshipOfferPdf(Long internshipOfferId) throws IOException {
 
+
+        InternshipOffer offer = internshipOfferRepository.findInternshipOffersById(internshipOfferId)
+                .orElseThrow(() -> new InvalidInternShipOffer("Aucun ID correspondant à l'offre de stage : " +
+                                                              internshipOfferId));
+
+        InternshipOfferDto offerDto = InternshipOfferDto.create(offer);
+
+        Optional<Employer> savedEmployer = employerRepository.findByCredentialsEmail(offer.getEmployer().getEmail());
+        String employerCompany = savedEmployer.map(Employer::getEnterpriseName)
+                .orElse("Entreprise inconnue");
+
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(outputStream);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+
+        PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
+        Text programme = new Text(offerDto.getTargetedProgramme()).setFont(boldFont);
+        Text datePostulation = new Text(offerDto.getPublishedDate() + " au "
+                + offerDto.getExpirationDate() + ". ").setFont(boldFont);
+        Text email = new Text(offerDto.getEmployerEmail()).setFont(boldFont);
+
+        Paragraph title = new Paragraph(offerDto.getTitle())
+                .setFont(boldFont)
+                .setFontSize(25)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginTop(60f)
+                .setMarginBottom(40f);
+        document.add(title);
+
+        Paragraph intro = new Paragraph("\n Notre offre de stage s'adresse plus particulièrement aux étudiants en ")
+                .add(programme)
+                .add(".")
+                .setFontSize(15)
+                .setMarginBottom(20f);
+        document.add(intro);
+
+        Paragraph description = new Paragraph("Voici une un petit aperçu de ce qui serait à s'attendre :" + "\n")
+                .setFontSize(15);
+        document.add(description);
+
+        Paragraph stageInfos = new Paragraph(offerDto.getDescription())
+                .setFontSize(15)
+                .setMarginTop(20f)
+                .setMarginBottom(20f);
+        document.add(stageInfos);
+
+        Paragraph date = new Paragraph("L'offre de stage sera disponible du ")
+                .add(datePostulation)
+                .setFontSize(15)
+                .setMarginBottom(20f);
+        document.add(date);
+
+        Paragraph contact = new Paragraph("Pour plus d'informations, n'hésitez pas à nous contacter à l'adresse" +
+                                            " courriel suivante : ")
+                .add(email)
+                .add(".")
+                .setFontSize(15)
+                .setMarginBottom(40f);
+        document.add(contact);
+
+        Paragraph salutations = new Paragraph("Au plaisir de vous revoir," + "\n" + employerCompany)
+                .setFont(boldFont)
+                .setFontSize(15);
+        document.add(salutations);
+
+        document.close();
+        return outputStream.toByteArray();
+    }
 }

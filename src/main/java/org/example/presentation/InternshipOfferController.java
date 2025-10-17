@@ -1,5 +1,6 @@
 package org.example.presentation;
 
+import com.itextpdf.commons.utils.Base64;
 import lombok.RequiredArgsConstructor;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
@@ -7,10 +8,14 @@ import org.example.service.InternshipOfferService;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -88,4 +93,18 @@ public class InternshipOfferController {
         return ResponseEntity.ok(responseOffer);
     }
 
+    @GetMapping("/{id}/create-pdf")
+    public ResponseEntity<ByteArrayResource> downloadInternshipOfferPdf(@PathVariable Long id) throws IOException {
+        byte[] pdfBytes = internshipOfferService.generateInternshipOfferPdf(id);
+        ByteArrayResource resource = new ByteArrayResource(pdfBytes);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=internship_offer.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(pdfBytes.length)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
+    }
 }

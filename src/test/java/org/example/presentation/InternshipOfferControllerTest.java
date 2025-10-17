@@ -30,9 +30,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InternshipOfferControllerTest {
@@ -249,5 +249,64 @@ public class InternshipOfferControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void downloadInternshipOfferPdf_Success() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipOfferController)
+                .setControllerAdvice(new InternshipOfferControllerException())
+                .build();
 
+        Long offerId = 1L;
+        byte[] mockPDF = "MOCK_PDF_BYTES".getBytes();
+
+        when(internshipOfferService.generateInternshipOfferPdf(offerId))
+                .thenReturn(mockPDF);
+
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .get("/api/v1/internship-offers/{id}/create-pdf", offerId))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition", "attachment; filename=internship_offer.pdf"))
+                .andExpect(content().contentType(MediaType.APPLICATION_PDF))
+                .andExpect(content().bytes(mockPDF));
+
+        verify(internshipOfferService, times(1)).generateInternshipOfferPdf(offerId);
+    }
+
+    @Test
+    void downloadInternshipOfferPdf_Failure() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipOfferController)
+                .setControllerAdvice(new InternshipOfferControllerException())
+                .build();
+
+        Long invalidId = 2L;
+
+        when(internshipOfferService.generateInternshipOfferPdf(invalidId))
+                .thenThrow(new InvalidInternShipOffer("Demande de téléchargement invalide."));
+
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .get("/api/v1/internship-offers/{id}/create-pdf", invalidId))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void downloadPdf_Mock() throws Exception {
+        byte[] fakePdf = "PDF_FAKE".getBytes();
+
+        when(internshipOfferService.generateInternshipOfferPdf(1L)).thenReturn(fakePdf);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(internshipOfferController).build();
+
+        var result = mockMvc.perform(
+                        get("/api/v1/internship-offers/{id}/create-pdf", 1L)
+                                .accept(MediaType.APPLICATION_PDF))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String userHome = System.getProperty("user.home");
+        java.nio.file.Path downloadsPath = java.nio.file.Paths.get(userHome, "Downloads", "internship_offer_test.pdf");
+        java.nio.file.Files.write(downloadsPath, result.getResponse().getContentAsByteArray());
+
+        System.out.println("Fichier PDF téléchargé : " + downloadsPath.toAbsolutePath());
+    }
 }

@@ -19,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -419,5 +421,42 @@ public class InternshipOfferServiceTest {
         assertThat(refusedOffers).isEmpty();
     }
 
+    @Test
+    void generateInternshipOfferPdfTest_Success() throws IOException {
+        // Arrange
+        Employer employer = buildEmployer();
+        InternshipOffer offer = buildInternshipOffer(employer, LocalDate.now());
+        offer.setId(1L);
+        offer.setTargetedProgramme("Informatique");
+        offer.setExpirationDate(LocalDate.now().plusMonths(1));
+        offer.setStatus(InternshipOfferStatus.ACCEPTED);
 
+        when(internshipOfferRepository.findInternshipOffersById(1L))
+                .thenReturn(Optional.of(offer));
+
+        when(employerRepository.findByCredentialsEmail(employer.getEmail()))
+                .thenReturn(Optional.of(employer));
+
+        // Act
+        byte[] pdfBytes = internshipOfferService.generateInternshipOfferPdf(1L);
+
+        // Assert
+        assertNotNull(pdfBytes, "Le PDF généré ne doit pas être null");
+        assertTrue(pdfBytes.length > 100, "Le PDF généré doit contenir des octets");
+        verify(internshipOfferRepository, times(1)).findInternshipOffersById(1L);
+    }
+
+    @Test
+    void generateInternshipOfferPdfTest_Failure() {
+        // Arrange
+        when(internshipOfferRepository.findInternshipOffersById(2L))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(InvalidInternShipOffer.class, () ->
+                internshipOfferService.generateInternshipOfferPdf(2L)
+        );
+
+        verify(internshipOfferRepository, times(1)).findInternshipOffersById(2L);
+    }
 }
