@@ -39,9 +39,6 @@ public class EmployerService {
     private static final Logger logger = LoggerFactory.getLogger(EmployerService.class);
     private final EmployerRepository employerRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserAppService userAppService;
-    private final EmailService emailService;
-    private final InternshipApplicationService  internshipApplicationService;
     private final ApplicationEventPublisher eventPublisher;
 
     public EmployerResponseDto saveEmployer(EmployerDto employerDto) {

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.example.service.dto.InternshipApplication.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -68,7 +67,7 @@ public class EmployerController {
             HttpServletRequest request
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getAllInternshipApplicationsFromEmployer(email);
+        internshipApplicationService.getAllApplicationsFromEmployer(email);
         return ResponseEntity.ok(internshipApplicationService.getAllApplications());
     }
 
@@ -77,7 +76,7 @@ public class EmployerController {
             HttpServletRequest request,
             @PathVariable Long id){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(id, email);
+        internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email);
         return ResponseEntity.ok(internshipApplicationService.getAllApplications());
     }
 }

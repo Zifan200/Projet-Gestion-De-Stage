@@ -31,7 +31,7 @@ public class InternshipApplicationDTO {
 
     @Builder
     public InternshipApplicationDTO(
-            Long id, String studentEmail, Long selectedCvID, Long internshipOfferId, ApprovalStatus status, LocalDateTime createdAt
+            Long id, String studentEmail, Long selectedCvID, Long internshipOfferId, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
     ){
         this.id = id;
         this.studentEmail = studentEmail;

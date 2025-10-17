@@ -42,11 +42,12 @@ public class InternshipApplicationServiceTest {
     @InjectMocks
     private InternshipApplicationService internshipApplicationService;
 
-    private String STUDENT_EMAIL = "student@gmail.com";
-
+    private final String STUDENT_EMAIL = "student@gmail.com";
+    private final String EMPLOYER_EMAIL = "employer@gmail.com";
 
     @Test
     void createInternShipApplication_shouldSaveApplication() {
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
                 .firstName("firstName")
@@ -56,7 +57,11 @@ public class InternshipApplicationServiceTest {
                 .program("Program")
                 .build();
         CV studentCV = CV.builder().id(1L).build();
-        InternshipOffer offer = InternshipOffer.builder().id(1L).title("JAva Dev").build();
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Java Dev")
+                .employer(employer)
+                .build();
         InternshipApplication application = InternshipApplication.builder()
                 .id(1L)
                 .student(student)
@@ -66,7 +71,8 @@ public class InternshipApplicationServiceTest {
 
         InternshipApplicationDTO applicationDTO = InternshipApplicationDTO.create(application);
 
-        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.ofNullable(student));
+        when(employerRepository.findByCredentialsEmail(EMPLOYER_EMAIL)).thenReturn(Optional.of(employer));
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
         when(cvRepository.findById(1L)).thenReturn(Optional.of(studentCV));
         when(internshipOfferRepository.findById(1L)).thenReturn(Optional.of(offer));
         when(internshipApplicationRepository.save(any(InternshipApplication.class)))
@@ -89,6 +95,7 @@ public class InternshipApplicationServiceTest {
 
     @Test
     void createInternShipApplicationWithWrongValues_shouldNOTSaveApplication() {
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
                 .firstName("firstName")
@@ -98,7 +105,7 @@ public class InternshipApplicationServiceTest {
                 .program("Program")
                 .build();
         CV studentCV = CV.builder().id(1L).build();
-        InternshipOffer offer = InternshipOffer.builder().id(1L).title("JAva Dev").build();
+        InternshipOffer offer = InternshipOffer.builder().id(1L).title("Java Dev").employer(employer).build();
         InternshipApplication application = InternshipApplication.builder()
                 .id(1L)
                 .student(student)
@@ -126,6 +133,7 @@ public class InternshipApplicationServiceTest {
     @Test
     void getAllInternshipApplications_itReturnListOfSavedInternshipApplication() {
         // Arrange
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
                 .firstName("firstName")
@@ -143,6 +151,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(1L)
                 .title("Java Developer")
+                .employer(employer)
                 .build();
 
         InternshipApplication app1 = InternshipApplication.builder()
@@ -191,7 +200,11 @@ public class InternshipApplicationServiceTest {
     @Test
     void getAllApplicationWithStatus_itReturnsApplicationsWithGivenStatus() {
         // Arrange
+        String employerEmail = "emplyer@rmail.com";
         String status = "PENDING";
+        Employer employer = Employer.builder()
+                .id(1L).email(employerEmail).
+                build();
 
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
@@ -211,6 +224,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(1L)
                 .title("Java Developer")
+                .employer(employer)
                 .build();
 
         InternshipApplication app = InternshipApplication.builder()
@@ -259,6 +273,7 @@ public class InternshipApplicationServiceTest {
     void getAllApplicationsFromOffer_shouldReturnApplicationsForGivenOffer() {
         // Arrange
         Long offerId = 1L;
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
         Etudiant student = Etudiant.builder()
                 .email(STUDENT_EMAIL)
                 .firstName("firstName")
@@ -273,6 +288,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(offerId)
                 .title("Java Developer")
+                .employer(employer)
                 .build();
 
         InternshipApplication app1 = InternshipApplication.builder()
@@ -320,21 +336,11 @@ public class InternshipApplicationServiceTest {
         Long offerId = 1L;
         String status = "PENDING";
 
-        Etudiant student = Etudiant.builder()
-                .email(STUDENT_EMAIL)
-                .firstName("firstName")
-                .lastName("lastName")
-                .password("password")
-                .phone("123-456-7890")
-                .program("Program")
-                .build();
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
 
         CV cv = CV.builder().id(1L).build();
-
-        InternshipOffer offer = InternshipOffer.builder()
-                .id(offerId)
-                .title("Java Developer")
-                .build();
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        InternshipOffer offer = InternshipOffer.builder().id(1L).title("Java Dev").employer(employer).build();
 
         InternshipApplication app = InternshipApplication.builder()
                 .id(1L)
@@ -386,7 +392,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllInternshipApplicationsFromEmployer_shouldReturnApplicationsForEmployer() {
+    void getAllApplicationsFromEmployer_shouldReturnApplicationsForEmployer() {
         // Arrange
         String employerEmail = "employer@test.com";
         Employer employer = Employer.builder().email(employerEmail).build();
@@ -399,12 +405,12 @@ public class InternshipApplicationServiceTest {
         InternshipApplication app2 = InternshipApplication.builder().id(2L).student(student).selectedStudentCV(cv).offer(offer).build();
 
         when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
-        when(internshipApplicationRepository.findAllByOffer_EmployerEmail(employerEmail))
+        when(internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(employerEmail))
                 .thenReturn(List.of(app1, app2));
 
         // Act
         List<InternshipApplicationResponseDTO> result =
-                internshipApplicationService.getAllInternshipApplicationsFromEmployer(employerEmail);
+                internshipApplicationService.getAllApplicationsFromEmployer(employerEmail);
 
         // Assert
         assertNotNull(result);
@@ -414,7 +420,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllInternshipApplicationsFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
         // Arrange
         String invalidEmail = "nonexistent@company.com";
         when(employerRepository.findByCredentialsEmail(invalidEmail)).thenReturn(Optional.empty());
@@ -422,14 +428,14 @@ public class InternshipApplicationServiceTest {
         // Act & Assert
         InvalidInternshipApplicationException exception = assertThrows(
                 InvalidInternshipApplicationException.class,
-                () -> internshipApplicationService.getAllInternshipApplicationsFromEmployer(invalidEmail)
+                () -> internshipApplicationService.getAllApplicationsFromEmployer(invalidEmail)
         );
 
         assertTrue(exception.getMessage().contains("employer does not exist"));
     }
 
     @Test
-    void getAllInternshipApplicationsFromOfferFromEmployer_shouldReturnApplicationsForOfferAndEmployer() {
+    void getAllApplicationsFromOfferFromEmployer_shouldReturnApplicationsForOfferAndEmployer() {
         // Arrange
         String employerEmail = "employer@test.com";
         Long offerId = 1L;
@@ -445,22 +451,25 @@ public class InternshipApplicationServiceTest {
 
         when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
         when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(offer));
-        when(internshipApplicationRepository.findAllByOffer_EmployerEmail(employerEmail))
+        when(internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(employerEmail))
                 .thenReturn(List.of(app1, app2));
 
         // Act
         List<InternshipApplicationResponseDTO> result =
-                internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(offerId, employerEmail);
+                internshipApplicationService.getAllApplicationsFromOfferFromEmployer(offerId, employerEmail);
 
         // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(app1.getId(), result.get(0).getId());
+        assertEquals(app1.getOffer().getId(), result.get(0).getInternshipOfferId());
         assertEquals(app2.getId(), result.get(1).getId());
+        assertEquals(app2.getOffer().getId(), result.get(1).getInternshipOfferId());
+
     }
 
     @Test
-    void getAllInternshipApplicationsFromOfferFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromOfferFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
         // Arrange
         String invalidEmail = "nonexistent@company.com";
         Long offerId = 1L;
@@ -470,14 +479,14 @@ public class InternshipApplicationServiceTest {
         // Act & Assert
         InvalidInternshipApplicationException exception = assertThrows(
                 InvalidInternshipApplicationException.class,
-                () -> internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(offerId, invalidEmail)
+                () -> internshipApplicationService.getAllApplicationsFromOfferFromEmployer(offerId, invalidEmail)
         );
 
         assertTrue(exception.getMessage().contains("employer does not exist"));
     }
 
     @Test
-    void getAllInternshipApplicationsFromOfferFromEmployer_whenOfferDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromOfferFromEmployer_whenOfferDoesNotExist_shouldThrowException() {
         // Arrange
         String email = "employer@example.com";
         Long invalidOfferId = 999L;
@@ -487,7 +496,7 @@ public class InternshipApplicationServiceTest {
         // Act & Assert
         InvalidInternshipApplicationException exception = assertThrows(
                 InvalidInternshipApplicationException.class,
-                () -> internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(invalidOfferId, email)
+                () -> internshipApplicationService.getAllApplicationsFromOfferFromEmployer(invalidOfferId, email)
         );
 
         assertTrue(exception.getMessage().contains("offer does not exist"));

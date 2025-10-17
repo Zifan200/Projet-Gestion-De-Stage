@@ -1,5 +1,4 @@
 package org.example.presentation;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipApplicationControllerException;
@@ -13,13 +12,11 @@ import org.example.service.dto.InternshipApplication.InternshipApplicationRespon
 import org.example.service.exception.DuplicateUserException;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.example.service.exception.InvalidInternshipApplicationException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -222,7 +219,7 @@ class EmployerControllerTest {
         when(userAppService.getMe(FAKE_JWT)).thenReturn(
                 EmployerDto.builder().email(EMPLOYER_EMAIL).build()
         );
-        when(internshipApplicationService.getAllInternshipApplicationsFromEmployer(EMPLOYER_EMAIL))
+        when(internshipApplicationService.getAllApplicationsFromEmployer(EMPLOYER_EMAIL))
                 .thenReturn(List.of(responseDto));
         when(internshipApplicationService.getAllApplications())
                 .thenReturn(List.of(responseDto));
@@ -252,7 +249,7 @@ class EmployerControllerTest {
         when(userAppService.getMe(FAKE_JWT)).thenReturn(
                 EmployerDto.builder().email(EMPLOYER_EMAIL).build()
         );
-        when(internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(10L, EMPLOYER_EMAIL))
+        when(internshipApplicationService.getAllApplicationsFromOfferFromEmployer(10L, EMPLOYER_EMAIL))
                 .thenReturn(List.of(responseDto));
         when(internshipApplicationService.getAllApplications())
                 .thenReturn(List.of(responseDto));
@@ -275,7 +272,7 @@ class EmployerControllerTest {
         when(userAppService.getMe(FAKE_JWT)).thenReturn(
                 EmployerDto.builder().email(EMPLOYER_EMAIL).build()
         );
-        when(internshipApplicationService.getAllInternshipApplicationsFromEmployer(EMPLOYER_EMAIL))
+        when(internshipApplicationService.getAllApplicationsFromEmployer(EMPLOYER_EMAIL))
                 .thenThrow(new InvalidInternshipApplicationException("No applications found"));
 
         MvcResult result = mockMvc.perform(get("/api/v1/employer/get-all-internship-applications")
@@ -299,7 +296,7 @@ class EmployerControllerTest {
         when(userAppService.getMe(FAKE_JWT)).thenReturn(
                 EmployerDto.builder().email(EMPLOYER_EMAIL).build()
         );
-        when(internshipApplicationService.getAllInternshipApplicationsFromOfferFromEmployer(999L, EMPLOYER_EMAIL))
+        when(internshipApplicationService.getAllApplicationsFromOfferFromEmployer(999L, EMPLOYER_EMAIL))
                 .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
 
         MvcResult result = mockMvc.perform(get("/api/v1/employer/get-all-internship-applications/internship-offer/999")
