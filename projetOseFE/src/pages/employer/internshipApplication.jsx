@@ -40,7 +40,8 @@ export const InternshipApplications = () => {
 
                     <tbody>
                     {applications.map((app) => (
-                        <tr key={app.id} className="border-t border-zinc-300 text-zinc-700">
+                        <tr key={app.id}
+                            className="border-t border-zinc-300 text-zinc-700 text-xl"> {/* text-xl sur le tr */}
                             {/* Offre */}
                             <td className="px-4 py-2">{app.internshipOfferTitle}</td>
                             {/* Étudiant */}
@@ -52,7 +53,7 @@ export const InternshipApplications = () => {
                             {/* Action */}
                             <td className="px-4 py-2">
                                 <button
-                                    className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    className="px-6 py-3 bg-green-300 text-black rounded-xl text-lg font-semibold hover:bg-green-400 transition-all duration-200"
                                     onClick={() => handleViewApplication(app)}
                                 >
                                     {t("internshipApplications.table.actionView") || "Voir"}
@@ -62,6 +63,7 @@ export const InternshipApplications = () => {
                     ))}
                     </tbody>
 
+
                 </table>
             </div>
 
@@ -69,24 +71,26 @@ export const InternshipApplications = () => {
             {isModalOpen && selectedApplication && (
                 <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                        <h2 className="text-xl font-semibold mb-4">{selectedApplication.studentEmail}</h2>
-                        <p>
+
+                        {/* Nom de l'étudiant en texte plus gros */}
+                        <h2 className="text-3xl font-semibold mb-4">{selectedApplication.studentEmail}</h2>
+
+                        <p className="text-6lg">
                             <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}:</strong> {selectedApplication.internshipOfferTitle}
                         </p>
-                        <p>
+                        <p className="text-10lg">
                             <strong>{t("internshipApplications.modal.cv") || "CV"}:</strong> {selectedApplication.selectedCvFileName}
                         </p>
-
-                        <p>
+                        <p className="text-lg">
                             <strong>{t("internshipApplications.modal.status") || "Statut"}:</strong> {selectedApplication.status}
                         </p>
-                        <p>
+                        <p className="text-lg">
                             <strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}:</strong> {new Date(selectedApplication.createdAt).toLocaleDateString()}
                         </p>
 
                         <div className="mt-6 flex justify-end">
                             <button
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-lg"
                                 onClick={() => {
                                     setIsModalOpen(false);
                                     setSelectedApplication(null);
@@ -95,6 +99,7 @@ export const InternshipApplications = () => {
                                 {t("internshipApplications.modal.close") || "Fermer"}
                             </button>
                         </div>
+
                     </div>
                 </div>
             )}
