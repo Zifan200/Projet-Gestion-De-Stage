@@ -304,7 +304,7 @@ public class InternshipOfferControllerTest {
                 .andReturn();
 
         String userHome = System.getProperty("user.home");
-        java.nio.file.Path downloadsPath = java.nio.file.Paths.get(userHome, "Downloads", "internship_offer_test.pdf");
+        java.nio.file.Path downloadsPath = java.nio.file.Paths.get(userHome, "internship_offer_test.pdf");
         java.nio.file.Files.write(downloadsPath, result.getResponse().getContentAsByteArray());
 
         System.out.println("Fichier PDF téléchargé : " + downloadsPath.toAbsolutePath());
