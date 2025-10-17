@@ -53,7 +53,7 @@ public class EmployerController {
     }
 
     @GetMapping("/get-internship-application/{id}")
-    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForEmployer(
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getInternshipApplicationForEmployerById(
             HttpServletRequest request,
             @PathVariable Long id
     ){

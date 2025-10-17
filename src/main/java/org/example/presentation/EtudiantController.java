@@ -9,6 +9,8 @@ import org.example.service.EmailService;
 import org.example.service.UserAppService;
 import org.example.service.dto.EtudiantDTO;
 import org.example.model.EmailMessage;
+import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,9 +62,9 @@ public class EtudiantController {
     }
 
     @PostMapping("/apply-to-internship-offer")
-    public ResponseEntity<org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO> applyToInternShipOffer(
+    public ResponseEntity<InternshipApplicationResponseDTO> applyToInternShipOffer(
             HttpServletRequest request,
-            @Valid @RequestBody org.example.service.dto.InternshipApplication.InternshipApplicationDTO internshipApplicationDtoDTO) {
+            @Valid @RequestBody InternshipApplicationDTO internshipApplicationDtoDTO) {
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
         internshipApplicationDtoDTO.setStudentEmail(email);
         return ResponseEntity
