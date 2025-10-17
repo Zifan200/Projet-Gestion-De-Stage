@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class DeepLTranslatorService {
     private final DeepLClient client;
 
-    public DeepLTranslatorService() throws DeepLException, InterruptedException {
+    public DeepLTranslatorService()  {
         Dotenv dotenv = Dotenv.load();
         String key = dotenv.get("DEEPL_KEY");
         this.client = new DeepLClient(key);
