@@ -172,9 +172,8 @@ public class InternshipOfferService {
                         .build())
                 .toList();
     }
-    @Transactional(readOnly = true)
+    @Transactional
     public byte[] generateInternshipOfferPdf(Long internshipOfferId) throws IOException {
-
 
         InternshipOffer offer = internshipOfferRepository.findInternshipOffersById(internshipOfferId)
                 .orElseThrow(() -> new InvalidInternShipOffer("Aucun ID correspondant à l'offre de stage : " +
