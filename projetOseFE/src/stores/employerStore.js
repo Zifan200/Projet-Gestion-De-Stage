@@ -6,25 +6,25 @@ export const useEmployerStore = create()(
     devtools(
         (set, get) => ({
             employers: [],
-            applications: [],
+            applications: [], // <-- toutes les candidatures de l'employeur
             loading: false,
             error: null,
 
-            createEmployer: async (employerData) => {
+            createEmployer: async (employer) => {
                 set({ loading: true, error: null });
                 try {
-                    const employer = await employerService.register(employerData);
+                    const newEmployer = await employerService.register(employer);
                     set((s) => ({
-                        employers: [...s.employers, employer],
+                        employers: [...s.employers, newEmployer],
                         loading: false,
                     }));
-                    return employer;
+                    return newEmployer;
                 } catch (e) {
                     set({ error: e.message, loading: false });
                 }
             },
 
-            // Récupérer toutes les candidatures de l'employeur connecté
+            // Récupérer toutes les candidatures pour l'employeur connecté
             fetchApplications: async () => {
                 set({ loading: true, error: null });
                 try {
@@ -35,6 +35,6 @@ export const useEmployerStore = create()(
                 }
             },
         }),
-        { name: "employer-store" }
-    )
+        { name: "employer-store" },
+    ),
 );

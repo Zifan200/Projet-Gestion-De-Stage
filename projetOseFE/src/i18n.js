@@ -7,6 +7,26 @@ import { initReactI18next } from "react-i18next";
 export const resources = {
   en: {
     translation: {
+      internshipApplications: {
+        loading: "Loading applications...",
+        error: "Error loading applications",
+        table: {
+          offerTitle: "Offer title",
+          studentName: "Student",
+          cv: "CV",
+          status: "Status",
+          action: "Action",
+          actionView: "View"
+        },
+        modal: {
+          offerTitle: "Offer title",
+          studentName: "Student",
+          cv: "CV",
+          status: "Status",
+          appliedAt: "Applied on",
+          close: "Close"
+        }
+      },
       success: {
         loginSucces: "Login successful!",
         registerEnterpriseSuccess:
@@ -42,6 +62,7 @@ export const resources = {
         applicationSend: "Application send",
         allOffers: "All offers",
         manageCvs: "Submitted CV",
+        applications: "Internship Applications",
       },
       errors: {
         email: { invalid: "Invalid email address" },
@@ -338,6 +359,26 @@ export const resources = {
   },
   fr: {
     translation: {
+      internshipApplications: {
+        loading: "Chargement des candidatures...",
+        error: "Erreur lors du chargement des candidatures",
+        table: {
+          offerTitle: "Titre de l'offre",
+          studentName: "Étudiant",
+          cv: "CV",
+          status: "Statut",
+          action: "Action",
+          actionView: "Voir"
+        },
+        modal: {
+          offerTitle: "Titre de l'offre",
+          studentName: "Étudiant",
+          cv: "CV",
+          status: "Statut",
+          appliedAt: "Postulé le",
+          close: "Fermer"
+        }
+      },
       success: {
         loginSucces: "Connexion réussie !",
         registerEnterpriseSuccess:
@@ -375,6 +416,7 @@ export const resources = {
         offerConfirm: "Offres signer",
         allOffers: "Toutes les offres",
         manageCvs: "CV soumis",
+        applications: "Candidatures de stage",
       },
       errors: {
         email: { invalid: "Email est invalide" },
