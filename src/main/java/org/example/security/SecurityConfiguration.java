@@ -75,6 +75,7 @@ public class SecurityConfiguration {
                         .requestMatchers(INTERNSHIP_PATH).permitAll()
                         .requestMatchers(GET, INTERNSHIP_PATH).hasAnyAuthority(Role.STUDENT.name())
 
+                        .requestMatchers("/**").hasAnyAuthority(Role.GESTIONNAIRE.name())
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console
