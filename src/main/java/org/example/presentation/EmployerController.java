@@ -31,7 +31,6 @@ public class EmployerController {
 
     @PostMapping("/register")
     public ResponseEntity<EmployerResponseDto> registerEmployer(@Valid @RequestBody EmployerDto employerDto) {
-        System.out.println(employerDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(employerService.saveEmployer(employerDto));

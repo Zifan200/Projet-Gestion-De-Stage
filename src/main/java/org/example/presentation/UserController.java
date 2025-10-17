@@ -7,6 +7,7 @@ import org.example.security.exception.UserNotFoundException;
 import org.example.service.AuthService;
 import org.example.service.UserAppService;
 import org.example.service.dto.*;
+import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -86,4 +87,35 @@ public class UserController {
 		return ResponseEntity.accepted().contentType(MediaType.APPLICATION_JSON).body(
 			userService.getMe(request.getHeader("Authorization")));
 	}
+
+    @PutMapping("/settings")
+    public ResponseEntity<ApiSuccessResponse<UserSettingsDto>> updateMySettings(
+            HttpServletRequest request,
+            @RequestBody UserSettingsDto dto
+    ) {
+        Long id = userService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getId();
+        UserSettingsDto updated = userService.updateMySettings(id, dto);
+
+        return ResponseEntity.ok(
+                ApiSuccessResponse.of(
+                        "USER_SETTINGS_UPDATED",
+                        "Les paramètres utilisateur ont été mis à jour avec succès.",
+                        updated
+                )
+        );
+    }
+
+    @GetMapping("/settings")
+    public ResponseEntity<ApiSuccessResponse<UserSettingsDto>> getMySettings(HttpServletRequest request) {
+        Long id = userService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getId();
+        UserSettingsDto settings = userService.getMySettings(id);
+
+        return ResponseEntity.ok(
+                ApiSuccessResponse.of(
+                        "USER_SETTINGS_FETCHED",
+                        "Paramètres utilisateur récupérés avec succès.",
+                        settings
+                )
+        );
+    }
 }
