@@ -314,7 +314,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
-        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
 
         // Assert
         assertThat(acceptedOffers).hasSize(2);
@@ -330,7 +330,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of());
 
         // Act
-        List<InternshipOfferDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
+        List<InternshipOfferListDto> acceptedOffers = internshipOfferService.getAcceptedOffers();
 
         // Assert
         assertThat(acceptedOffers).isEmpty();
@@ -357,7 +357,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
-        List<InternshipOfferDto> pendingOffers = internshipOfferService.getPendingOffers();
+        List<InternshipOfferListDto> pendingOffers = internshipOfferService.getPendingOffers();
 
         // Assert
         assertThat(pendingOffers).hasSize(2);
@@ -372,7 +372,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of());
 
         // Act
-        List<InternshipOfferDto> pendingOffers = internshipOfferService.getPendingOffers();
+        List<InternshipOfferListDto> pendingOffers = internshipOfferService.getPendingOffers();
 
         // Assert
         assertThat(pendingOffers).isEmpty();
@@ -398,7 +398,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
-        List<InternshipOfferDto> refusedOffers = internshipOfferService.getRejectedOffers();
+        List<InternshipOfferListDto> refusedOffers = internshipOfferService.getRejectedOffers();
 
         // Assert
         assertThat(refusedOffers).hasSize(2);
@@ -413,7 +413,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(List.of());
 
         // Act
-        List<InternshipOfferDto> refusedOffers = internshipOfferService.getRejectedOffers();
+        List<InternshipOfferListDto> refusedOffers = internshipOfferService.getRejectedOffers();
 
         // Assert
         assertThat(refusedOffers).isEmpty();

@@ -127,16 +127,6 @@ public class InternshipOfferService {
                         .build())
                 .toList();
     }
-
-    /*public List<InternshipOfferDto> getAcceptedOffers() {
-        List<InternshipOffer> acceptedOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
-
-        return acceptedOffers.stream()
-                .map(InternshipOfferDto::create)
-                .toList();
-    }*/
-
     public List<InternshipOfferListDto> getRejectedOffers() {
         List<InternshipOffer> rejectedOffers =
                 internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
@@ -154,15 +144,6 @@ public class InternshipOfferService {
                 .toList();
     }
 
-    /*public List<InternshipOfferDto> getRejectedOffers() {
-        List<InternshipOffer> rejectedOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
-
-        return rejectedOffers.stream()
-                .map(InternshipOfferDto::create)
-                .toList();
-    }*/
-
     public List<InternshipOfferListDto> getPendingOffers() {
         List<InternshipOffer> pendingOffers =
                 internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
@@ -179,15 +160,6 @@ public class InternshipOfferService {
                         .build())
                 .toList();
     }
-
-    /*public List<InternshipOfferDto> getPendingOffers() {
-        List<InternshipOffer> pendingOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
-
-        return pendingOffers.stream()
-                .map(InternshipOfferDto::create)
-                .toList();
-    }*/
 
 
     public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status, String reasons) {
