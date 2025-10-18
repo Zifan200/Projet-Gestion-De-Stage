@@ -24,6 +24,7 @@ public class InternshipApplicationResponseDTO {
     private Long selectedCvID;
     private String selectedCvFileName;
     private Long selectedCvFileSize;
+    private byte[] selectedCvFileData;
 
     private Long internshipOfferId;
     private String internshipOfferTitle;
@@ -36,7 +37,7 @@ public class InternshipApplicationResponseDTO {
 
     @Builder
     public InternshipApplicationResponseDTO(
-            Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize,
+            Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
             LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
 
@@ -48,6 +49,7 @@ public class InternshipApplicationResponseDTO {
         this.selectedCvID = selectedCvID;
         this.selectedCvFileName = selectedCvFileName;
         this.selectedCvFileSize = selectedCvFileSize;
+        this.selectedCvFileData = selectedCvFileData;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
         this.internshipOfferEmployerEmail = internshipOfferEmployerEmail;
@@ -71,6 +73,7 @@ public class InternshipApplicationResponseDTO {
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
                 .selectedCvFileName(internshipApplication.getSelectedStudentCV().getFileName())
                 .selectedCvFileSize(internshipApplication.getSelectedStudentCV().getFileSize())
+                .selectedCvFileData(internshipApplication.getSelectedStudentCV().getData())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
