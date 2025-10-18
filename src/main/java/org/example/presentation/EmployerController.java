@@ -77,22 +77,4 @@ public class EmployerController {
         internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email);
         return ResponseEntity.ok(internshipApplicationService.getAllApplications());
     }
-
-//    @PostMapping("/{cvId}/download")
-//    public ResponseEntity<byte[]> downloadCvForEmployer(
-//            @PathVariable Long cvId,
-//            @RequestBody LoginDTO email,
-//            HttpServletRequest request) {
-//
-//        System.out.println(email);
-//
-//        CV cv = cvService.downloadCv(cvId, email.getEmail());
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(cv.getFileType()))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + cv.getFileName() + "\"")
-//                .body(cv.getData());
-//    }
-
-
 }

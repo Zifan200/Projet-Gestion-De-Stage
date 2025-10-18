@@ -30,7 +30,6 @@ export const InternshipApplications = () => {
     };
 
     // Prévisualiser le CV (employeur)
-    // Prévisualiser le CV (employeur)
     const handlePreviewCv = async (application) => {
         console.log("=== DEBUG Preview ===");
         console.log("CV ID :", application.selectedCvID);
