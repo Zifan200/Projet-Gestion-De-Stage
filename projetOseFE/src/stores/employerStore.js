@@ -29,7 +29,6 @@ export const useEmployerStore = create()(
                 set({ loading: true, error: null });
                 try {
                     const applications = await employerService.getAllApplications();
-                    console.log("Fetched applications:", applications);
                     set({ applications, loading: false });
                 } catch (e) {
                     set({ error: e.message, loading: false });

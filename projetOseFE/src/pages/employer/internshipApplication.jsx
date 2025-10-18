@@ -51,7 +51,8 @@ export const InternshipApplications = () => {
                     <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
                     <tr>
                         <th className="px-4 py-3">{t("internshipApplications.table.offerTitle") || "Offre"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Étudiant"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
                         <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
                         <th className="px-4 py-3">{t("internshipApplications.table.status") || "Statut"}</th>
                         <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
@@ -61,6 +62,7 @@ export const InternshipApplications = () => {
                     {applications.map((app) => (
                         <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-xl">
                             <td className="px-4 py-2">{app.internshipOfferTitle}</td>
+                            <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
                             <td className="px-4 py-2">{app.studentEmail}</td>
                             <td className="px-4 py-2">
                                 {app.selectedCvFileName ? (
@@ -132,23 +134,42 @@ export const InternshipApplications = () => {
             {isModalOpen && selectedApplication && (
                 <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                        <h2 className="text-3xl font-semibold mb-4">{selectedApplication.studentEmail}</h2>
-                        <p>
-                            <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}:</strong>{" "}
-                            {selectedApplication.internshipOfferTitle}
+                        {/* Nom complet */}
+                        <h2 className="text-3xl font-semibold mb-2">
+                            {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
+                        </h2>
+
+                        {/* Email */}
+                        <p className="mb-2">
+                            <strong>{t("internshipApplications.modal.email") || "Email"}:</strong>{" "}
+                            {selectedApplication.studentEmail}
                         </p>
-                        <p>
+
+                        {/* CV */}
+                        <p className="mb-2">
                             <strong>{t("internshipApplications.modal.cv") || "CV"}:</strong>{" "}
                             {selectedApplication.selectedCvFileName || "Aucun CV"}
                         </p>
-                        <p>
+
+                        {/* Offre */}
+                        <p className="mb-2">
+                            <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}:</strong>{" "}
+                            {selectedApplication.internshipOfferTitle}
+                        </p>
+
+                        {/* Statut */}
+                        <p className="mb-2">
                             <strong>{t("internshipApplications.modal.status") || "Statut"}:</strong>{" "}
                             {selectedApplication.status}
                         </p>
-                        <p>
+
+                        {/* Postulé le */}
+                        <p className="mb-2">
                             <strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}:</strong>{" "}
                             {new Date(selectedApplication.createdAt).toLocaleDateString()}
                         </p>
+
+                        {/* Bouton fermer */}
                         <div className="mt-6 flex justify-end">
                             <button
                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-lg"
