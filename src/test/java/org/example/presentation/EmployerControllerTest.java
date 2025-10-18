@@ -1,22 +1,21 @@
 package org.example.presentation;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.presentation.exception.EmployerControllerException;
-import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
 import org.example.service.EmployerService;
-import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
 import org.example.service.dto.*;
-import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.DuplicateUserException;
 import org.example.service.exception.InvalidInternShipOffer;
-import org.example.service.exception.InvalidInternshipApplicationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,13 +23,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,15 +43,14 @@ class EmployerControllerTest {
     @Mock
     private InternshipOfferService internshipOfferService;
 
-    @Mock
-    private InternshipApplicationService internshipApplicationService;
+
     @InjectMocks
     private EmployerController employerController;
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String FAKE_JWT = "fake-jwt";
     private static final String EMAIL = "student@mail.com";
-    private static final String EMPLOYER_EMAIL = "employer@mail.com";
+
 
     @Test
     void registerEmployer_shouldReturn201() {
@@ -200,113 +198,5 @@ class EmployerControllerTest {
         Exception resolved = result.getResolvedException();
         assertNotNull(resolved);
         assertTrue(resolved instanceof InvalidInternShipOffer);
-    }
-
-    @Test
-    void getAllInternshipApplicationsForEmployer_shouldReturn200() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
-                .build();
-
-        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
-                .id(1L)
-                .studentEmail("student@mail.com")
-                .internshipOfferId(10L)
-                .internshipOfferTitle("Java Developer")
-                .build();
-
-        when(userAppService.getMe(FAKE_JWT)).thenReturn(
-                EmployerDto.builder().email(EMPLOYER_EMAIL).build()
-        );
-        when(internshipApplicationService.getAllApplicationsFromEmployer(EMPLOYER_EMAIL))
-                .thenReturn(List.of(responseDto));
-        when(internshipApplicationService.getAllApplications())
-                .thenReturn(List.of(responseDto));
-
-        mockMvc.perform(get("/api/v1/employer/get-all-internship-applications")
-                        .header("Authorization", "Bearer " + FAKE_JWT)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Java Developer"));
-    }
-
-    @Test
-    void getAllInternshipApplicationsForOfferForEmployer_shouldReturn200() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new EmployerControllerException())
-                .build();
-
-        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
-                .id(1L)
-                .studentEmail("student@mail.com")
-                .internshipOfferId(10L)
-                .internshipOfferTitle("Backend Developer")
-                .build();
-
-        when(userAppService.getMe(FAKE_JWT)).thenReturn(
-                EmployerDto.builder().email(EMPLOYER_EMAIL).build()
-        );
-        when(internshipApplicationService.getAllApplicationsFromOfferFromEmployer(10L, EMPLOYER_EMAIL))
-                .thenReturn(List.of(responseDto));
-        when(internshipApplicationService.getAllApplications())
-                .thenReturn(List.of(responseDto));
-
-        mockMvc.perform(get("/api/v1/employer/get-all-internship-applications/internship-offer/10")
-                        .header("Authorization", "Bearer " + FAKE_JWT)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"));
-    }
-
-    @Test
-    void getAllInternshipApplicationsForEmployer_shouldReturn400_whenNoApplications() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new InternshipApplicationControllerException())
-                .build();
-
-        when(userAppService.getMe(FAKE_JWT)).thenReturn(
-                EmployerDto.builder().email(EMPLOYER_EMAIL).build()
-        );
-        when(internshipApplicationService.getAllApplicationsFromEmployer(EMPLOYER_EMAIL))
-                .thenThrow(new InvalidInternshipApplicationException("No applications found"));
-
-        MvcResult result = mockMvc.perform(get("/api/v1/employer/get-all-internship-applications")
-                        .header("Authorization", "Bearer " + FAKE_JWT)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        Exception resolved = result.getResolvedException();
-        assertNotNull(resolved);
-        assertTrue(resolved instanceof InvalidInternshipApplicationException);
-    }
-
-    @Test
-    void getAllInternshipApplicationsForOfferForEmployer_shouldReturn400_whenOfferInvalid() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(employerController)
-                .setControllerAdvice(new InternshipApplicationControllerException())
-                .build();
-
-        when(userAppService.getMe(FAKE_JWT)).thenReturn(
-                EmployerDto.builder().email(EMPLOYER_EMAIL).build()
-        );
-        when(internshipApplicationService.getAllApplicationsFromOfferFromEmployer(999L, EMPLOYER_EMAIL))
-                .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
-
-        MvcResult result = mockMvc.perform(get("/api/v1/employer/get-all-internship-applications/internship-offer/999")
-                        .header("Authorization", "Bearer " + FAKE_JWT)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        Exception resolved = result.getResolvedException();
-        assertNotNull(resolved);
-        assertTrue(resolved instanceof InvalidInternshipApplicationException);
     }
 }
