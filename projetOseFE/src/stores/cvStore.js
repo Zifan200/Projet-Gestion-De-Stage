@@ -103,7 +103,22 @@ export const useCvStore = create((set, get) => ({
       set({ error: "Impossible de prévisualiser le CV." });
     }
   },
+  downloadCvForEmployer: (fileData, fileName) => {
+    try {
+      cvService.downloadForEmployer(fileData, fileName);
+    } catch (err) {
+      set({ error: err.message });
+      throw err;
+    }
+  },
 
+  closePreview: () => {
+    const { previewUrl } = get();
+    if (previewUrl) {
+      window.URL.revokeObjectURL(previewUrl); // libère le blob
+    }
+    set({ previewUrl: null, previewType: null });
+  },
 
   applyCvStore: async (offerId, cvId) => {
     try {

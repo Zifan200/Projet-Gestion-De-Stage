@@ -3,16 +3,20 @@ import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import useAuthStore from "../../stores/authStore.js";
-import { cvService } from "../../services/cvService.js";
 import { toast } from "sonner";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
     const { applications, fetchApplications } = useEmployerStore();
-    const { previewUrl, previewType, previewCvForEmployer, closePreview } = useCvStore();
+    const {
+        previewUrl,
+        previewType,
+        previewCvForEmployer,
+        downloadCvForEmployer,
+        closePreview,
+    } = useCvStore();
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { token } = useAuthStore.getState();
 
     useEffect(() => {
         fetchApplications();
@@ -33,16 +37,7 @@ export const InternshipApplications = () => {
 
     const handleDownloadCv = (application) => {
         try {
-            const url = cvService.previewForEmployer(
-                application.selectedCvFileData,
-                application.selectedCvFileName
-            );
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = application.selectedCvFileName;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+            downloadCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
         } catch (err) {
             toast.error("Impossible de télécharger le CV");
         }
@@ -108,14 +103,18 @@ export const InternshipApplications = () => {
                     <div className="flex justify-between items-center mb-2">
                         <h3 className="text-xl font-semibold">Prévisualisation du CV</h3>
                         <button
-                            className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-600"
+                            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                             onClick={closePreview}
                         >
                             Fermer
                         </button>
                     </div>
                     {previewType === "pdf" ? (
-                        <iframe src={previewUrl} className="w-full h-96 border" title="Preview CV" />
+                        <iframe
+                            src={previewUrl}
+                            className="w-full h-[600px] border"
+                            title="Preview CV"
+                        />
                     ) : (
                         <a
                             href={previewUrl}
