@@ -80,6 +80,34 @@ export const useCvStore = create((set, get) => ({
     }
   },
 
-  closePreview: () => set({ previewUrl: null, previewType: null }),
+  // ===================== Fonctions pour l’employeur =====================
+  // previewCvForEmployer: async (cvId, studentEmail) => {
+  //   try {
+  //     const { token } = useAuthStore.getState(); // récupère le token
+  //
+  //     // appelle le service (qui gère la structure JSON attendue)
+  //     const url = await cvService.previewForEmployer(cvId, studentEmail, token);
+  //
+  //     set({ previewUrl: url, previewType: "pdf" });
+  //   } catch (err) {
+  //     console.error("Erreur previewCvForEmployer:", err);
+  //     set({ error: err.message });
+  //     throw err;
+  //   }
+  // },
+  //
+  // downloadCvForEmployer: async (cvId, fileName, studentEmail) => {
+  //   try {
+  //     const { token } = useAuthStore.getState();
+  //
+  //     // idem : passe l'email et le token au service
+  //     await cvService.downloadCvForEmployer(cvId, fileName, studentEmail, token);
+  //   } catch (err) {
+  //     console.error("Erreur downloadCvForEmployer:", err);
+  //     set({ error: err.message });
+  //     throw err;
+  //   }
+  // },
+  //
+  // closePreview: () => set({ previewUrl: null, previewType: null }),
 }));
-

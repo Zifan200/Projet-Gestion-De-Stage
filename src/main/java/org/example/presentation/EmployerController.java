@@ -4,16 +4,13 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.service.EmployerService;
-import org.example.service.InternshipApplicationService;
-import org.example.service.InternshipOfferService;
-import org.example.service.UserAppService;
-import org.example.service.dto.EmployerDto;
-import org.example.service.dto.EmployerResponseDto;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.model.CV;
+import org.example.service.*;
+import org.example.service.dto.*;
 import org.example.utils.JwtTokenUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.example.service.dto.InternshipApplication.*;
@@ -30,6 +27,7 @@ public class EmployerController {
     private final EmployerService employerService;
     private final InternshipOfferService internshipOfferService;
     private final InternshipApplicationService internshipApplicationService;
+    private final CVService cvService;
 
     @PostMapping("/register")
     public ResponseEntity<EmployerResponseDto> registerEmployer(@Valid @RequestBody EmployerDto employerDto) {
@@ -79,4 +77,22 @@ public class EmployerController {
         internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email);
         return ResponseEntity.ok(internshipApplicationService.getAllApplications());
     }
+
+//    @PostMapping("/{cvId}/download")
+//    public ResponseEntity<byte[]> downloadCvForEmployer(
+//            @PathVariable Long cvId,
+//            @RequestBody LoginDTO email,
+//            HttpServletRequest request) {
+//
+//        System.out.println(email);
+//
+//        CV cv = cvService.downloadCv(cvId, email.getEmail());
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(cv.getFileType()))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + cv.getFileName() + "\"")
+//                .body(cv.getData());
+//    }
+
+
 }

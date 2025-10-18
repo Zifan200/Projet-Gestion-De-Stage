@@ -41,7 +41,7 @@ export const cvService = {
     });
     return res.data; // blob binaire
   },
-  
+
   async applyCVService(token, offerId, cvId, studentEmail) {
     const payload = {
       studentEmail,
@@ -58,4 +58,51 @@ export const cvService = {
 
     return res.data;
   },
+
+  // // --- Fonctions pour employer ---
+  // async previewForEmployer(cvId, studentEmail, token) {
+  //   const payload = {
+  //     email: studentEmail,
+  //     password: "" // inutile ici, mais requis par LoginDTO
+  //   };
+  //
+  //   const res = await api.post(
+  //       `/employer/${cvId}/download`,
+  //       payload,
+  //       {
+  //         responseType: "blob",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //   );
+  //
+  //   return window.URL.createObjectURL(res.data);
+  // },
+  //
+  // async downloadCvForEmployer(cvId, fileName, studentEmail, token) {
+  //   const payload = {
+  //     email: studentEmail,
+  //     password: "" // idem, requis pour correspondre à LoginDTO
+  //   };
+  //
+  //   const res = await api.post(
+  //       `/employer/${cvId}/download`,
+  //       payload,
+  //       {
+  //         responseType: "blob",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //   );
+  //
+  //   const blob = new Blob([res.data]);
+  //   const link = document.createElement("a");
+  //   link.href = window.URL.createObjectURL(blob);
+  //   link.download = fileName || `cv_${cvId}.pdf`;
+  //   link.click();
+  // }
 };
