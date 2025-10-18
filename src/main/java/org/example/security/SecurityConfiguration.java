@@ -45,10 +45,12 @@ public class SecurityConfiguration {
     private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employer/register";
     private static final String USER_PATH = "/api/v1/user/**";
     private static final String USER_PASSWORD_RESET_PATH = "/api/v1/user/password-reset/**";
-    private static final String EMPLOYER_PATH = "/employer/**";
+    private static final String EMPLOYER_PATH = "/api/v1/employer/**";
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/v1/student/register";
     private static final String INTERNSHIP_PATH = "/api/v1/internship-offers/**";
+    private static final String EMPLOYER_INTERNSHIP_STUDENT_APPLICATIONS_PATH = "/api/v1/internship-applications/internship-offer/**";
+    private static final String INTERNSHIP_APPLICATION_PATH = "/api/v1/internship-applications/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,10 +62,11 @@ public class SecurityConfiguration {
                         .requestMatchers(USER_PATH).permitAll()
                         .requestMatchers(POST, USER_PASSWORD_RESET_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
+
                         // Employer
+                        .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
-                        .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
 
                         // Student
                         .requestMatchers(POST, STUDENT_REGISTER_PATH).permitAll()
