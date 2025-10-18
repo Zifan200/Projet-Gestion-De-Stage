@@ -18,6 +18,8 @@ public class InternshipApplicationResponseDTO {
 
     private Long id;
     private String studentEmail;
+    private String studentFirstName;
+    private String studentLastName;
 
     private Long selectedCvID;
     private String selectedCvFileName;
@@ -34,13 +36,15 @@ public class InternshipApplicationResponseDTO {
 
     @Builder
     public InternshipApplicationResponseDTO(
-            Long id, String studentEmail, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize,
+            Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
             LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
 
             ){
         this.id = id;
         this.studentEmail = studentEmail;
+        this.studentFirstName = studentFirstName;
+        this.studentLastName = studentLastName;
         this.selectedCvID = selectedCvID;
         this.selectedCvFileName = selectedCvFileName;
         this.selectedCvFileSize = selectedCvFileSize;
@@ -60,6 +64,8 @@ public class InternshipApplicationResponseDTO {
         return InternshipApplicationResponseDTO.builder()
                 .id(internshipApplication.getId())
                 .studentEmail(internshipApplication.getStudent().getEmail())
+                .studentFirstName(internshipApplication.getStudent().getFirstName())
+                .studentLastName(internshipApplication.getStudent().getLastName())
                 .employerEmail(internshipApplication.getOffer().getEmployer().getEmail())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())

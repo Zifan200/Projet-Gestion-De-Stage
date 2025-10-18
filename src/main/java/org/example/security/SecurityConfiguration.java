@@ -62,6 +62,7 @@ public class SecurityConfiguration {
                         .requestMatchers(USER_PATH).permitAll()
                         .requestMatchers(POST, USER_PASSWORD_RESET_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
+
                         // Employer
                         .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
