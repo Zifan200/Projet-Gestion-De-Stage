@@ -82,9 +82,9 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
-    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOffer(Long offer_id){
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOffer(Long offerId){
         //check if offer exists
-        Optional<InternshipOffer> offer = internshipOfferRepository.findById(offer_id);
+        Optional<InternshipOffer> offer = internshipOfferRepository.findById(offerId);
         if(offer.isEmpty()){
             throw new InvalidInternshipApplicationException("Invalid internship offer : offer does not exist");
         }
@@ -93,14 +93,14 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).toList();
     }
 
-    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOfferWithStatus(Long offer_id, String status){
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOfferWithStatus(Long offerId, String status){
         //check if status is a valid status
         if(!SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){
             throw new InvalidApprovalStatus("a application with invalid status was found");
         }
 
         //check if offer exists
-        Optional<InternshipOffer> offer = internshipOfferRepository.findById(offer_id);
+        Optional<InternshipOffer> offer = internshipOfferRepository.findById(offerId);
         if(offer.isEmpty()){
             throw new InvalidInternshipApplicationException("Invalid internship offer : offer does not exist");
         }

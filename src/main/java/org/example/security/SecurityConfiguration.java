@@ -45,7 +45,7 @@ public class SecurityConfiguration {
     private static final String EMPLOYER_REGISTER_PATH = "/api/v1/employer/register";
     private static final String USER_PATH = "/api/v1/user/**";
     private static final String USER_PASSWORD_RESET_PATH = "/api/v1/user/password-reset/**";
-    private static final String EMPLOYER_PATH = "/employer/**";
+    private static final String EMPLOYER_PATH = "/api/v1/employer/**";
     private static final String STUDENT_PATH = "/api/v1/student/**";
     private static final String STUDENT_REGISTER_PATH = "/api/v1/student/register";
     private static final String INTERNSHIP_PATH = "/api/v1/internship-offers/**";
@@ -62,10 +62,11 @@ public class SecurityConfiguration {
                         .requestMatchers(USER_PATH).permitAll()
                         .requestMatchers(POST, USER_PASSWORD_RESET_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.STUDENT.name())
+
                         // Employer
+                        .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
                         .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name())
                         .requestMatchers(EMPLOYER_PATH).hasAuthority(Role.EMPLOYER.name())
-                        .requestMatchers(POST, EMPLOYER_REGISTER_PATH).permitAll()
 
                         // Student
                         .requestMatchers(POST, STUDENT_REGISTER_PATH).permitAll()
@@ -75,7 +76,6 @@ public class SecurityConfiguration {
                         .requestMatchers(INTERNSHIP_PATH).permitAll()
                         .requestMatchers(GET, INTERNSHIP_PATH).hasAnyAuthority(Role.STUDENT.name())
 
-                        .requestMatchers("/**").hasAnyAuthority(Role.GESTIONNAIRE.name())
                         .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console
