@@ -3,72 +3,50 @@ import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import useAuthStore from "../../stores/authStore.js";
+import { cvService } from "../../services/cvService.js";
+import { toast } from "sonner";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
-    const { applications, fetchApplications, loading, error } = useEmployerStore();
-    const {
-        previewUrl,
-        previewType,
-        previewCvForEmployer,
-        downloadCvForEmployer,
-        closePreview
-    } = useCvStore();
+    const { applications, fetchApplications } = useEmployerStore();
+    const { previewUrl, previewType, previewCvForEmployer, closePreview } = useCvStore();
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const { token } = useAuthStore.getState();
 
     useEffect(() => {
         fetchApplications();
     }, []);
 
-    // Ouvrir le modal pour voir les détails
     const handleViewApplication = (application) => {
         setSelectedApplication(application);
         setIsModalOpen(true);
     };
 
-    // Prévisualiser le CV (employeur)
-    const handlePreviewCv = async (application) => {
-        console.log("=== DEBUG Preview ===");
-        console.log("CV ID :", application.selectedCvID);
-        console.log("Email étudiant :", application.studentEmail);
-        console.log("Objet application :", application);
-        console.log("=====================");
-
-        if (!application.selectedCvID || !application.studentEmail) {
-            console.error("❌ CV ID ou email étudiant manquant !");
-            return;
-        }
-
+    const handlePreviewCv = (application) => {
         try {
-            await previewCvForEmployer(application.selectedCvID, application.studentEmail);
+            previewCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
         } catch (err) {
-            console.error("❌ Erreur lors de la prévisualisation du CV:", err);
+            toast.error(err.message);
         }
     };
 
-
-    // Télécharger le CV (employeur)
-    const handleDownloadCv = async (application) => {
-        if (!application.selectedCvID || !application.studentEmail) {
-            console.error("CV ID or student email is missing!");
-            return;
-        }
+    const handleDownloadCv = (application) => {
         try {
-            await downloadCvForEmployer(
-                application.selectedCvID,
-                application.selectedCvFileName,
-                application.studentEmail
+            const url = cvService.previewForEmployer(
+                application.selectedCvFileData,
+                application.selectedCvFileName
             );
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = application.selectedCvFileName;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         } catch (err) {
-            console.error("Erreur lors du téléchargement du CV:", err);
+            toast.error("Impossible de télécharger le CV");
         }
     };
-
-    if (loading) return <div>{t("internshipApplications.loading") || "Chargement..."}</div>;
-    if (error) return <div>{t("internshipApplications.error") || "Erreur"}: {error}</div>;
 
     return (
         <div className="p-10">

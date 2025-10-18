@@ -58,51 +58,16 @@ export const cvService = {
 
     return res.data;
   },
+  previewForEmployer(fileData, fileName) {
+    if (!fileData) {
+      throw new Error("Aucun fichier CV disponible pour ce candidat.");
+    }
 
-  // // --- Fonctions pour employer ---
-  // async previewForEmployer(cvId, studentEmail, token) {
-  //   const payload = {
-  //     email: studentEmail,
-  //     password: "" // inutile ici, mais requis par LoginDTO
-  //   };
-  //
-  //   const res = await api.post(
-  //       `/employer/${cvId}/download`,
-  //       payload,
-  //       {
-  //         responseType: "blob",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //   );
-  //
-  //   return window.URL.createObjectURL(res.data);
-  // },
-  //
-  // async downloadCvForEmployer(cvId, fileName, studentEmail, token) {
-  //   const payload = {
-  //     email: studentEmail,
-  //     password: "" // idem, requis pour correspondre à LoginDTO
-  //   };
-  //
-  //   const res = await api.post(
-  //       `/employer/${cvId}/download`,
-  //       payload,
-  //       {
-  //         responseType: "blob",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //   );
-  //
-  //   const blob = new Blob([res.data]);
-  //   const link = document.createElement("a");
-  //   link.href = window.URL.createObjectURL(blob);
-  //   link.download = fileName || `cv_${cvId}.pdf`;
-  //   link.click();
-  // }
+    const uint8Array = fileData instanceof Uint8Array ? fileData : new Uint8Array(fileData);
+
+
+    const blob = new Blob([uint8Array], { type: "application/pdf" });
+
+    return window.URL.createObjectURL(blob);
+  },
 };

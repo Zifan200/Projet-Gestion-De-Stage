@@ -67,6 +67,44 @@ export const useCvStore = create((set, get) => ({
     }
   },
 
+  previewCvForEmployer: (fileData, fileName) => {
+    if (!fileData) {
+      const errorMsg = "Aucun fichier CV disponible pour ce candidat.";
+      set({ error: errorMsg });
+      return;
+    }
+
+    try {
+      let uint8Array;
+
+      if (fileData instanceof Uint8Array) {
+        uint8Array = fileData;
+      } else if (fileData instanceof ArrayBuffer) {
+        uint8Array = new Uint8Array(fileData);
+      } else if (typeof fileData === "string") {
+        // Décoder le Base64 en bytes
+        const binaryString = atob(fileData);
+        const len = binaryString.length;
+        uint8Array = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          uint8Array[i] = binaryString.charCodeAt(i);
+        }
+      } else {
+        const errorMsg = "Type de fileData inconnu pour la prévisualisation.";
+        set({ error: errorMsg });
+        return;
+      }
+
+      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      set({ previewUrl: url, previewType: "pdf" });
+    } catch (err) {
+      set({ error: "Impossible de prévisualiser le CV." });
+    }
+  },
+
+
   applyCvStore: async (offerId, cvId) => {
     try {
       const { user, token } = useAuthStore.getState();
@@ -79,35 +117,4 @@ export const useCvStore = create((set, get) => ({
       throw err;
     }
   },
-
-  // ===================== Fonctions pour l’employeur =====================
-  // previewCvForEmployer: async (cvId, studentEmail) => {
-  //   try {
-  //     const { token } = useAuthStore.getState(); // récupère le token
-  //
-  //     // appelle le service (qui gère la structure JSON attendue)
-  //     const url = await cvService.previewForEmployer(cvId, studentEmail, token);
-  //
-  //     set({ previewUrl: url, previewType: "pdf" });
-  //   } catch (err) {
-  //     console.error("Erreur previewCvForEmployer:", err);
-  //     set({ error: err.message });
-  //     throw err;
-  //   }
-  // },
-  //
-  // downloadCvForEmployer: async (cvId, fileName, studentEmail) => {
-  //   try {
-  //     const { token } = useAuthStore.getState();
-  //
-  //     // idem : passe l'email et le token au service
-  //     await cvService.downloadCvForEmployer(cvId, fileName, studentEmail, token);
-  //   } catch (err) {
-  //     console.error("Erreur downloadCvForEmployer:", err);
-  //     set({ error: err.message });
-  //     throw err;
-  //   }
-  // },
-  //
-  // closePreview: () => set({ previewUrl: null, previewType: null }),
 }));
