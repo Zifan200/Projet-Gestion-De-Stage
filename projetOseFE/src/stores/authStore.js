@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { authService } from "../services/authService.js";
+import { useUserStore } from "./userStore.js"; //
 
 const useAuthStore = create(
   persist(
@@ -29,6 +30,9 @@ const useAuthStore = create(
               loading: false,
             });
 
+            const { loadSettings } = useUserStore.getState();
+            await loadSettings();
+
             return userData;
           }
         } catch (err) {
@@ -53,4 +57,3 @@ const useAuthStore = create(
 );
 
 export default useAuthStore;
-
