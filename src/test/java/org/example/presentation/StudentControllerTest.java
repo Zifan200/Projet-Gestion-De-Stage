@@ -7,8 +7,8 @@ import org.example.service.InternshipApplicationService;
 import org.example.service.StudentService;
 import org.example.service.UserAppService;
 import org.example.service.dto.EtudiantDTO;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,7 +74,7 @@ class StudentControllerTest {
                 .build();
 
         when(userAppService.getMe(FAKE_JWT)).thenReturn(studentDto);
-        when(internshipApplicationService.saveInternshipApplicaiton(any(InternshipApplicationDTO.class)))
+        when(internshipApplicationService.saveInternshipApplication(any(InternshipApplicationDTO.class)))
                 .thenReturn(responseDto);
 
 
@@ -117,7 +117,7 @@ class StudentControllerTest {
         dto.setStudentEmail(EMAIL);
 
         when(userAppService.getMe(FAKE_JWT)).thenReturn(studentDto);
-        when(internshipApplicationService.saveInternshipApplicaiton(any(InternshipApplicationDTO.class)))
+        when(internshipApplicationService.saveInternshipApplication(any(InternshipApplicationDTO.class)))
                 .thenThrow(new InvalidInternshipApplicationException("Invalid internship offer: CV not found"));
 
         // Act

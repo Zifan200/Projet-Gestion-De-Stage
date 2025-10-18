@@ -41,8 +41,8 @@ public class EmployerController {
 
     @PostMapping("/create-internship-offer")
     public ResponseEntity<InternshipOfferResponseDto> createInternShipOffer(
-        HttpServletRequest request,
-        @Valid @RequestBody InternshipOfferDto internshipOfferDto) {
+            HttpServletRequest request,
+            @Valid @RequestBody InternshipOfferDto internshipOfferDto) {
 
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
 

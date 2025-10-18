@@ -21,7 +21,6 @@ public class InternshipApplication {
     @ManyToOne
     private InternshipOffer offer;
 
-
     private ApprovalStatus status =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
 
