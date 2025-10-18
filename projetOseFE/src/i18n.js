@@ -12,11 +12,12 @@ export const resources = {
         error: "Error loading applications",
         table: {
           offerTitle: "Offer title",
-          studentName: "Student",
+          studentName: "Student name",
           cv: "CV",
           status: "Status",
           action: "Action",
-          actionView: "View"
+          actionView: "View",
+          studentEmail: "Email"
         },
         modal: {
           offerTitle: "Offer title",
@@ -24,7 +25,8 @@ export const resources = {
           cv: "CV",
           status: "Status",
           appliedAt: "Applied on",
-          close: "Close"
+          close: "Close",
+          email: "Email"
         }
       },
       success: {
@@ -364,11 +366,12 @@ export const resources = {
         error: "Erreur lors du chargement des candidatures",
         table: {
           offerTitle: "Titre de l'offre",
-          studentName: "Étudiant",
+          studentName: "Nom de l'Étudiant",
           cv: "CV",
           status: "Statut",
           action: "Action",
-          actionView: "Voir"
+          actionView: "Voir",
+          studentEmail: "Email"
         },
         modal: {
           offerTitle: "Titre de l'offre",
@@ -376,7 +379,8 @@ export const resources = {
           cv: "CV",
           status: "Statut",
           appliedAt: "Postulé le",
-          close: "Fermer"
+          close: "Fermer",
+          email: "Email"
         }
       },
       success: {
