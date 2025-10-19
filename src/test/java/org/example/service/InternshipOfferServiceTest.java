@@ -3,10 +3,12 @@ package org.example.service;
 import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.UserCreatedEvent;
 import org.example.model.Employer;
+import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
+import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.EmployerDto;
 import org.example.service.dto.InternshipOfferDto;
 import org.example.service.dto.InternshipOfferListDto;
@@ -22,8 +24,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 //import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -459,4 +463,70 @@ public class InternshipOfferServiceTest {
 
         verify(internshipOfferRepository, times(1)).findInternshipOffersById(2L);
     }
+
+    @Test
+    void getAllOffersSummaryFromEmployer_shouldReturnOffersOfEmployer() {
+        // Arrange
+        Employer employer = spy(buildEmployer());
+
+        InternshipApplication app1 = new InternshipApplication();
+
+        InternshipOffer offer1 = InternshipOffer.builder()
+                .id(1L)
+                .title("Backend Developer")
+                .employer(employer)
+                .expirationDate(LocalDate.now().plusDays(30))
+                .targetedProgramme("Informatique")
+                .reason("Bon profil")
+                .applications(new HashSet<>(Set.of(app1)))
+                .status(InternshipOfferStatus.ACCEPTED)
+                .build();
+
+        InternshipOffer offer2 = InternshipOffer.builder()
+                .id(2L)
+                .title("Frontend Developer")
+                .employer(employer)
+                .expirationDate(LocalDate.now().plusDays(60))
+                .targetedProgramme("Design")
+                .reason("Bon candidat")
+                .applications(new HashSet<>(Set.of(app1)))
+                .status(InternshipOfferStatus.PENDING)
+                .build();
+
+        when(employer.getInternshipOffers()).thenReturn(Set.of(offer1, offer2));
+        when(employerRepository.findByCredentialsEmail(employer.getEmail()))
+                .thenReturn(Optional.of(employer));
+
+        // Act
+        List<InternshipOfferListDto> offers =
+                internshipOfferService.getAllOffersSummaryFromEmployer(employer.getEmail());
+
+        // Assert
+        assertThat(offers).hasSize(2);
+        assertThat(offers).extracting("title")
+                .containsExactlyInAnyOrder("Backend Developer", "Frontend Developer");
+
+        assertThat(offers.stream()
+                .filter(o -> o.getTitle().equals("Backend Developer"))
+                .findFirst().get().getApplicationCount()).isEqualTo(1);
+
+        assertThat(offers.stream()
+                .filter(o -> o.getTitle().equals("Frontend Developer"))
+                .findFirst().get().getApplicationCount()).isEqualTo(1);
+    }
+
+    @Test
+    void getAllOffersSummaryFromEmployer_whenEmployerNotFound_shouldThrow() {
+        // Arrange
+        String email = "missing@employer.com";
+        when(employerRepository.findByCredentialsEmail(email)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> internshipOfferService.getAllOffersSummaryFromEmployer(email))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("userNotFound");
+
+        verify(employerRepository).findByCredentialsEmail(email);
+    }
+
 }
