@@ -1,19 +1,19 @@
 package org.example;
 
+import lombok.Builder;
 import org.example.model.Employer;
+import org.example.model.auth.Role;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
-import org.example.service.GestionnaireService;
-import org.example.service.InternshipOfferService;
-import org.example.service.dto.GestionnaireDTO;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferListDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.service.*;
+import org.example.service.dto.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,9 +22,16 @@ import java.util.List;
 @SpringBootApplication
 public class Main {
     private final GestionnaireService gestionnaireService;
+    private final EmployerService employerService;
+    private final StudentService studentService;
+    private final CVService cvService;
 
-    public Main(GestionnaireService gestionnaireService) {
+    public Main(GestionnaireService gestionnaireService, EmployerService employerService, StudentService studentService, CVService cvService) {
         this.gestionnaireService = gestionnaireService;
+        this.employerService = employerService;
+        this.studentService = studentService;
+        this.cvService = cvService;
+
     }
 
     public static void main(String[] args) {
@@ -55,19 +62,15 @@ public class Main {
             EmployerRepository employerRepository = context.getBean(EmployerRepository.class);
             InternshipOfferService internshipOfferService = context.getBean(InternshipOfferService.class);
 
-            Employer employer = Employer.builder()
+            EmployerDto employer = EmployerDto.builder()
                     .firstName("Alice")
                     .lastName("Dupont")
                     .email("alice@example.com")
-                    .password("password")
-                    .active(true)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .since(LocalDate.of(2020, 1, 1))
+                    .password("Test123!")
                     .enterpriseName("TechCorp")
                     .phone("123-456-7890")
                     .build();
-            employerRepository.save(employer);
+            employerService.saveEmployer(employer);
             System.out.println("✅ Employeur créé : " + employer.getEnterpriseName());
 
             // -----------------------------
@@ -108,6 +111,34 @@ public class Main {
                     .expirationDate(LocalDate.now().plusMonths(2))
                     .build();
             InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer("alice@example.com", offer4);
+
+            EtudiantDTO etudiantDTO = studentService.inscriptionEtudiant(
+              EtudiantDTO.builder()
+                      .firstName("Popa")
+                      .lastName("Nowell")
+                      .email("popanowell@example.com")
+                      .phone("514-999-9999")
+                      .adresse("Pole nord")
+                      .role(Role.STUDENT)
+                      .password("Popanowell1!")
+                      .program("Technique de l'informatique")
+                      .build()
+            );
+
+            byte[] fakePdf = "Fake PDF content for demo".getBytes();
+
+            MultipartFile file = new MockMultipartFile(
+                    "file",
+                    "cv_test.txt",
+                    "application/pdf",
+                    "Mon CV de test".getBytes()
+            );
+            CvResponseDTO cvResponseDTO = cvService.addCv(etudiantDTO.getEmail(), file);
+            cvService.approveCv(cvResponseDTO.getId());
+
+
+
+
 
             // -----------------------------
             // 4️⃣ Mise à jour des statuts
