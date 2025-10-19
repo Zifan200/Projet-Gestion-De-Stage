@@ -128,7 +128,7 @@ function App() {
       icon: EnvelopeClosedIcon,
     },
     {
-      key: "seeOffers",
+      key: "settings",
       label: t("menu.settings"),
       href: "/dashboard/sutdent/settings",
       icon: GearIcon,
