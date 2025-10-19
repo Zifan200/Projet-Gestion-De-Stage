@@ -14,10 +14,15 @@ export const useUserStore = create((set, get) => ({
       if (!token) throw new Error("Missing token");
 
       const data = await userService.getSettings(token);
-      const language = data?.language || "en";
+      console.log(data);
+
+      const localLang = localStorage.getItem("lang") || "en";
+      const language = data?.language || localLang;
+      console.log(localLang);
+      console.log(language);
 
       if (!data?.language) {
-        await userService.updateSettings(token, { language: "en" });
+        await userService.updateSettings(token, { language });
       }
 
       set({ settings: { ...data, language }, loading: false });
