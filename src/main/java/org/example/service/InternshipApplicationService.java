@@ -30,6 +30,7 @@ public class InternshipApplicationService {
     private final CvRepository  cvRepository;
     private final InternshipOfferRepository internshipOfferRepository;
     private final InternshipApplicationRepository internshipApplicationRepository;
+    private final EtudiantRepository etudiantRepository;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -149,5 +150,24 @@ public class InternshipApplicationService {
 
         List<InternshipApplication> applicationList = internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(email);
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
+    }
+
+    public InternshipApplicationResponseDTO getApplicationByStudentAndId(String email, Long id) {
+        Optional<Etudiant> student = etudiantRepository.findByCredentialsEmail(email);
+        if (student.isEmpty()) {
+            throw new InvalidInternshipApplicationException(
+                    "Invalid internship application: student not found with email " + email
+            );
+        }
+
+        Optional<InternshipApplication> application = internshipApplicationRepository.findById(id);
+        if (application.isEmpty()) {
+            throw new InvalidInternshipApplicationException(
+                    "Invalid internship application : application does not exist"
+            );
+        }
+
+        InternshipApplication savedApplication = application.get();
+        return InternshipApplicationResponseDTO.create(savedApplication);
     }
 }

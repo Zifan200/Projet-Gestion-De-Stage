@@ -71,4 +71,14 @@ public class EtudiantController {
                 .status(HttpStatus.CREATED)
                 .body(internshipApplicationService.saveInternshipApplication(internshipApplicationDtoDTO));
     }
+
+    @GetMapping("/get-internship-application/{id}")
+    public ResponseEntity<InternshipApplicationResponseDTO> getInternshipApplicationForStudentById(
+            HttpServletRequest request,
+            @PathVariable Long id
+    ) {
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        InternshipApplicationResponseDTO res = internshipApplicationService.getApplicationByStudentAndId(email, id);
+        return ResponseEntity.ok(res);
+    }
 }
