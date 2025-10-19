@@ -2,22 +2,18 @@ package org.example.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.Employer;
-import org.example.model.Etudiant;
-import org.example.model.Gestionnaire;
-import org.example.model.UserApp;
-import org.example.repository.EmployerRepository;
-import org.example.repository.EtudiantRepository;
-import org.example.repository.GestionnaireRepository;
-import org.example.repository.UserAppRepository;
+import org.example.model.*;
+import org.example.repository.*;
 import org.example.security.JwtTokenProvider;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.*;
+import org.example.service.exception.UserSettingsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -31,6 +27,8 @@ public class UserAppService {
     private final EtudiantRepository studentRepository;
     private final GestionnaireRepository gestionnaireRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserSettingsRepository userSettingsRepository;
+
 
 
     public String authenticateUser(LoginDTO loginDto) {
@@ -71,6 +69,33 @@ public class UserAppService {
         return gestionnaireOptional.isPresent() ?
                 GestionnaireDTO.fromEntity(gestionnaireOptional.get()) :
                 GestionnaireDTO.empty();
+    }
+
+    public UserSettingsDto getMySettings(Long userId) {
+        UserSettings settings = userSettingsRepository.findByUserId(userId);
+        if (settings == null) {
+            throw new UserSettingsNotFoundException("Aucun paramètre trouvé pour l'utilisateur avec l'ID " + userId);
+        }
+        return UserSettingsDto.fromEntity(settings);
+    }
+
+    @Transactional
+    public UserSettingsDto updateMySettings(Long userId, UserSettingsDto dto) {
+        UserApp user = userAppRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Utilisateur introuvable avec id " + userId));
+
+        UserSettings settings = userSettingsRepository.findByUserId(userId);
+        if (settings == null) {
+            settings = new UserSettings();
+            settings.setUser(user);
+        }
+
+        if (dto.getLanguage() != null) {
+            settings.setLanguage(dto.getLanguage());
+        }
+
+        userSettingsRepository.save(settings);
+        return UserSettingsDto.fromEntity(settings);
     }
 }
 

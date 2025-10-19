@@ -189,6 +189,7 @@ export const resources = {
           noOffers: "No offers available yet.",
           enterprise: "Enterprise name",
           loading: "Loading...",
+          status: "Status",
         },
         modal: {
           description: "Description",
@@ -555,6 +556,7 @@ export const resources = {
           noOffers: "Aucune offre pour le moment.",
           enterprise: "Nom de l'entreprise",
           loading: "Chargement...",
+          status: "Statut",
         },
         modal: {
           description: "Description",

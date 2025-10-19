@@ -76,6 +76,11 @@ public class EmployerControllerException {
         return buildError(HttpStatus.BAD_REQUEST, "INVALID_FILE", ex.getMessage());
     }
 
+    @ExceptionHandler(UserSettingsNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserSettingsNotFound(UserSettingsNotFoundException ex) {
+        return buildError(HttpStatus.NOT_FOUND, "USER_SETTINGS_NOT_FOUND", ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
         System.out.println(ex);
