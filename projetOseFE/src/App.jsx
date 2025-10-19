@@ -56,7 +56,7 @@ function App() {
       icon: EnvelopeClosedIcon,
     },
     {
-      key: "seeOffers",
+      key: "settings",
       label: t("menu.settings"),
       href: "/dashboard/gs/settings",
       icon: GearIcon,
