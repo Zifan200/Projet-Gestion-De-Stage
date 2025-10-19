@@ -16,9 +16,11 @@ import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
+import org.example.model.UserApp;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
+import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.dto.InternshipOfferDto;
@@ -92,6 +94,25 @@ public class InternshipOfferService {
         }
 
         return offers;
+    }
+
+    public List<InternshipOfferListDto> getAllOffersSummaryFromEmployer(String email) {
+        Employer employer = employerRepository.findByCredentialsEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + email));
+        return employer
+                .getInternshipOffers()
+                .stream()
+                .map(offer -> InternshipOfferListDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .reason(offer.getReason())
+                        .status(offer.getStatus())
+                        .applicationCount(offer.getApplications().size())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 
