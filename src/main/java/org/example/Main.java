@@ -1,9 +1,17 @@
 package org.example;
 
+
+
+import org.example.repository.EtudiantRepository;
+import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import lombok.Builder;
 import org.example.model.Employer;
 import org.example.model.auth.Role;
+import org.example.model.CV;
+import org.example.model.Etudiant;
 import org.example.model.enums.InternshipOfferStatus;
+import org.example.repository.CvRepository;
 import org.example.repository.EmployerRepository;
 import org.example.service.*;
 import org.example.service.dto.*;
@@ -56,10 +64,12 @@ public class Main {
             gestionnaireService.saveGestionnaire(admin);
             System.out.println("✅ Gestionnaire créé : " + admin.getEmail());
 
+
+
             // -----------------------------
             // 2️⃣ Création de l’employeur
             // -----------------------------
-            EmployerRepository employerRepository = context.getBean(EmployerRepository.class);
+            EmployerService employerService = context.getBean(EmployerService.class);
             InternshipOfferService internshipOfferService = context.getBean(InternshipOfferService.class);
 
             EmployerDto employer = EmployerDto.builder()
@@ -67,6 +77,7 @@ public class Main {
                     .lastName("Dupont")
                     .email("alice@example.com")
                     .password("Test123!")
+                    .since(LocalDate.of(2020, 1, 1))
                     .enterpriseName("TechCorp")
                     .phone("123-456-7890")
                     .build();
@@ -182,6 +193,45 @@ public class Main {
             internshipOfferService.getRejectedOffers().forEach(o ->
                     System.out.println("ID: " + o.getId() + " | " + o.getTitle())
             );
+
+            // [9] creation student + application
+            StudentService studentService = context.getBean(StudentService.class);
+            CvRepository cvRepository = context.getBean(CvRepository.class);
+            InternshipApplicationService internshipApplicationService = context.getBean(InternshipApplicationService.class);
+
+            EtudiantDTO studentDTO = EtudiantDTO.builder()
+                    .firstName("jimmy")
+                    .lastName("jammer")
+                    .email("jimmy@hotmail.com")
+                    .password("Test123!")
+                    .phone("123-123-1234")
+                    .program("Technique Informatique")
+                    .build();
+
+            EtudiantDTO savedEtudiant = studentService.inscriptionEtudiant(studentDTO);
+            byte[] bytes = new byte[9];
+            CV studentCV = CV.builder()
+                    .etudiant(EtudiantDTO.toEntity(savedEtudiant))
+                    .data(bytes)
+                    .fileName("My Cv")
+                    .fileSize(1L)
+                    .fileType("pdf")
+                    .reason("")
+                    .uploadedAt(LocalDateTime.now())
+                    .status(InternshipOfferStatus.ACCEPTED)
+                    .build();
+            //cant get cv id
+            cvRepository.save(studentCV);
+
+            InternshipApplicationDTO internshipApplicationDTO = InternshipApplicationDTO.builder()
+                            .internshipOfferId(savedOffer1.getId())
+                                    .employerEmail(employer.getEmail())
+                                            .studentEmail(studentDTO.getEmail())
+                                                    .selectedCvID(studentCV.getId()).build();
+
+            InternshipApplicationResponseDTO savedInternshipApplication = internshipApplicationService.saveInternshipApplication(internshipApplicationDTO);
+
+
         };
     }
 }

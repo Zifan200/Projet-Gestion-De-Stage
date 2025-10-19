@@ -9,8 +9,8 @@ import org.example.service.EmailService;
 import org.example.service.UserAppService;
 import org.example.service.dto.EtudiantDTO;
 import org.example.model.EmailMessage;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplicaiton.InternshipApplicationResponseDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +69,6 @@ public class EtudiantController {
         internshipApplicationDtoDTO.setStudentEmail(email);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(internshipApplicationService.saveInternshipApplicaiton(internshipApplicationDtoDTO));
+                .body(internshipApplicationService.saveInternshipApplication(internshipApplicationDtoDTO));
     }
 }
