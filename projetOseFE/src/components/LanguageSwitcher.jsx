@@ -16,7 +16,11 @@ export const LanguageSwitcher = () => {
   }, [i18n]);
 
   useEffect(() => {
-    if (isAuthenticated && settings?.language && settings.language !== i18n.language) {
+    if (
+      isAuthenticated &&
+      settings?.language &&
+      settings.language !== i18n.language
+    ) {
       i18n.changeLanguage(settings.language);
     }
   }, [isAuthenticated, settings.language, i18n]);
@@ -43,7 +47,7 @@ export const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="text-sm px-3 py-1 border rounded-md hover:bg-gray-100 transition"
+      className="text-sm px-3 py-1 rounded-full hover:bg-gray-100 transition"
     >
       {oppositeLang.toUpperCase()}
     </button>

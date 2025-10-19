@@ -41,7 +41,7 @@ export const DashboardSettings = () => {
             value={settings.language}
             onChange={handleLanguageChange}
             disabled={loading}
-            className="border rounded-md px-3 py-1"
+            className="border rounded-md border-zinc-400 px-3 py-1"
           >
             <option value="en">{t("languages.en")}</option>
             <option value="fr">{t("languages.fr")}</option>
