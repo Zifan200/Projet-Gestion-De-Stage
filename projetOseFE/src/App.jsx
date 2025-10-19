@@ -83,7 +83,7 @@ function App() {
       icon: EnvelopeOpenIcon,
     },
     {
-      key: "seeOffers",
+      key: "settings",
       label: t("menu.settings"),
       href: "/dashboard/employer/settings",
       icon: GearIcon,
