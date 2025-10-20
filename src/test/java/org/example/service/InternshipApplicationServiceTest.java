@@ -558,7 +558,89 @@ public class InternshipApplicationServiceTest {
         );
     }
 
+    @Test
+    void getApplicationByStudentAndId_ShouldReturnInternshipApplicationResponseDTO() {
+        //Arrange
+        String employerEmail = "some.employer@company.com";
+        Long id = 1L;
 
+        Employer employer = Employer.builder().email(employerEmail).build();
+        InternshipOffer offer = InternshipOffer.builder().id(id).employer(employer).build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(id).build();
+
+        InternshipApplication application = InternshipApplication.builder()
+                .id(id)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+
+        when(internshipApplicationRepository.findById(id))
+                .thenReturn(Optional.of(application));
+
+        // Act
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.getApplicationByStudentAndId(STUDENT_EMAIL, id);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(id, response.getId());
+        assertEquals(STUDENT_EMAIL, response.getStudentEmail());
+        assertEquals(offer.getTitle(), response.getInternshipOfferTitle());
+        assertEquals(employerEmail, response.getEmployerEmail());
+    }
+
+    @Test
+    void getApplicationByStudentAndId_shouldThrowException_whenApplicationDoesNotExist() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        // Act + Assert
+        assertThrows(
+                InvalidInternshipApplicationException.class, () ->
+                internshipApplicationService.getApplicationByStudentAndId(
+                        student.getEmail(),
+                        1L
+                )
+        );
+    }
+
+    @Test
+    void getApplicationByStudentAndId_shouldThrowException_whenStudentNotFound() {
+        // Arrange
+        String employerEmail = "some.employer@company.com";
+        Long id = 1L;
+
+        Employer employer = Employer.builder().email(employerEmail).build();
+        InternshipOffer offer = InternshipOffer.builder().id(id).employer(employer).build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(id).build();
+
+        InternshipApplication application = InternshipApplication.builder()
+                .id(id)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail("notfound@email.com"))
+                .thenReturn(Optional.empty());
+
+        // Act + Assert
+        assertThrows(
+                InvalidInternshipApplicationException.class, () ->
+                        internshipApplicationService.getApplicationByStudentAndId(
+                                "notfound@email.com",
+                                application.getId()
+                        )
+        );
+    }
 }
 
 

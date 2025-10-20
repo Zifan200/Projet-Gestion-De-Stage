@@ -6,6 +6,7 @@ import org.example.presentation.exception.InvalidStudentControllerException;
 import org.example.service.InternshipApplicationService;
 import org.example.service.StudentService;
 import org.example.service.UserAppService;
+import org.example.service.dto.EmployerDto;
 import org.example.service.dto.EtudiantDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
@@ -15,13 +16,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -132,5 +138,99 @@ class StudentControllerTest {
             }
         """))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getInternshipApplicationForStudentById_shouldReturn200() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        EtudiantDTO savedStudent = EtudiantDTO.builder().email(EMAIL).build();
+
+        InternshipApplicationResponseDTO applicationRes = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail(EMAIL)
+                .internshipOfferId(1L)
+                .internshipOfferTitle("Développeur Fullstack")
+                .build();
+
+        // Act
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(savedStudent);
+        when(internshipApplicationService.getApplicationByStudentAndId(EMAIL, applicationRes.getId()))
+                .thenReturn(applicationRes);
+
+        // Assert
+        mockMvc.perform(get("/api/v1/student/get-internship-application/1")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("studentEmail").value(EMAIL))
+                .andExpect(jsonPath("internshipOfferId").value(1))
+                .andExpect(jsonPath("internshipOfferTitle").value("Développeur Fullstack"));
+    }
+
+    @Test
+    void getInternshipApplicationForStudentById_shouldReturn400_whenNoApplications() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        EtudiantDTO savedStudent = EtudiantDTO.builder().email(EMAIL).build();
+
+        // Act
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(savedStudent);
+        when(internshipApplicationService.getApplicationByStudentAndId(EMAIL, 1L))
+                .thenThrow(new InvalidInternshipApplicationException("Internship application not found"));
+
+        // Assert
+        MvcResult result = mockMvc.perform(get("/api/v1/student/get-internship-application/1")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternshipApplicationException);
+    }
+
+    @Test
+    void getInternshipApplicationForStudentById_shouldReturn400_withWrongStudent() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        EtudiantDTO savedStudent = EtudiantDTO.builder().email(EMAIL).build();
+
+        InternshipApplicationResponseDTO applicationRes = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("incorrect.student@gmail.com")
+                .internshipOfferId(1L)
+                .internshipOfferTitle("Développeur Fullstack")
+                .build();
+
+        // Act
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(savedStudent);
+        when(internshipApplicationService.getApplicationByStudentAndId(EMAIL, 1L))
+                .thenThrow(new InvalidInternshipApplicationException("Invalid user"));
+
+        // Assert
+        MvcResult result = mockMvc.perform(get("/api/v1/student/get-internship-application/1")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternshipApplicationException);
     }
 }
