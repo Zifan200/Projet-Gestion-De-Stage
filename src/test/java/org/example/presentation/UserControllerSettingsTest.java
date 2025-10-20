@@ -78,7 +78,7 @@ class UserControllerSettingsTest {
 
         mockMvc.perform(get("/api/v1/user/settings")
                         .header(AUTH_HEADER, FAKE_JWT_HEADER))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test
