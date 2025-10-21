@@ -143,11 +143,13 @@ export const resources = {
         success: {
           create: "Offer successfully created!",
           delete: "Offer successfully deleted!",
+          download: "Download completed successfully!"
         },
         error: {
           create: "Error while creating the offer.",
           delete: "Error while deleting the offer.",
           load: "Error while loading offers.",
+          download: "Error while downloading the offer."
         },
 
         form: {
@@ -230,6 +232,7 @@ export const resources = {
           view: "View",
           delete: "Delete",
           reject: "Reject",
+          download: "Download"
         },
 
         errors: {
@@ -351,6 +354,7 @@ export const resources = {
         actions: {
           apply: "Apply",
           view: "View",
+          download: "Download"
         },
         noOffers: "No internship offers available",
         filterLabel: "Filter:",
@@ -519,11 +523,13 @@ export const resources = {
         success: {
           create: "Offre créée avec succès !",
           delete: "Offre supprimée avec succès !",
+          download : "Téléchargement effectué avec succès!"
         },
         error: {
           create: "Erreur lors de la création de l'offre.",
           delete: "Erreur lors de la suppression de l'offre.",
           load: "Erreur lors du chargement des offres.",
+          download: "Erreur lors du téléchargement de l'offre."
         },
 
         form: {
@@ -606,6 +612,7 @@ export const resources = {
           view: "Voir",
           delete: "Supprimer",
           reject: "Rejeter",
+          download: "Télécharger"
         },
 
         errors: {
@@ -729,6 +736,7 @@ export const resources = {
         actions: {
           apply: "Postuler",
           view: "Voir",
+          download: "Télécharger"
         },
         noOffers: "Aucune offre de stage disponible",
         filterLabel: "Filtrer",
