@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/student")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -80,5 +82,14 @@ public class EtudiantController {
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
         InternshipApplicationResponseDTO res = internshipApplicationService.getApplicationByStudentAndId(email, id);
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/get-all-internship-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForStudent(
+            HttpServletRequest request
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        List<InternshipApplicationResponseDTO> list = internshipApplicationService.getAllApplicationsFromStudent(email);
+        return ResponseEntity.ok(list);
     }
 }

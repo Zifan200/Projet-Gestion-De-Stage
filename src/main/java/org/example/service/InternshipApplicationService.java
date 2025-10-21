@@ -170,4 +170,13 @@ public class InternshipApplicationService {
         InternshipApplication savedApplication = application.get();
         return InternshipApplicationResponseDTO.create(savedApplication);
     }
+
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromStudent(String email) {
+        Optional<Etudiant> student = studentRepository.findByCredentialsEmail(email);
+        if(student.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship offer : student does not exist");
+        }
+        List<InternshipApplication> list = internshipApplicationRepository.findAllByStudentCredentialsEmail(email);
+        return list.stream().map(InternshipApplicationResponseDTO::create).toList();
+    }
 }
