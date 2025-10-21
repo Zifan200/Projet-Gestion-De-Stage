@@ -237,7 +237,7 @@ export const resources = {
           loadOffers: "Error while loading offers",
         },
       },
-      description: "Welcome to React and react-i18next",
+      description: "Welcome to the OSE 2.0 platform",
       form: {
         employer: {
           title: "Create an employer account",
@@ -703,6 +703,8 @@ export const resources = {
             "Un CV avec ce nom existe déjà. Veuillez renommer le fichier avant de le téléverser.",
         },
       },
+      description: "Bienvenue à la platforme OSE 2.0 platform",
+
       studentOffers: {
         title: "Offres de stage",
         table: {
@@ -745,11 +747,11 @@ export const resources = {
   },
 };
 
-const savedLang = localStorage.getItem("lang") || "en";
+const savedLang = localStorage.getItem("lang") || "fr";
 
 i18n.use(initReactI18next).init({
   resources,
-  fallbackLng: "en",
+  fallbackLng: "fr",
   lng: savedLang,
   interpolation: {
     escapeValue: false,
