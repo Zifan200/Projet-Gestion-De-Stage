@@ -104,7 +104,7 @@ export const InternshipApplications = () => {
             {previewUrl && (
                 <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
                     <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xl font-semibold">Prévisualisation du CV</h3>
+                        <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
                         <button
                             className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                             onClick={closePreview}
