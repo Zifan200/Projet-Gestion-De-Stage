@@ -108,7 +108,7 @@ export const InternshipApplications = () => {
                             className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                             onClick={closePreview}
                         >
-                            Fermer
+                            {t("internshipApplications.closeCvPreview")}
                         </button>
                     </div>
                     {previewType === "pdf" ? (
