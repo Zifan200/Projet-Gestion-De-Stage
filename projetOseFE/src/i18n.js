@@ -403,6 +403,7 @@ export const resources = {
           close: "Fermer",
           email: "Email"
         },
+        closeCvPreview: "Fermer",
         settings: {
           lang: {
             title: "Changement de la langue",
