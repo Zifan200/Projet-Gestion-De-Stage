@@ -77,7 +77,7 @@ export const InternshipApplications = () => {
                                             className="text-green-600 underline hover:text-green-800"
                                             onClick={() => handleDownloadCv(app)}
                                         >
-                                            Télécharger
+                                            {t("internshipApplications.table.download")}
                                         </button>
                                     </>
                                 ) : (
