@@ -125,13 +125,13 @@ public class Main {
 
             EtudiantDTO etudiantDTO = studentService.inscriptionEtudiant(
               EtudiantDTO.builder()
-                      .firstName("Popa")
+                      .firstName("Alexandre")
                       .lastName("Nowell")
-                      .email("popanowell@example.com")
+                      .email("alexandre@example.com")
                       .phone("514-999-9999")
                       .adresse("Pole nord")
                       .role(Role.STUDENT)
-                      .password("Popanowell1!")
+                      .password("Test123!")
                       .program("Technique de l'informatique")
                       .build()
             );
