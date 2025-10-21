@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.security.exception.APIException;
 import org.example.service.dto.ErrorResponseDTO;
 import org.example.service.exception.InvalidApprovalStatus;
-import org.example.service.exception.InvalidInternShipOffer;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

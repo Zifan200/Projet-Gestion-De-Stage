@@ -1,14 +1,11 @@
 package org.example.presentation;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.service.InternshipApplicationService;
 import org.example.service.UserAppService;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
-import org.example.utils.JwtTokenUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

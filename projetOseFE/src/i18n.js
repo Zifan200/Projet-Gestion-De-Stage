@@ -189,6 +189,7 @@ export const resources = {
           noOffers: "No offers available yet.",
           enterprise: "Enterprise name",
           loading: "Loading...",
+          status: "Status",
         },
         modal: {
           description: "Description",
@@ -371,7 +372,9 @@ export const resources = {
           status: "Statut",
           action: "Action",
           actionView: "Voir",
-          studentEmail: "Email"
+          studentEmail: "Courriel",
+          download: "Télécharger",
+          noCv: "Aucun CV",
         },
         modal: {
           offerTitle: "Titre de l'offre",
@@ -555,6 +558,7 @@ export const resources = {
           noOffers: "Aucune offre pour le moment.",
           enterprise: "Nom de l'entreprise",
           loading: "Chargement...",
+          status: "Statut",
         },
         modal: {
           description: "Description",
