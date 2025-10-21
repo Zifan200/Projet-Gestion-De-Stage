@@ -372,7 +372,9 @@ export const resources = {
           status: "Statut",
           action: "Action",
           actionView: "Voir",
-          studentEmail: "Email"
+          studentEmail: "Courriel",
+          download: "Télécharger",
+          noCv: "Aucun CV",
         },
         modal: {
           offerTitle: "Titre de l'offre",
