@@ -13,7 +13,7 @@ concurrency:
 jobs:
   backend:
     name: Backend (Maven)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     services:
       postgres:
