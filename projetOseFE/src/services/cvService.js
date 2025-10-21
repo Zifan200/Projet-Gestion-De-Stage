@@ -70,24 +70,25 @@ export const cvService = {
   
   downloadForEmployer(fileData, fileName = "cv.pdf") {
     if (!fileData) throw new Error("Aucun fichier CV disponible pour le téléchargement.");
-
     let uint8Array;
 
-    if (fileData instanceof Uint8Array) {
+    if (fileData instanceof Uint8Array) 
       uint8Array = fileData;
-    } else if (fileData instanceof ArrayBuffer) {
+      
+    else if (fileData instanceof ArrayBuffer)
       uint8Array = new Uint8Array(fileData);
-    } else if (typeof fileData === "string") {
+    
+    else if (typeof fileData === "string") {
       const base64 = fileData.includes(",") ? fileData.split(",")[1] : fileData;
       const cleanedBase64 = base64.replace(/\s/g, '');
       const binaryString = atob(cleanedBase64);
       uint8Array = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
+      
+      for (let i = 0; i < binaryString.length; i++) 
         uint8Array[i] = binaryString.charCodeAt(i);
-      }
-    } else {
+      
+    else
       throw new Error("Type de fileData inconnu pour le téléchargement.");
-    }
 
     const blob = new Blob([uint8Array], { type: "application/pdf" });
     const url = window.URL.createObjectURL(blob);
