@@ -19,6 +19,8 @@ import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
+import org.example.security.exception.UserNotFoundException;
+import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.dto.InternshipOfferListDto;
 import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.dto.InternshipOfferDto;
@@ -73,6 +75,16 @@ public class InternshipOfferService {
         logger.info("InternshipOffer created = \"{}\"", savedInternshipOffer.getTitle());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
+
+    public List<InternshipOfferListDto> getAllOffersFromEmployer(String email){
+        Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
+        if(employer.isEmpty()){
+            throw new UserNotFoundException("employer not found");
+        }
+        List<InternshipOffer> offersList =  internshipOfferRepository.findAllByEmployerEmail(email);
+        return offersList.stream().map(InternshipOfferListDto::create).collect(Collectors.toList());
+    }
+
     public List<InternshipOfferListDto> getAllOffersSummary() {
         List<InternshipOfferListDto> offers = internshipOfferRepository.findAll()
                 .stream()

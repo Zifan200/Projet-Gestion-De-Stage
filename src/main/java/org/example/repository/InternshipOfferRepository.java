@@ -13,6 +13,7 @@ import java.util.Set;
 public interface InternshipOfferRepository extends JpaRepository<InternshipOffer, Long> {
 
     Optional<InternshipOffer> findInternshipOffersById(Long id);
+    List<InternshipOffer> findAllByEmployerEmail(String email);
     Optional<Set<InternshipOffer>> findInternshipOffersByEmployerId(Long employerId);
     Optional<Set<InternshipOffer>> findInternshipOffersByPublishedDate(LocalDate publishedDate);
     List<InternshipOffer> findDistinctByStatus(InternshipOfferStatus status);

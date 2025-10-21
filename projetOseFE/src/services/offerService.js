@@ -11,7 +11,7 @@ export const offerService = {
   },
 
   async getOffers(token) {
-    const res = await api.get("/employer/offers", {
+    const res = await api.get("/get-all-internship-offers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
