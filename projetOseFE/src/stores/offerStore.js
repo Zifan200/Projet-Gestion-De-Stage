@@ -1,6 +1,6 @@
-import {create} from "zustand";
-import {persist} from "zustand/middleware";
-import {offerService} from "../services/offerService.js";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { offerService } from "../services/offerService.js";
 
 export const useOfferStore = create(
     persist(
@@ -145,27 +145,6 @@ export const useOfferStore = create(
                     set({ error: err, loading: false });
                 }
             },
-            downloadOfferPdf: async (token, id) => {
-                try {
-                    const pdfBlob = await offerService.downloadOfferPdf(token, id);
-
-                    const url = window.URL.createObjectURL(new Blob([pdfBlob],
-                        { type: "application/pdf" }));
-                    const link = document.createElement("a");
-                    link.href = url;
-
-                    link.setAttribute("download", `internship_offer.pdf`);
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-
-                    return true;
-                }
-                catch (err) {
-                    console.error("Error :", err);
-                    throw err;
-                }
-            }
         }),
 
         { name: "offer-storage" }

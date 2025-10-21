@@ -34,8 +34,7 @@ export const AllOffers = () => {
         programs, loadPrograms,
         loadOffersByProgram,
         viewOffer, loading,
-        updateOfferStatus,
-        downloadOfferPdf
+        updateOfferStatus
     } = useOfferStore();
 
     // --- Charger le store au montage ---
@@ -126,15 +125,6 @@ export const AllOffers = () => {
         }
     };
 
-    const handleDownload = async (id) => {
-        try {
-            await downloadOfferPdf(user.token, id);
-            toast.success(t("offer.success.download"));
-        } catch {
-            toast.error(t("offer.error.download"));
-        }
-    };
-
     // --- Rows pour le tableau ---
     const tableRows = () => currentOffers.map((offer) => (
         <tr key={offer.id} className="border-t border-gray-300">
@@ -148,11 +138,6 @@ export const AllOffers = () => {
                     label={t("offer.actions.view")}
                     className="w-1/2"
                     onClick={() => openOffer(offer.id)}
-                />
-                <Button
-                    onClick={() => handleDownload(offer.id)}
-                    label={t("offer.actions.download")}
-                    className="w-1/2 bg-amber-200 hover:bg-amber-50"
                 />
             </td>
         </tr>

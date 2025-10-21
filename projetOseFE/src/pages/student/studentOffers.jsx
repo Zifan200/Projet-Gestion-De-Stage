@@ -16,7 +16,7 @@ export const StudentOffers = () => {
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-    const { offers, loading, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
+    const { offers, loading, loadOffersSummary, viewOffer } = useOfferStore();
     const { cvs, loadCvs, applyCvStore } = useCvStore(); // <- ici le nom correspond au store
 
     const [selectedCv, setSelectedCv] = useState(null); // CV choisi pour postuler
@@ -41,15 +41,6 @@ export const StudentOffers = () => {
         } catch (error) {
             console.error(error);
             toast.error(t("studentOffers.errors.viewOffer"));
-        }
-    };
-
-    const handleDownload = async (offerId) => {
-        try {
-            await downloadOfferPdf(user.token, offerId);
-            toast.success(t("offer.success.download"));
-        } catch {
-            toast.error(t("offer.error.download"));
         }
     };
 
@@ -97,14 +88,6 @@ export const StudentOffers = () => {
                                     onClick={() => handleViewOffer(offer.id)}
                                 >
                                     {t("studentOffers.actions.view") || "View"}
-                                </button>
-                            </td>
-                            <td className="px-4 py-2">
-                                <button
-                                    className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
-                                    onClick={() => handleDownload(offer.id)}
-                                    >
-                                    {t("studentOffers.actions.download")}
                                 </button>
                             </td>
                         </tr>
