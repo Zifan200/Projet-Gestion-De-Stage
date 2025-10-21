@@ -27,8 +27,14 @@ export const resources = {
           status: "Status",
           appliedAt: "Applied on",
           close: "Close",
-          email: "Email"
-        }
+          email: "Email",
+        },
+        previewCv: "CV preview",
+        closeCvPreview: "Close",
+        errors: {
+          downloadCv: "Unable to download CV",
+          loadApplications: "Error loading applications",
+        },  
       },
       success: {
         loginSucces: "Login successful!",
