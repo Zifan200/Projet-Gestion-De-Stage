@@ -81,7 +81,7 @@ export const InternshipApplications = () => {
                                         </button>
                                     </>
                                 ) : (
-                                    "Aucun CV"
+                                    t("internshipApplications.table.noCv")
                                 )}
                             </td>
                             <td className="px-4 py-2">{app.status}</td>
