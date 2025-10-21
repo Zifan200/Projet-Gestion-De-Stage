@@ -32,6 +32,7 @@ import { OfferList } from "./pages/employer/offerList.jsx";
 import { AllOffers } from "./pages/gs/allOffers.jsx";
 import { GsDashboard } from "./pages/gs/dashboard.jsx";
 import { GsManageCvs } from "./pages/gs/cvs.jsx";
+import {InternshipApplications} from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 
 function App() {
@@ -69,6 +70,12 @@ function App() {
       label: t("menu.dashboard"),
       href: "/dashboard/employer/",
       icon: BackpackIcon,
+    },
+    {
+      key: "applications",
+      label: t("menu.applications"),
+      href: "/dashboard/employer/applications",
+      icon: PersonIcon, // ou un autre icône
     },
     {
       key: "createOffers",
@@ -208,8 +215,12 @@ function App() {
               element={<OfferList />}
             />
             <Route
-              path="/dashboard/employer/settings"
-              element={<DashboardSettings />}
+                path="/dashboard/employer/applications"
+                element={<InternshipApplications />}
+            />
+            <Route
+                path="/dashboard/employer/settings"
+                element={<DashboardSettings />}
             />
           </Route>
           {/* Routes Employeur */}

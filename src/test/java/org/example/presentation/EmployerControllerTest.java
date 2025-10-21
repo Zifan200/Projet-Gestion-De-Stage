@@ -221,8 +221,6 @@ class EmployerControllerTest {
         );
         when(internshipApplicationService.getAllApplicationsFromEmployer(EMPLOYER_EMAIL))
                 .thenReturn(List.of(responseDto));
-        when(internshipApplicationService.getAllApplications())
-                .thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/api/v1/employer/get-all-internship-applications")
                         .header("Authorization", "Bearer " + FAKE_JWT)
@@ -250,8 +248,6 @@ class EmployerControllerTest {
                 EmployerDto.builder().email(EMPLOYER_EMAIL).build()
         );
         when(internshipApplicationService.getAllApplicationsFromOfferFromEmployer(10L, EMPLOYER_EMAIL))
-                .thenReturn(List.of(responseDto));
-        when(internshipApplicationService.getAllApplications())
                 .thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/api/v1/employer/get-all-internship-applications/internship-offer/10")

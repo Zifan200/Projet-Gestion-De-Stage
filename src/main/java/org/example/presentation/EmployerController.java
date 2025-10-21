@@ -4,16 +4,13 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.service.EmployerService;
-import org.example.service.InternshipApplicationService;
-import org.example.service.InternshipOfferService;
-import org.example.service.UserAppService;
-import org.example.service.dto.EmployerDto;
-import org.example.service.dto.EmployerResponseDto;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.model.CV;
+import org.example.service.*;
+import org.example.service.dto.*;
 import org.example.utils.JwtTokenUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.example.service.dto.InternshipApplication.*;
@@ -30,6 +27,7 @@ public class EmployerController {
     private final EmployerService employerService;
     private final InternshipOfferService internshipOfferService;
     private final InternshipApplicationService internshipApplicationService;
+    private final CVService cvService;
 
     @PostMapping("/register")
     public ResponseEntity<EmployerResponseDto> registerEmployer(@Valid @RequestBody EmployerDto employerDto) {
@@ -52,14 +50,22 @@ public class EmployerController {
 
     }
 
+    @GetMapping("/get-all-internship-offers")
+    public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffers(
+            HttpServletRequest request
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(internshipOfferService.getAllOffersFromEmployer(email));
+    }
+
+
     @GetMapping("/get-internship-application/{id}")
-    public ResponseEntity<List<InternshipApplicationResponseDTO>> getInternshipApplicationForEmployerById(
+    public ResponseEntity<InternshipApplicationResponseDTO> getInternshipApplicationForEmployerById(
             HttpServletRequest request,
             @PathVariable Long id
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getApplicationByEmployerAndId(email, id);
-        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+        return ResponseEntity.ok(internshipApplicationService.getApplicationByEmployerAndId(email, id));
     }
 
     @GetMapping("/get-all-internship-applications")
@@ -67,8 +73,7 @@ public class EmployerController {
             HttpServletRequest request
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getAllApplicationsFromEmployer(email);
-        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromEmployer(email));
     }
 
     @GetMapping("/get-all-internship-applications/internship-offer/{id}")
@@ -76,7 +81,6 @@ public class EmployerController {
             HttpServletRequest request,
             @PathVariable Long id){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email);
-        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+        return ResponseEntity.ok( internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email));
     }
 }
