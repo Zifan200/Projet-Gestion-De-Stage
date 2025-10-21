@@ -11,19 +11,30 @@ export const useUserStore = create((set, get) => ({
     try {
       set({ loading: true, error: null });
       const { token } = useAuthStore.getState();
-      if (!token) throw new Error("Missing token");
-
-      const data = await userService.getSettings(token);
-
       const localLang = localStorage.getItem("lang") || "en";
-      const language = data?.language || localLang;
 
-      if (!data?.language) {
+      if (!token) {
+        set({
+          settings: { language: localLang },
+          loading: false,
+        });
+        return;
+      }
+
+      const remote = await userService.getSettings(token);
+      const language = remote?.language || localLang;
+
+      if (!remote?.language) {
         await userService.updateSettings(token, { language });
       }
 
-      set({ settings: { ...data, language }, loading: false });
+      if (!localStorage.getItem("lang")) {
+        localStorage.setItem("lang", language);
+      }
+
+      set({ settings: { ...remote, language }, loading: false });
     } catch (err) {
+      console.error(err);
       set({ error: err.message, loading: false });
     }
   },
@@ -31,15 +42,19 @@ export const useUserStore = create((set, get) => ({
   updateLanguage: async (language) => {
     try {
       const { token } = useAuthStore.getState();
-      if (!token) throw new Error("Missing token");
 
-      await userService.updateSettings(token, { language });
+      localStorage.setItem("lang", language);
+
+      if (token) {
+        await userService.updateSettings(token, { language });
+      }
+
       set((state) => ({
         settings: { ...state.settings, language },
       }));
     } catch (err) {
+      console.error(err);
       set({ error: err.message });
-      throw err;
     }
   },
 }));

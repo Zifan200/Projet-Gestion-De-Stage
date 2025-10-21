@@ -106,6 +106,7 @@ public class InternshipOfferService {
                         .id(offer.getId())
                         .title(offer.getTitle())
                         .enterpriseName(offer.getEmployer().getEnterpriseName())
+                        .description(offer.getDescription())
                         .expirationDate(offer.getExpirationDate())
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())

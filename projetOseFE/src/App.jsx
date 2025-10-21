@@ -130,7 +130,7 @@ function App() {
     {
       key: "settings",
       label: t("menu.settings"),
-      href: "/dashboard/sutdent/settings",
+      href: "/dashboard/student/settings",
       icon: GearIcon,
     },
   ];
@@ -182,6 +182,10 @@ function App() {
             <Route
               path="/dashboard/student/offers"
               element={<StudentOffers />}
+            />
+            <Route
+              path="/dashboard/student/settings"
+              element={<DashboardSettings />}
             />
           </Route>
 
