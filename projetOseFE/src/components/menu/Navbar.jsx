@@ -74,6 +74,14 @@ const Navbar = () => {
     logout();
   };
 
+  const settings = () => {
+    if (isAuthenticated) {
+      if (user.role === "STUDENT") navigate("/dashboard/student/settings");
+      if (user.role === "EMPLOYER") navigate("/dashboard/employer/settings");
+      if (user.role === "GESTIONNAIRE") navigate("/dashboard/gs/settings");
+    }
+  };
+
   return (
     <nav
       ref={wrapperRef}
@@ -162,6 +170,13 @@ const Navbar = () => {
                         >
                           {t("menu.disconnect")}
                         </button>
+                        <button
+                          className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded"
+                          onClick={settings}
+                        >
+                          {t("menu.settings")}
+                        </button>
+
                         <div
                           className={
                             "h-[1px] bg-zinc-300 w-full mt-3 mb-3 ml-auto mr-auto"

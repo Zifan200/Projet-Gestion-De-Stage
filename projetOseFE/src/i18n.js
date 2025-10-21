@@ -7,6 +7,16 @@ import { initReactI18next } from "react-i18next";
 export const resources = {
   en: {
     translation: {
+      settings: {
+        lang: {
+          title: "Language",
+          language_description: "Select the language used for the interface",
+        },
+      },
+      languages: {
+        en: "English",
+        fr: "French",
+      },
       success: {
         loginSucces: "Login successful!",
         registerEnterpriseSuccess:
@@ -42,6 +52,7 @@ export const resources = {
         applicationSend: "Application send",
         allOffers: "All offers",
         manageCvs: "Submitted CV",
+        settings: "Settings",
       },
       errors: {
         email: { invalid: "Invalid email address" },
@@ -184,7 +195,8 @@ export const resources = {
           rejected: "Internship offer rejected",
           rejectReason: "Please specify a reason",
           reasonRequired: "A reason is required",
-          reasonPlaceholder: "Ex: The profile does not meet the requirements of the position...",
+          reasonPlaceholder:
+            "Ex: The profile does not meet the requirements of the position...",
         },
         filter: {
           status: {
@@ -305,21 +317,21 @@ export const resources = {
           title: "Title",
           company: "Company",
           deadline: "Deadline",
-          action: "Action"
+          action: "Action",
         },
         modal: {
-        companyName: "Company Name",
-        companyEmail: "Company Email",
-        targetedProgramme: "Targeted Programme",
-        publishedDate: "Published Date",
-        deadline: "Deadline",
-        status: "Status",
-        description: "Description",
-        close: "Close",
-        apply: "Apply",
-        selectCv: "Your CV(s)",
-        chooseCv: "Choose a CV",
-      },
+          companyName: "Company Name",
+          companyEmail: "Company Email",
+          targetedProgramme: "Targeted Programme",
+          publishedDate: "Published Date",
+          deadline: "Deadline",
+          status: "Status",
+          description: "Description",
+          close: "Close",
+          apply: "Apply",
+          selectCv: "Your CV(s)",
+          chooseCv: "Choose a CV",
+        },
         actions: {
           apply: "Apply",
           view: "View",
@@ -329,20 +341,30 @@ export const resources = {
         filterLabel: "Filter:",
         loading: "Loading offers...",
         success: {
-          applyOffer: "You have successfully applied to this offer"
+          applyOffer: "You have successfully applied to this offer",
         },
         errors: {
           applyOffer: "Failed to apply to the offer",
           loadOffers: "Failed to load offers",
           viewOffers: "Failed to view offers",
-          selectOffers: "Failed to select an offer"
-        }
-      }
-
+          selectOffers: "Failed to select an offer",
+        },
+      },
     },
   },
   fr: {
     translation: {
+      settings: {
+        lang: {
+          title: "Changement de la langue",
+          language_description:
+            "Choisissez la langue utilisée pour l’interface",
+        },
+      },
+      languages: {
+        en: "Anglais",
+        fr: "Français",
+      },
       success: {
         loginSucces: "Connexion réussie !",
         registerEnterpriseSuccess:
@@ -380,6 +402,7 @@ export const resources = {
         offerConfirm: "Offres signer",
         allOffers: "Toutes les offres",
         manageCvs: "CV soumis",
+        settings: "Paramètres",
       },
       errors: {
         email: { invalid: "Email est invalide" },
@@ -533,7 +556,8 @@ export const resources = {
           rejected: "Offre de stage rejetée",
           rejectReason: "Veuillez spécifier une raison",
           reasonRequired: "Une raison est requise",
-          reasonPlaceholder: "Ex : Le profil ne correspond pas aux exigences du poste...",
+          reasonPlaceholder:
+            "Ex : Le profil ne correspond pas aux exigences du poste...",
         },
         filter: {
           status: {
@@ -654,7 +678,7 @@ export const resources = {
           title: "Titre",
           company: "Entreprise",
           deadline: "Date limite",
-          action: "Action"
+          action: "Action",
         },
         modal: {
           companyName: "Nom de l'entreprise",
@@ -678,26 +702,33 @@ export const resources = {
         filterLabel: "Filtrer",
         loading: "Chargement des offres...",
         success: {
-          applyOffer: "Vous avez postulé à cette offre avec succès"
+          applyOffer: "Vous avez postulé à cette offre avec succès",
         },
         errors: {
           applyOffer: "Échec de la postulation à l'offre",
           loadOffers: "Impossible de charger les offres",
           viewOffers: "Impossible de voir les offres",
-          selectOffers: "Impossible de sélectionner une offre"
-        }
-      }
+          selectOffers: "Impossible de sélectionner une offre",
+        },
+      },
     },
   },
 };
+
+const savedLang = localStorage.getItem("lang") || "en";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: "en",
+    fallbackLng: "en",
+    lng: savedLang,
     interpolation: {
       escapeValue: false, // react already safes from xss
+    },
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
     },
   });
 
