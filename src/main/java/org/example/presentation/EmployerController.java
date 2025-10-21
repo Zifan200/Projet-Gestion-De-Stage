@@ -51,13 +51,12 @@ public class EmployerController {
     }
 
     @GetMapping("/get-internship-application/{id}")
-    public ResponseEntity<List<InternshipApplicationResponseDTO>> getInternshipApplicationForEmployerById(
+    public ResponseEntity<InternshipApplicationResponseDTO> getInternshipApplicationForEmployerById(
             HttpServletRequest request,
             @PathVariable Long id
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getApplicationByEmployerAndId(email, id);
-        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+        return ResponseEntity.ok(internshipApplicationService.getApplicationByEmployerAndId(email, id));
     }
 
     @GetMapping("/get-all-internship-applications")
@@ -65,8 +64,7 @@ public class EmployerController {
             HttpServletRequest request
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getAllApplicationsFromEmployer(email);
-        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromEmployer(email));
     }
 
     @GetMapping("/get-all-internship-applications/internship-offer/{id}")
@@ -74,7 +72,6 @@ public class EmployerController {
             HttpServletRequest request,
             @PathVariable Long id){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email);
-        return ResponseEntity.ok(internshipApplicationService.getAllApplications());
+        return ResponseEntity.ok( internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email));
     }
 }
