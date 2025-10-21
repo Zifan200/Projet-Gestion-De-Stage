@@ -9,7 +9,7 @@ import {useNavigate} from "react-router";
 
 export const OfferList = () => {
   const { t } = useTranslation();
-  const { offers, loadOffers, deleteOffer } = useOfferStore();
+  const { offers, loadOffers, deleteOffer, downloadOfferPdf } = useOfferStore();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -24,6 +24,15 @@ export const OfferList = () => {
       toast.error(t("offer.error.delete"));
     }
   };
+
+    const handleDownload = async (id) => {
+        try {
+            await downloadOfferPdf(user.token, id);
+            toast.success(t("offer.success.download"));
+        } catch {
+            toast.error(t("offer.error.download"));
+        }
+    };
 
   const rows = offers.map((offer) => (
     <tr key={offer.id} className="border-t border-gray-300">
@@ -42,6 +51,11 @@ export const OfferList = () => {
           onClick={() => handleDelete(offer.id)}
           label={t("offer.actions.delete")}
           className="bg-red-400"
+        />
+        <Button
+            onClick={() => handleDownload(offer.id)}
+            label={t("offer.actions.download")}
+            className="w-1/2 bg-amber-200 hover:bg-amber-50"
         />
       </td>
     </tr>

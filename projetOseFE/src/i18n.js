@@ -131,10 +131,12 @@ export const resources = {
         success: {
           create: "Offer successfully created!",
           delete: "Offer deleted successfully!",
+          download: "Download completed successfully!"
         },
         error: {
           create: "Error while creating the offer.",
           delete: "Error deleting the offer.",
+          download: "Error while downloading the offer."
         },
         form: {
           title: "Title",
@@ -199,7 +201,8 @@ export const resources = {
           create_another: "Add New Offer",
           view: "View",
           delete: "Delete",
-          reject: "Reject"
+          reject: "Reject",
+          download: "Download"
         },
         errors: {
           loadOffer: "Unable to get offer",
@@ -319,7 +322,8 @@ export const resources = {
       },
         actions: {
           apply: "Apply",
-          view: "View"
+          view: "View",
+          download: "Download"
         },
         noOffers: "No internship offers available",
         filterLabel: "Filter:",
@@ -476,9 +480,12 @@ export const resources = {
         success: {
           create: "Offre créée avec succès !",
           delete: "Offre supprimée avec succès!",
+          download : "Téléchargement effectué avec succès!"
         },
         error: {
           create: "Erreur lors de la création de l'offre.",
+          delete: "Erreur lors de la suppression de l'offre.",
+          download: "Erreur lors du téléchargement de l'offre."
         },
         form: {
           title: "Titre",
@@ -543,7 +550,8 @@ export const resources = {
           create_another: "Ajouter une nouvelle offre",
           view: "Voir",
           delete: "Supprimer",
-          reject: "Rejeter"
+          reject: "Rejeter",
+          download: "Télécharger"
         },
         errors: {
           loadOffer: "Impossible de récupérer l'offre",
@@ -663,7 +671,8 @@ export const resources = {
         },
         actions: {
           apply: "Postuler",
-          view: "Voir"
+          view: "Voir",
+          download: "Télécharger"
         },
         noOffers: "Aucune offre de stage disponible",
         filterLabel: "Filtrer",

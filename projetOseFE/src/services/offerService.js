@@ -111,4 +111,14 @@ export const offerService = {
     });
     return res.data;
   },
+
+  async downloadOfferPdf(token, id) {
+    const res = await api.get(`/internship-offers/${id}/create-pdf`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: "blob"
+    });
+    return res.data;
+  }
 }
