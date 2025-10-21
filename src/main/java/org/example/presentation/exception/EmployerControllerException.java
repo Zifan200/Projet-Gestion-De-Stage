@@ -3,6 +3,7 @@ package org.example.presentation.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.security.exception.APIException;
+import org.example.security.exception.InvalidJwtTokenException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.ErrorResponseDTO;
 import org.example.service.exception.*;
@@ -79,6 +80,11 @@ public class EmployerControllerException {
     @ExceptionHandler(UserSettingsNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleUserSettingsNotFound(UserSettingsNotFoundException ex) {
         return buildError(HttpStatus.OK, "USER_SETTINGS_NOT_FOUND", ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidJwt(InvalidJwtTokenException ex) {
+        return buildError(HttpStatus.UNAUTHORIZED, "INVALID_JWT_TOKEN", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

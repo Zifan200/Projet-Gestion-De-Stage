@@ -11,7 +11,7 @@ export const offerService = {
   },
 
   async getOffers(token) {
-    const res = await api.get("/employer/offers", {
+    const res = await api.get("/internship-offers/employer", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -47,11 +47,14 @@ export const offerService = {
   },
 
   async getOffersByProgram(token, program) {
-    const res = await api.get(`/internship-offers/filter-by-program?program=${program}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await api.get(
+      `/internship-offers/filter-by-program?program=${program}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     return res.data;
   },
 
@@ -92,13 +95,13 @@ export const offerService = {
 
   async updateOfferStatus(token, id, status, reason) {
     const res = await api.post(
-        `/internship-offers/${id}/update-status?status=${status}&reason=${encodeURIComponent(reason)}`,
-        {}, // pas de corps, juste une requête vide
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      `/internship-offers/${id}/update-status?status=${status}&reason=${encodeURIComponent(reason)}`,
+      {}, // pas de corps, juste une requête vide
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
     );
     return res.data;
   },
@@ -121,4 +124,4 @@ export const offerService = {
     });
     return res.data;
   }
-}
+};
