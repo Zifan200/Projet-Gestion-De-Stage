@@ -77,18 +77,21 @@ export const useCvStore = create((set, get) => ({
     try {
       let uint8Array;
 
-      if (fileData instanceof Uint8Array) {
+      if (fileData instanceof Uint8Array)
         uint8Array = fileData;
-      } else if (fileData instanceof ArrayBuffer) {
+      
+      else if (fileData instanceof ArrayBuffer)
         uint8Array = new Uint8Array(fileData);
-      } else if (typeof fileData === "string") {
+      
+      else if (typeof fileData === "string") {
         // Décoder le Base64 en bytes
         const binaryString = atob(fileData);
         const len = binaryString.length;
         uint8Array = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
+        
+        for (let i = 0; i < len; i++)
           uint8Array[i] = binaryString.charCodeAt(i);
-        }
+       
       } else {
         const errorMsg = "Type de fileData inconnu pour la prévisualisation.";
         set({ error: errorMsg });
@@ -103,6 +106,7 @@ export const useCvStore = create((set, get) => ({
       set({ error: "Impossible de prévisualiser le CV." });
     }
   },
+  
   downloadCvForEmployer: (fileData, fileName) => {
     try {
       cvService.downloadForEmployer(fileData, fileName);
