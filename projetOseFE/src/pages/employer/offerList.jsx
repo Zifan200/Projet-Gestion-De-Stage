@@ -96,7 +96,7 @@ export const OfferList = () => {
                 <Button
                     onClick={() => handleDownload(offer.id)}
                     label={t("offer.actions.download")}
-                    className="w-1/2 bg-amber-200 hover:bg-amber-50"
+                    className="bg-amber-200 hover:bg-amber-50 rounded-lg"
                 />
             </td>
         </tr>
