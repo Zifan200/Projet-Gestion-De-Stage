@@ -14,6 +14,7 @@ public class InternshipOfferListDto {
     private Long id;
     private String title;
     private String enterpriseName;
+    private String description;
     private LocalDate expirationDate;
     private String targetedProgramme;
     private InternshipOfferStatus status;
@@ -31,4 +32,5 @@ public class InternshipOfferListDto {
                 .reason(internshipOffers.getReason())
                 .build();
     }
+    private Integer applicationCount;
 }

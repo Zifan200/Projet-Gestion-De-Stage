@@ -167,54 +167,64 @@ export const resources = {
         },
       },
       offer: {
-        title: "Create an Internship Offer",
-        description: "Fill in the information to publish a new offer.",
-        submit: "Submit Offer",
+        title: "Create an internship offer",
+        description: "Fill in the details to publish a new offer.",
+        submit: "Publish offer",
+
         success: {
           create: "Offer successfully created!",
-          delete: "Offer deleted successfully!",
+          delete: "Offer successfully deleted!",
+          download: "Download completed successfully!"
         },
         error: {
           create: "Error while creating the offer.",
-          delete: "Error deleting the offer.",
+          delete: "Error while deleting the offer.",
+          load: "Error while loading offers.",
+          download: "Error while downloading the offer."
         },
+
         form: {
           title: "Title",
           description: "Description",
           program: "Targeted Program",
           email: "Employer Email",
-          deadline: "Expiration Date",
+          deadline: "Deadline",
           placeholders: {
-            title: "Ex: Internship at Health Research Institute",
-            description: "Ex: Computer science internship in medical research",
+            title: "Ex: Internship at the Health Research Institute",
+            description: "Ex: Computer science internship in the medical field",
             program: "Ex: Computer Science",
-            email: "stage@info.com",
+            email: "internship@info.com",
           },
         },
+
         validation: {
           title_required: "A title is required.",
           description_required: "A description is required.",
           program_required: "A program is required.",
-          invalid_email: "Invalid email.",
-          expiration_required: "An expiration date is required.",
+          invalid_email: "Invalid email address.",
+          expiration_required: "A deadline is required.",
         },
+
         table: {
           title: "My Internship Offers",
-          offerTitle: "Title",
-          program: "Program",
+          offerTitle: "Offer Title",
+          enterprise: "Company Name",
+          program: "Targeted Program",
           email: "Email",
           deadline: "Deadline",
-          actions: "Actions",
-          noOffers: "No offers available yet.",
-          enterprise: "Enterprise name",
-          loading: "Loading...",
           status: "Status",
+          applications: "Applications",
+          actions: "Actions",
+          noOffers: "No offers published yet.",
+          loading: "Loading...",
+          reason: "Reason for rejection",
         },
+
         modal: {
           description: "Description",
-          targetedProgramme: "Targeted program",
-          companyEmail: "Company email",
-          publishedDate: "Published date",
+          targetedProgramme: "Targeted Program",
+          companyEmail: "Company Email",
+          publishedDate: "Published Date",
           deadline: "Deadline",
           status: "Status",
           close: "Close",
@@ -225,31 +235,43 @@ export const resources = {
           rejectReason: "Please specify a reason",
           reasonRequired: "A reason is required",
           reasonPlaceholder:
-            "Ex: The profile does not meet the requirements of the position...",
+            "Ex: The profile does not match the position requirements...",
         },
+
         filter: {
-          status: {
-            all: "Status",
-            pending: "Pending",
-            accepted: "Accepted",
-            rejected: "Rejected",
-          },
+          status: "Filter by status",
+          all: "All statuses",
           program: {
             all: "All programs",
           },
         },
+
+        sort: {
+          by: "Sort by",
+          date: "Expiration date",
+          applications: "Application count",
+        },
+
+        status: {
+          accepted: "Accepted",
+          rejected: "Rejected",
+          pending: "Pending",
+        },
+
         actions: {
-          create_another: "Add New Offer",
+          create_another: "Add a new offer",
           view: "View",
           delete: "Delete",
           reject: "Reject",
+          download: "Download"
         },
+
         errors: {
-          loadOffer: "Unable to get offer",
+          loadOffer: "Unable to fetch offer",
           loadOffers: "Error while loading offers",
         },
       },
-      description: "Welcome to React and react-i18next",
+      description: "Welcome to the OSE 2.0 platform",
       form: {
         employer: {
           title: "Create an employer account",
@@ -363,6 +385,7 @@ export const resources = {
         actions: {
           apply: "Apply",
           view: "View",
+          download: "Download"
         },
         noOffers: "No internship offers available",
         filterLabel: "Filter:",
@@ -552,13 +575,19 @@ export const resources = {
         description:
           "Remplis les informations pour publier une nouvelle offre.",
         submit: "Publier l'offre",
+
         success: {
           create: "Offre créée avec succès !",
-          delete: "Offre supprimée avec succès!",
+          delete: "Offre supprimée avec succès !",
+          download : "Téléchargement effectué avec succès!"
         },
         error: {
           create: "Erreur lors de la création de l'offre.",
+          delete: "Erreur lors de la suppression de l'offre.",
+          load: "Erreur lors du chargement des offres.",
+          download: "Erreur lors du téléchargement de l'offre."
         },
+
         form: {
           title: "Titre",
           description: "Description",
@@ -572,6 +601,7 @@ export const resources = {
             email: "stage@info.com",
           },
         },
+
         validation: {
           title_required: "Un titre est obligatoire.",
           description_required: "Une description est obligatoire.",
@@ -579,28 +609,32 @@ export const resources = {
           invalid_email: "Courriel invalide.",
           expiration_required: "Une date limite est obligatoire.",
         },
+
         table: {
           title: "Mes offres de stage",
-          offerTitle: "Titre",
-          program: "Programme",
+          offerTitle: "Titre de l’offre",
+          enterprise: "Nom de l'entreprise",
+          program: "Programme visé",
           email: "Courriel",
           deadline: "Date limite",
-          actions: "Actions",
-          noOffers: "Aucune offre pour le moment.",
-          enterprise: "Nom de l'entreprise",
-          loading: "Chargement...",
           status: "Statut",
+          applications: "Candidatures",
+          actions: "Actions",
+          noOffers: "Aucune offre publiée pour le moment.",
+          loading: "Chargement...",
+          reason: "Raison du refus",
         },
+
         modal: {
           description: "Description",
           targetedProgramme: "Programme ciblé",
-          companyEmail: "Email de l'entreprise",
+          companyEmail: "Courriel de l'entreprise",
           publishedDate: "Date de publication",
           deadline: "Date limite",
           status: "Statut",
           close: "Fermer",
           accept: "Accepter",
-          reject: "Rejecter",
+          reject: "Rejeter",
           accepted: "Offre de stage acceptée",
           rejected: "Offre de stage rejetée",
           rejectReason: "Veuillez spécifier une raison",
@@ -608,23 +642,35 @@ export const resources = {
           reasonPlaceholder:
             "Ex : Le profil ne correspond pas aux exigences du poste...",
         },
+
         filter: {
-          status: {
-            all: "Statut",
-            pending: "En attente",
-            accepted: "Accepté",
-            rejected: "Rejeté",
-          },
+          status: "Filtrer par statut",
+          all: "Tous les statuts",
           program: {
             all: "Tous les programmes",
           },
         },
+
+        sort: {
+          by: "Trier par",
+          date: "Date d’expiration",
+          applications: "Nombre de candidatures",
+        },
+
+        status: {
+          accepted: "Acceptée",
+          rejected: "Rejetée",
+          pending: "En attente",
+        },
+
         actions: {
           create_another: "Ajouter une nouvelle offre",
           view: "Voir",
           delete: "Supprimer",
           reject: "Rejeter",
+          download: "Télécharger"
         },
+
         errors: {
           loadOffer: "Impossible de récupérer l'offre",
           loadOffers: "Erreur lors du chargement des offres",
@@ -720,6 +766,8 @@ export const resources = {
             "Un CV avec ce nom existe déjà. Veuillez renommer le fichier avant de le téléverser.",
         },
       },
+      description: "Bienvenue à la platforme OSE 2.0 platform",
+
       studentOffers: {
         title: "Offres de stage",
         table: {
@@ -744,6 +792,7 @@ export const resources = {
         actions: {
           apply: "Postuler",
           view: "Voir",
+          download: "Télécharger"
         },
         noOffers: "Aucune offre de stage disponible",
         filterLabel: "Filtrer",
@@ -762,21 +811,23 @@ export const resources = {
   },
 };
 
-const savedLang = localStorage.getItem("lang") || "en";
+const savedLang = localStorage.getItem("lang") || "fr";
 
-i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .init({
-    resources,
-    fallbackLng: "en",
-    lng: savedLang,
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-    detection: {
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
-    },
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  fallbackLng: "fr",
+  lng: savedLang,
+  interpolation: {
+    escapeValue: false,
+  },
+  detection: {
+    order: ["localStorage", "navigator"],
+    caches: ["localStorage"],
+  },
+});
+
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("lang", lng);
+});
 
 export default i18n;
