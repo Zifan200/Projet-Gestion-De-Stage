@@ -213,8 +213,10 @@ function App() {
             <Route
                 path="/dashboard/employer/applications"
                 element={<InternshipApplications />}
-              path="/dashboard/employer/settings"
-              element={<DashboardSettings />}
+            />
+            <Route
+                path="/dashboard/employer/settings"
+                element={<DashboardSettings />}
             />
           </Route>
           {/* Routes Employeur */}
