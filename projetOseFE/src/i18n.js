@@ -9,7 +9,6 @@ export const resources = {
     translation: {
       internshipApplications: {
         loading: "Loading applications...",
-        error: "Error loading applications",
         table: {
           offerTitle: "Offer title",
           studentName: "Student name",
