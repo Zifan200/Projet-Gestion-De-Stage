@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverClose,
 } from "../../components/ui/popover.jsx";
+import useAuthStore from "../../stores/authStore.js";
 
 // Simple Modal Component
 const Modal = ({ open, onClose, title, children }) => {
@@ -37,7 +38,8 @@ const Modal = ({ open, onClose, title, children }) => {
 
 export const OfferList = () => {
   const { t } = useTranslation();
-  const { offers, loadOffers, deleteOffer, downloadOfferPdf } = useOfferStore();
+  const user = useAuthStore((s) => s.user);
+  const { offers, loadOffers, downloadOfferPdf } = useOfferStore();
   const navigate = useNavigate();
 
   const [filterStatus, setFilterStatus] = useState(null);
