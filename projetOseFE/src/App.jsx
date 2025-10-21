@@ -23,15 +23,17 @@ import {
   EnvelopeClosedIcon,
   FileTextIcon,
   EnvelopeOpenIcon,
+  GearIcon,
 } from "@radix-ui/react-icons";
 import AddIntership from "./pages/employer/addIntership.jsx";
 import { StudentCVs } from "./pages/student/cvs.jsx";
 import { useTranslation } from "react-i18next";
 import { OfferList } from "./pages/employer/offerList.jsx";
-import {AllOffers} from "./pages/gs/allOffers.jsx";
+import { AllOffers } from "./pages/gs/allOffers.jsx";
 import { GsDashboard } from "./pages/gs/dashboard.jsx";
 import { GsManageCvs } from "./pages/gs/cvs.jsx";
 import {InternshipApplications} from "./pages/employer/internshipApplication.jsx";
+import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 
 function App() {
   const { t } = useTranslation();
@@ -53,6 +55,12 @@ function App() {
       label: t("menu.allOffers"),
       href: "/dashboard/gs/internships",
       icon: EnvelopeClosedIcon,
+    },
+    {
+      key: "settings",
+      label: t("menu.settings"),
+      href: "/dashboard/gs/settings",
+      icon: GearIcon,
     },
   ];
 
@@ -80,6 +88,12 @@ function App() {
       label: t("menu.seeOffer"),
       href: "/dashboard/employer/my-offers",
       icon: EnvelopeOpenIcon,
+    },
+    {
+      key: "settings",
+      label: t("menu.settings"),
+      href: "/dashboard/employer/settings",
+      icon: GearIcon,
     },
     // {
     //   key: "applications",
@@ -120,6 +134,12 @@ function App() {
       href: "/dashboard/student/applications",
       icon: EnvelopeClosedIcon,
     },
+    {
+      key: "settings",
+      label: t("menu.settings"),
+      href: "/dashboard/sutdent/settings",
+      icon: GearIcon,
+    },
   ];
   return (
     <div className="min-h-screen">
@@ -146,9 +166,10 @@ function App() {
               path="/dashboard/gs/manage-students-cvs"
               element={<GsManageCvs />}
             />
+            <Route path="/dashboard/gs/internships" element={<AllOffers />} />
             <Route
-                path="/dashboard/gs/internships"
-                element={<AllOffers />}
+              path="/dashboard/gs/settings"
+              element={<DashboardSettings />}
             />
           </Route>
 
@@ -165,7 +186,10 @@ function App() {
           >
             <Route index element={<StudentDashboard />} />
             <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
+            <Route
+              path="/dashboard/student/offers"
+              element={<StudentOffers />}
+            />
           </Route>
 
           <Route
@@ -189,13 +213,18 @@ function App() {
             <Route
                 path="/dashboard/employer/applications"
                 element={<InternshipApplications />}
+              path="/dashboard/employer/settings"
+              element={<DashboardSettings />}
             />
           </Route>
           {/* Routes Employeur */}
           <Route path="/signup/employer" element={<EmployerSignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/employer/ajout_stages" element={<AjoutStage />} />
-
+          <Route
+            path="/dashboard/employer/settings"
+            element={<DashboardSettings />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
