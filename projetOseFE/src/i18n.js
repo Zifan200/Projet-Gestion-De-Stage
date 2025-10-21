@@ -17,7 +17,9 @@ export const resources = {
           status: "Status",
           action: "Action",
           actionView: "View",
-          studentEmail: "Email"
+          studentEmail: "Email",
+          download: "Download",
+          noCv: "No resume",
         },
         modal: {
           offerTitle: "Offer title",
