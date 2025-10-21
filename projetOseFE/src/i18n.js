@@ -371,7 +371,6 @@ export const resources = {
     translation: {
       internshipApplications: {
         loading: "Chargement des candidatures...",
-        error: "Erreur lors du chargement des candidatures",
         table: {
           offerTitle: "Titre de l'offre",
           studentName: "Nom de l'Étudiant",
