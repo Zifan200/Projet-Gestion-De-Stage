@@ -83,10 +83,10 @@ export const cvService = {
       const cleanedBase64 = base64.replace(/\s/g, '');
       const binaryString = atob(cleanedBase64);
       uint8Array = new Uint8Array(binaryString.length);
-      
-      for (let i = 0; i < binaryString.length; i++) 
-        uint8Array[i] = binaryString.charCodeAt(i);
-      
+
+      for (let i = 0; i < binaryString.length; i++)
+        uint8Array[i] = binaryString.charCodeAt(i)
+    }
     else
       throw new Error("Type de fileData inconnu pour le téléchargement.");
 
