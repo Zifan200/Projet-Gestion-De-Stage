@@ -34,16 +34,18 @@ export const resources = {
         errors: {
           downloadCv: "Unable to download CV",
           loadApplications: "Error loading applications",
-        },  
-      settings: {
-        lang: {
-          title: "Language",
-          language_description: "Select the language used for the interface",
         },
-      },
-      languages: {
-        en: "English",
-        fr: "French",
+
+        settings: {
+          lang: {
+            title: "Language",
+            language_description: "Select the language used for the interface",
+          },
+        },
+        languages: {
+          en: "English",
+          fr: "French",
+        },
       },
       success: {
         loginSucces: "Login successful!",
@@ -400,17 +402,18 @@ export const resources = {
           appliedAt: "Postulé le",
           close: "Fermer",
           email: "Email"
-        }
-      settings: {
-        lang: {
-          title: "Changement de la langue",
-          language_description:
-            "Choisissez la langue utilisée pour l’interface",
         },
-      },
-      languages: {
-        en: "Anglais",
-        fr: "Français",
+        settings: {
+          lang: {
+            title: "Changement de la langue",
+            language_description:
+                "Choisissez la langue utilisée pour l’interface",
+          },
+        },
+        languages: {
+          en: "Anglais",
+          fr: "Français",
+        },
       },
       success: {
         loginSucces: "Connexion réussie !",
