@@ -39,7 +39,7 @@ export const InternshipApplications = () => {
         try {
             downloadCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
         } catch (err) {
-            toast.error("Impossible de télécharger le CV");
+            toast.error(t("internshipApplications.errors.downloadCv"));
         }
     };
 
