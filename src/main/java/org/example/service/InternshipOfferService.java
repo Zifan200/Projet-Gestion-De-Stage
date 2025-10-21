@@ -81,7 +81,7 @@ public class InternshipOfferService {
         if(employer.isEmpty()){
             throw new UserNotFoundException("employer not found");
         }
-        List<InternshipOffer> offersList =  internshipOfferRepository.findAllByEmployerEmail(email);
+        List<InternshipOffer> offersList =  internshipOfferRepository.getAllByEmployerCredentialsEmail(email);
         return offersList.stream().map(InternshipOfferListDto::create).collect(Collectors.toList());
     }
 
