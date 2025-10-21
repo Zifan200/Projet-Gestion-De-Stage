@@ -58,18 +58,16 @@ export const cvService = {
 
     return res.data;
   },
+  
   previewForEmployer(fileData, fileName) {
     if (!fileData) {
       throw new Error("Aucun fichier CV disponible pour ce candidat.");
     }
-
     const uint8Array = fileData instanceof Uint8Array ? fileData : new Uint8Array(fileData);
-
-
     const blob = new Blob([uint8Array], { type: "application/pdf" });
-
     return window.URL.createObjectURL(blob);
   },
+  
   downloadForEmployer(fileData, fileName = "cv.pdf") {
     if (!fileData) throw new Error("Aucun fichier CV disponible pour le téléchargement.");
 
