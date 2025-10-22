@@ -202,16 +202,16 @@ public class InternshipApplicationService {
     }
 
     public InternshipApplicationResponseDTO updateApplicationStatus(
-            Long applicationId, ApprovalStatus status/*, String reasons*/
+            Long applicationId, ApprovalStatus status, String reasons
     ) {
-        if (status == null/* || reasons == null*/) {
+        if (status == null || reasons == null) {
             throw new InvalidInternshipApplicationException("Application not found");
         }
         System.out.println(applicationId);
         InternshipApplication application = internshipApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new InvalidInternshipApplicationException("Application not found with id: " + applicationId));
         application.setStatus(status);
-        //application.setReason(reasons);
+        application.setReason(reasons);
         internshipApplicationRepository.save(application);
         eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
         return InternshipApplicationResponseDTO.create(application);
