@@ -1,4 +1,4 @@
-package org.example.service.dto.InternshipApplication;
+package org.example.service.dto.internshipApplication;
 
 
 import lombok.Builder;

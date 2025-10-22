@@ -3,7 +3,7 @@ package org.example.presentation;
 import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.service.InternshipApplicationService;
-import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;

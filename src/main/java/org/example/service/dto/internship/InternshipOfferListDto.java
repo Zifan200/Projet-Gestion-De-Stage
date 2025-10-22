@@ -1,4 +1,4 @@
-package org.example.service.dto;
+package org.example.service.dto.internship;
 
 import lombok.Builder;
 import lombok.Data;
@@ -6,7 +6,6 @@ import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder

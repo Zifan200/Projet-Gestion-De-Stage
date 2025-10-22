@@ -1,15 +1,10 @@
 package org.example.service;
 
-import jakarta.validation.constraints.Email;
 import org.example.event.UserCreatedEvent;
-import org.example.model.EmailMessage;
 import org.example.model.Employer;
-import org.example.model.UserApp;
 import org.example.repository.EmployerRepository;
-import org.example.repository.UserAppRepository;
-import org.example.security.exception.UsedEmailAddressException;
-import org.example.service.dto.EmployerDto;
-import org.example.service.dto.EmployerResponseDto;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.employer.EmployerResponseDto;
 import org.example.service.exception.DuplicateUserException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

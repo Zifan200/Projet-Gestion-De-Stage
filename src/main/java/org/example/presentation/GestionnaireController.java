@@ -2,10 +2,9 @@ package org.example.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.CVService;
-import org.example.service.GestionnaireService;
-import org.example.service.dto.CvDownloadDTO;
-import org.example.service.dto.CvResponseDTO;
-import org.example.service.dto.CvStatusDTO;
+import org.example.service.dto.cv.CvDownloadDTO;
+import org.example.service.dto.cv.CvResponseDTO;
+import org.example.service.dto.cv.CvStatusDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -6,7 +6,7 @@ import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.CvResponseDTO;
+import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

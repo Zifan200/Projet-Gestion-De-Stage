@@ -1,10 +1,9 @@
-package org.example.service.dto;
+package org.example.service.dto.internship;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 

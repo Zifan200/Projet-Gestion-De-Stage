@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.event.EmployerCreatedInternshipOfferEvent;
-import org.example.event.UserCreatedEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
@@ -9,10 +8,10 @@ import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.EmployerDto;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferListDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

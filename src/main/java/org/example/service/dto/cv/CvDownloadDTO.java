@@ -1,4 +1,4 @@
-package org.example.service.dto;
+package org.example.service.dto.cv;
 
 
 import lombok.AllArgsConstructor;

@@ -2,19 +2,20 @@ package org.example;
 
 
 
-import org.example.repository.EtudiantRepository;
-import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
-import lombok.Builder;
-import org.example.model.Employer;
+import org.example.service.dto.cv.CvResponseDTO;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.gestionnaire.GestionnaireDTO;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
+import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.model.auth.Role;
 import org.example.model.CV;
-import org.example.model.Etudiant;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
-import org.example.repository.EmployerRepository;
 import org.example.service.*;
-import org.example.service.dto.*;
+import org.example.service.dto.student.EtudiantDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,23 +1,20 @@
 package org.example.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
-import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
-import org.example.service.dto.*;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

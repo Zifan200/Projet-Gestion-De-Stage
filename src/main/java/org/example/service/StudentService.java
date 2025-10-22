@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.model.Etudiant;
 import org.example.repository.EtudiantRepository;
-import org.example.service.dto.EtudiantDTO;
+import org.example.service.dto.student.EtudiantDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

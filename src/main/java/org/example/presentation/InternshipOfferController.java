@@ -1,15 +1,12 @@
 package org.example.presentation;
 
-import com.itextpdf.commons.utils.Base64;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferListDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;

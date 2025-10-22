@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.model.CV;
 import org.example.service.CVService;
 import org.example.service.UserAppService;
-import org.example.service.dto.CvResponseDTO;
+import org.example.service.dto.cv.CvResponseDTO;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

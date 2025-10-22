@@ -1,6 +1,5 @@
-package org.example.service.dto;
+package org.example.service.dto.gestionnaire;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -8,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.example.model.Gestionnaire;
 import org.example.model.auth.Role;
+import org.example.service.dto.util.UserDTO;
 
 import java.time.LocalDate;
 

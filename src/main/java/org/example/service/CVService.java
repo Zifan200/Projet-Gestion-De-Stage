@@ -2,19 +2,17 @@ package org.example.service;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.example.model.CV;
 import org.example.model.Etudiant;
 import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.CvDownloadDTO;
-import org.example.service.dto.CvResponseDTO;
+import org.example.service.dto.cv.CvDownloadDTO;
+import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

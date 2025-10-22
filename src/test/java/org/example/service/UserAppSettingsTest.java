@@ -5,7 +5,7 @@ import org.example.model.UserSettings;
 import org.example.repository.UserAppRepository;
 import org.example.repository.UserSettingsRepository;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.UserSettingsDto;
+import org.example.service.dto.util.UserSettingsDto;
 import org.example.service.exception.UserSettingsNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

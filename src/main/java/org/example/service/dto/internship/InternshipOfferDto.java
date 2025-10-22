@@ -1,4 +1,4 @@
-package org.example.service.dto;
+package org.example.service.dto.internship;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.InternshipOfferStatus;
+import org.example.service.dto.employer.EmployerResponseDto;
 
 import java.time.LocalDate;
 
