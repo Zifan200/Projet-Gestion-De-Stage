@@ -92,4 +92,15 @@ public class EtudiantController {
         List<InternshipApplicationResponseDTO> list = internshipApplicationService.getAllApplicationsFromStudent(email);
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping("/get-all-internship-applications/{status}")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForStudentByStatus(
+            HttpServletRequest request,
+            @PathVariable String status
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(email, status);
+        return ResponseEntity.ok(list);
+    }
 }

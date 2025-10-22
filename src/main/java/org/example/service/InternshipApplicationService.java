@@ -2,6 +2,8 @@ package org.example.service;
 
 
 import lombok.AllArgsConstructor;
+import org.example.event.InternshipApplicationStatusChangeEvent;
+import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.event.StudentCreatedInternshipApplicationCreatedEvent;
 import org.example.model.*;
 import org.example.model.enums.ApprovalStatus;
@@ -10,7 +12,9 @@ import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.*;
 import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidApprovalStatus;
+import org.example.service.exception.InvalidInternShipOffer;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,5 +182,38 @@ public class InternshipApplicationService {
         }
         List<InternshipApplication> list = internshipApplicationRepository.findAllByStudentCredentialsEmail(email);
         return list.stream().map(InternshipApplicationResponseDTO::create).toList();
+    }
+
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromStudentByStatus(String email, String status) {
+        Optional<Etudiant> student = studentRepository.findByCredentialsEmail(email);
+        if(student.isEmpty()){
+            throw new InvalidInternshipApplicationException("Invalid internship application : student does not exist");
+        }
+
+        if(!SimpleEnumUtils.isValuePresentInEnum(ApprovalStatus.class, status)){
+            throw new InvalidApprovalStatus("Invalid internship application status");
+        }
+
+        List<InternshipApplication> list = internshipApplicationRepository.findAllByStudentCredentialsEmailAndStatus(
+                email,
+                SimpleEnumUtils.findEnumValue(ApprovalStatus.class, status)
+        );
+        return list.stream().map(InternshipApplicationResponseDTO::create).toList();
+    }
+
+    public InternshipApplicationResponseDTO updateApplicationStatus(
+            Long applicationId, ApprovalStatus status/*, String reasons*/
+    ) {
+        if (status == null/* || reasons == null*/) {
+            throw new InvalidInternshipApplicationException("Application not found");
+        }
+        System.out.println(applicationId);
+        InternshipApplication application = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new InvalidInternshipApplicationException("Application not found with id: " + applicationId));
+        application.setStatus(status);
+        //application.setReason(reasons);
+        internshipApplicationRepository.save(application);
+        eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+        return InternshipApplicationResponseDTO.create(application);
     }
 }

@@ -28,17 +28,17 @@ public class InternshipApplicationResponseDTO {
 
     private Long internshipOfferId;
     private String internshipOfferTitle;
-    private String internshipOfferEmployerEmail;
+    //private String internshipOfferEmployerEmail;
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
-    private ApprovalStatus status =  ApprovalStatus.PENDING;
+    private ApprovalStatus status;
     private LocalDateTime createdAt;
 
     @Builder
     public InternshipApplicationResponseDTO(
             Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
-            Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
+            Long internshipOfferId, String internshipOfferTitle, /*String internshipOfferEmployerEmail,*/
             LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
 
             ){
@@ -52,7 +52,7 @@ public class InternshipApplicationResponseDTO {
         this.selectedCvFileData = selectedCvFileData;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
-        this.internshipOfferEmployerEmail = internshipOfferEmployerEmail;
+        //this.internshipOfferEmployerEmail = internshipOfferEmployerEmail;
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;

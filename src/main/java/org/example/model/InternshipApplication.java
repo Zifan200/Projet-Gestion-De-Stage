@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class InternshipApplication {
     @Id
@@ -21,6 +22,8 @@ public class InternshipApplication {
     @ManyToOne
     private InternshipOffer offer;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ApprovalStatus status =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
 
