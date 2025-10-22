@@ -3,7 +3,7 @@ package org.example.service.dto.internship;
 import lombok.Builder;
 import lombok.Data;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
 
@@ -16,7 +16,7 @@ public class InternshipOfferListDto {
     private String description;
     private LocalDate expirationDate;
     private String targetedProgramme;
-    private InternshipOfferStatus status;
+    private ApprovalStatus status;
     private String reason;
 
 

@@ -6,7 +6,6 @@ import org.example.event.StudentCreatedInternshipApplicationCreatedEvent;
 import org.example.model.*;
 import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.SimpleEnumUtils;
-import org.example.model.enums.InternshipOfferStatus;
 import org.example.repository.*;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
@@ -43,7 +42,7 @@ public class InternshipApplicationService {
         if(selectedCV.isEmpty()){
             throw new InvalidInternshipApplicationException("Invalid internship offer : cv does not exist");
         }
-        if(selectedCV.get().getStatus() == InternshipOfferStatus.PENDING || selectedCV.get().getStatus() == InternshipOfferStatus.REJECTED){
+        if(selectedCV.get().getStatus() == ApprovalStatus.PENDING || selectedCV.get().getStatus() == ApprovalStatus.REJECTED){
             throw  new InvalidInternshipApplicationException("Invalid internship offer : cv is not a acceptable status");
         }
         if(offer.isEmpty()){

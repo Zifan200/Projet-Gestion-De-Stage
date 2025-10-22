@@ -1,7 +1,7 @@
 package org.example.service.dto.cv;
 
 import lombok.*;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 
 @Getter
 @Setter
@@ -9,6 +9,6 @@ import org.example.model.enums.InternshipOfferStatus;
 @NoArgsConstructor
 @Builder
 public class CvStatusDTO {
-    private InternshipOfferStatus status;
+    private ApprovalStatus status;
     private String reason;
 }

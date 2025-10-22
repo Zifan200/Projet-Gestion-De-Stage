@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.service.dto.employer.EmployerResponseDto;
 
 import java.time.LocalDate;
@@ -41,12 +41,12 @@ public class InternshipOfferDto {
     private LocalDate expirationDate;
 
     @Builder.Default
-    private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
+    private ApprovalStatus status = ApprovalStatus.PENDING;
     private String reason;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason) {
+                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -60,7 +60,7 @@ public class InternshipOfferDto {
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+                              Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -73,7 +73,7 @@ public class InternshipOfferDto {
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status) {
+                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;

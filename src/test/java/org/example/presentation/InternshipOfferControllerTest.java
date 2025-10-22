@@ -2,7 +2,7 @@ package org.example.presentation;
 
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
 import org.example.service.InternshipOfferService;
@@ -215,12 +215,12 @@ public class InternshipOfferControllerTest {
                 .build();
 
         InternshipOfferResponseDto offerResponse = InternshipOfferResponseDto.create(offer);
-        offerResponse.setStatus(InternshipOfferStatus.PENDING);
+        offerResponse.setStatus(ApprovalStatus.PENDING);
 
         InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
-        updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
+        updatedResponse.setStatus(ApprovalStatus.ACCEPTED);
 
-        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED, "the offer looks good"))
+        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), ApprovalStatus.ACCEPTED, "the offer looks good"))
                 .thenReturn(updatedResponse);
 
         mockMvc.perform(post("/api/v1/internship-offers/{id}/update-status", offerResponse.getId())
@@ -241,7 +241,7 @@ public class InternshipOfferControllerTest {
                 .setControllerAdvice(new InternshipOfferControllerException())
                 .build();
 
-        when(internshipOfferService.updateOfferStatus(eq(100L), eq(InternshipOfferStatus.ACCEPTED), anyString()))
+        when(internshipOfferService.updateOfferStatus(eq(100L), eq(ApprovalStatus.ACCEPTED), anyString()))
                 .thenThrow(new InvalidInternShipOffer("Offer not found"));
 
         mockMvc.perform(post("/api/v1/internship-offers/100/update-status")

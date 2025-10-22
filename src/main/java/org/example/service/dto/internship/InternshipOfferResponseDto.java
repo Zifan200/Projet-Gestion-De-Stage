@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
 
@@ -21,13 +21,13 @@ public class InternshipOfferResponseDto {
     private String employerEmail;
     private LocalDate publishedDate;
     private LocalDate expirationDate;
-    private InternshipOfferStatus status;
+    private ApprovalStatus status;
     private String reason;
 
     @Builder
  
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
-                                      String employerEmail, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason) {
+                                      String employerEmail, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason) {
         this.id = id;
         this.title = title;
         this.description = description;

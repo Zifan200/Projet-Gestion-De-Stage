@@ -16,7 +16,7 @@ import org.example.event.EmployerCreatedInternshipOfferEvent;
 import org.example.event.InternshipOfferStatusChangeEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.security.exception.UserNotFoundException;
@@ -157,7 +157,7 @@ public class InternshipOfferService {
 
     public List<InternshipOfferListDto> getAcceptedOffers() {
         List<InternshipOffer> acceptedOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED);
+                internshipOfferRepository.findDistinctByStatus(ApprovalStatus.ACCEPTED);
 
         return acceptedOffers.stream()
                 .map(offer -> InternshipOfferListDto.builder()
@@ -173,7 +173,7 @@ public class InternshipOfferService {
     }
     public List<InternshipOfferListDto> getRejectedOffers() {
         List<InternshipOffer> rejectedOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED);
+                internshipOfferRepository.findDistinctByStatus(ApprovalStatus.REJECTED);
 
         return rejectedOffers.stream()
                 .map(offer -> InternshipOfferListDto.builder()
@@ -190,7 +190,7 @@ public class InternshipOfferService {
 
     public List<InternshipOfferListDto> getPendingOffers() {
         List<InternshipOffer> pendingOffers =
-                internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING);
+                internshipOfferRepository.findDistinctByStatus(ApprovalStatus.PENDING);
 
         return pendingOffers.stream()
                 .map(offer -> InternshipOfferListDto.builder()
@@ -206,7 +206,7 @@ public class InternshipOfferService {
     }
 
 
-    public InternshipOfferResponseDto updateOfferStatus(Long offerId, InternshipOfferStatus status, String reasons) {
+    public InternshipOfferResponseDto updateOfferStatus(Long offerId, ApprovalStatus status, String reasons) {
         if (status == null || reasons == null) {
             throw new InvalidInternShipOffer("Offer not found");
         }
@@ -224,7 +224,7 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAll()
                 .stream()
                 .filter(offer -> offer.getTargetedProgramme().equalsIgnoreCase(programme))
-                .filter(offer -> offer.getStatus() == InternshipOfferStatus.ACCEPTED)
+                .filter(offer -> offer.getStatus() == ApprovalStatus.ACCEPTED)
                 .map(offer -> InternshipOfferListDto.builder()
                         .id(offer.getId())
                         .title(offer.getTitle())

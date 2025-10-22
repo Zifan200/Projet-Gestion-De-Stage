@@ -2,7 +2,7 @@ package org.example.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
 import org.example.service.dto.internship.InternshipOfferListDto;
@@ -98,7 +98,7 @@ public class InternshipOfferController {
             @RequestParam String reason
     ) {
 
-        InternshipOfferStatus newStatus = InternshipOfferStatus.valueOf(status.toUpperCase());
+        ApprovalStatus newStatus = ApprovalStatus.valueOf(status.toUpperCase());
         InternshipOfferResponseDto responseOffer = internshipOfferService.updateOfferStatus(id, newStatus, reason);
         return ResponseEntity.ok(responseOffer);
     }

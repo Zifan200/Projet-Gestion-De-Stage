@@ -12,7 +12,7 @@ import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.model.auth.Role;
 import org.example.model.CV;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.CvRepository;
 import org.example.service.*;
 import org.example.service.dto.student.EtudiantDTO;
@@ -155,9 +155,9 @@ public class Main {
             // -----------------------------
             // 4️⃣ Mise à jour des statuts
             // -----------------------------
-            internshipOfferService.updateOfferStatus(savedOffer1.getId(), InternshipOfferStatus.ACCEPTED, "je taimes");
-            internshipOfferService.updateOfferStatus(savedOffer2.getId(), InternshipOfferStatus.ACCEPTED, "t cool");
-            internshipOfferService.updateOfferStatus(savedOffer4.getId(), InternshipOfferStatus.REJECTED, "pas intéressant");
+            internshipOfferService.updateOfferStatus(savedOffer1.getId(), ApprovalStatus.ACCEPTED, "je taimes");
+            internshipOfferService.updateOfferStatus(savedOffer2.getId(), ApprovalStatus.ACCEPTED, "t cool");
+            internshipOfferService.updateOfferStatus(savedOffer4.getId(), ApprovalStatus.REJECTED, "pas intéressant");
 
             // -----------------------------
             // 5️⃣ Afficher toutes les offres
@@ -219,7 +219,7 @@ public class Main {
                     .fileType("pdf")
                     .reason("")
                     .uploadedAt(LocalDateTime.now())
-                    .status(InternshipOfferStatus.ACCEPTED)
+                    .status(ApprovalStatus.ACCEPTED)
                     .build();
             //cant get cv id
             cvRepository.save(studentCV);

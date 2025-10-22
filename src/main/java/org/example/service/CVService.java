@@ -4,7 +4,7 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import org.example.model.CV;
 import org.example.model.Etudiant;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
@@ -46,7 +46,7 @@ public class CVService {
                     .fileSize(cvFile.getSize())
                     .uploadedAt(LocalDateTime.now())
                     .data(cvFile.getBytes())
-                    .status(InternshipOfferStatus.PENDING)
+                    .status(ApprovalStatus.PENDING)
                     .build();
 
             cvRepository.save(cv);
@@ -119,7 +119,7 @@ public class CVService {
     }
 
     @Transactional
-    public CvResponseDTO updateCvStatus(Long cvId, InternshipOfferStatus newStatus, String reason) {
+    public CvResponseDTO updateCvStatus(Long cvId, ApprovalStatus newStatus, String reason) {
         CV cv = cvRepository.findById(cvId)
                 .orElseThrow(() -> new CvNotFoundException("CV introuvable. Veuillez réessayer."));
 
@@ -129,14 +129,14 @@ public class CVService {
 
         cv.setStatus(newStatus);
 
-        if (newStatus == InternshipOfferStatus.REJECTED) {
+        if (newStatus == ApprovalStatus.REJECTED) {
             cv.setReason(reason);
         }
         else {
             cv.setReason(reason);
         }
 
-        if (newStatus == InternshipOfferStatus.REJECTED && (reason == null || reason.isEmpty())) {
+        if (newStatus == ApprovalStatus.REJECTED && (reason == null || reason.isEmpty())) {
             throw new InvalidInternShipOffer("Vous devez spécifier la raison du refus.");
         }
 
@@ -146,12 +146,12 @@ public class CVService {
 
     @Transactional
     public CvResponseDTO approveCv(Long cvId) {
-        return updateCvStatus(cvId, InternshipOfferStatus.ACCEPTED, null);
+        return updateCvStatus(cvId, ApprovalStatus.ACCEPTED, null);
     }
 
     @Transactional
     public CvResponseDTO refuseCv(Long cvId, String reason) {
-        return updateCvStatus(cvId, InternshipOfferStatus.REJECTED, reason);
+        return updateCvStatus(cvId, ApprovalStatus.REJECTED, reason);
     }
 
     @Transactional(readOnly = true)
