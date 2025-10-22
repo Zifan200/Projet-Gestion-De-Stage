@@ -2,6 +2,8 @@ package org.example.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.enums.ApprovalStatus;
+import org.example.presentation.exception.EmployerControllerException;
+import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.presentation.exception.InvalidStudentControllerException;
 import org.example.service.InternshipApplicationService;
 import org.example.service.StudentService;
@@ -20,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -232,5 +236,73 @@ class StudentControllerTest {
         Exception resolved = result.getResolvedException();
         assertNotNull(resolved);
         assertTrue(resolved instanceof InvalidInternshipApplicationException);
+    }
+
+    @Test
+    void getAllInternshipApplicationsForStudent_shouldReturn200() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        EtudiantDTO savedStudent = EtudiantDTO.builder().email(EMAIL).build();
+
+        InternshipApplicationResponseDTO applicationRes1 = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail(EMAIL)
+                .internshipOfferId(1L)
+                .internshipOfferTitle("Développeur Fullstack")
+                .build();
+
+        InternshipApplicationResponseDTO applicationRes2 = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail(EMAIL)
+                .internshipOfferId(2L)
+                .internshipOfferTitle("Programmeur Java")
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(
+                EtudiantDTO.builder().email(EMAIL).build()
+        );
+
+        // Act
+        when(internshipApplicationService.getAllApplicationsFromStudent(EMAIL))
+                .thenReturn(List.of(applicationRes1, applicationRes2));
+
+        // Assert
+        mockMvc.perform(get("/api/v1/student/get-all-internship-applications")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].studentEmail").value(EMAIL))
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Développeur Fullstack"))
+                .andExpect(jsonPath("$[1].internshipOfferTitle").value("Programmeur Java"));
+    }
+
+    @Test
+    void getAllInternshipApplicationsForStudent_shouldReturn200_whenNoApplications() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        EtudiantDTO savedStudent = EtudiantDTO.builder().email(EMAIL).build();
+
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(
+                EtudiantDTO.builder().email(EMAIL).build()
+        );
+
+        // Act
+        List<InternshipApplicationResponseDTO> list = internshipApplicationService.getAllApplicationsFromStudent(EMAIL);
+        when(list).thenReturn(List.of());
+
+        // Assert
+        mockMvc.perform(get("/api/v1/student/get-all-internship-applications")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertTrue(list.size() == 0);
     }
 }

@@ -641,6 +641,89 @@ public class InternshipApplicationServiceTest {
                         )
         );
     }
+
+    @Test
+    void getAllApplicationsFromStudent_shouldReturnApplicationsForStudent() {
+        // Arrange
+        String employerEmail = "emile.ployer@corp.com";
+        Employer employer = Employer.builder().email(employerEmail).build();
+
+        CV cv = CV.builder().id(1L).build();
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        InternshipOffer offer1 = InternshipOffer.builder()
+                .id(1L)
+                .title("Frontend Angular")
+                .employer(employer)
+                .build();
+        InternshipOffer offer2 = InternshipOffer.builder()
+                .id(2L)
+                .title("Développeur Fullstack")
+                .employer(employer)
+                .build();
+
+        InternshipApplication app1 = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer1)
+                .build();
+        InternshipApplication app2 = InternshipApplication.builder()
+                .id(2L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer2)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findAllByStudentCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(List.of(app1, app2));
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudent(STUDENT_EMAIL);
+
+        // Assert
+        assertNotNull(list);
+        assertEquals(2, list.size());
+        assertEquals("Frontend Angular", list.get(0).getInternshipOfferTitle());
+        assertEquals("Développeur Fullstack", list.get(1).getInternshipOfferTitle());
+    }
+
+    @Test
+    void getAllApplicationsFromStudent_whenStudentDoesNotExist_shouldThrowException() {
+        // Arrange
+        String invalidEmail = "student@notfound.com";
+        when(studentRepository.findByCredentialsEmail(invalidEmail)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllApplicationsFromStudent(invalidEmail)
+        );
+
+        assertTrue(exception.getMessage().contains("student does not exist"));
+    }
+
+    @Test
+    void getAllApplicationsFromStudent_shouldReturnEmptyList_whenNoApplications() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findAllByStudentCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(List.of());
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudent(STUDENT_EMAIL);
+
+        // Assert
+        assertNotNull(list);
+        assertEquals(0, list.size());
+    }
 }
 
 
