@@ -17,10 +17,10 @@ export const AllOffers = () => {
     const [rejectReason, setRejectReason] = useState("");
 
     const offerStatuses = {
-        ALL: t("offer.filter.status.all"),
-        PENDING: t("offer.filter.status.pending"),
-        ACCEPTED: t("offer.filter.status.accepted"),
-        REJECTED: t("offer.filter.status.rejected"),
+        ALL: t("offer.filter.all"),
+        PENDING: t("offer.status.pending"),
+        ACCEPTED: t("offer.status.accepted"),
+        REJECTED: t("offer.status.rejected"),
     };
 
     const [currentOfferStatus, setCurrentOfferStatus] = useState(offerStatuses.ALL);
