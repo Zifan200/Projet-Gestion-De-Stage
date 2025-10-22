@@ -8,7 +8,8 @@ STORY DONE:
 Scrum master:
   1er sprint: Ossman
   2e sprint: Victoria
-
+  3e Sprint : Zifan
+  
 Objectif smart:
 
   premier point smart (communication)
