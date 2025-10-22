@@ -724,6 +724,78 @@ public class InternshipApplicationServiceTest {
         assertNotNull(list);
         assertEquals(0, list.size());
     }
+
+    @Test
+    void getAllApplicationsFromStudentByStatus_shouldReturnApplicationsWithStatus() {
+        // Arrange
+        String status = "ACCEPTED";
+
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Frontend React")
+                .employer(employer)
+                .build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(1L).build();
+
+        InternshipApplication application = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .status(ApprovalStatus.ACCEPTED)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
+
+        when(internshipApplicationRepository.findAllByStudentCredentialsEmailAndStatus(
+                STUDENT_EMAIL, ApprovalStatus.ACCEPTED
+        )).thenReturn(List.of(application));
+
+        // Act
+        List<InternshipApplicationResponseDTO> res =
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(STUDENT_EMAIL, status);
+
+        // Assert
+        assertNotNull(res);
+        assertEquals(1, res.size());
+        assertEquals(application.getId(), res.get(0).getId());
+        assertEquals(ApprovalStatus.ACCEPTED, res.get(0).getStatus());
+    }
+
+    @Test
+    void getAllApplicationsFromStudentByStatus_shouldThrowException_whenInvalidStatus() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+
+        // Act & Assert
+        assertThrows(InvalidApprovalStatus.class,
+                () -> internshipApplicationService.getAllApplicationsFromStudentByStatus(
+                        STUDENT_EMAIL, "INVALID"
+                ));
+    }
+
+    @Test
+    void getAllApplicationsFromStudentByStatus_shouldReturnEmptyList_whenNoApplications() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(STUDENT_EMAIL, "PENDING");
+
+        // Assert
+        assertNotNull(list);
+        assertEquals(0, list.size());
+    }
 }
 
 

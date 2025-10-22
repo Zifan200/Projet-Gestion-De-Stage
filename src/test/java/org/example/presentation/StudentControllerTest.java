@@ -1,6 +1,7 @@
 package org.example.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipApplicationControllerException;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -303,6 +305,91 @@ class StudentControllerTest {
                         .header("Authorization", "Bearer " + FAKE_JWT)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        assertTrue(list.size() == 0);
+    }
+
+    @Test
+    void getAllInternshipApplicationsForStudentByStatus_shouldReturn200() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO applicationRes1 = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail(EMAIL)
+                .internshipOfferId(1L)
+                .internshipOfferTitle("Développeur Fullstack")
+                .status(ApprovalStatus.REJECTED)
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(
+                EtudiantDTO.builder().email(EMAIL).build()
+        );
+
+        // Act
+        when(internshipApplicationService.getAllApplicationsFromStudentByStatus(EMAIL, "REJECTED"))
+                .thenReturn(List.of(applicationRes1));
+
+        // Assert
+        mockMvc.perform(get("/api/v1/student/get-all-internship-applications/REJECTED")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].studentEmail").value(EMAIL))
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Développeur Fullstack"))
+                .andExpect(jsonPath("$[0].status").value("REJECTED"));
+    }
+
+    @Test
+    void getAllInternshipApplicationsForStudentByStatus_shouldReturn200_whenNoApplications() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(
+                EtudiantDTO.builder().email(EMAIL).build()
+        );
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(EMAIL, "ACCEPTED");
+        when(list).thenReturn(List.of());
+
+        // Assert
+        mockMvc.perform(get("/api/v1/student/get-all-internship-applications/ACCEPTED")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllInternshipApplicationsForStudentByStatus_shouldReturn400_whenInvalidStatus() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InvalidStudentControllerException())
+                .build();
+
+        EtudiantDTO savedStudent = EtudiantDTO.builder().email(EMAIL).build();
+
+        // Act
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(savedStudent);
+
+        when(internshipApplicationService.getAllApplicationsFromStudentByStatus(EMAIL, "invalid"))
+                .thenThrow(new InvalidInternshipApplicationException("Invalid status"));
+
+        // Assert
+        MvcResult result = mockMvc.perform(get("/api/v1/student/get-all-internship-applications/invalid")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternshipApplicationException);
     }
 }
