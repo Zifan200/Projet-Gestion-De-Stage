@@ -9,9 +9,8 @@ import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
 import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferListDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.service.UserAppService;
+import org.example.service.dto.*;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,8 +38,14 @@ public class InternshipOfferControllerTest {
 
     @Mock
     private InternshipOfferService internshipOfferService;
+    @Mock
+    private UserAppService userAppService;
     @InjectMocks
     private InternshipOfferController internshipOfferController;
+
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String FAKE_JWT = "fake-jwt";
+    private static final String EMAIL = "employer@example.com";
 
     @Test
     void getAllInternshipOffers_shouldReturnOffers() {
@@ -309,4 +314,70 @@ public class InternshipOfferControllerTest {
 
         System.out.println("Fichier PDF téléchargé : " + downloadsPath.toAbsolutePath());
     }
+
+    @Test
+    void getAllEmployerInternshipOffersSummary_shouldReturn200WithOffers() throws Exception {
+        // Arrange
+        EmployerDto employerDto = EmployerDto.builder()
+                .email(EMAIL)
+                .firstName("John")
+                .lastName("Doe")
+                .build();
+
+        InternshipOfferListDto offer1 = InternshipOfferListDto.builder()
+                .id(1L)
+                .title("Backend Developer")
+                .applicationCount(3)
+                .build();
+
+        InternshipOfferListDto offer2 = InternshipOfferListDto.builder()
+                .id(2L)
+                .title("Frontend Developer")
+                .applicationCount(1)
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(employerDto);
+        when(internshipOfferService.getAllOffersSummaryFromEmployer(EMAIL))
+                .thenReturn(List.of(offer1, offer2));
+
+        // Act + Assert
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(internshipOfferController).build();
+        mockMvc.perform(get("/api/v1/internship-offers/employer")
+                        .header(AUTH_HEADER, "Bearer " + FAKE_JWT)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Backend Developer"))
+                .andExpect(jsonPath("$[1].title").value("Frontend Developer"));
+    }
+
+    @Test
+    void getAllEmployerInternshipOffersSummary_shouldReturn500WhenServiceThrows() throws Exception {
+        // Arrange
+        EmployerDto employerDto = EmployerDto.builder()
+                .email(EMAIL)
+                .firstName("John")
+                .lastName("Doe")
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(employerDto);
+        when(internshipOfferService.getAllOffersSummaryFromEmployer(EMAIL))
+                .thenThrow(new RuntimeException("Database down"));
+
+        // Act + Assert
+        MockMvc mockMvc = mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipOfferController)
+                .setControllerAdvice(new EmployerControllerException())
+                .build();
+
+        mockMvc.perform(get("/api/v1/internship-offers/employer")
+                        .header(AUTH_HEADER, "Bearer " + FAKE_JWT)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.status").value(500))
+                .andExpect(jsonPath("$.errorCode").value("INTERNAL_ERROR"))
+                .andExpect(jsonPath("$.message").value("Une erreur inattendue est survenue"))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
+
 }
