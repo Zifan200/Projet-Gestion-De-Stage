@@ -3,7 +3,7 @@ package service;
 import org.example.model.Etudiant;
 import org.example.repository.EtudiantRepository;
 import org.example.service.StudentService;
-import org.example.service.dto.EtudiantDTO;
+import org.example.service.dto.student.EtudiantDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

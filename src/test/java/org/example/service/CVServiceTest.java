@@ -2,11 +2,11 @@ package org.example.service;
 
 import org.example.model.CV;
 import org.example.model.Etudiant;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.CvRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.CvResponseDTO;
+import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -266,8 +266,8 @@ class CVServiceTest {
 
         CvResponseDTO response = cvService.approveCv(1L);
 
-        assertThat(response.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
-        assertThat(cv.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
+        assertThat(response.getStatus()).isEqualTo(ApprovalStatus.ACCEPTED);
+        assertThat(cv.getStatus()).isEqualTo(ApprovalStatus.ACCEPTED);
 
         verify(cvRepository).findById(1L);
         verify(cvRepository).save(cv);
@@ -286,8 +286,8 @@ class CVServiceTest {
 
         CvResponseDTO response = cvService.refuseCv(1L, "Le CV est insuffisant.");
 
-        assertThat(response.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
-        assertThat(cv.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
+        assertThat(response.getStatus()).isEqualTo(ApprovalStatus.REJECTED);
+        assertThat(cv.getStatus()).isEqualTo(ApprovalStatus.REJECTED);
 
         verify(cvRepository).findById(1L);
         verify(cvRepository).save(cv);
@@ -306,11 +306,11 @@ class CVServiceTest {
         when(cvRepository.save(any(CV.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         cvService.approveCv(1L);
-        CvResponseDTO response = cvService.updateCvStatus(1L, InternshipOfferStatus.REJECTED,
+        CvResponseDTO response = cvService.updateCvStatus(1L, ApprovalStatus.REJECTED,
                                                     "Contenu insuffisant.");
 
-        assertThat(response.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
-        assertThat(cv.getStatus()).isEqualTo(InternshipOfferStatus.REJECTED);
+        assertThat(response.getStatus()).isEqualTo(ApprovalStatus.REJECTED);
+        assertThat(cv.getStatus()).isEqualTo(ApprovalStatus.REJECTED);
 
         verify(cvRepository, times(2)).findById(1L);
         verify(cvRepository, times(2)).save(cv);
@@ -333,7 +333,7 @@ class CVServiceTest {
 
         cvService.approveCv(1L);
 
-        assertThatThrownBy(() -> cvService.updateCvStatus(1L, InternshipOfferStatus.ACCEPTED, null))
+        assertThatThrownBy(() -> cvService.updateCvStatus(1L, ApprovalStatus.ACCEPTED, null))
                 .isInstanceOf(InvalidInternShipOffer.class);
     }
 
@@ -352,7 +352,7 @@ class CVServiceTest {
 
         when(cvRepository.findById(cv.getId() + 1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> cvService.updateCvStatus(2L, InternshipOfferStatus.ACCEPTED, null))
+        assertThatThrownBy(() -> cvService.updateCvStatus(2L, ApprovalStatus.ACCEPTED, null))
                     .isInstanceOf(CvNotFoundException.class);
     }
 }

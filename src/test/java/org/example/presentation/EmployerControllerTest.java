@@ -7,8 +7,11 @@ import org.example.service.EmployerService;
 import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
-import org.example.service.dto.*;
-import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.employer.EmployerResponseDto;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
+import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.DuplicateUserException;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.example.service.exception.InvalidInternshipApplicationException;
@@ -221,8 +224,6 @@ class EmployerControllerTest {
         );
         when(internshipApplicationService.getAllApplicationsFromEmployer(EMPLOYER_EMAIL))
                 .thenReturn(List.of(responseDto));
-        when(internshipApplicationService.getAllApplications())
-                .thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/api/v1/employer/get-all-internship-applications")
                         .header("Authorization", "Bearer " + FAKE_JWT)
@@ -250,8 +251,6 @@ class EmployerControllerTest {
                 EmployerDto.builder().email(EMPLOYER_EMAIL).build()
         );
         when(internshipApplicationService.getAllApplicationsFromOfferFromEmployer(10L, EMPLOYER_EMAIL))
-                .thenReturn(List.of(responseDto));
-        when(internshipApplicationService.getAllApplications())
                 .thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/api/v1/employer/get-all-internship-applications/internship-offer/10")

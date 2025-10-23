@@ -2,7 +2,7 @@ package org.example.presentation.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.security.exception.APIException;
-import org.example.service.dto.ErrorResponseDTO;
+import org.example.service.dto.util.ErrorResponseDTO;
 import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.springframework.http.HttpStatus;

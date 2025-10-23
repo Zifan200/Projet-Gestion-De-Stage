@@ -7,15 +7,45 @@ import { initReactI18next } from "react-i18next";
 export const resources = {
   en: {
     translation: {
-      settings: {
-        lang: {
-          title: "Language",
-          language_description: "Select the language used for the interface",
+      internshipApplications: {
+        loading: "Loading applications...",
+        table: {
+          offerTitle: "Offer title",
+          studentName: "Student name",
+          cv: "CV",
+          status: "Status",
+          action: "Action",
+          actionView: "View",
+          studentEmail: "Email",
+          download: "Download",
+          noCv: "No resume",
         },
-      },
-      languages: {
-        en: "English",
-        fr: "French",
+        modal: {
+          offerTitle: "Offer title",
+          studentName: "Student",
+          cv: "CV",
+          status: "Status",
+          appliedAt: "Applied on",
+          close: "Close",
+          email: "Email",
+        },
+        previewCv: "CV preview",
+        closeCvPreview: "Close",
+        errors: {
+          downloadCv: "Unable to download CV",
+          loadApplications: "Error loading applications",
+        },
+
+        settings: {
+          lang: {
+            title: "Language",
+            language_description: "Select the language used for the interface",
+          },
+        },
+        languages: {
+          en: "English",
+          fr: "French",
+        },
       },
       success: {
         loginSucces: "Login successful!",
@@ -52,6 +82,7 @@ export const resources = {
         applicationSend: "Application send",
         allOffers: "All offers",
         manageCvs: "Submitted CV",
+        applications: "Internship Applications",
         settings: "Settings",
       },
       errors: {
@@ -143,11 +174,13 @@ export const resources = {
         success: {
           create: "Offer successfully created!",
           delete: "Offer successfully deleted!",
+          download: "Download completed successfully!"
         },
         error: {
           create: "Error while creating the offer.",
           delete: "Error while deleting the offer.",
           load: "Error while loading offers.",
+          download: "Error while downloading the offer."
         },
 
         form: {
@@ -230,6 +263,7 @@ export const resources = {
           view: "View",
           delete: "Delete",
           reject: "Reject",
+          download: "Download"
         },
 
         errors: {
@@ -351,6 +385,7 @@ export const resources = {
         actions: {
           apply: "Apply",
           view: "View",
+          download: "Download"
         },
         noOffers: "No internship offers available",
         filterLabel: "Filter:",
@@ -369,16 +404,40 @@ export const resources = {
   },
   fr: {
     translation: {
-      settings: {
-        lang: {
-          title: "Changement de la langue",
-          language_description:
-            "Choisissez la langue utilisée pour l’interface",
+      internshipApplications: {
+        loading: "Chargement des candidatures...",
+        table: {
+          offerTitle: "Titre de l'offre",
+          studentName: "Nom de l'Étudiant",
+          cv: "CV",
+          status: "Statut",
+          action: "Action",
+          actionView: "Voir",
+          studentEmail: "Courriel",
+          download: "Télécharger",
+          noCv: "Aucun CV",
         },
-      },
-      languages: {
-        en: "Anglais",
-        fr: "Français",
+        modal: {
+          offerTitle: "Titre de l'offre",
+          studentName: "Étudiant",
+          cv: "CV",
+          status: "Statut",
+          appliedAt: "Postulé le",
+          close: "Fermer",
+          email: "Email"
+        },
+        closeCvPreview: "Fermer",
+        settings: {
+          lang: {
+            title: "Changement de la langue",
+            language_description:
+                "Choisissez la langue utilisée pour l’interface",
+          },
+        },
+        languages: {
+          en: "Anglais",
+          fr: "Français",
+        },
       },
       success: {
         loginSucces: "Connexion réussie !",
@@ -417,6 +476,7 @@ export const resources = {
         offerConfirm: "Offres signer",
         allOffers: "Toutes les offres",
         manageCvs: "CV soumis",
+        applications: "Candidatures de stage",
         settings: "Paramètres",
       },
       errors: {
@@ -519,11 +579,13 @@ export const resources = {
         success: {
           create: "Offre créée avec succès !",
           delete: "Offre supprimée avec succès !",
+          download : "Téléchargement effectué avec succès!"
         },
         error: {
           create: "Erreur lors de la création de l'offre.",
           delete: "Erreur lors de la suppression de l'offre.",
           load: "Erreur lors du chargement des offres.",
+          download: "Erreur lors du téléchargement de l'offre."
         },
 
         form: {
@@ -606,6 +668,7 @@ export const resources = {
           view: "Voir",
           delete: "Supprimer",
           reject: "Rejeter",
+          download: "Télécharger"
         },
 
         errors: {
@@ -729,6 +792,7 @@ export const resources = {
         actions: {
           apply: "Postuler",
           view: "Voir",
+          download: "Télécharger"
         },
         noOffers: "Aucune offre de stage disponible",
         filterLabel: "Filtrer",

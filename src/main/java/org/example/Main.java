@@ -2,19 +2,20 @@ package org.example;
 
 
 
-import org.example.repository.EtudiantRepository;
-import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
-import lombok.Builder;
-import org.example.model.Employer;
+import org.example.service.dto.cv.CvResponseDTO;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.gestionnaire.GestionnaireDTO;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
+import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.model.auth.Role;
 import org.example.model.CV;
-import org.example.model.Etudiant;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.CvRepository;
-import org.example.repository.EmployerRepository;
 import org.example.service.*;
-import org.example.service.dto.*;
+import org.example.service.dto.student.EtudiantDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -125,13 +126,13 @@ public class Main {
 
             EtudiantDTO etudiantDTO = studentService.inscriptionEtudiant(
               EtudiantDTO.builder()
-                      .firstName("Popa")
+                      .firstName("Alexandre")
                       .lastName("Nowell")
-                      .email("popanowell@example.com")
+                      .email("alexandre@example.com")
                       .phone("514-999-9999")
                       .adresse("Pole nord")
                       .role(Role.STUDENT)
-                      .password("Popanowell1!")
+                      .password("Test123!")
                       .program("Technique de l'informatique")
                       .build()
             );
@@ -154,9 +155,9 @@ public class Main {
             // -----------------------------
             // 4️⃣ Mise à jour des statuts
             // -----------------------------
-            internshipOfferService.updateOfferStatus(savedOffer1.getId(), InternshipOfferStatus.ACCEPTED, "je taimes");
-            internshipOfferService.updateOfferStatus(savedOffer2.getId(), InternshipOfferStatus.ACCEPTED, "t cool");
-            internshipOfferService.updateOfferStatus(savedOffer4.getId(), InternshipOfferStatus.REJECTED, "pas intéressant");
+            internshipOfferService.updateOfferStatus(savedOffer1.getId(), ApprovalStatus.ACCEPTED, "je taimes");
+            internshipOfferService.updateOfferStatus(savedOffer2.getId(), ApprovalStatus.ACCEPTED, "t cool");
+            internshipOfferService.updateOfferStatus(savedOffer4.getId(), ApprovalStatus.REJECTED, "pas intéressant");
 
             // -----------------------------
             // 5️⃣ Afficher toutes les offres
@@ -218,7 +219,7 @@ public class Main {
                     .fileType("pdf")
                     .reason("")
                     .uploadedAt(LocalDateTime.now())
-                    .status(InternshipOfferStatus.ACCEPTED)
+                    .status(ApprovalStatus.ACCEPTED)
                     .build();
             //cant get cv id
             cvRepository.save(studentCV);

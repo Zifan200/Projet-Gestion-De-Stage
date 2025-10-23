@@ -1,23 +1,20 @@
 package org.example.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.Employer;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
-import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.UserAppService;
-import org.example.service.dto.*;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -218,12 +215,12 @@ public class InternshipOfferControllerTest {
                 .build();
 
         InternshipOfferResponseDto offerResponse = InternshipOfferResponseDto.create(offer);
-        offerResponse.setStatus(InternshipOfferStatus.PENDING);
+        offerResponse.setStatus(ApprovalStatus.PENDING);
 
         InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
-        updatedResponse.setStatus(InternshipOfferStatus.ACCEPTED);
+        updatedResponse.setStatus(ApprovalStatus.ACCEPTED);
 
-        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), InternshipOfferStatus.ACCEPTED, "the offer looks good"))
+        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), ApprovalStatus.ACCEPTED, "the offer looks good"))
                 .thenReturn(updatedResponse);
 
         mockMvc.perform(post("/api/v1/internship-offers/{id}/update-status", offerResponse.getId())
@@ -244,7 +241,7 @@ public class InternshipOfferControllerTest {
                 .setControllerAdvice(new InternshipOfferControllerException())
                 .build();
 
-        when(internshipOfferService.updateOfferStatus(eq(100L), eq(InternshipOfferStatus.ACCEPTED), anyString()))
+        when(internshipOfferService.updateOfferStatus(eq(100L), eq(ApprovalStatus.ACCEPTED), anyString()))
                 .thenThrow(new InvalidInternShipOffer("Offer not found"));
 
         mockMvc.perform(post("/api/v1/internship-offers/100/update-status")

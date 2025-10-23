@@ -7,7 +7,7 @@ import org.example.model.auth.Credentials;
 import org.example.model.auth.Role;
 import org.example.repository.UserAppRepository;
 import org.example.security.JwtTokenProvider;
-import org.example.service.dto.LoginDTO;
+import org.example.service.dto.util.LoginDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
