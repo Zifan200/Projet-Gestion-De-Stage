@@ -80,8 +80,7 @@ public class EtudiantController {
             @PathVariable Long id
     ) {
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        InternshipApplicationResponseDTO res = internshipApplicationService.getApplicationByStudentAndId(email, id);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(internshipApplicationService.getApplicationByStudentAndId(email, id));
     }
 
     @GetMapping("/get-all-internship-applications")
@@ -89,8 +88,7 @@ public class EtudiantController {
             HttpServletRequest request
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        List<InternshipApplicationResponseDTO> list = internshipApplicationService.getAllApplicationsFromStudent(email);
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromStudent(email));
     }
 
     @GetMapping("/get-all-internship-applications/{status}")
@@ -99,8 +97,8 @@ public class EtudiantController {
             @PathVariable String status
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
-        List<InternshipApplicationResponseDTO> list =
-                internshipApplicationService.getAllApplicationsFromStudentByStatus(email, status);
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(email, status)
+        );
     }
 }
