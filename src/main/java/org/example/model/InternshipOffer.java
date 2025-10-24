@@ -6,6 +6,7 @@ import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,10 +39,12 @@ public class InternshipOffer {
     private ApprovalStatus status = ApprovalStatus.PENDING;
 
     private String reason;
+    private Date dateDebut;
+    private Date dateFin;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, Date dateDebut, Date dateFin
     ){
         this.id = id;
         this.title = title;
@@ -54,5 +57,7 @@ public class InternshipOffer {
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
         this.status = status != null ? status : ApprovalStatus.PENDING;
         this.reason = reason;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
     }
 }

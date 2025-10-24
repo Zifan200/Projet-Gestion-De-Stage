@@ -13,12 +13,14 @@ import org.example.model.enums.ApprovalStatus;
 import org.example.service.dto.employer.EmployerResponseDto;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Data
 @Builder
 public class InternshipOfferDto {
     private Long id;
+
     @NotBlank(message = "required: title")
     @Size(min = 4)
     @NotEmpty
@@ -37,16 +39,19 @@ public class InternshipOfferDto {
     private String employerEmail;
 
     private LocalDate publishedDate;
-
     private LocalDate expirationDate;
 
     @Builder.Default
     private ApprovalStatus status = ApprovalStatus.PENDING;
+
     private String reason;
+    private Date dateDebut;
+    private Date dateFin;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason) {
+                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
+                              ApprovalStatus status, String reason, Date dateDebut, Date dateFin) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -56,11 +61,14 @@ public class InternshipOfferDto {
         this.expirationDate = expirationDate;
         this.status = status;
         this.reason = reason;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
     }
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status) {
+                              Employer employer, LocalDate publishedDate, LocalDate expirationDate,
+                              ApprovalStatus status, Date dateDebut, Date dateFin) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -69,11 +77,14 @@ public class InternshipOfferDto {
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
     }
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status) {
+                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate,
+                              ApprovalStatus status, Date dateDebut, Date dateFin) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -82,9 +93,11 @@ public class InternshipOfferDto {
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
     }
 
-    public InternshipOfferDto(){}
+    public InternshipOfferDto() {}
 
     public static InternshipOfferDto create(InternshipOffer internshipOffer) {
         return InternshipOfferDto.builder()
@@ -97,6 +110,8 @@ public class InternshipOfferDto {
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
                 .reason(internshipOffer.getReason())
+                .dateDebut(internshipOffer.getDateDebut())
+                .dateFin(internshipOffer.getDateFin())
                 .build();
     }
 

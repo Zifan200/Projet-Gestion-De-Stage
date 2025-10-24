@@ -66,6 +66,8 @@ public class InternshipOfferService {
                 .employer(savedEmployer.get())
                 .publishedDate(LocalDate.now())
                 .expirationDate(internshipOfferDto.getExpirationDate())
+                .dateDebut(internshipOfferDto.getDateDebut())
+                .dateFin(internshipOfferDto.getDateFin())
                 .build();
 
         var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
@@ -385,4 +387,25 @@ public class InternshipOfferService {
         document.close();
         return outputStream.toByteArray();
     }
+
+    public String getIntershipOfferSession(InternshipOffer internshipOffer) {
+        if (internshipOffer.getDateDebut() == null) {
+            return "Aucune session (date non définie)";
+        }
+
+        // Conversion de java.util.Date → java.time.LocalDate
+        LocalDate localDate = new java.sql.Date(internshipOffer.getDateDebut().getTime()).toLocalDate();
+        int mois = localDate.getMonthValue();
+        int annee = localDate.getYear();
+
+        if (mois >= 1 && mois <= 4) {
+            return "Hiver " + annee;
+        } else if (mois >= 9 && mois <= 12) {
+            return "Automne " + annee;
+        } else {
+            return "Aucune session (été)";
+        }
+    }
+
+
 }
