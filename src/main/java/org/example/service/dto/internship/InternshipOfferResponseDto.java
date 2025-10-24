@@ -26,11 +26,12 @@ public class InternshipOfferResponseDto {
     private String reason;
     private Date dateDebut;
     private Date dateFin;
+    private String session;
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
                                       String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
-                                      ApprovalStatus status, String reason, Date dateDebut, Date dateFin) {
+                                      ApprovalStatus status, String reason, Date dateDebut, Date dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -42,6 +43,7 @@ public class InternshipOfferResponseDto {
         this.reason = reason;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.session = session;
     }
 
     public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
@@ -57,6 +59,7 @@ public class InternshipOfferResponseDto {
                 .reason(internshipOffer.getReason())
                 .dateDebut(internshipOffer.getDateDebut())
                 .dateFin(internshipOffer.getDateFin())
+                .session(internshipOffer.getSession())
                 .build();
     }
 

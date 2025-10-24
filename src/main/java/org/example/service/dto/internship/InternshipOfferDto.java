@@ -47,11 +47,12 @@ public class InternshipOfferDto {
     private String reason;
     private Date dateDebut;
     private Date dateFin;
+    private String session;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, String reason, Date dateDebut, Date dateFin) {
+                              ApprovalStatus status, String reason, Date dateDebut, Date dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -63,12 +64,13 @@ public class InternshipOfferDto {
         this.reason = reason;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.session = session;
     }
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, Date dateDebut, Date dateFin) {
+                              ApprovalStatus status, Date dateDebut, Date dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -79,12 +81,13 @@ public class InternshipOfferDto {
         this.status = status;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.session = session;
     }
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, Date dateDebut, Date dateFin) {
+                              ApprovalStatus status, Date dateDebut, Date dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -95,6 +98,7 @@ public class InternshipOfferDto {
         this.status = status;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.session = session;
     }
 
     public InternshipOfferDto() {}
@@ -112,6 +116,7 @@ public class InternshipOfferDto {
                 .reason(internshipOffer.getReason())
                 .dateDebut(internshipOffer.getDateDebut())
                 .dateFin(internshipOffer.getDateFin())
+                .session(internshipOffer.getSession())
                 .build();
     }
 

@@ -41,10 +41,11 @@ public class InternshipOffer {
     private String reason;
     private Date dateDebut;
     private Date dateFin;
+    private String session;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, Date dateDebut, Date dateFin
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, Date dateDebut, Date dateFin, String session
     ){
         this.id = id;
         this.title = title;
@@ -59,5 +60,6 @@ public class InternshipOffer {
         this.reason = reason;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.session = session;
     }
 }

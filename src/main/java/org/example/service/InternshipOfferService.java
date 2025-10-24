@@ -389,6 +389,8 @@ public class InternshipOfferService {
     }
 
     public String getIntershipOfferSession(InternshipOffer internshipOffer) {
+        String session = internshipOffer.getSession();
+
         if (internshipOffer.getDateDebut() == null) {
             return "Aucune session (date non définie)";
         }
@@ -396,12 +398,13 @@ public class InternshipOfferService {
         // Conversion de java.util.Date → java.time.LocalDate
         LocalDate localDate = new java.sql.Date(internshipOffer.getDateDebut().getTime()).toLocalDate();
         int mois = localDate.getMonthValue();
-        int annee = localDate.getYear();
 
         if (mois >= 1 && mois <= 4) {
-            return "Hiver " + annee;
+            session = "Hiver";
+            return session;
         } else if (mois >= 9 && mois <= 12) {
-            return "Automne " + annee;
+            session = "Automne";
+            return session;
         } else {
             return "Aucune session (été)";
         }

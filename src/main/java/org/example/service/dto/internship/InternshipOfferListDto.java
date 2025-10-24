@@ -22,6 +22,7 @@ public class InternshipOfferListDto {
     private Integer applicationCount;
     private Date dateDebut;
     private Date dateFin;
+    private String session;
 
     public static InternshipOfferListDto create(InternshipOffer internshipOffer) {
         return InternshipOfferListDto.builder()
@@ -39,6 +40,7 @@ public class InternshipOfferListDto {
                 .reason(internshipOffer.getReason())
                 .dateDebut(internshipOffer.getDateDebut())
                 .dateFin(internshipOffer.getDateFin())
+                .session(internshipOffer.getSession())
                 .build();
     }
 }
