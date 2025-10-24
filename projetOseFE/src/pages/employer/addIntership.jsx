@@ -18,7 +18,6 @@ export default function AddIntership() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const form = useForm({
     resolver: zodResolver(offerSchema),
@@ -28,6 +27,9 @@ export default function AddIntership() {
       targetedProgramme: "",
       employerEmail: user.email,
       expirationDate: "",
+      dateDebut: "",
+      dateFin: "",
+      session: "",
     },
   });
 
@@ -36,18 +38,11 @@ export default function AddIntership() {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
       await createOffer(token, data);
       toast.success(t("offer.success.create"));
-      // navigate("/dashboard/employer/my-offers", {
-      // state: { status: "success", message: t("offer.success.create") },
-      // });
       form.reset();
     } catch (err) {
       toast.error(t("offer.error.create"));
-      // navigate("/dashboard/employer/my-offers", {
-      // state: { status: "error", message: t("offer.error.create") },
-      // });
     }
   };
 
@@ -56,58 +51,82 @@ export default function AddIntership() {
     toast.error(t("errors.fillFields"));
   };
 
+  const dateDebut = form.watch("dateDebut");
+
   return (
-    <div>
-      <FormTemplate
-        title={t("offer.title")}
-        description={t("offer.description")}
-      >
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="w-full max-w-xl flex flex-col gap-6"
-          >
-            <div>
-              <Label name="title" label={t("offer.form.title")} />
-              <Input
-                name="title"
-                placeholder={t("offer.form.placeholders.title")}
-              />
-            </div>
+      <div>
+        <FormTemplate
+            title={t("offer.title")}
+            description={t("offer.description")}
+        >
+          <FormProvider {...form}>
+            <form
+                onSubmit={form.handleSubmit(onSubmit, onError)}
+                className="w-full max-w-xl flex flex-col gap-6"
+            >
+              <div>
+                <Label name="title" label={t("offer.form.title")}/>
+                <Input
+                    name="title"
+                    placeholder={t("offer.form.placeholders.title")}
+                />
+              </div>
 
-            <div>
-              <Label name="description" label={t("offer.form.description")} />
-              <Textarea
-                name="description"
-                placeholder={t("offer.form.placeholders.description")}
-              />
-            </div>
+              <div>
+                <Label name="description" label={t("offer.form.description")}/>
+                <Textarea
+                    name="description"
+                    placeholder={t("offer.form.placeholders.description")}
+                />
+              </div>
 
-            <div className="flex flex-col">
-              <Label name="targetedProgramme" label={t("offer.form.program")} />
-              <select
-                name="targetedProgramme"
-                {...form.register("targetedProgramme")}
-                className="rounded-xl border border-zinc-300 p-3"
-              >
-                <option value="">{t("offer.form.placeholders.program")}</option>
-                {programmes.map((prog, i) => (
-                  <option key={i} value={prog}>
-                    {prog}
-                  </option>
-                ))}
-              </select>
-            </div>
+              <div className="flex flex-col">
+                <Label name="targetedProgramme" label={t("offer.form.program")}/>
+                <select
+                    name="targetedProgramme"
+                    {...form.register("targetedProgramme")}
+                    className="rounded-xl border border-zinc-300 p-3"
+                >
+                  <option value="">{t("offer.form.placeholders.program")}</option>
+                  {programmes.map((prog, i) => (
+                      <option key={i} value={prog}>
+                        {prog}
+                      </option>
+                  ))}
+                </select>
+              </div>
 
-            <div>
-              <Label name="expirationDate" label={t("offer.form.deadline")} />
-              <Input name="expirationDate" type="date" />
-            </div>
+              <div>
+                <Label name="dateDebut" label={t("offer.form.startDate")}/>
+                <Input
+                    name="dateDebut"
+                    type="date"
+                    {...form.register("dateDebut")}
+                />
+              </div>
 
-            <Button className="mt-6 p-2" label={t("offer.submit")} />
-          </form>
-        </FormProvider>
-      </FormTemplate>
-    </div>
+              <div>
+                <Label name="dateFin" label={t("offer.form.endDate")}/>
+                <Input
+                    name="dateFin"
+                    type="date"
+                    {...form.register("dateFin")}
+                />
+                {form.formState.errors.dateFin && (
+                    <p className="text-red-500 text-sm mt-1">
+                    </p>
+                )}
+              </div>
+              
+              <div>
+                <Label name="expirationDate" label={t("offer.form.deadline")}/>
+                <Input name="expirationDate" type="date" {...form.register("expirationDate")} />
+              </div>
+
+              <Button className="mt-6 p-2" label={t("offer.submit")}/>
+            </form>
+          </FormProvider>
+        </FormTemplate>
+      </div>
   );
 }

@@ -189,6 +189,8 @@ export const resources = {
           program: "Targeted Program",
           email: "Employer Email",
           deadline: "Offer Expiration Date",
+          startDate: "Offer Start Date",
+          endDate: "Offer End Date",
           placeholders: {
             title: "Ex: Internship at the Health Research Institute",
             description: "Ex: Computer science internship in the medical field",
@@ -594,6 +596,8 @@ export const resources = {
           program: "Programme visé",
           email: "Courriel de l'employeur",
           deadline: "Date d'expiration de l'offre",
+          startDate: "Date de début de l'offre",
+          endDate: "Date de fin de l'offre",
           placeholders: {
             title: "Ex : Stage à l'institut de recherche en santé",
             description: "Ex : Stage en informatique dans le domaine médical",
@@ -608,6 +612,7 @@ export const resources = {
           program_required: "Un programme est obligatoire.",
           invalid_email: "Courriel invalide.",
           expiration_required: "Une date limite est obligatoire.",
+          endDate_after_startDate: "La date de fin doit être postérieure à la date de début.",
         },
 
         table: {
