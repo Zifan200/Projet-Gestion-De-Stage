@@ -188,7 +188,7 @@ export const resources = {
           description: "Description",
           program: "Targeted Program",
           email: "Employer Email",
-          deadline: "Deadline",
+          deadline: "Offer Expiration Date",
           placeholders: {
             title: "Ex: Internship at the Health Research Institute",
             description: "Ex: Computer science internship in the medical field",
@@ -593,7 +593,7 @@ export const resources = {
           description: "Description",
           program: "Programme visé",
           email: "Courriel de l'employeur",
-          deadline: "Date limite",
+          deadline: "Date d'expiration de l'offre",
           placeholders: {
             title: "Ex : Stage à l'institut de recherche en santé",
             description: "Ex : Stage en informatique dans le domaine médical",
