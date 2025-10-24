@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -47,10 +48,14 @@ public class InternshipOfferServiceTest {
     @InjectMocks
     private EmployerService employerService;
 
+    @InjectMocks
+    private InternshipOfferService service;
+
     @Mock
     private InternshipOfferRepository internshipOfferRepository;
     @InjectMocks
     private InternshipOfferService internshipOfferService;
+
 
     private EmployerDto buildEmployerDto() {
         return EmployerDto.builder()
@@ -526,6 +531,42 @@ public class InternshipOfferServiceTest {
                 .hasMessageContaining("userNotFound");
 
         verify(employerRepository).findByCredentialsEmail(email);
+    }
+
+    @Test
+    void testSessionHiver() {
+        InternshipOffer offer = InternshipOffer.builder()
+                .dateDebut(Date.valueOf(LocalDate.of(2025, 2, 15)))
+                .build();
+        String session = service.getIntershipOfferSession(offer);
+        assertEquals("Hiver", session);
+    }
+
+    @Test
+    void testSessionAutomne() {
+        InternshipOffer offer = InternshipOffer.builder()
+                .dateDebut(Date.valueOf(LocalDate.of(2025, 10, 10)))
+                .build();
+        String session = service.getIntershipOfferSession(offer);
+        assertEquals("Automne", session);
+    }
+
+    @Test
+    void testSessionEte() {
+        InternshipOffer offer = InternshipOffer.builder()
+                .dateDebut(Date.valueOf(LocalDate.of(2025, 6, 15)))
+                .build();
+        String session = service.getIntershipOfferSession(offer);
+        assertEquals("Aucune session (été)", session);
+    }
+
+    @Test
+    void testDateDebutNull() {
+        InternshipOffer offer = InternshipOffer.builder()
+                .dateDebut(null)
+                .build();
+        String session = service.getIntershipOfferSession(offer);
+        assertEquals("Aucune session (date non définie)", session);
     }
 
 }
