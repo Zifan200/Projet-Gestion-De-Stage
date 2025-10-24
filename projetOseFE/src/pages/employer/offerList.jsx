@@ -7,50 +7,51 @@ import { useOfferStore } from "../../stores/offerStore.js";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverClose,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverClose,
 } from "../../components/ui/popover.jsx";
 import useAuthStore from "../../stores/authStore.js";
 
 // Simple Modal Component
 const Modal = ({ open, onClose, title, children }) => {
-  if (!open) return null;
+    if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-800 text-lg"
-          >
-            ✕
-          </button>
+    return (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">{title}</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-500 hover:text-gray-800 text-lg"
+                    >
+                        ✕
+                    </button>
+                </div>
+                <div className="text-gray-800">{children}</div>
+            </div>
         </div>
-        <div className="text-gray-800">{children}</div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export const OfferList = () => {
-  const { t } = useTranslation();
-  const user = useAuthStore((s) => s.user);
-  const { offers, loadOffers, downloadOfferPdf } = useOfferStore();
-  const navigate = useNavigate();
+    const { t } = useTranslation();
+    const user = useAuthStore((s) => s.user);
+    const { offers, loadOffers, downloadOfferPdf } = useOfferStore();
+    const navigate = useNavigate();
 
-  const [filterStatus, setFilterStatus] = useState(null);
-  const [sortKey, setSortKey] = useState("date");
-  const [selectedOffer, setSelectedOffer] = useState(null); // for modal
+    const [filterStatus, setFilterStatus] = useState(null);
+    const [sortKey, setSortKey] = useState("date");
+    const [filterSession, setFilterSession] = useState("All");
+    const [selectedOffer, setSelectedOffer] = useState(null);
 
-  useEffect(() => {
-    loadOffers().catch(() => {
-      toast.error(t("offer.error.load"));
-    });
-  }, []);
+    useEffect(() => {
+        loadOffers().catch(() => {
+            toast.error(t("offer.error.load"));
+        });
+    }, []);
 
     const handleDownload = async (id) => {
         try {
@@ -62,9 +63,15 @@ export const OfferList = () => {
     };
 
     const sortedAndFilteredOffers = useMemo(() => {
-        let filtered = filterStatus
-            ? offers.filter((o) => o.status === filterStatus)
-            : offers;
+        let filtered = offers;
+
+        if (filterStatus) {
+            filtered = filtered.filter((o) => o.status === filterStatus);
+        }
+
+        if (filterSession && filterSession !== "All") {
+            filtered = filtered.filter((o) => o.session === filterSession);
+        }
 
         return [...filtered].sort((a, b) => {
             if (sortKey === "date")
@@ -73,7 +80,7 @@ export const OfferList = () => {
                 return (b.applicationCount || 0) - (a.applicationCount || 0);
             return 0;
         });
-    }, [offers, filterStatus, sortKey]);
+    }, [offers, filterStatus, sortKey, filterSession]);
 
     const rows = sortedAndFilteredOffers.map((offer) => (
         <tr key={offer.id} className="border-t border-gray-300">
@@ -83,9 +90,7 @@ export const OfferList = () => {
             <td className="px-4 py-2">
                 {new Date(offer.expirationDate).toLocaleDateString()}
             </td>
-            <td className="px-4 py-2">
-                {t(`offer.status.${offer.status?.toLowerCase()}`)}
-            </td>
+            <td className="px-4 py-2">{t(`offer.status.${offer.status?.toLowerCase()}`)}</td>
             <td className="px-4 py-2 text-center">{offer.applicationCount}</td>
             <td className="px-4 py-2 flex space-x-2">
                 <Button
@@ -110,18 +115,13 @@ export const OfferList = () => {
                 onAction={() => navigate("/dashboard/employer/add-intership")}
             />
 
-            <div className="flex items-center gap-4">
-                {/* Filter */}
+            <div className="flex items-center gap-4 mb-4 w-full">
+                {/* Filter by status */}
                 <Popover>
-                    {({open, setOpen, triggerRef, contentRef}) => (
+                    {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
-                            <PopoverTrigger
-                                open={open}
-                                setOpen={setOpen}
-                                triggerRef={triggerRef}
-                            >
-                <span
-                    className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                   {t("offer.filter.status")}:{" "}
                     {filterStatus
                         ? t(`offer.status.${filterStatus.toLowerCase()}`)
@@ -138,9 +138,7 @@ export const OfferList = () => {
                                                 setOpen(false);
                                             }}
                                             className={`px-3 py-1 rounded text-left ${
-                                                filterStatus === status
-                                                    ? "bg-blue-100 font-semibold"
-                                                    : "hover:bg-gray-100"
+                                                filterStatus === status ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
                                             }`}
                                         >
                                             {t(`offer.status.${status.toLowerCase()}`)}
@@ -156,9 +154,7 @@ export const OfferList = () => {
                                         {t("offer.filter.all")}
                                     </button>
                                     <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
+                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
@@ -166,20 +162,14 @@ export const OfferList = () => {
                     )}
                 </Popover>
 
+                {/* Sort */}
                 <Popover>
-                    {({open, setOpen, triggerRef, contentRef}) => (
+                    {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
-                            <PopoverTrigger
-                                open={open}
-                                setOpen={setOpen}
-                                triggerRef={triggerRef}
-                            >
-                <span
-                    className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                   {t("offer.sort.by")}:{" "}
-                    {sortKey === "date"
-                        ? t("offer.sort.date")
-                        : t("offer.sort.applications")}
+                    {sortKey === "date" ? t("offer.sort.date") : t("offer.sort.applications")}
                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
@@ -190,9 +180,7 @@ export const OfferList = () => {
                                             setOpen(false);
                                         }}
                                         className={`px-3 py-1 rounded text-left ${
-                                            sortKey === "date"
-                                                ? "bg-blue-100 font-semibold"
-                                                : "hover:bg-gray-100"
+                                            sortKey === "date" ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
                                         }`}
                                     >
                                         {t("offer.sort.date")}
@@ -203,23 +191,33 @@ export const OfferList = () => {
                                             setOpen(false);
                                         }}
                                         className={`px-3 py-1 rounded text-left ${
-                                            sortKey === "applications"
-                                                ? "bg-blue-100 font-semibold"
-                                                : "hover:bg-gray-100"
+                                            sortKey === "applications" ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
                                         }`}
                                     >
                                         {t("offer.sort.applications")}
                                     </button>
                                     <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
+                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
                         </>
                     )}
                 </Popover>
+
+                {/* Filter by session (aligned right) */}
+                <div className="ml-auto flex items-center gap-2">
+                    <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
+                    <select
+                        className="rounded border border-zinc-300 p-1"
+                        value={filterSession}
+                        onChange={(e) => setFilterSession(e.target.value)}
+                    >
+                        <option value="All">{t("offer.filter.all")}</option>
+                        <option value="Automne">{t("offer.filter.session_automne")}</option>
+                        <option value="Hiver">{t("offer.filter.session_hiver")}</option>
+                    </select>
+                </div>
             </div>
 
             <Table
@@ -242,12 +240,10 @@ export const OfferList = () => {
                 title={selectedOffer?.title}
             >
                 <p className="mb-2 text-gray-700">
-                    <strong>{t("offer.table.enterprise")}:</strong>{" "}
-                    {selectedOffer?.enterpriseName}
+                    <strong>{t("offer.table.enterprise")}:</strong> {selectedOffer?.enterpriseName}
                 </p>
                 <p className="mb-2 text-gray-700">
-                    <strong>{t("offer.table.program")}:</strong>{" "}
-                    {selectedOffer?.targetedProgramme}
+                    <strong>{t("offer.table.program")}:</strong> {selectedOffer?.targetedProgramme}
                 </p>
                 <p className="mb-2 text-gray-700">
                     <strong>{t("offer.table.deadline")}:</strong>{" "}
@@ -258,11 +254,9 @@ export const OfferList = () => {
                     {t(`offer.status.${selectedOffer?.status?.toLowerCase()}`)}
                 </p>
 
-                {/* Affiche la raison seulement si elle est non vide */}
                 {selectedOffer?.reason && selectedOffer.reason.trim() !== "" && (
                     <p className="mb-4 text-gray-700">
-                        <strong>{t("offer.table.reason") || "Raison du GS"}:</strong>{" "}
-                        {selectedOffer.reason}
+                        <strong>{t("offer.table.reason") || "Raison du GS"}:</strong> {selectedOffer.reason}
                     </p>
                 )}
 

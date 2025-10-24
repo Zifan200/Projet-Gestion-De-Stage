@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
-import { offerSchema } from "../../models/offer.js";
+import { getOfferSchema } from "../../models/offer.js";
 import Label from "../../components/ui/label.js";
 import Input from "../../components/ui/Input.jsx";
 import { Textarea } from "../../components/ui/textarea.jsx";
@@ -18,9 +18,10 @@ export default function AddIntership() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
+  const token = useAuthStore((s) => s.token);
 
   const form = useForm({
-    resolver: zodResolver(offerSchema),
+    resolver: zodResolver(getOfferSchema()),
     defaultValues: {
       title: "",
       description: "",
@@ -34,7 +35,6 @@ export default function AddIntership() {
   });
 
   const createOffer = useOfferStore((s) => s.createOffer);
-  const token = useAuthStore((s) => s.token);
 
   const onSubmit = async (data) => {
     try {
@@ -65,7 +65,7 @@ export default function AddIntership() {
                 className="w-full max-w-xl flex flex-col gap-6"
             >
               <div>
-                <Label name="title" label={t("offer.form.title")}/>
+                <Label name="title" label={t("offer.form.title")} />
                 <Input
                     name="title"
                     placeholder={t("offer.form.placeholders.title")}
@@ -73,7 +73,7 @@ export default function AddIntership() {
               </div>
 
               <div>
-                <Label name="description" label={t("offer.form.description")}/>
+                <Label name="description" label={t("offer.form.description")} />
                 <Textarea
                     name="description"
                     placeholder={t("offer.form.placeholders.description")}
@@ -81,7 +81,7 @@ export default function AddIntership() {
               </div>
 
               <div className="flex flex-col">
-                <Label name="targetedProgramme" label={t("offer.form.program")}/>
+                <Label name="targetedProgramme" label={t("offer.form.program")} />
                 <select
                     name="targetedProgramme"
                     {...form.register("targetedProgramme")}
@@ -97,7 +97,7 @@ export default function AddIntership() {
               </div>
 
               <div>
-                <Label name="dateDebut" label={t("offer.form.startDate")}/>
+                <Label name="dateDebut" label={t("offer.form.startDate")} />
                 <Input
                     name="dateDebut"
                     type="date"
@@ -106,24 +106,25 @@ export default function AddIntership() {
               </div>
 
               <div>
-                <Label name="dateFin" label={t("offer.form.endDate")}/>
+                <Label name="dateFin" label={t("offer.form.endDate")} />
                 <Input
                     name="dateFin"
                     type="date"
                     {...form.register("dateFin")}
                 />
-                {form.formState.errors.dateFin && (
-                    <p className="text-red-500 text-sm mt-1">
-                    </p>
-                )}
-              </div>
-              
-              <div>
-                <Label name="expirationDate" label={t("offer.form.deadline")}/>
-                <Input name="expirationDate" type="date" {...form.register("expirationDate")} />
+                
               </div>
 
-              <Button className="mt-6 p-2" label={t("offer.submit")}/>
+              <div>
+                <Label name="expirationDate" label={t("offer.form.deadline")} />
+                <Input
+                    name="expirationDate"
+                    type="date"
+                    {...form.register("expirationDate")}
+                />
+              </div>
+
+              <Button className="mt-6 p-2" label={t("offer.submit")} />
             </form>
           </FormProvider>
         </FormTemplate>

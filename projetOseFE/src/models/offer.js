@@ -1,28 +1,21 @@
 import { z } from "zod";
+import i18n from "../i18n";
 
-export const offerSchema = z
-    .object({
-      title: z.string().min(1, "Le titre est requis"),
-      description: z.string().min(1, "La description est requise"),
-      targetedProgramme: z.string().min(1, "Le programme est requis"),
-      employerEmail: z.string().email("Email invalide"),
-      expirationDate: z.string().min(1, "La date limite est requise"),
-      dateDebut: z.string().min(1, "La date de début est requise"),
-      dateFin: z.string().min(1, "La date de fin est requise"),
+export const getOfferSchema = () =>
+    z.object({
+      title: z.string().min(1, i18n.t("offer.validation.title_required")),
+      description: z.string().min(1, i18n.t("offer.validation.description_required")),
+      targetedProgramme: z.string().min(1, i18n.t("offer.validation.program_required")),
+      employerEmail: z.string().email(i18n.t("offer.validation.invalid_email")),
+      expirationDate: z.string().min(1, i18n.t("offer.validation.expiration_required")),
+      dateDebut: z.string().min(1, i18n.t("offer.validation.start_required")),
+      dateFin: z.string().min(1, i18n.t("offer.validation.end_required")),
     })
-    // dateFin après dateDebut
-    .refine(
-        (data) => new Date(data.dateFin) >= new Date(data.dateDebut),
-        {
-          message: "La date de fin doit être postérieure à la date de début",
-          path: ["dateFin"],
-        }
-    )
-    // expirationDate avant dateDebut
-    .refine(
-        (data) => new Date(data.expirationDate) <= new Date(data.dateDebut),
-        {
-          message: "La date limite doit être avant la date de début du stage",
-          path: ["expirationDate"],
-        }
-    );
+        .refine(
+            (data) => new Date(data.dateFin) >= new Date(data.dateDebut),
+            { message: i18n.t("offer.form.end_after_start"), path: ["dateFin"] }
+        )
+        .refine(
+            (data) => new Date(data.expirationDate) <= new Date(data.dateDebut),
+            { message: i18n.t("offer.form.expiration_before_start"), path: ["expirationDate"] }
+        );

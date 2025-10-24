@@ -190,6 +190,8 @@ export const resources = {
           email: "Employer Email",
           deadline: "Offer Expiration Date",
           startDate: "Offer Start Date",
+          expiration_before_start: "Expiration date must be before start date.",
+          end_after_start: "End date must be after start date.",
           endDate: "Offer End Date",
           placeholders: {
             title: "Ex: Internship at the Health Research Institute",
@@ -242,6 +244,9 @@ export const resources = {
 
         filter: {
           status: "Filter by status",
+          session: "Filter by session",
+          session_automne: "Fall",
+          session_hiver: "Winter",
           all: "All statuses",
           program: {
             all: "All programs",
@@ -598,6 +603,8 @@ export const resources = {
           deadline: "Date d'expiration de l'offre",
           startDate: "Date de début de l'offre",
           endDate: "Date de fin de l'offre",
+          expiration_before_start: "La date d'expiration doit être avant la date de début.",
+          end_after_start: "La date de fin doit être après la date de début.",
           placeholders: {
             title: "Ex : Stage à l'institut de recherche en santé",
             description: "Ex : Stage en informatique dans le domaine médical",
@@ -650,6 +657,9 @@ export const resources = {
 
         filter: {
           status: "Filtrer par statut",
+          session: "Filtrer par session",
+          session_automne: "Automne",
+          session_hiver: "Hiver",
           all: "Tous les statuts",
           program: {
             all: "Tous les programmes",
