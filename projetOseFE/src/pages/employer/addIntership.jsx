@@ -28,8 +28,8 @@ export default function AddIntership() {
       targetedProgramme: "",
       employerEmail: user.email,
       expirationDate: "",
-      dateDebut: "",
-      dateFin: "",
+      startDate: "",
+      endDate: "",
       session: "",
     },
   });
@@ -52,7 +52,7 @@ export default function AddIntership() {
     toast.error(t("errors.fillFields"));
   };
 
-  const dateDebut = form.watch("dateDebut");
+  const startDate = form.watch("startDate");
 
   return (
       <div>
@@ -98,26 +98,25 @@ export default function AddIntership() {
               </div>
 
               <div>
-                <Label name="dateDebut" label={t("offer.form.startDate")} />
+                <Label name="startDate" label={t("offer.form.startDate")}/>
                 <Input
-                    name="dateDebut"
+                    name="startDate"
                     type="date"
-                    {...form.register("dateDebut")}
+                    {...form.register("startDate")}
                 />
               </div>
 
               <div>
-                <Label name="dateFin" label={t("offer.form.endDate")} />
+                <Label name="endDate" label={t("offer.form.endDate")}/>
                 <Input
-                    name="dateFin"
+                    name="endDate"
                     type="date"
-                    {...form.register("dateFin")}
+                    {...form.register("endDate")}
                 />
-
               </div>
 
               <div>
-                <Label name="expirationDate" label={t("offer.form.deadline")} />
+                <Label name="expirationDate" label={t("offer.form.deadline")}/>
                 <Input
                     name="expirationDate"
                     type="date"

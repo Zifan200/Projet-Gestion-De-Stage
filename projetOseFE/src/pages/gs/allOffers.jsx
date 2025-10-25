@@ -25,6 +25,7 @@ export const AllOffers = () => {
 
     const [currentOfferStatus, setCurrentOfferStatus] = useState(offerStatuses.ALL);
     const [currentProgram, setCurrentProgram] = useState(t("offer.filter.program.all"));
+    const [currentSession, setCurrentSession] = useState("All");
 
     const {
         offers, loadAllOffersSummary,
@@ -53,7 +54,7 @@ export const AllOffers = () => {
     // --- Mettre à jour currentOffers chaque fois que filtre change ou store change ---
     useEffect(() => {
         applyCurrentFilter();
-    }, [currentOfferStatus, currentProgram, offers, pendingOffers, acceptedOffers, rejectedOffers]);
+    }, [currentOfferStatus, currentProgram, currentSession, offers, pendingOffers, acceptedOffers, rejectedOffers]);
 
     // --- Fonction qui applique le filtre actuel ---
     const applyCurrentFilter = () => {
@@ -67,7 +68,10 @@ export const AllOffers = () => {
 
         let filtered = listToFilter;
         if (currentProgram !== t("offer.filter.program.all")) {
-            filtered = listToFilter.filter(o => o.targetedProgramme === currentProgram);
+            filtered = filtered.filter(o => o.targetedProgramme === currentProgram);
+        }
+        if (currentSession !== "All") {
+            filtered = filtered.filter(o => o.session === currentSession);
         }
         setCurrentOffers(filtered);
     };
@@ -93,12 +97,10 @@ export const AllOffers = () => {
             setIsModalOpen(false);
             setSelectedOffer(null);
 
-            // Recharge le store
             await loadAllOffersSummary();
             await loadPendingOffers();
             await loadAcceptedOffers();
             await loadRejectedOffers();
-
         } catch (err) {
             console.error(err);
             toast.error(t("offer.errors.updateStatus"));
@@ -143,16 +145,15 @@ export const AllOffers = () => {
             <td className="px-4 py-2">{offer.targetedProgramme}</td>
             <td className="px-4 py-2">{offer.status}</td>
             <td className="px-4 py-2">{new Date(offer.expirationDate).toLocaleDateString()}</td>
-            <td>
+            <td className="flex gap-2 justify-end">
                 <Button
                     label={t("offer.actions.view")}
-                    className="w-1/2"
                     onClick={() => openOffer(offer.id)}
                 />
                 <Button
                     onClick={() => handleDownload(offer.id)}
                     label={t("offer.actions.download")}
-                    className="w-1/2 bg-amber-200 hover:bg-amber-50"
+                    className="bg-amber-200 hover:bg-amber-50"
                 />
             </td>
         </tr>
@@ -160,20 +161,48 @@ export const AllOffers = () => {
 
     return (
         <div className="space-y-6">
-            {/* Filtrage programmes */}
-            <select value={currentProgram} onChange={e => setCurrentProgram(e.target.value)}>
-                <option value={t("offer.filter.program.all")}>{t("offer.filter.program.all")}</option>
-                {programs.map(p => <option key={p} value={p}>{p}</option>)}
-            </select>
+            {/* Filtrage programmes, status et session sur la même ligne */}
+            <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex gap-4">
+                    <select
+                        value={currentProgram}
+                        onChange={e => setCurrentProgram(e.target.value)}
+                        className="border rounded px-3 py-2"
+                    >
+                        <option value={t("offer.filter.program.all")}>{t("offer.filter.program.all")}</option>
+                        {programs.map(p => <option key={p} value={p}>{p}</option>)}
+                    </select>
 
-            {/* Filtrage status */}
-            <select value={currentOfferStatus} onChange={e => setCurrentOfferStatus(e.target.value)}>
-                {Object.values(offerStatuses).map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+                    <select
+                        value={currentOfferStatus}
+                        onChange={e => setCurrentOfferStatus(e.target.value)}
+                        className="border rounded px-3 py-2"
+                    >
+                        {Object.values(offerStatuses).map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">
+                        {t("offer.filter.session")}:
+                    </label>
+
+                    <select
+                        value={currentSession}
+                        onChange={e => setCurrentSession(e.target.value)}
+                        className="border rounded px-3 py-2"
+                    >
+                        <option value="All">{t("offer.session.all")}</option>
+                        <option value="Automne">{t("offer.session.autumn")}</option>
+                        <option value="Hiver">{t("offer.session.winter")}</option>
+                    </select>
+                </div>
+
+            </div>
 
             {loading ? <p>{t("offer.table.loading")}</p> :
                 <>
-                    <Header title={t("menu.allOffers")} />
+                    <Header title={t("menu.allOffers")}/>
                     <Table
                         headers={[
                             t("offer.table.offerTitle"),
@@ -201,7 +230,6 @@ export const AllOffers = () => {
                         <p><strong>{t("offer.modal.description")}: </strong>{selectedOffer.description}</p>
                         <p><strong>{t("offer.modal.status")}: </strong>{selectedOffer.status}</p>
 
-                        {/* Rejet */}
                         <div className="mt-4">
                             <label className="block font-medium mb-1">{t("offer.modal.rejectReason")}</label>
                             <textarea
@@ -213,23 +241,21 @@ export const AllOffers = () => {
                             />
                         </div>
 
-                        <div className="flex justify-between mt-6">
-                            <div className="flex space-x-2">
-                                <button
-                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                                    onClick={handleAccept}
-                                >
-                                    {t("offer.modal.accept")}
-                                </button>
+                        <div className="flex justify-end mt-6 gap-2">
+                            <button
+                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                onClick={handleAccept}
+                            >
+                                {t("offer.modal.accept")}
+                            </button>
 
-                                <button
-                                    className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
-                                    disabled={!rejectReason.trim()}
-                                    onClick={handleReject}
-                                >
-                                    {t("offer.actions.reject")}
-                                </button>
-                            </div>
+                            <button
+                                className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
+                                disabled={!rejectReason.trim()}
+                                onClick={handleReject}
+                            >
+                                {t("offer.actions.reject")}
+                            </button>
 
                             <button
                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"

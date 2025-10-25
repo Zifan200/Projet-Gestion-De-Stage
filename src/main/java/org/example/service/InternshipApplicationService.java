@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class InternshipApplicationService {
     private final CvRepository  cvRepository;
     private final InternshipOfferRepository internshipOfferRepository;
     private final InternshipApplicationRepository internshipApplicationRepository;
+
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -54,12 +56,21 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
         }
 
+        // Récupérer session et dates depuis l'offre
+        String session = saveOffer.getSession();
+        LocalDate startDate = saveOffer.getStartDate();
+        LocalDate endDate = saveOffer.getEndDate();
+
         InternshipApplication application = InternshipApplication.builder()
                 .student(student.get())
                 .selectedStudentCV(selectedCV.get())
-                .offer(offer.get())
+                .offer(saveOffer)
                 .status(ApprovalStatus.PENDING)
+                .startDate(startDate)
+                .endDate(endDate)
+                .session(session)
                 .build();
+
 
         var savedInternshipApplication = internshipApplicationRepository.save(application);
         eventPublisher.publishEvent(new StudentCreatedInternshipApplicationCreatedEvent());

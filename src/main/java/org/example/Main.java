@@ -93,8 +93,8 @@ public class Main {
                     .targetedProgramme("Cinéma")
                     .employerEmail(employer.getEmail())
                     .expirationDate(LocalDate.now().plusMonths(2))
-                    .dateDebut(LocalDate.of(2025, 2, 15))
-                    .dateFin(LocalDate.of(2025, 5, 15))
+                    .startDate(LocalDate.of(2025, 2, 15))
+                    .EndDate(LocalDate.of(2025, 5, 15))
                     .build();
             InternshipOfferResponseDto savedOffer1 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer1);
 
@@ -104,8 +104,8 @@ public class Main {
                     .targetedProgramme("Informatique")
                     .employerEmail(employer.getEmail())
                     .expirationDate(LocalDate.now().plusMonths(3))
-                    .dateDebut(LocalDate.of(2025, 9, 1))
-                    .dateFin(LocalDate.of(2025, 11, 30))
+                    .startDate(LocalDate.of(2025, 9, 1))
+                    .EndDate(LocalDate.of(2025, 11, 30))
                     .build();
             InternshipOfferResponseDto savedOffer2 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer2);
 
@@ -131,21 +131,21 @@ public class Main {
             // 3️⃣1️⃣ Tester getIntershipOfferSession
             // -----------------------------
             InternshipOffer offerEntity1 = internshipOfferRepository.findById(savedOffer1.getId()).get();
-            String session1 = internshipOfferService.getIntershipOfferSession(offerEntity1.getDateDebut());
+            String session1 = internshipOfferService.getIntershipOfferSession(offerEntity1.getStartDate());
             System.out.println("Session pour l'offre '" + savedOffer1.getTitle() + "' : " + session1);
 
             InternshipOffer offerEntity2 = internshipOfferRepository.findById(savedOffer2.getId()).get();
-            String session2 = internshipOfferService.getIntershipOfferSession(offerEntity2.getDateDebut());
+            String session2 = internshipOfferService.getIntershipOfferSession(offerEntity2.getStartDate());
             System.out.println("Session pour l'offre '" + savedOffer2.getTitle() + "' : " + session2);
 
-            if (savedOffer3.getDateDebut() != null) {
+            if (savedOffer3.getStartDate() != null) {
                 InternshipOffer offerEntity3 = internshipOfferRepository.findById(savedOffer3.getId()).get();
-                String session3 = internshipOfferService.getIntershipOfferSession(offerEntity3.getDateDebut());
+                String session3 = internshipOfferService.getIntershipOfferSession(offerEntity3.getStartDate());
                 System.out.println("Session pour l'offre '" + savedOffer3.getTitle() + "' : " + session3);
             }
-            if (savedOffer4.getDateDebut() != null) {
+            if (savedOffer4.getStartDate() != null) {
                 InternshipOffer offerEntity4 = internshipOfferRepository.findById(savedOffer4.getId()).get();
-                String session4 = internshipOfferService.getIntershipOfferSession(offerEntity4.getDateDebut());
+                String session4 = internshipOfferService.getIntershipOfferSession(offerEntity4.getStartDate());
                 System.out.println("Session pour l'offre '" + savedOffer4.getTitle() + "' : " + session4);
             }
 

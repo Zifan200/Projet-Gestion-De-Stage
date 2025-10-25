@@ -6,7 +6,6 @@ import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder
@@ -20,8 +19,8 @@ public class InternshipOfferListDto {
     private ApprovalStatus status;
     private String reason;
     private Integer applicationCount;
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String session;
 
     public static InternshipOfferListDto create(InternshipOffer internshipOffer) {
@@ -38,8 +37,8 @@ public class InternshipOfferListDto {
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .status(internshipOffer.getStatus())
                 .reason(internshipOffer.getReason())
-                .dateDebut(internshipOffer.getDateDebut())
-                .dateFin(internshipOffer.getDateFin())
+                .startDate(internshipOffer.getStartDate())
+                .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())
                 .build();
     }

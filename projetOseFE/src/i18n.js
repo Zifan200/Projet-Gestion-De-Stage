@@ -254,6 +254,7 @@ export const resources = {
           },
         },
         session: {
+          all: "All sessions",
           autumn: "Autumn",
           winter: "Winter"
         },
@@ -672,6 +673,7 @@ export const resources = {
           },
         },
         session: {
+          all: "Toutes les sessions",
           autumn: "Automne",
           winter: "Hiver"
         },

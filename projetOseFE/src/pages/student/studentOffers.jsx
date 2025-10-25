@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
@@ -12,21 +12,22 @@ export const StudentOffers = () => {
 
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [filterSession, setFilterSession] = useState("All"); // 👈 ajout du filtre
 
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
     const { offers, loading, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
-    const { cvs, loadCvs, applyCvStore } = useCvStore(); // <- ici le nom correspond au store
+    const { cvs, loadCvs, applyCvStore } = useCvStore();
 
-    const [selectedCv, setSelectedCv] = useState(null); // CV choisi pour postuler
+    const [selectedCv, setSelectedCv] = useState(null);
 
     useEffect(() => {
         if (!isAuthenticated || !user) {
             navigate("/");
         } else {
             loadOffersSummary();
-            loadCvs(); // charge les CV dès que le composant est monté
+            loadCvs();
         }
     }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs]);
 
@@ -59,19 +60,49 @@ export const StudentOffers = () => {
             return;
         }
         try {
-            await applyCvStore(selectedOffer.id, selectedCv.id); // <- utiliser applyCvStore ici
+            await applyCvStore(selectedOffer.id, selectedCv.id);
             toast.success(t("studentOffers.success.applyOffer"));
             setIsModalOpen(false);
             setSelectedOffer(null);
             setSelectedCv(null);
         } catch (err) {
             console.error(err);
-            toast.error(t("studentOffers.errors.applyOffer"))
+            toast.error(t("studentOffers.errors.applyOffer"));
         }
     };
 
+    // 🔹 Filtrage par session
+    const filteredOffers = useMemo(() => {
+        let filtered = offers;
+
+        if (filterSession && filterSession !== "All") {
+            filtered = filtered.filter((offer) => offer.session === filterSession);
+        }
+
+        console.log("🎯 Offres filtrées par session :", filterSession, filtered);
+        return filtered;
+    }, [offers, filterSession]);
+
     return (
         <div className="p-10">
+            {/* Filtre session */}
+            <div className="flex justify-end mb-4">
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">
+                        {t("offer.filter.session")}:
+                    </label>
+                    <select
+                        className="rounded border border-zinc-300 p-1"
+                        value={filterSession}
+                        onChange={(e) => setFilterSession(e.target.value)}
+                    >
+                        <option value="All">{t("offer.session.all")}</option>
+                        <option value="Automne">{t("offer.session.autumn")}</option>
+                        <option value="Hiver">{t("offer.session.winter")}</option>
+                    </select>
+                </div>
+            </div>
+
             {/* Table des offres */}
             <div className="overflow-x-auto bg-white shadow rounded">
                 <table className="w-full text-sm text-left border-collapse">
@@ -84,26 +115,26 @@ export const StudentOffers = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {offers.map((offer) => (
+                    {filteredOffers.map((offer) => (
                         <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
                             <td className="px-4 py-2">{offer.title}</td>
                             <td className="px-4 py-2">{offer.enterpriseName}</td>
                             <td className="px-4 py-2">
-                                {offer.expirationDate ? new Date(offer.expirationDate).toLocaleDateString() : "-"}
+                                {offer.expirationDate
+                                    ? new Date(offer.expirationDate).toLocaleDateString()
+                                    : "-"}
                             </td>
-                            <td className="px-4 py-2">
+                            <td className="px-4 py-2 flex gap-2">
                                 <button
                                     className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
                                     onClick={() => handleViewOffer(offer.id)}
                                 >
                                     {t("studentOffers.actions.view") || "View"}
                                 </button>
-                            </td>
-                            <td className="px-4 py-2">
                                 <button
                                     className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
                                     onClick={() => handleDownload(offer.id)}
-                                    >
+                                >
                                     {t("studentOffers.actions.download")}
                                 </button>
                             </td>
@@ -118,11 +149,30 @@ export const StudentOffers = () => {
                 <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
                         <h2 className="text-xl font-semibold mb-4">{selectedOffer.title}</h2>
-                        <p><strong>{t("studentOffers.modal.companyEmail")}:</strong> {selectedOffer.employerEmail}</p>
-                        <p><strong>{t("studentOffers.modal.targetedProgramme")}:</strong> {selectedOffer.targetedProgramme}</p>
-                        <p><strong>{t("studentOffers.modal.publishedDate")}:</strong> {selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
-                        <p><strong>{t("studentOffers.modal.deadline")}:</strong> {selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}</p>
-                        <p><strong>{t("studentOffers.modal.description")}:</strong> {selectedOffer.description}</p>
+                        <p>
+                            <strong>{t("studentOffers.modal.companyEmail")}:</strong>{" "}
+                            {selectedOffer.employerEmail}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.targetedProgramme")}:</strong>{" "}
+                            {selectedOffer.targetedProgramme}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.publishedDate")}:</strong>{" "}
+                            {selectedOffer.publishedDate
+                                ? new Date(selectedOffer.publishedDate).toLocaleDateString()
+                                : "-"}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.deadline")}:</strong>{" "}
+                            {selectedOffer.expirationDate
+                                ? new Date(selectedOffer.expirationDate).toLocaleDateString()
+                                : "-"}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.description")}:</strong>{" "}
+                            {selectedOffer.description}
+                        </p>
 
                         {/* Sélecteur de CV */}
                         <div className="mt-4">
@@ -132,12 +182,16 @@ export const StudentOffers = () => {
                             <select
                                 className="w-full border rounded px-2 py-1"
                                 value={selectedCv?.id || ""}
-                                onChange={(e) => setSelectedCv(cvs.find(cv => cv.id.toString() === e.target.value))}
+                                onChange={(e) =>
+                                    setSelectedCv(
+                                        cvs.find((cv) => cv.id.toString() === e.target.value)
+                                    )
+                                }
                             >
                                 <option value="">-- {t("studentOffers.modal.chooseCv")} --</option>
                                 {cvs
-                                    .filter(cv => cv.status === "ACCEPTED")
-                                    .map(cv => (
+                                    .filter((cv) => cv.status === "ACCEPTED")
+                                    .map((cv) => (
                                         <option key={cv.id} value={cv.id}>
                                             {cv.name || cv.fileName}
                                         </option>
@@ -145,10 +199,14 @@ export const StudentOffers = () => {
                             </select>
                         </div>
 
-                        {/* Boutons Apply et Close */}
+                        {/* Boutons */}
                         <div className="mt-6 flex justify-between">
                             <button
-                                className={`px-4 py-2 rounded text-white ${selectedCv ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"}`}
+                                className={`px-4 py-2 rounded text-white ${
+                                    selectedCv
+                                        ? "bg-green-500 hover:bg-green-600"
+                                        : "bg-gray-400 cursor-not-allowed"
+                                }`}
                                 onClick={handleApply}
                                 disabled={!selectedCv}
                             >

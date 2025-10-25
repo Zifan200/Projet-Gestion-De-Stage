@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
@@ -15,8 +15,10 @@ export const InternshipApplications = () => {
         downloadCvForEmployer,
         closePreview,
     } = useCvStore();
+
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [filterSession, setFilterSession] = useState("All"); // 👈 ajout du filtre
 
     useEffect(() => {
         fetchApplications();
@@ -43,23 +45,53 @@ export const InternshipApplications = () => {
         }
     };
 
+    // 🔹 Filtrage par session (comme dans OfferList)
+    const filteredApplications = useMemo(() => {
+        let filtered = applications;
+
+        if (filterSession && filterSession !== "All") {
+            filtered = filtered.filter((a) => a.session === filterSession);
+        }
+
+        console.log("Candidatures filtrées par session :", filterSession, filtered);
+        return filtered;
+    }, [applications, filterSession]);
+
     return (
-        <div className="p-10">
+        <div className="p-10 space-y-6">
+            {/* Filtre session */}
+            <div className="flex justify-end mb-4">
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">
+                        {t("offer.filter.session")}:
+                    </label>
+                    <select
+                        className="rounded border border-zinc-300 p-1"
+                        value={filterSession}
+                        onChange={(e) => setFilterSession(e.target.value)}
+                    >
+                        <option value="All">{t("offer.session.all")}</option>
+                        <option value="Automne">{t("offer.session.autumn")}</option>
+                        <option value="Hiver">{t("offer.session.winter")}</option>
+                    </select>
+                </div>
+            </div>
+
             {/* Table des candidatures */}
             <div className="overflow-x-auto bg-white shadow rounded">
                 <table className="w-full text-sm text-left border-collapse">
                     <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
                     <tr>
-                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle") || "Offre"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.status") || "Statut"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle")}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.studentName")}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail")}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.cv")}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.status")}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.action")}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {applications.map((app) => (
+                    {filteredApplications.map((app) => (
                         <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
                             <td className="px-4 py-2">{app.internshipOfferTitle}</td>
                             <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
@@ -90,46 +122,14 @@ export const InternshipApplications = () => {
                                     className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
                                     onClick={() => handleViewApplication(app)}
                                 >
-                                    {t("internshipApplications.table.actionView") || "Voir"}
+                                    {t("internshipApplications.table.actionView")}
                                 </button>
-
                             </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </div>
-
-            {/* Preview CV */}
-            {previewUrl && (
-                <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
-                    <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
-                        <button
-                            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-                            onClick={closePreview}
-                        >
-                            {t("internshipApplications.closeCvPreview")}
-                        </button>
-                    </div>
-                    {previewType === "pdf" ? (
-                        <iframe
-                            src={previewUrl}
-                            className="w-full h-[600px] border"
-                            title="Preview CV"
-                        />
-                    ) : (
-                        <a
-                            href={previewUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 underline"
-                        >
-                            Ouvrir le CV
-                        </a>
-                    )}
-                </div>
-            )}
 
             {/* Modal détails candidature */}
             {isModalOpen && selectedApplication && (
@@ -138,11 +138,11 @@ export const InternshipApplications = () => {
                         <h2 className="text-xl font-semibold mb-4">
                             {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
                         </h2>
-                        <p><strong>{t("internshipApplications.modal.email") || "Email"}:</strong> {selectedApplication.studentEmail}</p>
-                        <p><strong>{t("internshipApplications.modal.cv") || "CV"}:</strong> {selectedApplication.selectedCvFileName || "Aucun CV"}</p>
-                        <p><strong>{t("internshipApplications.modal.offerTitle") || "Offre"}:</strong> {selectedApplication.internshipOfferTitle}</p>
-                        <p><strong>{t("internshipApplications.modal.status") || "Statut"}:</strong> {selectedApplication.status}</p>
-                        <p><strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}:</strong> {new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
+                        <p><strong>Email:</strong> {selectedApplication.studentEmail}</p>
+                        <p><strong>CV:</strong> {selectedApplication.selectedCvFileName || "Aucun CV"}</p>
+                        <p><strong>Offre:</strong> {selectedApplication.internshipOfferTitle}</p>
+                        <p><strong>Statut:</strong> {selectedApplication.status}</p>
+                        <p><strong>Postulé le:</strong> {new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
 
                         <div className="mt-6 flex justify-end">
                             <button
@@ -152,7 +152,7 @@ export const InternshipApplications = () => {
                                     setSelectedApplication(null);
                                 }}
                             >
-                                {t("internshipApplications.modal.close") || "Fermer"}
+                                {t("internshipApplications.modal.close")}
                             </button>
                         </div>
                     </div>

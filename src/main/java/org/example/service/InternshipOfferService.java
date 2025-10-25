@@ -60,7 +60,7 @@ public class InternshipOfferService {
             throw new InvalidInternShipOffer("Invalid internship offer (employer does not exist)");
         }
 
-        String session = getIntershipOfferSession(internshipOfferDto.getDateDebut());
+        String session = getIntershipOfferSession(internshipOfferDto.getStartDate());
 
         InternshipOffer internshipOffer = InternshipOffer.builder()
                 .title(internshipOfferDto.getTitle())
@@ -69,8 +69,8 @@ public class InternshipOfferService {
                 .employer(savedEmployer.get())
                 .publishedDate(LocalDate.now())
                 .expirationDate(internshipOfferDto.getExpirationDate())
-                .dateDebut(internshipOfferDto.getDateDebut())
-                .dateFin(internshipOfferDto.getDateFin())
+                .startDate(internshipOfferDto.getStartDate())
+                .endDate(internshipOfferDto.getEndDate())
                 .session(session)
                 .build();
 
@@ -108,8 +108,8 @@ public class InternshipOfferService {
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())
                         .status(offer.getStatus())
-                        .dateDebut(offer.getDateDebut())
-                        .dateFin(offer.getDateFin())
+                        .startDate(offer.getStartDate())
+                        .endDate(offer.getEndDate())
                         .session(offer.getSession())
                         .build())
                 .collect(Collectors.toList());
@@ -117,8 +117,6 @@ public class InternshipOfferService {
         if (offers.isEmpty()) {
             System.out.println("Aucune offre de stage disponible pour le moment.");
         }
-        System.out.println("PIPI CACA" + offers);
-        //System.out.println(""internshipOfferRepository.findAll());
         return offers;
     }
 
@@ -138,8 +136,8 @@ public class InternshipOfferService {
                         .reason(offer.getReason())
                         .status(offer.getStatus())
                         .applicationCount(offer.getApplications().size())
-                        .dateDebut(offer.getDateDebut())
-                        .dateFin(offer.getDateFin())
+                        .startDate(offer.getStartDate())
+                        .endDate(offer.getEndDate())
                         .session(offer.getSession())
                         .build())
                 .collect(Collectors.toList());
@@ -189,6 +187,9 @@ public class InternshipOfferService {
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())
                         .status(offer.getStatus())
+                        .startDate(offer.getStartDate())
+                        .endDate(offer.getEndDate())
+                        .session(offer.getSession())
                         .build())
                 .toList();
     }
@@ -407,12 +408,12 @@ public class InternshipOfferService {
         return outputStream.toByteArray();
     }
 
-    public String getIntershipOfferSession(LocalDate dateDebut) {
-        if (dateDebut == null) {
+    public String getIntershipOfferSession(LocalDate startDate) {
+        if (startDate == null) {
             return "Aucune session (date non définie)";
         }
 
-        int mois = dateDebut.getMonthValue();
+        int mois = startDate.getMonthValue();
 
         if (mois >= 1 && mois <= 4) {
             return "Hiver";

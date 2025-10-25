@@ -8,7 +8,6 @@ import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @NoArgsConstructor
 @Getter
@@ -24,14 +23,14 @@ public class InternshipOfferResponseDto {
     private LocalDate expirationDate;
     private ApprovalStatus status;
     private String reason;
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String session;
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
                                       String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
-                                      ApprovalStatus status, String reason, LocalDate dateDebut, LocalDate dateFin, String session) {
+                                      ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -41,8 +40,8 @@ public class InternshipOfferResponseDto {
         this.expirationDate = expirationDate;
         this.status = status;
         this.reason = reason;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.session = session;
     }
 
@@ -57,8 +56,8 @@ public class InternshipOfferResponseDto {
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
                 .reason(internshipOffer.getReason())
-                .dateDebut(internshipOffer.getDateDebut())
-                .dateFin(internshipOffer.getDateFin())
+                .startDate(internshipOffer.getStartDate())
+                .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())
                 .build();
     }

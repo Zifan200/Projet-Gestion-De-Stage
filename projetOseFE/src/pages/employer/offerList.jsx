@@ -208,7 +208,7 @@ export const OfferList = () => {
                         value={filterSession}
                         onChange={(e) => setFilterSession(e.target.value)}
                     >
-                        <option value="All">{t("offer.filter.all")}</option>
+                        <option value="All">{t("offer.session.all")}</option>
                         <option value="Automne">{t("offer.session.autumn")}</option>
                         <option value="Hiver">{t("offer.session.winter")}</option>
                     </select>
