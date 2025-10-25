@@ -38,6 +38,7 @@ export default function AddIntership() {
 
   const onSubmit = async (data) => {
     try {
+      console.log("Données envoyées:", data);
       await createOffer(token, data);
       toast.success(t("offer.success.create"));
       form.reset();
@@ -112,7 +113,7 @@ export default function AddIntership() {
                     type="date"
                     {...form.register("dateFin")}
                 />
-                
+
               </div>
 
               <div>

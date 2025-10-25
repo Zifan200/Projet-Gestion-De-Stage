@@ -222,6 +222,7 @@ export const resources = {
           noOffers: "No offers published yet.",
           loading: "Loading...",
           reason: "Reason for rejection",
+          description: "Description",
         },
 
         modal: {
@@ -251,6 +252,10 @@ export const resources = {
           program: {
             all: "All programs",
           },
+        },
+        session: {
+          autumn: "Autumn",
+          winter: "Winter"
         },
 
         sort: {
@@ -635,6 +640,7 @@ export const resources = {
           noOffers: "Aucune offre publiée pour le moment.",
           loading: "Chargement...",
           reason: "Raison du refus",
+          description: "Description",
         },
 
         modal: {
@@ -664,6 +670,10 @@ export const resources = {
           program: {
             all: "Tous les programmes",
           },
+        },
+        session: {
+          autumn: "Automne",
+          winter: "Hiver"
         },
 
         sort: {

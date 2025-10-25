@@ -48,7 +48,7 @@ export const OfferList = () => {
     const [selectedOffer, setSelectedOffer] = useState(null);
 
     useEffect(() => {
-        loadOffers().catch(() => {
+        loadOffers(user.token).catch(() => {
             toast.error(t("offer.error.load"));
         });
     }, []);
@@ -65,22 +65,17 @@ export const OfferList = () => {
     const sortedAndFilteredOffers = useMemo(() => {
         let filtered = offers;
 
-        if (filterStatus) {
-            filtered = filtered.filter((o) => o.status === filterStatus);
-        }
-
         if (filterSession && filterSession !== "All") {
             filtered = filtered.filter((o) => o.session === filterSession);
         }
 
-        return [...filtered].sort((a, b) => {
-            if (sortKey === "date")
-                return new Date(b.expirationDate) - new Date(a.expirationDate);
-            if (sortKey === "applications")
-                return (b.applicationCount || 0) - (a.applicationCount || 0);
-            return 0;
-        });
-    }, [offers, filterStatus, sortKey, filterSession]);
+        console.log("Offres filtrées par session :", filterSession, filtered);
+
+        return filtered;
+    }, [offers, filterSession]);
+
+
+
 
     const rows = sortedAndFilteredOffers.map((offer) => (
         <tr key={offer.id} className="border-t border-gray-300">
@@ -121,12 +116,12 @@ export const OfferList = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("offer.filter.status")}:{" "}
-                    {filterStatus
-                        ? t(`offer.status.${filterStatus.toLowerCase()}`)
-                        : t("offer.filter.all")}
-                </span>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                    {t("offer.filter.status")}:{" "}
+                                    {filterStatus
+                                        ? t(`offer.status.${filterStatus.toLowerCase()}`)
+                                        : t("offer.filter.all")}
+                                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -167,10 +162,10 @@ export const OfferList = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("offer.sort.by")}:{" "}
-                    {sortKey === "date" ? t("offer.sort.date") : t("offer.sort.applications")}
-                </span>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                    {t("offer.sort.by")}:{" "}
+                                    {sortKey === "date" ? t("offer.sort.date") : t("offer.sort.applications")}
+                                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -205,7 +200,7 @@ export const OfferList = () => {
                     )}
                 </Popover>
 
-                {/* Filter by session (aligned right) */}
+                {/* Filter by session */}
                 <div className="ml-auto flex items-center gap-2">
                     <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
                     <select
@@ -214,8 +209,8 @@ export const OfferList = () => {
                         onChange={(e) => setFilterSession(e.target.value)}
                     >
                         <option value="All">{t("offer.filter.all")}</option>
-                        <option value="Automne">{t("offer.filter.session_automne")}</option>
-                        <option value="Hiver">{t("offer.filter.session_hiver")}</option>
+                        <option value="Automne">{t("offer.session.autumn")}</option>
+                        <option value="Hiver">{t("offer.session.winter")}</option>
                     </select>
                 </div>
             </div>
@@ -239,30 +234,39 @@ export const OfferList = () => {
                 onClose={() => setSelectedOffer(null)}
                 title={selectedOffer?.title}
             >
-                <p className="mb-2 text-gray-700">
-                    <strong>{t("offer.table.enterprise")}:</strong> {selectedOffer?.enterpriseName}
-                </p>
-                <p className="mb-2 text-gray-700">
-                    <strong>{t("offer.table.program")}:</strong> {selectedOffer?.targetedProgramme}
-                </p>
-                <p className="mb-2 text-gray-700">
-                    <strong>{t("offer.table.deadline")}:</strong>{" "}
-                    {new Date(selectedOffer?.expirationDate).toLocaleDateString()}
-                </p>
-                <p className="mb-4 text-gray-700">
-                    <strong>{t("offer.table.status")}:</strong>{" "}
-                    {t(`offer.status.${selectedOffer?.status?.toLowerCase()}`)}
-                </p>
+                <div className="space-y-4">
+                    <div className="flex gap-2">
+                        <span className="font-semibold">{t("offer.table.enterprise")}:</span>
+                        <span>{selectedOffer?.enterpriseName}</span>
+                    </div>
 
-                {selectedOffer?.reason && selectedOffer.reason.trim() !== "" && (
-                    <p className="mb-4 text-gray-700">
-                        <strong>{t("offer.table.reason") || "Raison du GS"}:</strong> {selectedOffer.reason}
-                    </p>
-                )}
+                    <div className="flex gap-2">
+                        <span className="font-semibold">{t("offer.table.program")}:</span>
+                        <span>{selectedOffer?.targetedProgramme}</span>
+                    </div>
 
-                <p className="text-gray-800 whitespace-pre-line">
-                    {selectedOffer?.description || t("offer.noDescription")}
-                </p>
+                    <div className="flex gap-2">
+                        <span className="font-semibold">{t("offer.table.deadline")}:</span>
+                        <span>{new Date(selectedOffer?.expirationDate).toLocaleDateString()}</span>
+                    </div>
+
+                    <div className="flex gap-2">
+                        <span className="font-semibold">{t("offer.table.status")}:</span>
+                        <span>{t(`offer.status.${selectedOffer?.status?.toLowerCase()}`)}</span>
+                    </div>
+
+                    {selectedOffer?.reason && selectedOffer.reason.trim() !== "" && (
+                        <div className="flex gap-2">
+                            <span className="font-semibold">{t("offer.table.reason")}:</span>
+                            <span>{selectedOffer.reason}</span>
+                        </div>
+                    )}
+
+                    <div className="flex flex-col gap-1">
+                        <span className="font-semibold">{t("offer.table.description")}:</span>
+                        <p className="text-gray-800">{selectedOffer?.description || t("offer.noDescription")}</p>
+                    </div>
+                </div>
             </Modal>
         </div>
     );
