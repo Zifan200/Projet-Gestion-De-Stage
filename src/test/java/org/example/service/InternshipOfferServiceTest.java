@@ -535,37 +535,28 @@ public class InternshipOfferServiceTest {
 
     @Test
     void testSessionHiver() {
-        InternshipOffer offer = InternshipOffer.builder()
-                .dateDebut(Date.valueOf(LocalDate.of(2025, 2, 15)))
-                .build();
-        String session = service.getIntershipOfferSession(offer);
+        LocalDate dateDebut = LocalDate.of(2025, 2, 15);
+        String session = service.getIntershipOfferSession(dateDebut);
         assertEquals("Hiver", session);
     }
 
     @Test
     void testSessionAutomne() {
-        InternshipOffer offer = InternshipOffer.builder()
-                .dateDebut(Date.valueOf(LocalDate.of(2025, 10, 10)))
-                .build();
-        String session = service.getIntershipOfferSession(offer);
+        LocalDate dateDebut = LocalDate.of(2025, 10, 10);
+        String session = service.getIntershipOfferSession(dateDebut);
         assertEquals("Automne", session);
     }
 
     @Test
     void testSessionEte() {
-        InternshipOffer offer = InternshipOffer.builder()
-                .dateDebut(Date.valueOf(LocalDate.of(2025, 6, 15)))
-                .build();
-        String session = service.getIntershipOfferSession(offer);
-        assertEquals("Aucune session (été)", session);
+        LocalDate dateDebut = LocalDate.of(2025, 6, 15);
+        String session = service.getIntershipOfferSession(dateDebut);
+        assertEquals("Été", session);  // correction du texte attendu
     }
 
     @Test
     void testDateDebutNull() {
-        InternshipOffer offer = InternshipOffer.builder()
-                .dateDebut(null)
-                .build();
-        String session = service.getIntershipOfferSession(offer);
+        String session = service.getIntershipOfferSession(null);
         assertEquals("Aucune session (date non définie)", session);
     }
 

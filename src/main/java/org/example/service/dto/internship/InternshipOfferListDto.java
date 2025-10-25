@@ -20,8 +20,8 @@ public class InternshipOfferListDto {
     private ApprovalStatus status;
     private String reason;
     private Integer applicationCount;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private String session;
 
     public static InternshipOfferListDto create(InternshipOffer internshipOffer) {

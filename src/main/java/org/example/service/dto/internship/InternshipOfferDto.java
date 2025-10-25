@@ -45,14 +45,14 @@ public class InternshipOfferDto {
     private ApprovalStatus status = ApprovalStatus.PENDING;
 
     private String reason;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private String session;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, String reason, Date dateDebut, Date dateFin, String session) {
+                              ApprovalStatus status, String reason, LocalDate dateDebut,LocalDate dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -70,7 +70,7 @@ public class InternshipOfferDto {
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, Date dateDebut, Date dateFin, String session) {
+                              ApprovalStatus status, LocalDate dateDebut, LocalDate dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -87,7 +87,7 @@ public class InternshipOfferDto {
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
                               EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, Date dateDebut, Date dateFin, String session) {
+                              ApprovalStatus status, LocalDate dateDebut, LocalDate dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;

@@ -48,16 +48,19 @@ public class InternshipOfferService {
 
     public InternshipOfferResponseDto saveInternshipOffer(
             String email,
-            InternshipOfferDto internshipOfferDto) {
+            InternshipOfferDto internshipOfferDto
+    ) {
         Optional<Employer> savedEmployer = employerRepository.findByCredentialsEmail(email);
 
-        if(internshipOfferDto.getTitle().isBlank() && internshipOfferDto.getDescription().isBlank()){
+        if (internshipOfferDto.getTitle().isBlank() && internshipOfferDto.getDescription().isBlank()) {
             throw new InvalidInternShipOffer("Invalid internship offer (missing critical information)");
         }
-        if(savedEmployer.isEmpty())
-        {
-            throw new InvalidInternShipOffer("Invalid internship offer (employer does not exist) " + savedEmployer);
+
+        if (savedEmployer.isEmpty()) {
+            throw new InvalidInternShipOffer("Invalid internship offer (employer does not exist)");
         }
+
+        String session = getIntershipOfferSession(internshipOfferDto.getDateDebut());
 
         InternshipOffer internshipOffer = InternshipOffer.builder()
                 .title(internshipOfferDto.getTitle())
@@ -68,13 +71,22 @@ public class InternshipOfferService {
                 .expirationDate(internshipOfferDto.getExpirationDate())
                 .dateDebut(internshipOfferDto.getDateDebut())
                 .dateFin(internshipOfferDto.getDateFin())
+                .session(session)
                 .build();
 
-        var savedInternshipOffer =  internshipOfferRepository.save(internshipOffer);
+        var savedInternshipOffer = internshipOfferRepository.save(internshipOffer);
+
         eventPublisher.publishEvent(new EmployerCreatedInternshipOfferEvent());
-        logger.info("InternshipOffer created = \"{}\"", savedInternshipOffer.getTitle());
-        return InternshipOfferResponseDto.create(savedInternshipOffer);
+        logger.info("InternshipOffer created = \"{}\" (session = {})",
+                savedInternshipOffer.getTitle(), session);
+
+        InternshipOfferResponseDto responseDto = InternshipOfferResponseDto.create(savedInternshipOffer);
+        responseDto.setSession(session);
+
+        return responseDto;
     }
+
+
 
     public List<InternshipOfferListDto> getAllOffersFromEmployer(String email){
         Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
@@ -96,13 +108,17 @@ public class InternshipOfferService {
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())
                         .status(offer.getStatus())
+                        .dateDebut(offer.getDateDebut())
+                        .dateFin(offer.getDateFin())
+                        .session(offer.getSession())
                         .build())
                 .collect(Collectors.toList());
 
         if (offers.isEmpty()) {
             System.out.println("Aucune offre de stage disponible pour le moment.");
         }
-
+        System.out.println("PIPI CACA" + offers);
+        //System.out.println(""internshipOfferRepository.findAll());
         return offers;
     }
 
@@ -122,6 +138,9 @@ public class InternshipOfferService {
                         .reason(offer.getReason())
                         .status(offer.getStatus())
                         .applicationCount(offer.getApplications().size())
+                        .dateDebut(offer.getDateDebut())
+                        .dateFin(offer.getDateFin())
+                        .session(offer.getSession())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -388,25 +407,19 @@ public class InternshipOfferService {
         return outputStream.toByteArray();
     }
 
-    public String getIntershipOfferSession(InternshipOffer internshipOffer) {
-        String session = internshipOffer.getSession();
-
-        if (internshipOffer.getDateDebut() == null) {
+    public String getIntershipOfferSession(LocalDate dateDebut) {
+        if (dateDebut == null) {
             return "Aucune session (date non définie)";
         }
 
-        // Conversion de java.util.Date → java.time.LocalDate
-        LocalDate localDate = new java.sql.Date(internshipOffer.getDateDebut().getTime()).toLocalDate();
-        int mois = localDate.getMonthValue();
+        int mois = dateDebut.getMonthValue();
 
         if (mois >= 1 && mois <= 4) {
-            session = "Hiver";
-            return session;
+            return "Hiver";
         } else if (mois >= 9 && mois <= 12) {
-            session = "Automne";
-            return session;
+            return "Automne";
         } else {
-            return "Aucune session (été)";
+            return "Été";
         }
     }
 

@@ -39,13 +39,13 @@ public class InternshipOffer {
     private ApprovalStatus status = ApprovalStatus.PENDING;
 
     private String reason;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private String session;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, Date dateDebut, Date dateFin, String session
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, LocalDate dateDebut, LocalDate dateFin, String session
     ){
         this.id = id;
         this.title = title;

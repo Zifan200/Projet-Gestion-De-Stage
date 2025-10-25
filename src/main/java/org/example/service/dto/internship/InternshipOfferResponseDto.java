@@ -24,14 +24,14 @@ public class InternshipOfferResponseDto {
     private LocalDate expirationDate;
     private ApprovalStatus status;
     private String reason;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private String session;
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
                                       String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
-                                      ApprovalStatus status, String reason, Date dateDebut, Date dateFin, String session) {
+                                      ApprovalStatus status, String reason, LocalDate dateDebut, LocalDate dateFin, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
