@@ -18,11 +18,11 @@ export const InternshipApplications = () => {
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [filterSession, setFilterSession] = useState("All"); // 👈 ajout du filtre
+    const [filterSession, setFilterSession] = useState("All");
 
     useEffect(() => {
         fetchApplications();
-    }, []);
+    }, [fetchApplications]);
 
     const handleViewApplication = (application) => {
         setSelectedApplication(application);
@@ -45,16 +45,10 @@ export const InternshipApplications = () => {
         }
     };
 
-    // 🔹 Filtrage par session (comme dans OfferList)
+    // 🔹 Filtrage par session
     const filteredApplications = useMemo(() => {
-        let filtered = applications;
-
-        if (filterSession && filterSession !== "All") {
-            filtered = filtered.filter((a) => a.session === filterSession);
-        }
-
-        console.log("Candidatures filtrées par session :", filterSession, filtered);
-        return filtered;
+        if (filterSession === "All") return applications;
+        return applications.filter((a) => a.session === filterSession);
     }, [applications, filterSession]);
 
     return (
@@ -62,9 +56,7 @@ export const InternshipApplications = () => {
             {/* Filtre session */}
             <div className="flex justify-end mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">
-                        {t("offer.filter.session")}:
-                    </label>
+                    <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
                     <select
                         className="rounded border border-zinc-300 p-1"
                         value={filterSession}
@@ -130,6 +122,37 @@ export const InternshipApplications = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Preview CV */}
+            {previewUrl && (
+                <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
+                        <button
+                            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                            onClick={closePreview}
+                        >
+                            {t("internshipApplications.closeCvPreview")}
+                        </button>
+                    </div>
+                    {previewType === "pdf" ? (
+                        <iframe
+                            src={previewUrl}
+                            className="w-full h-[600px] border"
+                            title="Preview CV"
+                        />
+                    ) : (
+                        <a
+                            href={previewUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                        >
+                            Ouvrir le CV
+                        </a>
+                    )}
+                </div>
+            )}
 
             {/* Modal détails candidature */}
             {isModalOpen && selectedApplication && (
