@@ -34,13 +34,15 @@ public class InternshipApplicationResponseDTO {
     private String employerEmail;
     private ApprovalStatus status =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String session;
 
     @Builder
     public InternshipApplicationResponseDTO(
             Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
-            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
-
+            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt, LocalDate startDate, LocalDate endDate, String session
             ){
         this.id = id;
         this.studentEmail = studentEmail;
@@ -58,6 +60,9 @@ public class InternshipApplicationResponseDTO {
         this.employerEmail = employerEmail;
         this.status = status;
         this.createdAt = createdAt;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.session = session;
     }
     //
     //added application details for the next backend prog or front end warrior (idk if it helps)
@@ -80,6 +85,9 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
                 .status(internshipApplication.getStatus())
                 .createdAt(internshipApplication.getCreatedAt())
+                .startDate(internshipApplication.getStartDate())
+                .endDate(internshipApplication.getEndDate())
+                .session(internshipApplication.getSession())
                 .build();
     }
 }

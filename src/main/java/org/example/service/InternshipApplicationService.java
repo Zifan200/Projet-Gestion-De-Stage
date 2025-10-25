@@ -143,6 +143,7 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
         }
         List<InternshipApplication> applicationList = internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(email);
+        System.out.println(applicationList);
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
