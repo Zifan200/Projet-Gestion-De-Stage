@@ -12,7 +12,8 @@ export const StudentOffers = () => {
 
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [filterSession, setFilterSession] = useState("All"); // 👈 ajout du filtre
+    const [filterSession, setFilterSession] = useState("All");
+    const [filterYear, setFilterYear] = useState("All"); // 🔹 Ajout du filtre par année
 
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -71,7 +72,18 @@ export const StudentOffers = () => {
         }
     };
 
-    // 🔹 Filtrage par session
+    // 🔹 Extraire les années disponibles à partir des dates d'expiration
+    const availableYears = useMemo(() => {
+        const years = new Set();
+        offers.forEach((offer) => {
+            if (offer.expirationDate) {
+                years.add(new Date(offer.expirationDate).getFullYear());
+            }
+        });
+        return ["All", ...Array.from(years).sort()];
+    }, [offers]);
+
+    // 🔹 Filtrage par session et année
     const filteredOffers = useMemo(() => {
         let filtered = offers;
 
@@ -79,14 +91,23 @@ export const StudentOffers = () => {
             filtered = filtered.filter((offer) => offer.session === filterSession);
         }
 
-        console.log("🎯 Offres filtrées par session :", filterSession, filtered);
+        if (filterYear && filterYear !== "All") {
+            filtered = filtered.filter(
+                (offer) =>
+                    offer.expirationDate &&
+                    new Date(offer.expirationDate).getFullYear().toString() === filterYear
+            );
+        }
+
+        console.log("🎯 Offres filtrées :", { filterSession, filterYear, filtered });
         return filtered;
-    }, [offers, filterSession]);
+    }, [offers, filterSession, filterYear]);
 
     return (
         <div className="p-10">
-            {/* Filtre session */}
-            <div className="flex justify-end mb-4">
+            {/* 🔹 Filtres Session et Année */}
+            <div className="flex justify-end mb-4 gap-4">
+                {/* Filtre par session */}
                 <div className="flex items-center gap-2">
                     <label className="text-sm font-medium">
                         {t("offer.filter.session")}:
@@ -99,6 +120,24 @@ export const StudentOffers = () => {
                         <option value="All">{t("offer.session.all")}</option>
                         <option value="Automne">{t("offer.session.autumn")}</option>
                         <option value="Hiver">{t("offer.session.winter")}</option>
+                    </select>
+                </div>
+
+                {/* Filtre par année */}
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">
+                        {t("offer.filter.year")}:
+                    </label>
+                    <select
+                        className="rounded border border-zinc-300 p-1"
+                        value={filterYear}
+                        onChange={(e) => setFilterYear(e.target.value)}
+                    >
+                        {availableYears.map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>

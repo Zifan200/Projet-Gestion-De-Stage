@@ -246,9 +246,10 @@ export const resources = {
         filter: {
           status: "Filter by status",
           session: "Filter by session",
-          session_automne: "Fall",
-          session_hiver: "Winter",
+          //session_automne: "Fall",
+          //session_hiver: "Winter",
           all: "All statuses",
+          year: "Filter by year",
           program: {
             all: "All programs",
           },
@@ -665,8 +666,9 @@ export const resources = {
         filter: {
           status: "Filtrer par statut",
           session: "Filtrer par session",
-          session_automne: "Automne",
-          session_hiver: "Hiver",
+          //session_automne: "Automne",
+          //session_hiver: "Hiver",
+          year: "Filtrer par année",
           all: "Tous les statuts",
           program: {
             all: "Tous les programmes",
