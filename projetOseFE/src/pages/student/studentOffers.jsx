@@ -5,6 +5,9 @@ import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
+import {useStudentStore} from "../../stores/studentStore.js";
+import {Table} from "../../components/ui/table.jsx";
+import {Header} from "../../components/ui/header.jsx";
 
 export const StudentOffers = () => {
     const { t } = useTranslation();
@@ -18,17 +21,18 @@ export const StudentOffers = () => {
 
     const { offers, loading, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
     const { cvs, loadCvs, applyCvStore } = useCvStore(); // <- ici le nom correspond au store
+    const { applications, loadAllApplications } = useStudentStore();
 
     const [selectedCv, setSelectedCv] = useState(null); // CV choisi pour postuler
 
     useEffect(() => {
-        if (!isAuthenticated || !user) {
-            navigate("/");
-        } else {
+        if (!isAuthenticated || !user) navigate("/");
+        else {
             loadOffersSummary();
             loadCvs(); // charge les CV dès que le composant est monté
+            loadAllApplications();
         }
-    }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs]);
+    }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs, loadAllApplications]);
 
     if (!isAuthenticated || !user) return null;
 
@@ -68,50 +72,56 @@ export const StudentOffers = () => {
             console.error(err);
             toast.error(t("studentOffers.errors.applyOffer"))
         }
+        loadAllApplications();
+    };
+
+    const rows = () => {
+        if (applications.length === offers.length) return [];
+
+        return offers.map((offer) => (
+            !applications.find((a) => a.internshipOfferId === offer.id) &&
+            <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
+                <td className="px-4 py-2">{offer.title}</td>
+                <td className="px-4 py-2">{offer.enterpriseName}</td>
+                <td className="px-4 py-2">
+                    {offer.expirationDate ? new Date(offer.expirationDate).toLocaleDateString() : "-"}
+                </td>
+                <td className="px-4 py-2">
+                    <button
+                        className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
+                        onClick={() => handleViewOffer(offer.id)}
+                    >
+                        {t("studentOffers.actions.view") || "View"}
+                    </button>
+                </td>
+                <td className="px-4 py-2">
+                    <button
+                        className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
+                        onClick={() => handleDownload(offer.id)}
+                    >
+                        {t("studentOffers.actions.download")}
+                    </button>
+                </td>
+            </tr>
+        ));
     };
 
     return (
-        <div className="p-10">
+        <div className="space-y-6">
+            <Header title={"Offers"} />
+
             {/* Table des offres */}
-            <div className="overflow-x-auto bg-white shadow rounded">
-                <table className="w-full text-sm text-left border-collapse">
-                    <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
-                    <tr>
-                        <th className="px-4 py-3">{t("studentOffers.table.title")}</th>
-                        <th className="px-4 py-3">{t("studentOffers.table.company")}</th>
-                        <th className="px-4 py-3">{t("studentOffers.table.deadline") || "Deadline"}</th>
-                        <th className="px-4 py-3">{t("studentOffers.table.action") || "Action"}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {offers.map((offer) => (
-                        <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
-                            <td className="px-4 py-2">{offer.title}</td>
-                            <td className="px-4 py-2">{offer.enterpriseName}</td>
-                            <td className="px-4 py-2">
-                                {offer.expirationDate ? new Date(offer.expirationDate).toLocaleDateString() : "-"}
-                            </td>
-                            <td className="px-4 py-2">
-                                <button
-                                    className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
-                                    onClick={() => handleViewOffer(offer.id)}
-                                >
-                                    {t("studentOffers.actions.view") || "View"}
-                                </button>
-                            </td>
-                            <td className="px-4 py-2">
-                                <button
-                                    className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
-                                    onClick={() => handleDownload(offer.id)}
-                                    >
-                                    {t("studentOffers.actions.download")}
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
+            {/*<div className="overflow-x-auto bg-white shadow rounded">*/}
+            <Table
+                headers={[
+                    t("studentOffers.table.title"),
+                    t("studentOffers.table.company"),
+                    t("studentOffers.table.deadline"),
+                    t("studentOffers.table.action")
+                ]}
+                rows={rows()}
+                emptyMessage={t("studentOffers.noOffers")}
+            />
 
             {/* Modal */}
             {isModalOpen && selectedOffer && (
