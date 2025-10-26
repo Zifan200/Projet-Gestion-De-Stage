@@ -192,7 +192,7 @@ export const AllOffers = () => {
 
                     <label className="text-sm font-medium ml-4">{t("offer.filter.year") || "Year"}:</label>
                     <select value={currentYear} onChange={e => setCurrentYear(e.target.value)} className="border rounded px-3 py-2">
-                        <option value="All">All</option>
+                        <option value="Year">{t("offer.session.year")}</option>
                         {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
                     </select>
                 </div>

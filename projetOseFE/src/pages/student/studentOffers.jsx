@@ -13,7 +13,7 @@ export const StudentOffers = () => {
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterSession, setFilterSession] = useState("All");
-    const [filterYear, setFilterYear] = useState("All"); // 🔹 Ajout du filtre par année
+    const [filterYear, setFilterYear] = useState("All");
 
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);

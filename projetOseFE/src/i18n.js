@@ -257,7 +257,8 @@ export const resources = {
         session: {
           all: "All sessions",
           autumn: "Autumn",
-          winter: "Winter"
+          winter: "Winter",
+          year: "all years"
         },
 
         sort: {
