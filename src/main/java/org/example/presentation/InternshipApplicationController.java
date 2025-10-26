@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/v1/internship-applications")
 @CrossOrigin(origins = "http://localhost:5173")
 public class InternshipApplicationController {
-    private final UserAppService userAppService;
     private final InternshipApplicationService  internshipApplicationService;
 
     @GetMapping("/get-all")

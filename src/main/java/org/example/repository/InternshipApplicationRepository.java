@@ -3,7 +3,9 @@ package org.example.repository;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
+import org.example.service.dto.student.EtudiantDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +15,6 @@ import java.util.Optional;
 public interface InternshipApplicationRepository extends JpaRepository<InternshipApplication, Long> {
 
 
-    List<InternshipApplication> findAllBy();
     List<InternshipApplication> findAllByStudentCredentialsEmail(String studentEmail);
     List<InternshipApplication> findAllByStatus(ApprovalStatus status);
 
