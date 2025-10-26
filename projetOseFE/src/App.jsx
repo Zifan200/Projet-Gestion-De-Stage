@@ -34,6 +34,7 @@ import { GsDashboard } from "./pages/gs/dashboard.jsx";
 import { GsManageCvs } from "./pages/gs/cvs.jsx";
 import {InternshipApplications} from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
+import {StudentApplications} from "./pages/student/internshipApplications.jsx";
 
 function App() {
   const { t } = useTranslation();
@@ -130,7 +131,7 @@ function App() {
     },
     {
       key: "applications",
-      label: t("menu.post"),
+      label: t("menu.applications"),
       href: "/dashboard/student/applications",
       icon: EnvelopeClosedIcon,
     },
@@ -142,98 +143,102 @@ function App() {
     },
   ];
   return (
-    <div className="min-h-screen">
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          {/* Pages principales */}
-          <Route path="/" element={<Home />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/request-password" element={<RequestPassword />} />
+      <div className="min-h-screen">
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            {/* Pages principales */}
+            <Route path="/" element={<Home />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/request-password" element={<RequestPassword />} />
 
-          {/* Routes Ge */}
-          <Route
-            path="/dashboard/gs/"
-            element={
-              <DashboardLayout
-                sidebarLinks={gsDashboardSidebarLinks}
-                title={t("dashboardLayout.gs")}
+            {/* Routes Ge */}
+            <Route
+                path="/dashboard/gs/"
+                element={
+                  <DashboardLayout
+                      sidebarLinks={gsDashboardSidebarLinks}
+                      title={t("dashboardLayout.gs")}
+                  />
+                }
+            >
+              <Route index element={<GsDashboard />} />
+              <Route
+                  path="/dashboard/gs/manage-students-cvs"
+                  element={<GsManageCvs />}
               />
-            }
-          >
-            <Route index element={<GsDashboard />} />
-            <Route
-              path="/dashboard/gs/manage-students-cvs"
-              element={<GsManageCvs />}
-            />
-            <Route path="/dashboard/gs/internships" element={<AllOffers />} />
-            <Route
-              path="/dashboard/gs/settings"
-              element={<DashboardSettings />}
-            />
-          </Route>
+              <Route path="/dashboard/gs/internships" element={<AllOffers />} />
+              <Route
+                  path="/dashboard/gs/settings"
+                  element={<DashboardSettings />}
+              />
+            </Route>
 
-          {/* Routes Étudiant */}
-          <Route path="/signup/student" element={<StudentSignUpPage />} />
-          <Route
-            path="/dashboard/student/"
-            element={
-              <DashboardLayout
-                sidebarLinks={studentDashboardSidebarLinks}
-                title={t("dashboardLayout.student")}
+            {/* Routes Étudiant */}
+            <Route path="/signup/student" element={<StudentSignUpPage />} />
+            <Route
+                path="/dashboard/student/"
+                element={
+                  <DashboardLayout
+                      sidebarLinks={studentDashboardSidebarLinks}
+                      title={t("dashboardLayout.student")}
+                  />
+                }
+            >
+              <Route index element={<StudentDashboard />} />
+              <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
+              <Route
+                  path="/dashboard/student/offers"
+                  element={<StudentOffers />}
               />
-            }
-          >
-            <Route index element={<StudentDashboard />} />
-            <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-            <Route
-              path="/dashboard/student/offers"
-              element={<StudentOffers />}
-            />
-            <Route
-              path="/dashboard/student/settings"
-              element={<DashboardSettings />}
-            />
-          </Route>
+              <Route
+                  path="/dashboard/student/applications"
+                  element={<StudentApplications />}
+              />
+              <Route
+                  path="/dashboard/student/settings"
+                  element={<DashboardSettings />}
+              />
+            </Route>
 
-          <Route
-            path="/dashboard/employer/"
-            element={
-              <DashboardLayout
-                sidebarLinks={employerDashboardSidebarLinks}
-                title={t("dashboardLayout.employer")}
+            <Route
+                path="/dashboard/employer/"
+                element={
+                  <DashboardLayout
+                      sidebarLinks={employerDashboardSidebarLinks}
+                      title={t("dashboardLayout.employer")}
+                  />
+                }
+            >
+              <Route index element={<EmployerDashboard />} />
+              <Route
+                  path="/dashboard/employer/add-intership"
+                  element={<AddIntership />}
               />
-            }
-          >
-            <Route index element={<EmployerDashboard />} />
-            <Route
-              path="/dashboard/employer/add-intership"
-              element={<AddIntership />}
-            />
-            <Route
-              path="/dashboard/employer/my-offers"
-              element={<OfferList />}
-            />
-            <Route
-                path="/dashboard/employer/applications"
-                element={<InternshipApplications />}
-            />
+              <Route
+                  path="/dashboard/employer/my-offers"
+                  element={<OfferList />}
+              />
+              <Route
+                  path="/dashboard/employer/applications"
+                  element={<InternshipApplications />}
+              />
+              <Route
+                  path="/dashboard/employer/settings"
+                  element={<DashboardSettings />}
+              />
+            </Route>
+            {/* Routes Employeur */}
+            <Route path="/signup/employer" element={<EmployerSignUpPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/employer/ajout_stages" element={<AjoutStage />} />
             <Route
                 path="/dashboard/employer/settings"
                 element={<DashboardSettings />}
             />
-          </Route>
-          {/* Routes Employeur */}
-          <Route path="/signup/employer" element={<EmployerSignUpPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/employer/ajout_stages" element={<AjoutStage />} />
-          <Route
-            path="/dashboard/employer/settings"
-            element={<DashboardSettings />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+          </Routes>
+        </BrowserRouter>
+      </div>
   );
 }
 
