@@ -193,6 +193,7 @@ export const resources = {
           expiration_before_start: "Expiration date must be before start date.",
           end_after_start: "End date must be after start date.",
           endDate: "Offer End Date",
+          expiration_not_past: "Expiration date cannot be in the past.",
           placeholders: {
             title: "Ex: Internship at the Health Research Institute",
             description: "Ex: Computer science internship in the medical field",
@@ -613,6 +614,7 @@ export const resources = {
           endDate: "Date de fin de l'offre",
           expiration_before_start: "La date d'expiration doit être avant la date de début.",
           end_after_start: "La date de fin doit être après la date de début.",
+          expiration_not_past: "La date d'expiration ne peut pas être dans le passé.",
           placeholders: {
             title: "Ex : Stage à l'institut de recherche en santé",
             description: "Ex : Stage en informatique dans le domaine médical",
