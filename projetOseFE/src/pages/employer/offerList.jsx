@@ -14,7 +14,6 @@ import {
 } from "../../components/ui/popover.jsx";
 import useAuthStore from "../../stores/authStore.js";
 
-// Simple Modal Component
 const Modal = ({ open, onClose, title, children }) => {
     if (!open) return null;
 
@@ -45,6 +44,7 @@ export const OfferList = () => {
     const [filterStatus, setFilterStatus] = useState(null);
     const [sortKey, setSortKey] = useState("date");
     const [filterSession, setFilterSession] = useState("All");
+    const [filterYear, setFilterYear] = useState("All");
     const [selectedOffer, setSelectedOffer] = useState(null);
 
     useEffect(() => {
@@ -62,20 +62,36 @@ export const OfferList = () => {
         }
     };
 
+    // Extraire les années disponibles à partir de startDate
+    const availableYears = useMemo(() => {
+        const years = new Set();
+        offers.forEach((offer) => {
+            if (offer.startDate) {
+                const year = new Date(offer.startDate).getFullYear();
+                years.add(year);
+            }
+        });
+        return Array.from(years).sort((a, b) => b - a); // années décroissantes
+    }, [offers]);
+
+    // Filtrage combiné (session + année)
     const sortedAndFilteredOffers = useMemo(() => {
         let filtered = offers;
 
-        if (filterSession && filterSession !== "All") {
+        if (filterSession !== "All") {
             filtered = filtered.filter((o) => o.session === filterSession);
         }
 
-        console.log("Offres filtrées par session :", filterSession, filtered);
+        if (filterYear !== "All") {
+            filtered = filtered.filter(
+                (o) =>
+                    o.startDate &&
+                    new Date(o.startDate).getFullYear().toString() === filterYear
+            );
+        }
 
         return filtered;
-    }, [offers, filterSession]);
-
-
-
+    }, [offers, filterSession, filterYear]);
 
     const rows = sortedAndFilteredOffers.map((offer) => (
         <tr key={offer.id} className="border-t border-gray-300">
@@ -85,7 +101,9 @@ export const OfferList = () => {
             <td className="px-4 py-2">
                 {new Date(offer.expirationDate).toLocaleDateString()}
             </td>
-            <td className="px-4 py-2">{t(`offer.status.${offer.status?.toLowerCase()}`)}</td>
+            <td className="px-4 py-2">
+                {t(`offer.status.${offer.status?.toLowerCase()}`)}
+            </td>
             <td className="px-4 py-2 text-center">{offer.applicationCount}</td>
             <td className="px-4 py-2 flex space-x-2">
                 <Button
@@ -107,7 +125,9 @@ export const OfferList = () => {
             <Header
                 title={t("offer.table.title")}
                 actionLabel={t("offer.actions.create_another")}
-                onAction={() => navigate("/dashboard/employer/add-intership")}
+                onAction={() =>
+                    navigate("/dashboard/employer/add-intership")
+                }
             />
 
             <div className="flex items-center gap-4 mb-4 w-full">
@@ -115,30 +135,42 @@ export const OfferList = () => {
                 <Popover>
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
-                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                            <PopoverTrigger
+                                open={open}
+                                setOpen={setOpen}
+                                triggerRef={triggerRef}
+                            >
                                 <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                                     {t("offer.filter.status")}:{" "}
                                     {filterStatus
-                                        ? t(`offer.status.${filterStatus.toLowerCase()}`)
+                                        ? t(
+                                            `offer.status.${filterStatus.toLowerCase()}`
+                                        )
                                         : t("offer.filter.all")}
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
-                                    {["ACCEPTED", "REJECTED", "PENDING"].map((status) => (
-                                        <button
-                                            key={status}
-                                            onClick={() => {
-                                                setFilterStatus(status);
-                                                setOpen(false);
-                                            }}
-                                            className={`px-3 py-1 rounded text-left ${
-                                                filterStatus === status ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
-                                            }`}
-                                        >
-                                            {t(`offer.status.${status.toLowerCase()}`)}
-                                        </button>
-                                    ))}
+                                    {["ACCEPTED", "REJECTED", "PENDING"].map(
+                                        (status) => (
+                                            <button
+                                                key={status}
+                                                onClick={() => {
+                                                    setFilterStatus(status);
+                                                    setOpen(false);
+                                                }}
+                                                className={`px-3 py-1 rounded text-left ${
+                                                    filterStatus === status
+                                                        ? "bg-blue-100 font-semibold"
+                                                        : "hover:bg-gray-100"
+                                                }`}
+                                            >
+                                                {t(
+                                                    `offer.status.${status.toLowerCase()}`
+                                                )}
+                                            </button>
+                                        )
+                                    )}
                                     <button
                                         onClick={() => {
                                             setFilterStatus(null);
@@ -149,7 +181,9 @@ export const OfferList = () => {
                                         {t("offer.filter.all")}
                                     </button>
                                     <PopoverClose setOpen={setOpen}>
-                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                        <span className="text-sm text-gray-600">
+                                            {t("menu.close")}
+                                        </span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
@@ -161,10 +195,16 @@ export const OfferList = () => {
                 <Popover>
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
-                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                            <PopoverTrigger
+                                open={open}
+                                setOpen={setOpen}
+                                triggerRef={triggerRef}
+                            >
                                 <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                                     {t("offer.sort.by")}:{" "}
-                                    {sortKey === "date" ? t("offer.sort.date") : t("offer.sort.applications")}
+                                    {sortKey === "date"
+                                        ? t("offer.sort.date")
+                                        : t("offer.sort.applications")}
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
@@ -175,7 +215,9 @@ export const OfferList = () => {
                                             setOpen(false);
                                         }}
                                         className={`px-3 py-1 rounded text-left ${
-                                            sortKey === "date" ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
+                                            sortKey === "date"
+                                                ? "bg-blue-100 font-semibold"
+                                                : "hover:bg-gray-100"
                                         }`}
                                     >
                                         {t("offer.sort.date")}
@@ -186,13 +228,17 @@ export const OfferList = () => {
                                             setOpen(false);
                                         }}
                                         className={`px-3 py-1 rounded text-left ${
-                                            sortKey === "applications" ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
+                                            sortKey === "applications"
+                                                ? "bg-blue-100 font-semibold"
+                                                : "hover:bg-gray-100"
                                         }`}
                                     >
                                         {t("offer.sort.applications")}
                                     </button>
                                     <PopoverClose setOpen={setOpen}>
-                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                        <span className="text-sm text-gray-600">
+                                            {t("menu.close")}
+                                        </span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
@@ -200,18 +246,46 @@ export const OfferList = () => {
                     )}
                 </Popover>
 
-                {/* Filter by session */}
-                <div className="ml-auto flex items-center gap-2">
-                    <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
-                    <select
-                        className="rounded border border-zinc-300 p-1"
-                        value={filterSession}
-                        onChange={(e) => setFilterSession(e.target.value)}
-                    >
-                        <option value="All">{t("offer.session.all")}</option>
-                        <option value="Automne">{t("offer.session.autumn")}</option>
-                        <option value="Hiver">{t("offer.session.winter")}</option>
-                    </select>
+                {/* Filtrage session + année (même ligne, tout à droite) */}
+                <div className="ml-auto flex items-center gap-4">
+                    {/* Filter by session */}
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">
+                            {t("offer.filter.session")}:
+                        </label>
+                        <select
+                            className="rounded border border-zinc-300 p-1"
+                            value={filterSession}
+                            onChange={(e) => setFilterSession(e.target.value)}
+                        >
+                            <option value="All">{t("offer.session.all")}</option>
+                            <option value="Automne">
+                                {t("offer.session.autumn")}
+                            </option>
+                            <option value="Hiver">
+                                {t("offer.session.winter")}
+                            </option>
+                        </select>
+                    </div>
+
+                    {/* Filter by year */}
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">
+                            Filter by year:
+                        </label>
+                        <select
+                            className="rounded border border-zinc-300 p-1"
+                            value={filterYear}
+                            onChange={(e) => setFilterYear(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {availableYears.map((year) => (
+                                <option key={year} value={year.toString()}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -236,35 +310,58 @@ export const OfferList = () => {
             >
                 <div className="space-y-4">
                     <div className="flex gap-2">
-                        <span className="font-semibold">{t("offer.table.enterprise")}:</span>
+                        <span className="font-semibold">
+                            {t("offer.table.enterprise")}:
+                        </span>
                         <span>{selectedOffer?.enterpriseName}</span>
                     </div>
 
                     <div className="flex gap-2">
-                        <span className="font-semibold">{t("offer.table.program")}:</span>
+                        <span className="font-semibold">
+                            {t("offer.table.program")}:
+                        </span>
                         <span>{selectedOffer?.targetedProgramme}</span>
                     </div>
 
                     <div className="flex gap-2">
-                        <span className="font-semibold">{t("offer.table.deadline")}:</span>
-                        <span>{new Date(selectedOffer?.expirationDate).toLocaleDateString()}</span>
+                        <span className="font-semibold">
+                            {t("offer.table.deadline")}:
+                        </span>
+                        <span>
+                            {new Date(
+                                selectedOffer?.expirationDate
+                            ).toLocaleDateString()}
+                        </span>
                     </div>
 
                     <div className="flex gap-2">
-                        <span className="font-semibold">{t("offer.table.status")}:</span>
-                        <span>{t(`offer.status.${selectedOffer?.status?.toLowerCase()}`)}</span>
+                        <span className="font-semibold">
+                            {t("offer.table.status")}:
+                        </span>
+                        <span>
+                            {t(
+                                `offer.status.${selectedOffer?.status?.toLowerCase()}`
+                            )}
+                        </span>
                     </div>
 
-                    {selectedOffer?.reason && selectedOffer.reason.trim() !== "" && (
+                    {selectedOffer?.reason?.trim() && (
                         <div className="flex gap-2">
-                            <span className="font-semibold">{t("offer.table.reason")}:</span>
+                            <span className="font-semibold">
+                                {t("offer.table.reason")}:
+                            </span>
                             <span>{selectedOffer.reason}</span>
                         </div>
                     )}
 
                     <div className="flex flex-col gap-1">
-                        <span className="font-semibold">{t("offer.table.description")}:</span>
-                        <p className="text-gray-800">{selectedOffer?.description || t("offer.noDescription")}</p>
+                        <span className="font-semibold">
+                            {t("offer.table.description")}:
+                        </span>
+                        <p className="text-gray-800">
+                            {selectedOffer?.description ||
+                                t("offer.noDescription")}
+                        </p>
                     </div>
                 </div>
             </Modal>
