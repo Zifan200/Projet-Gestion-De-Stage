@@ -28,6 +28,7 @@ public class InternshipApplicationResponseDTO {
 
     private Long internshipOfferId;
     private String internshipOfferTitle;
+    private String internshipOfferDescription;
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
@@ -39,10 +40,10 @@ public class InternshipApplicationResponseDTO {
     public InternshipApplicationResponseDTO(
             Long id, String studentEmail, String  studentFirstName, String studentLastName,
             Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
-            Long internshipOfferId, String internshipOfferTitle,
+            Long internshipOfferId, String internshipOfferTitle, String internshipOfferDescription,
             LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail,
             ApprovalStatus status, LocalDateTime createdAt, String reason
-            ){
+    ){
         this.id = id;
         this.studentEmail = studentEmail;
         this.studentFirstName = studentFirstName;
@@ -53,6 +54,7 @@ public class InternshipApplicationResponseDTO {
         this.selectedCvFileData = selectedCvFileData;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
+        this.internshipOfferDescription = internshipOfferDescription;
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
@@ -77,6 +79,7 @@ public class InternshipApplicationResponseDTO {
                 .selectedCvFileData(internshipApplication.getSelectedStudentCV().getData())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
+                .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
                 .status(internshipApplication.getStatus())

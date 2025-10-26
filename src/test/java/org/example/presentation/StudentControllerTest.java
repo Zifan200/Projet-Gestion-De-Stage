@@ -100,9 +100,9 @@ class StudentControllerTest {
                 "internshipOfferId": 2
             }
         """))
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id").value(1))
-        .andExpect(jsonPath("$.status").value("PENDING"));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.status").value("PENDING"));
     }
 
     @Test
@@ -331,7 +331,7 @@ class StudentControllerTest {
                 .thenReturn(List.of(applicationRes1));
 
         // Assert
-        mockMvc.perform(get("/api/v1/student/get-all-internship-applications/REJECTED")
+        mockMvc.perform(get("/api/v1/student/get-internship-applications/REJECTED")
                         .header("Authorization", "Bearer " + FAKE_JWT)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -358,7 +358,7 @@ class StudentControllerTest {
         when(list).thenReturn(List.of());
 
         // Assert
-        mockMvc.perform(get("/api/v1/student/get-all-internship-applications/ACCEPTED")
+        mockMvc.perform(get("/api/v1/student/get-internship-applications/ACCEPTED")
                         .header("Authorization", "Bearer " + FAKE_JWT)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -381,7 +381,7 @@ class StudentControllerTest {
                 .thenThrow(new InvalidInternshipApplicationException("Invalid status"));
 
         // Assert
-        MvcResult result = mockMvc.perform(get("/api/v1/student/get-all-internship-applications/invalid")
+        MvcResult result = mockMvc.perform(get("/api/v1/student/get-internship-applications/invalid")
                         .header("Authorization", "Bearer " + FAKE_JWT)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
