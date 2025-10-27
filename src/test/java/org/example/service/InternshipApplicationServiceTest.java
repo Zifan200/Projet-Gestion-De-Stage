@@ -558,7 +558,244 @@ public class InternshipApplicationServiceTest {
         );
     }
 
+    @Test
+    void getApplicationByStudentAndId_ShouldReturnInternshipApplicationResponseDTO() {
+        //Arrange
+        String employerEmail = "some.employer@company.com";
+        Long id = 1L;
 
+        Employer employer = Employer.builder().email(employerEmail).build();
+        InternshipOffer offer = InternshipOffer.builder().id(id).employer(employer).build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(id).build();
+
+        InternshipApplication application = InternshipApplication.builder()
+                .id(id)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+
+        when(internshipApplicationRepository.findById(id))
+                .thenReturn(Optional.of(application));
+
+        // Act
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.getApplicationByStudentAndId(STUDENT_EMAIL, id);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(id, response.getId());
+        assertEquals(STUDENT_EMAIL, response.getStudentEmail());
+        assertEquals(offer.getTitle(), response.getInternshipOfferTitle());
+        assertEquals(employerEmail, response.getEmployerEmail());
+    }
+
+    @Test
+    void getApplicationByStudentAndId_shouldThrowException_whenApplicationDoesNotExist() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        // Act + Assert
+        assertThrows(
+                InvalidInternshipApplicationException.class, () ->
+                internshipApplicationService.getApplicationByStudentAndId(
+                        student.getEmail(),
+                        1L
+                )
+        );
+    }
+
+    @Test
+    void getApplicationByStudentAndId_shouldThrowException_whenStudentNotFound() {
+        // Arrange
+        String employerEmail = "some.employer@company.com";
+        Long id = 1L;
+
+        Employer employer = Employer.builder().email(employerEmail).build();
+        InternshipOffer offer = InternshipOffer.builder().id(id).employer(employer).build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(id).build();
+
+        InternshipApplication application = InternshipApplication.builder()
+                .id(id)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail("notfound@email.com"))
+                .thenReturn(Optional.empty());
+
+        // Act + Assert
+        assertThrows(
+                InvalidInternshipApplicationException.class, () ->
+                        internshipApplicationService.getApplicationByStudentAndId(
+                                "notfound@email.com",
+                                application.getId()
+                        )
+        );
+    }
+
+    @Test
+    void getAllApplicationsFromStudent_shouldReturnApplicationsForStudent() {
+        // Arrange
+        String employerEmail = "emile.ployer@corp.com";
+        Employer employer = Employer.builder().email(employerEmail).build();
+
+        CV cv = CV.builder().id(1L).build();
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        InternshipOffer offer1 = InternshipOffer.builder()
+                .id(1L)
+                .title("Frontend Angular")
+                .employer(employer)
+                .build();
+        InternshipOffer offer2 = InternshipOffer.builder()
+                .id(2L)
+                .title("Développeur Fullstack")
+                .employer(employer)
+                .build();
+
+        InternshipApplication app1 = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer1)
+                .build();
+        InternshipApplication app2 = InternshipApplication.builder()
+                .id(2L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer2)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findAllByStudentCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(List.of(app1, app2));
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudent(STUDENT_EMAIL);
+
+        // Assert
+        assertNotNull(list);
+        assertEquals(2, list.size());
+        assertEquals("Frontend Angular", list.get(0).getInternshipOfferTitle());
+        assertEquals("Développeur Fullstack", list.get(1).getInternshipOfferTitle());
+    }
+
+    @Test
+    void getAllApplicationsFromStudent_whenStudentDoesNotExist_shouldThrowException() {
+        // Arrange
+        String invalidEmail = "student@notfound.com";
+        when(studentRepository.findByCredentialsEmail(invalidEmail)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.getAllApplicationsFromStudent(invalidEmail)
+        );
+
+        assertTrue(exception.getMessage().contains("student does not exist"));
+    }
+
+    @Test
+    void getAllApplicationsFromStudent_shouldReturnEmptyList_whenNoApplications() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findAllByStudentCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(List.of());
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudent(STUDENT_EMAIL);
+
+        // Assert
+        assertNotNull(list);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void getAllApplicationsFromStudentByStatus_shouldReturnApplicationsWithStatus() {
+        // Arrange
+        String status = "ACCEPTED";
+
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Frontend React")
+                .employer(employer)
+                .build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(1L).build();
+
+        InternshipApplication application = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .status(ApprovalStatus.ACCEPTED)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
+
+        when(internshipApplicationRepository.findAllByStudentCredentialsEmailAndStatus(
+                STUDENT_EMAIL, ApprovalStatus.ACCEPTED
+        )).thenReturn(List.of(application));
+
+        // Act
+        List<InternshipApplicationResponseDTO> res =
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(STUDENT_EMAIL, status);
+
+        // Assert
+        assertNotNull(res);
+        assertEquals(1, res.size());
+        assertEquals(application.getId(), res.get(0).getId());
+        assertEquals(ApprovalStatus.ACCEPTED, res.get(0).getStatus());
+    }
+
+    @Test
+    void getAllApplicationsFromStudentByStatus_shouldThrowException_whenInvalidStatus() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+
+        // Act & Assert
+        assertThrows(InvalidApprovalStatus.class,
+                () -> internshipApplicationService.getAllApplicationsFromStudentByStatus(
+                        STUDENT_EMAIL, "INVALID"
+                ));
+    }
+
+    @Test
+    void getAllApplicationsFromStudentByStatus_shouldReturnEmptyList_whenNoApplications() {
+        // Arrange
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL))
+                .thenReturn(Optional.of(student));
+
+        // Act
+        List<InternshipApplicationResponseDTO> list =
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(STUDENT_EMAIL, "PENDING");
+
+        // Assert
+        assertNotNull(list);
+        assertEquals(0, list.size());
+    }
 }
 
 

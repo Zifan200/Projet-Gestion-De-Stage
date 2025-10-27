@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class InternshipApplication {
     @Id
@@ -21,12 +22,18 @@ public class InternshipApplication {
     @ManyToOne
     private InternshipOffer offer;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ApprovalStatus status =  ApprovalStatus.PENDING;
+
     private LocalDateTime createdAt;
+
+    private String reason;
 
     @Builder
     public InternshipApplication(
-            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status
+            Long id, Etudiant student, InternshipOffer offer,
+            CV selectedStudentCV, ApprovalStatus status, String reason
     ){
         this.id = id;
         this.student = student;
@@ -34,6 +41,7 @@ public class InternshipApplication {
         this.selectedStudentCV = selectedStudentCV;
         this.status = status;
         this.createdAt = LocalDateTime.now();
+        this.reason = reason;
     }
 }
 

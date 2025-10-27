@@ -28,19 +28,20 @@ public class InternshipApplicationResponseDTO {
 
     private Long internshipOfferId;
     private String internshipOfferTitle;
-    private String internshipOfferEmployerEmail;
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
-    private ApprovalStatus status =  ApprovalStatus.PENDING;
+    private ApprovalStatus status;
     private LocalDateTime createdAt;
+    private String reason;
 
     @Builder
     public InternshipApplicationResponseDTO(
-            Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
-            Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
-            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
-
+            Long id, String studentEmail, String  studentFirstName, String studentLastName,
+            Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
+            Long internshipOfferId, String internshipOfferTitle,
+            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail,
+            ApprovalStatus status, LocalDateTime createdAt, String reason
             ){
         this.id = id;
         this.studentEmail = studentEmail;
@@ -52,12 +53,12 @@ public class InternshipApplicationResponseDTO {
         this.selectedCvFileData = selectedCvFileData;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
-        this.internshipOfferEmployerEmail = internshipOfferEmployerEmail;
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
         this.status = status;
         this.createdAt = createdAt;
+        this.reason = reason;
     }
     //
     //added application details for the next backend prog or front end warrior (idk if it helps)
@@ -80,6 +81,7 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
                 .status(internshipApplication.getStatus())
                 .createdAt(internshipApplication.getCreatedAt())
+                .reason(internshipApplication.getReason())
                 .build();
     }
 }

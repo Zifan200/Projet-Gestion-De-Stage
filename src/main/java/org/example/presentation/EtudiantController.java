@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/student")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -70,5 +72,33 @@ public class EtudiantController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(internshipApplicationService.saveInternshipApplication(internshipApplicationDtoDTO));
+    }
+
+    @GetMapping("/get-internship-application/{id}")
+    public ResponseEntity<InternshipApplicationResponseDTO> getInternshipApplicationForStudentById(
+            HttpServletRequest request,
+            @PathVariable Long id
+    ) {
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(internshipApplicationService.getApplicationByStudentAndId(email, id));
+    }
+
+    @GetMapping("/get-all-internship-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForStudent(
+            HttpServletRequest request
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromStudent(email));
+    }
+
+    @GetMapping("/get-all-internship-applications/{status}")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForStudentByStatus(
+            HttpServletRequest request,
+            @PathVariable String status
+    ){
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(
+                internshipApplicationService.getAllApplicationsFromStudentByStatus(email, status)
+        );
     }
 }
