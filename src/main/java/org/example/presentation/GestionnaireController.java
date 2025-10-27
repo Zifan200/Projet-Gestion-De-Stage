@@ -57,10 +57,11 @@ public class GestionnaireController {
                 .body(dto.getData());
     }
 
-    @GetMapping("/get-all/students-with-application")
-    public ResponseEntity<List<EtudiantDTO>> downloadCv() {
+    @GetMapping("/get-all/students/with-application")
+    public ResponseEntity<List<EtudiantDTO>> getAllStudentsWithApplication() {
         return ResponseEntity.ok(
                 studentService.getAllStudentsAppliedToAInternshipOffer()
         );
     }
+
 }
