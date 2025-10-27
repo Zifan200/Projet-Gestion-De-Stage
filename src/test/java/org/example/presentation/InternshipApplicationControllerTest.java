@@ -150,10 +150,7 @@ class InternshipApplicationControllerTest {
 
     @Test
     void getAllInternshipApplicationsFromOfferWithStatus_shouldReturn200() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders
-                .standaloneSetup(internshipApplicationController)
-                .setControllerAdvice(new InternshipApplicationControllerException())
-                .build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(internshipApplicationController).setControllerAdvice(new InternshipApplicationControllerException()).build();
 
         InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
                 .id(1L)

@@ -14,4 +14,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     boolean existsByCredentialsEmail(String email);
     Optional<Etudiant> findByCredentialsEmail(String email);
     List<Etudiant> findByApplicationsIsNotEmpty();
+
+
 }
