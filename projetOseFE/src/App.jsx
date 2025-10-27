@@ -32,8 +32,9 @@ import { OfferList } from "./pages/employer/offerList.jsx";
 import { AllOffers } from "./pages/gs/allOffers.jsx";
 import { GsDashboard } from "./pages/gs/dashboard.jsx";
 import { GsManageCvs } from "./pages/gs/cvs.jsx";
-import {InternshipApplications} from "./pages/employer/internshipApplication.jsx";
+import { InternshipApplications } from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
+import { DevMode } from "./components/tools/dev-mode.jsx";
 
 function App() {
   const { t } = useTranslation();
@@ -215,12 +216,12 @@ function App() {
               element={<OfferList />}
             />
             <Route
-                path="/dashboard/employer/applications"
-                element={<InternshipApplications />}
+              path="/dashboard/employer/applications"
+              element={<InternshipApplications />}
             />
             <Route
-                path="/dashboard/employer/settings"
-                element={<DashboardSettings />}
+              path="/dashboard/employer/settings"
+              element={<DashboardSettings />}
             />
           </Route>
           {/* Routes Employeur */}
@@ -232,6 +233,7 @@ function App() {
             element={<DashboardSettings />}
           />
         </Routes>
+        <DevMode />
       </BrowserRouter>
     </div>
   );
