@@ -1,17 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
-import {
-  BackpackIcon,
-  PersonIcon,
-  CheckIcon,
-  EnvelopeClosedIcon,
-} from "@radix-ui/react-icons";
+import { CheckIcon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { api } from "../../lib/api.js";
 
 export const EmployerDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("employer_dashboard");
   const { applications, fetchApplications, loading, error } =
     useEmployerStore();
   const [studentApps, setStudentApps] = useState([]);
@@ -54,19 +49,22 @@ export const EmployerDashboard = () => {
     };
   }, [applications, studentApps]);
 
-  if (loading) return <p className="text-gray-600">Chargement...</p>;
-  if (error) return <p className="text-red-500">Erreur: {error}</p>;
+  if (loading)
+    return <p className="text-gray-600">{t("messages.loadPrompt")}</p>;
+  if (error) return <p className="text-red-500">{t("errors.loadOffers")}</p>;
 
   return (
     <div className="space-y-6">
+      <h1 className="text-2xl font-semibold mb-6">{t("titles.home")}</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         <StatCard
-          title={t("menu.myOffer")}
+          title={t("stats.myOffers")}
           value={stats.totalOffers}
           icon={EnvelopeClosedIcon}
         />
         <StatCard
-          title={t("menu.offerConfirm")}
+          title={t("stats.offerConfirm")}
           value={stats.confirmedOffers}
           icon={CheckIcon}
         />

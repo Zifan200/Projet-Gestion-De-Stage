@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
-import {
-  FileTextIcon,
-  CheckIcon,
-  EyeOpenIcon,
-  DownloadIcon,
-} from "@radix-ui/react-icons";
+import { FileTextIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import useAuthStore from "../../stores/authStore.js";
 import useGeStore from "../../stores/geStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
@@ -13,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 export const GsDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("gs_dashboard");
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const token = useAuthStore((s) => s.token);
@@ -32,35 +27,33 @@ export const GsDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       await loadAllsStudentCvs();
-      if (token) {
-        await loadAllOffersSummary(token);
-      }
+      if (token) await loadAllOffersSummary(token);
     };
     fetchData();
   }, [token]);
 
   useEffect(() => {
-    if (cvs && cvs.length > 0) {
+    if (cvs?.length) {
       const pending = cvs.filter((cv) => cv.status === "PENDING").length;
       setPendingCount(pending);
     }
   }, [cvs]);
 
   useEffect(() => {
-    if (offers && offers.length > 0) {
+    if (offers?.length) {
       setAvailableOffers(offers.length);
     }
   }, [offers]);
 
   const stats = [
     {
-      title: t("gsDashboard.stats.pending"),
+      title: t("stats.pending"),
       value: pendingCount,
-      change: t("gsDashboard.stats.thisMonth"),
+      change: t("stats.thisMonth"),
       icon: FileTextIcon,
     },
     {
-      title: t("menu.availableOffers"),
+      title: t("stats.availableOffers"),
       value: availableOffers,
       icon: EyeOpenIcon,
     },
@@ -68,7 +61,10 @@ export const GsDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">{t("gsDashboard.title")}</h1>
+      <h1 className="text-2xl font-semibold">{t("titles.dashboard")}</h1>
+      {/* <p className="text-gray-500"> */}
+      {/*   {t("messages.welcome", { firstName: user?.firstName || "" })} */}
+      {/* </p> */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         {stats.map((s, i) => (

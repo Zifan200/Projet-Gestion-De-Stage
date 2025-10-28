@@ -15,7 +15,7 @@ import {
 import { ReasonModal } from "../../components/ui/reason-modal.jsx";
 
 export const GsManageCvs = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("gs_dashboard_manage_cvs");
   const { cvs, loadAllsStudentCvs, approveCv, rejectCv, downloadCv } =
     useGeStore();
 
@@ -44,20 +44,18 @@ export const GsManageCvs = () => {
   const handleDownload = async (cv) => {
     try {
       await downloadCv(cv.id, { preview: false, fileName: cv.fileName });
-      toast.success(
-        t("gsManageCvs.toast.downloadSuccess", { fileName: cv.fileName }),
-      );
+      toast.success(t("toast.downloadSuccess", { fileName: cv.fileName }));
     } catch {
-      toast.error(t("gsManageCvs.toast.downloadError"));
+      toast.error(t("toast.downloadError"));
     }
   };
 
   const handleAccept = async (cv) => {
     try {
       await approveCv(cv.id);
-      toast.success(t("gsManageCvs.toast.accepted", { fileName: cv.fileName }));
+      toast.success(t("toast.accepted", { fileName: cv.fileName }));
     } catch {
-      toast.error(t("gsManageCvs.toast.acceptError"));
+      toast.error(t("toast.acceptError"));
     }
   };
 
@@ -69,12 +67,10 @@ export const GsManageCvs = () => {
   const rows = sortedAndFilteredCvs.map((cv) => (
     <tr key={cv.id} className="border-t border-gray-300">
       <td className="px-4 py-2">
-        {cv.firstName + " " + cv.lastName ?? t("gsManageCvs.unknownStudent")}
+        {cv.firstName + " " + cv.lastName ?? t("unknownStudent")}
       </td>
       <td className="px-4 py-2">{cv.fileName}</td>
-      <td className="px-4 py-2">
-        {t(`gsManageCvs.status.${cv.status.toLowerCase()}`)}
-      </td>
+      <td className="px-4 py-2">{t(`status.${cv.status.toLowerCase()}`)}</td>
       <td className="px-4 py-2">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
       <td className="px-4 py-2">
         {new Date(cv.uploadedAt).toLocaleDateString()}
@@ -84,8 +80,8 @@ export const GsManageCvs = () => {
           onClick={() => handlePreview(cv)}
           label={
             cv.fileType === "application/pdf"
-              ? t("gsManageCvs.actions.preview")
-              : t("gsManageCvs.actions.download")
+              ? t("actions.preview")
+              : t("actions.download")
           }
           className={
             cv.fileType === "application/pdf"
@@ -97,12 +93,12 @@ export const GsManageCvs = () => {
           <>
             <Button
               onClick={() => handleAccept(cv)}
-              label={t("gsManageCvs.actions.accept")}
+              label={t("actions.accept")}
               className="bg-green-300 hover:bg-green-100 rounded-lg"
             />
             <Button
               onClick={() => handleReject(cv)}
-              label={t("gsManageCvs.actions.reject")}
+              label={t("actions.reject")}
               className="bg-red-400 hover:bg-red-100 p-1 rounded-lg"
             />
           </>
@@ -113,8 +109,9 @@ export const GsManageCvs = () => {
 
   return (
     <div className="space-y-6">
-      <Header title={t("gsManageCvs.title")} />
+      <Header title={t("title")} />
 
+      {/* Filter */}
       <Popover>
         {({ open, setOpen, triggerRef, contentRef }) => (
           <>
@@ -124,8 +121,7 @@ export const GsManageCvs = () => {
               triggerRef={triggerRef}
             >
               <span className="px-4 hover:bg-zinc-200 transition py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer">
-                {t("gsManageCvs.filter")}:{" "}
-                {t(`gsManageCvs.status.${filterStatus.toLowerCase()}`)}
+                {t("filter")}: {t(`status.${filterStatus.toLowerCase()}`)}
               </span>
             </PopoverTrigger>
 
@@ -144,7 +140,7 @@ export const GsManageCvs = () => {
                         : "hover:bg-gray-100"
                     }`}
                   >
-                    {t(`gsManageCvs.status.${status.toLowerCase()}`)}
+                    {t(`status.${status.toLowerCase()}`)}
                   </button>
                 ))}
                 <PopoverClose setOpen={setOpen}>
@@ -158,19 +154,21 @@ export const GsManageCvs = () => {
         )}
       </Popover>
 
+      {/* Table */}
       <Table
         headers={[
-          t("gsManageCvs.table.student"),
-          t("gsManageCvs.table.fileName"),
-          t("gsManageCvs.table.status"),
-          t("gsManageCvs.table.size"),
-          t("gsManageCvs.table.date"),
-          t("gsManageCvs.table.actions"),
+          t("table.student"),
+          t("table.fileName"),
+          t("table.status"),
+          t("table.size"),
+          t("table.date"),
+          t("table.actions"),
         ]}
         rows={rows}
-        emptyMessage={t("gsManageCvs.empty")}
+        emptyMessage={t("empty")}
       />
 
+      {/* PDF Preview */}
       {previewId && (
         <div className="mt-4">
           <div className="flex justify-end mb-2">
@@ -184,24 +182,21 @@ export const GsManageCvs = () => {
         </div>
       )}
 
+      {/* Reason Modal */}
       <ReasonModal
         open={showReasonModal}
         onClose={() => setShowReasonModal(false)}
         onSubmit={async (reason) => {
           if (!reason.trim()) {
-            toast.error(t("gsManageCvs.toast.missingReason"));
+            toast.error(t("toast.missingReason"));
             return;
           }
           try {
             await rejectCv(selectedCv.id, reason);
-            toast.error(
-              t("gsManageCvs.toast.rejected", {
-                fileName: selectedCv.fileName,
-              }),
-            );
+            toast.error(t("toast.rejected", { fileName: selectedCv.fileName }));
             setShowReasonModal(false);
           } catch {
-            toast.error(t("gsManageCvs.toast.rejectError"));
+            toast.error(t("toast.rejectError"));
           }
         }}
       />

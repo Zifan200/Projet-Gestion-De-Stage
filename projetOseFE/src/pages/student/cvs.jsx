@@ -8,7 +8,8 @@ import { toast } from "sonner";
 import PdfViewer from "../../components/CvViewer.jsx";
 
 export const StudentCVs = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("student_dashboard_cvs");
+
   const { cvs, loadCvs, uploadCv, downloadCv, deleteCv } = useCvStore();
   const [previewId, setPreviewId] = useState(null);
 
@@ -26,29 +27,24 @@ export const StudentCVs = () => {
     );
 
     if (alreadyExists) {
-      toast.error(
-        t("studentDashboard.errors.fileExists", {
-          fileName: file.name,
-        }),
-      );
+      toast.error(t("errors.fileExists", { fileName: file.name }));
       e.target.value = "";
       return;
     }
 
     try {
       await uploadCv(file);
-      toast.success(
-        t("studentDashboard.success.uploadCv", { fileName: file.name }),
-      );
+      toast.success(t("success.uploadCv", { fileName: file.name }));
     } catch {
-      toast.error(t("studentDashboard.errors.uploadCv"));
+      toast.error(t("errors.uploadCv"));
     }
   };
+
   const handlePreview = (cv) => {
     if (cv.fileType === "application/pdf") {
       setPreviewId(cv.id);
     } else {
-      toast.error(t("studentDashboard.errors.prewviewNotSupported"));
+      toast.error(t("errors.previewNotSupported"));
     }
   };
 
@@ -76,17 +72,17 @@ export const StudentCVs = () => {
       <td className="px-4 py-2 flex space-x-2">
         <Button
           onClick={() => handlePreview(cv)}
-          label={t("studentDashboard.actions.preview")}
-          className={"bg-indigo-300 hover:bg-indigo-100 p-1 rounded-lg"}
+          label={t("actions.preview")}
+          className="bg-indigo-300 hover:bg-indigo-100 p-1 rounded-lg"
         />
         <Button
           onClick={() => downloadCv(cv.id, cv.fileName)}
-          label={t("studentDashboard.actions.download")}
-          className={"bg-blue-300 hover:bg-blue-100 rounded-lg"}
+          label={t("actions.download")}
+          className="bg-blue-300 hover:bg-blue-100 rounded-lg"
         />
         <Button
           onClick={() => deleteCv(cv.id)}
-          label={t("studentDashboard.actions.delete")}
+          label={t("actions.delete")}
           className="bg-red-300 hover:bg-red-100 rounded-lg"
         />
       </td>
@@ -96,8 +92,8 @@ export const StudentCVs = () => {
   return (
     <div className="space-y-6">
       <Header
-        title={t("studentDashboard.myCvs")}
-        actionLabel={t("studentDashboard.addCv")}
+        title={t("myCvs")}
+        actionLabel={t("addCv")}
         onAction={() => document.getElementById("cv-upload").click()}
       />
       <input
@@ -108,27 +104,28 @@ export const StudentCVs = () => {
       />
       <Table
         headers={[
-          t("studentDashboard.table.fileName"),
-          t("studentDashboard.table.type"),
-          t("studentDashboard.table.size"),
-          t("studentDashboard.table.date"),
-          t("studentDashboard.table.actions"),
+          t("table.fileName"),
+          t("table.type"),
+          t("table.size"),
+          t("table.date"),
+          t("table.actions"),
         ]}
         rows={rows}
-        emptyMessage={t("studentDashboard.noCvs")}
+        emptyMessage={t("noCvs")}
       />
+
       {previewId && (
         <div className="mt-4">
           <div className="flex justify-end mb-2">
             <Button
               onClick={() => setPreviewId(null)}
-              label={t("menu.close")}
+              label={t("actions.close", { defaultValue: "Close" })}
               className="bg-zinc-200 hover:bg-zinc-100 p-1 rounded-lg"
             />
           </div>
           <PdfViewer cvId={previewId} role="student" />
         </div>
-      )}{" "}
+      )}
     </div>
   );
 };

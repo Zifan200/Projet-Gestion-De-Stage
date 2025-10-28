@@ -31,7 +31,7 @@ export const DevMode = ({ children }) => {
   const handleQuickLogin = async (data) => {
     try {
       const user = await login(data);
-      toast.success(t("success.loginSucces"), { duration: 3000 });
+      toast.success(t("login:success.loginSuccess"), { duration: 3000 });
       setTimeout(() => {
         if (user.role === "STUDENT") navigate("/dashboard/student");
         if (user.role === "EMPLOYER") navigate("/dashboard/employer");

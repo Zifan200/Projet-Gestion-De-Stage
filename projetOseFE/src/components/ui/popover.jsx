@@ -80,11 +80,8 @@ export function PopoverContent({
 }
 
 export function PopoverClose({ setOpen, children }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("menu");
   return (
-    <button onClick={() => setOpen(false)}>
-      {children || t("menu.close")}
-    </button>
+    <button onClick={() => setOpen(false)}>{children || t("close")}</button>
   );
 }
-

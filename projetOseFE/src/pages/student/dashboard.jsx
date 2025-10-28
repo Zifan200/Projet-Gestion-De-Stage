@@ -1,11 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
-import {
-  FileTextIcon,
-  DownloadIcon,
-  CheckIcon,
-  EyeOpenIcon,
-} from "@radix-ui/react-icons";
+import { FileTextIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useCvStore } from "../../stores/cvStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
@@ -25,7 +20,10 @@ export const StudentDashboard = () => {
   const user = useAuthStore((s) => s.user);
   const token = useAuthStore((s) => s.token);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const { t } = useTranslation();
+
+  // 👇 Important : charge le namespace `student_dashboard`
+  const { t } = useTranslation("student_dashboard");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,17 +52,15 @@ export const StudentDashboard = () => {
   const stats = useMemo(() => {
     const totalCvs = cvs.length;
     const availableOffers = offers.length;
-    const acceptedOffers = useOfferStore.getState().acceptedOffers.length;
-    const pendingOffers = useOfferStore.getState().pendingOffers.length;
 
     return [
       {
-        title: t("menu.cvs"),
+        title: t("stats.cvs"),
         value: totalCvs,
         icon: FileTextIcon,
       },
       {
-        title: t("menu.availableOffers"),
+        title: t("stats.availableOffers"),
         value: availableOffers,
         icon: EyeOpenIcon,
       },
@@ -73,15 +69,10 @@ export const StudentDashboard = () => {
 
   return (
     <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">{t("titles.dashboard")}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         {stats.map((s, i) => (
-          <StatCard
-            key={i}
-            title={s.title}
-            value={s.value}
-            change={s.change}
-            icon={s.icon}
-          />
+          <StatCard key={i} title={s.title} value={s.value} icon={s.icon} />
         ))}
       </div>
     </div>
