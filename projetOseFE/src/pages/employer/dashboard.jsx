@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
 import {
   BackpackIcon,
@@ -7,43 +7,70 @@ import {
   EnvelopeClosedIcon,
 } from "@radix-ui/react-icons";
 import { useTranslation } from "react-i18next";
+import { useEmployerStore } from "../../stores/employerStore.js";
+import { api } from "../../lib/api.js";
 
 export const EmployerDashboard = () => {
   const { t } = useTranslation();
+  const { applications, fetchApplications, loading, error } =
+    useEmployerStore();
+  const [studentApps, setStudentApps] = useState([]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
+
+  useEffect(() => {
+    const fetchStudentApps = async () => {
+      try {
+        const res = await api.get("/applications/employer");
+        setStudentApps(res.data);
+      } catch (e) {
+        console.error(
+          "Erreur lors du chargement des candidatures étudiantes:",
+          e,
+        );
+      }
+    };
+    fetchStudentApps();
+  }, []);
+
+  const stats = useMemo(() => {
+    const totalOffers = applications.length;
+    const activeOffers = applications.filter(
+      (o) => o.status === "PENDING",
+    ).length;
+    const acceptedOffers = applications.filter(
+      (o) => o.status === "ACCEPTED",
+    ).length;
+    const confirmedOffers = acceptedOffers;
+    const totalStudents = studentApps.length;
+
+    return {
+      totalOffers,
+      activeOffers,
+      totalStudents,
+      confirmedOffers,
+    };
+  }, [applications, studentApps]);
+
+  if (loading) return <p className="text-gray-600">Chargement...</p>;
+  if (error) return <p className="text-red-500">Erreur: {error}</p>;
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         <StatCard
           title={t("menu.myOffer")}
-          value="12"
-          change="+1% ce mois"
+          value={stats.totalOffers}
           icon={EnvelopeClosedIcon}
         />
-        {/* <StatCard */}
-        {/*   title={t("menu.activeOffer")} */}
-        {/*   value="8" */}
-        {/*   change="+1" */}
-        {/*   icon={BackpackIcon} */}
-        {/* /> */}
-        {/* <StatCard */}
-        {/*   title={t("menu.studentOffer")} */}
-        {/*   value="42" */}
-        {/*   change="+5%" */}
-        {/*   icon={PersonIcon} */}
-        {/* /> */}
-        {/* <StatCard */}
-        {/*   title={t("menu.offerConfirm")} */}
-        {/*   value="18" */}
-        {/*   change="+3" */}
-        {/*   icon={CheckIcon} */}
-        {/* /> */}
+        <StatCard
+          title={t("menu.offerConfirm")}
+          value={stats.confirmedOffers}
+          icon={CheckIcon}
+        />
       </div>
-
-      {/* <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"> */}
-      {/*   <h2 className="text-lg font-semibold text-gray-800 mb-4"> */}
-      {/*     {t("menu.lastActivity")} */}
-      {/*   </h2> */}
-      {/* </section> */}
     </div>
   );
 };

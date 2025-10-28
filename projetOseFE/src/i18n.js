@@ -7,6 +7,17 @@ import { initReactI18next } from "react-i18next";
 export const resources = {
   en: {
     translation: {
+      settings: {
+        lang: {
+          title: "Language",
+          language_description: "Select the language used for the interface",
+        },
+      },
+      languages: {
+        en: "English",
+        fr: "French",
+      },
+
       internshipApplications: {
         loading: "Loading applications...",
         table: {
@@ -84,6 +95,7 @@ export const resources = {
         manageCvs: "Submitted CV",
         applications: "Internship Applications",
         settings: "Settings",
+        availableOffers: "Available Offers",
       },
       errors: {
         email: { invalid: "Invalid email address" },
@@ -174,13 +186,13 @@ export const resources = {
         success: {
           create: "Offer successfully created!",
           delete: "Offer successfully deleted!",
-          download: "Download completed successfully!"
+          download: "Download completed successfully!",
         },
         error: {
           create: "Error while creating the offer.",
           delete: "Error while deleting the offer.",
           load: "Error while loading offers.",
-          download: "Error while downloading the offer."
+          download: "Error while downloading the offer.",
         },
 
         form: {
@@ -263,7 +275,7 @@ export const resources = {
           view: "View",
           delete: "Delete",
           reject: "Reject",
-          download: "Download"
+          download: "Download",
         },
 
         errors: {
@@ -385,7 +397,7 @@ export const resources = {
         actions: {
           apply: "Apply",
           view: "View",
-          download: "Download"
+          download: "Download",
         },
         noOffers: "No internship offers available",
         filterLabel: "Filter:",
@@ -424,14 +436,14 @@ export const resources = {
           status: "Statut",
           appliedAt: "Postulé le",
           close: "Fermer",
-          email: "Email"
+          email: "Email",
         },
         closeCvPreview: "Fermer",
         settings: {
           lang: {
             title: "Changement de la langue",
             language_description:
-                "Choisissez la langue utilisée pour l’interface",
+              "Choisissez la langue utilisée pour l’interface",
           },
         },
         languages: {
@@ -439,6 +451,18 @@ export const resources = {
           fr: "Français",
         },
       },
+      settings: {
+        lang: {
+          title: "Changement de la langue",
+          language_description:
+            "Choisissez la langue utilisée pour l’interface",
+        },
+      },
+      languages: {
+        en: "Anglais",
+        fr: "Français",
+      },
+
       success: {
         loginSucces: "Connexion réussie !",
         registerEnterpriseSuccess:
@@ -478,6 +502,7 @@ export const resources = {
         manageCvs: "CV soumis",
         applications: "Candidatures de stage",
         settings: "Paramètres",
+        availableOffers: "Offres disponibles",
       },
       errors: {
         email: { invalid: "Email est invalide" },
@@ -579,13 +604,13 @@ export const resources = {
         success: {
           create: "Offre créée avec succès !",
           delete: "Offre supprimée avec succès !",
-          download : "Téléchargement effectué avec succès!"
+          download: "Téléchargement effectué avec succès!",
         },
         error: {
           create: "Erreur lors de la création de l'offre.",
           delete: "Erreur lors de la suppression de l'offre.",
           load: "Erreur lors du chargement des offres.",
-          download: "Erreur lors du téléchargement de l'offre."
+          download: "Erreur lors du téléchargement de l'offre.",
         },
 
         form: {
@@ -668,7 +693,7 @@ export const resources = {
           view: "Voir",
           delete: "Supprimer",
           reject: "Rejeter",
-          download: "Télécharger"
+          download: "Télécharger",
         },
 
         errors: {
@@ -792,7 +817,7 @@ export const resources = {
         actions: {
           apply: "Postuler",
           view: "Voir",
-          download: "Télécharger"
+          download: "Télécharger",
         },
         noOffers: "Aucune offre de stage disponible",
         filterLabel: "Filtrer",
