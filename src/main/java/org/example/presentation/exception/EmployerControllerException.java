@@ -86,6 +86,13 @@ public class EmployerControllerException {
         return buildError(HttpStatus.UNAUTHORIZED, "INVALID_JWT_TOKEN", ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidInternshipApplicationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidInternshipApplication(
+            InvalidInternshipApplicationException ex
+    ) {
+        return buildError(HttpStatus.BAD_REQUEST, "INVALID_INTERNSHIP_APPLICATION", ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
         System.out.println(ex);

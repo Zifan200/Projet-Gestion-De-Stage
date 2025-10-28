@@ -796,6 +796,79 @@ public class InternshipApplicationServiceTest {
         assertNotNull(list);
         assertEquals(0, list.size());
     }
+
+    @Test
+    void approveInternshipApplication_shouldReturnUpdatedApplication() {
+        // Arrange
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Frontend React")
+                .employer(employer)
+                .build();
+
+        Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
+        CV cv = CV.builder().id(1L).build();
+
+        InternshipApplication pendingApp = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+        InternshipApplicationResponseDTO pendingRes = InternshipApplicationResponseDTO.create(pendingApp);
+
+        when(employerRepository.findByCredentialsEmail(EMPLOYER_EMAIL)).thenReturn(Optional.of(employer));
+        when(internshipApplicationRepository.findById(pendingRes.getId())).thenReturn(Optional.of(pendingApp));
+
+        // Act
+        InternshipApplicationResponseDTO result =
+                internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, pendingRes.getId());
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(ApprovalStatus.ACCEPTED, result.getStatus());
+    }
+
+    @Test
+    void approveInternshipApplication_shouldThrow_whenApplicationNotFound() {
+        // Arrange
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+        when(employerRepository.findByCredentialsEmail(EMPLOYER_EMAIL)).thenReturn(Optional.of(employer));
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, 1L)
+        );
+    }
+
+    @Test
+    void approveInternshipApplication_shouldThrow_whenEmployerNotFound() {
+        // Arrange
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+        when(employerRepository.findByCredentialsEmail(EMPLOYER_EMAIL)).thenReturn(Optional.of(employer));
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Frontend React")
+                .employer(employer)
+                .build();
+
+        InternshipApplicationResponseDTO application = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail(STUDENT_EMAIL)
+                .employerEmail("wrong@test.com")
+                .internshipOfferId(offer.getId())
+                .internshipOfferTitle(offer.getTitle())
+                .build();
+
+        // Act & Assert
+        InvalidInternshipApplicationException exception = assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, application.getId())
+        );
+    }
 }
 
 

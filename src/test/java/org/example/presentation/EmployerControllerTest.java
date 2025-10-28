@@ -1,5 +1,6 @@
 package org.example.presentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.presentation.exception.InternshipOfferControllerException;
@@ -299,6 +300,108 @@ class EmployerControllerTest {
                 .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
 
         MvcResult result = mockMvc.perform(get("/api/v1/employer/get-all-internship-applications/internship-offer/999")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternshipApplicationException);
+    }
+
+    @Test
+    void approveInternshipApplication_shouldReturn201() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(employerController)
+                .setControllerAdvice(new EmployerControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO pendingApplication = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Backend Developer")
+                .build();
+
+        InternshipApplicationResponseDTO approvedApplication = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Backend Developer")
+                .status(ApprovalStatus.ACCEPTED)
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT))
+                .thenReturn(EmployerDto.builder().email(EMPLOYER_EMAIL).build());
+
+        // Act
+        when(internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, pendingApplication.getId()))
+                .thenReturn(approvedApplication);
+
+        // Assert
+        mockMvc.perform(put("/api/v1/employer/get-internship-application/1/approve")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status").value("ACCEPTED"))
+                .andExpect(jsonPath("studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("internshipOfferTitle").value("Backend Developer"));
+    }
+
+    @Test
+    void approveInternshipApplication_shouldReturn400_whenApplicationNotFound() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(employerController)
+                .setControllerAdvice(new EmployerControllerException())
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT))
+                .thenReturn(EmployerDto.builder().email(EMPLOYER_EMAIL).build());
+
+        // Act
+        when(internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, 999L))
+                .thenThrow(new InvalidInternshipApplicationException("Internship application not found"));
+
+        // Assert
+        MvcResult result = mockMvc.perform(put("/api/v1/employer/get-internship-application/999/approve")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternshipApplicationException);
+    }
+
+    @Test
+    void approveInternshipApplication_shouldReturn400_whenEmployerNotFound() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(employerController)
+                .setControllerAdvice(new EmployerControllerException())
+                .build();
+
+        when(userAppService.getMe(FAKE_JWT))
+                .thenReturn(EmployerDto.builder().email(EMPLOYER_EMAIL).build());
+
+        InternshipApplicationResponseDTO application = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .employerEmail("wrong@test.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Backend Developer")
+                .build();
+
+        // Act
+        when(internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, application.getId()))
+                .thenThrow(new InvalidInternshipApplicationException("Invalid application"));
+
+        // Assert
+        MvcResult result = mockMvc.perform(put("/api/v1/employer/get-internship-application/1/approve")
                         .header("Authorization", "Bearer " + FAKE_JWT)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
