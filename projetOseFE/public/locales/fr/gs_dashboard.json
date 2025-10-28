@@ -1,0 +1,25 @@
+{
+  "stats": {
+    "pending": "CVs en attente",
+    "availableOffers": "Offres disponibles",
+    "manageCvs": "Gérer les CVs étudiants",
+    "allOffers": "Toutes les offres de stage"
+  },
+  "titles": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord du gestionnaire",
+    "manageCvs": "Gérer les CVs étudiants",
+    "allOffers": "Toutes les offres",
+    "settings": "Paramètres"
+  },
+  "messages": {
+    "welcome": "Bon retour, {{firstName}} !",
+    "noCvs": "Aucun CV étudiant disponible pour le moment.",
+    "noOffers": "Aucune offre de stage trouvée.",
+    "loadPrompt": "Commencez par examiner ou valider des CVs."
+  },
+  "errors": {
+    "loadCvs": "Erreur lors du chargement des CVs étudiants.",
+    "loadOffers": "Erreur lors du chargement des offres de stage."
+  }
+}

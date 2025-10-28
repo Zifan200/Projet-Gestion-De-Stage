@@ -1,0 +1,32 @@
+{
+  "title": "Offres de stage",
+  "table": {
+    "title": "Titre",
+    "company": "Entreprise",
+    "deadline": "Date limite",
+    "action": "Action"
+  },
+  "actions": {
+    "view": "Voir",
+    "download": "Télécharger"
+  },
+  "modal": {
+    "companyEmail": "Courriel de l'entreprise",
+    "targetedProgramme": "Programme ciblé",
+    "publishedDate": "Date de publication",
+    "deadline": "Date limite",
+    "description": "Description",
+    "selectCv": "Sélectionne un CV",
+    "chooseCv": "Choisir un CV",
+    "apply": "Postuler",
+    "close": "Fermer"
+  },
+  "success": {
+    "applyOffer": "Tu as postulé à cette offre avec succès!"
+  },
+  "errors": {
+    "viewOffer": "Erreur lors de la visualisation de l'offre.",
+    "applyOffer": "Échec de la postulation à l'offre.",
+    "selectCv": "Veuillez sélectionner un CV avant de postuler."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "stats": {
+    "cvs": "My CVs",
+    "availableOffers": "Available Offers",
+    "acceptedOffers": "Accepted Offers",
+    "pendingOffers": "Pending Offers"
+  },
+  "messages": {
+    "welcome": "Welcome back, {{firstName}}!",
+    "noCvs": "You haven't uploaded any CVs yet.",
+    "uploadPrompt": "Add your first CV to apply for offers."
+  },
+  "errors": {
+    "loadCvs": "Error while loading CVs.",
+    "loadOffers": "Error while loading offers."
+  },
+  "titles": {
+    "home": "Home",
+    "dashboard": "Student Dashboard",
+    "cvs": "CV Management",
+    "offers": "Offers Overview"
+  }
+}

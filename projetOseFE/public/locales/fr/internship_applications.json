@@ -1,0 +1,27 @@
+{
+  "title": "Candidatures de stage",
+  "table": {
+    "offerTitle": "Titre de l'offre",
+    "studentName": "Nom de l'étudiant",
+    "studentEmail": "Courriel de l'étudiant",
+    "cv": "CV",
+    "download": "Télécharger",
+    "noCv": "Aucun CV",
+    "status": "Statut",
+    "action": "Action",
+    "actionView": "Voir"
+  },
+  "modal": {
+    "email": "Courriel",
+    "cv": "CV",
+    "offerTitle": "Offre",
+    "status": "Statut",
+    "appliedAt": "Postulé le",
+    "close": "Fermer"
+  },
+  "previewCv": "Aperçu du CV",
+  "closeCvPreview": "Fermer l’aperçu",
+  "errors": {
+    "downloadCv": "Erreur lors du téléchargement du CV."
+  }
+}

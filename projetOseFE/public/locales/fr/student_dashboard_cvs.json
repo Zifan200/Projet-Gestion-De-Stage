@@ -1,0 +1,26 @@
+{
+  "title": "Mes CVs",
+  "addCv": "Ajouter un CV",
+  "noCvs": "Tu n’as encore ajouté aucun CV.",
+  "myCvs": "Mes CVs",
+  "table": {
+    "fileName": "Nom du fichier",
+    "type": "Type de fichier",
+    "size": "Taille",
+    "date": "Date d'envoi",
+    "actions": "Actions"
+  },
+  "actions": {
+    "preview": "Prévisualiser",
+    "download": "Télécharger",
+    "delete": "Supprimer"
+  },
+  "success": {
+    "uploadCv": "Le CV '{{fileName}}' a été téléversé avec succès !"
+  },
+  "errors": {
+    "uploadCv": "Une erreur est survenue lors du téléversement du CV.",
+    "fileExists": "Le fichier '{{fileName}}' existe déjà.",
+    "previewNotSupported": "La prévisualisation est uniquement disponible pour les fichiers PDF."
+  }
+}

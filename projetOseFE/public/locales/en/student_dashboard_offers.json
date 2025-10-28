@@ -1,0 +1,32 @@
+{
+  "title": "Internship Offers",
+  "table": {
+    "title": "Title",
+    "company": "Company",
+    "deadline": "Deadline",
+    "action": "Action"
+  },
+  "actions": {
+    "view": "View",
+    "download": "Download"
+  },
+  "modal": {
+    "companyEmail": "Company Email",
+    "targetedProgramme": "Targeted Program",
+    "publishedDate": "Published Date",
+    "deadline": "Deadline",
+    "description": "Description",
+    "selectCv": "Select a CV",
+    "chooseCv": "Choose a CV",
+    "apply": "Apply",
+    "close": "Close"
+  },
+  "success": {
+    "applyOffer": "You have successfully applied for this offer!"
+  },
+  "errors": {
+    "viewOffer": "Error viewing the offer.",
+    "applyOffer": "Failed to apply to the offer.",
+    "selectCv": "Please select a CV before applying."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "title": "All Internship Offers",
+  "table": {
+    "loading": "Loading internship offers...",
+    "offerTitle": "Title",
+    "enterprise": "Company",
+    "program": "Program",
+    "status": "Status",
+    "deadline": "Deadline",
+    "noOffers": "No internship offers available."
+  },
+  "filter": {
+    "status": "Filter by status",
+    "program": {
+      "all": "All programs"
+    },
+    "all": "All"
+  },
+  "status": {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
+  },
+  "actions": {
+    "view": "View",
+    "download": "Download",
+    "reject": "Reject"
+  },
+  "success": {
+    "download": "Offer downloaded successfully!",
+    "updateStatus": "Offer status updated.",
+    "reject": "Offer rejected successfully!",
+    "accepted": "Offer accepted!"
+  },
+  "error": {
+    "download": "Failed to download the offer.",
+    "loadOffer": "Failed to load offer details.",
+    "updateStatus": "Failed to update offer status.",
+    "rejectFailed": "Failed to reject the offer."
+  },
+  "modal": {
+    "companyEmail": "Company Email",
+    "targetedProgramme": "Targeted Program",
+    "publishedDate": "Published Date",
+    "deadline": "Deadline",
+    "description": "Description",
+    "status": "Status",
+    "rejectReason": "Rejection Reason",
+    "reasonPlaceholder": "Enter a reason for rejection...",
+    "reasonRequired": "A reason is required to reject an offer.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "close": "Close",
+    "accepted": "Offer accepted successfully!",
+    "rejectSuccess": "Offer rejected successfully!"
+  }
+}

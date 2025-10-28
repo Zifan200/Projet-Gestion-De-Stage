@@ -1,0 +1,57 @@
+{
+  "title": "Toutes les offres de stage",
+  "table": {
+    "loading": "Chargement des offres de stage...",
+    "offerTitle": "Titre",
+    "enterprise": "Entreprise",
+    "program": "Programme",
+    "status": "Statut",
+    "deadline": "Date limite",
+    "noOffers": "Aucune offre de stage disponible."
+  },
+  "filter": {
+    "status": "Filtrer par statut",
+    "program": {
+      "all": "Tous les programmes"
+    },
+    "all": "Toutes"
+  },
+  "status": {
+    "pending": "En attente",
+    "accepted": "Acceptée",
+    "rejected": "Rejetée"
+  },
+  "actions": {
+    "view": "Voir",
+    "download": "Télécharger",
+    "reject": "Rejeter"
+  },
+  "success": {
+    "download": "Offre téléchargée avec succès !",
+    "updateStatus": "Statut de l’offre mis à jour.",
+    "reject": "Offre rejetée avec succès !",
+    "accepted": "Offre acceptée !"
+  },
+  "error": {
+    "download": "Échec du téléchargement de l’offre.",
+    "loadOffer": "Échec du chargement de l’offre.",
+    "updateStatus": "Échec de la mise à jour du statut de l’offre.",
+    "rejectFailed": "Échec du rejet de l’offre."
+  },
+  "modal": {
+    "companyEmail": "Courriel de l’entreprise",
+    "targetedProgramme": "Programme visé",
+    "publishedDate": "Date de publication",
+    "deadline": "Date limite",
+    "description": "Description",
+    "status": "Statut",
+    "rejectReason": "Raison du rejet",
+    "reasonPlaceholder": "Entrez la raison du rejet...",
+    "reasonRequired": "Une raison est requise pour rejeter une offre.",
+    "accept": "Accepter",
+    "reject": "Rejeter",
+    "close": "Fermer",
+    "accepted": "Offre acceptée avec succès !",
+    "rejectSuccess": "Offre rejetée avec succès !"
+  }
+}

@@ -37,30 +37,42 @@ import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 import { DevMode } from "./components/tools/dev-mode.jsx";
 
 function App() {
-  const { t } = useTranslation();
-  const gsDashboardSidebarLinks = [
+  const { t } = useTranslation([
+    "student_dashboard",
+    "employer_dashboard",
+    "gs_dashboard",
+    "menu",
+  ]);
+
+  const studentDashboardSidebarLinks = [
     {
-      key: "dashboard",
-      label: t("menu.dashboard"),
-      href: "/dashboard/gs/",
+      key: "home",
+      label: t("student_dashboard:titles.home"),
+      href: "/dashboard/student",
       icon: BackpackIcon,
     },
     {
-      key: "manageCvs",
-      label: t("menu.manageCvs"),
-      href: "/dashboard/gs/manage-students-cvs",
-      icon: BackpackIcon,
+      key: "cvs",
+      label: t("student_dashboard:stats.cvs"),
+      href: "/dashboard/student/cvs",
+      icon: FileTextIcon,
     },
     {
-      key: "seeOffers",
-      label: t("menu.allOffers"),
-      href: "/dashboard/gs/internships",
+      key: "offers",
+      label: t("student_dashboard:stats.availableOffers"),
+      href: "/dashboard/student/offers",
+      icon: EnvelopeOpenIcon,
+    },
+    {
+      key: "applications",
+      label: t("student_dashboard:stats.pendingOffers"),
+      href: "/dashboard/student/applications",
       icon: EnvelopeClosedIcon,
     },
     {
       key: "settings",
-      label: t("menu.settings"),
-      href: "/dashboard/gs/settings",
+      label: t("menu:settings"),
+      href: "/dashboard/student/settings",
       icon: GearIcon,
     },
   ];
@@ -68,80 +80,63 @@ function App() {
   const employerDashboardSidebarLinks = [
     {
       key: "dashboard",
-      label: t("menu.dashboard"),
+      label: t("employer_dashboard:titles.home"),
       href: "/dashboard/employer/",
       icon: BackpackIcon,
     },
     {
       key: "applications",
-      label: t("menu.applications"),
+      label: t("employer_dashboard:stats.applications"),
       href: "/dashboard/employer/applications",
-      icon: PersonIcon, // ou un autre icône
+      icon: PersonIcon,
     },
     {
       key: "createOffers",
-      label: t("menu.createOffer"),
+      label: t("employer_dashboard:stats.createOffer"),
       href: "/dashboard/employer/add-intership",
       icon: EnvelopeClosedIcon,
     },
     {
       key: "seeOffers",
-      label: t("menu.seeOffer"),
+      label: t("employer_dashboard:stats.myOffers"),
       href: "/dashboard/employer/my-offers",
       icon: EnvelopeOpenIcon,
     },
     {
       key: "settings",
-      label: t("menu.settings"),
+      label: t("menu:settings"),
       href: "/dashboard/employer/settings",
       icon: GearIcon,
     },
-    // {
-    //   key: "applications",
-    //   label: t("menu.post"),
-    //   href: "/employer/applications",
-    //   icon: PersonIcon,
-    // },
-    // {
-    //   key: "students",
-    //   label: t("menu.student"),
-    //   href: "/employer/students",
-    //   icon: CheckIcon,
-    // },
   ];
 
-  const studentDashboardSidebarLinks = [
+  const gsDashboardSidebarLinks = [
     {
-      key: "home",
-      label: "Dashboard",
-      href: "/dashboard/student",
+      key: "dashboard",
+      label: t("gs_dashboard:titles.home"),
+      href: "/dashboard/gs/",
       icon: BackpackIcon,
     },
     {
-      key: "cvs",
-      label: t("menu.cvs"),
-      href: "/dashboard/student/cvs",
-      icon: FileTextIcon,
+      key: "manageCvs",
+      label: t("gs_dashboard:stats.manageCvs"),
+      href: "/dashboard/gs/manage-students-cvs",
+      icon: BackpackIcon,
     },
     {
-      key: "offers",
-      label: t("menu.myOffer"),
-      href: "/dashboard/student/offers",
-      icon: EnvelopeOpenIcon,
-    },
-    {
-      key: "applications",
-      label: t("menu.post"),
-      href: "/dashboard/student/applications",
+      key: "seeOffers",
+      label: t("gs_dashboard:stats.allOffers"),
+      href: "/dashboard/gs/internships",
       icon: EnvelopeClosedIcon,
     },
     {
       key: "settings",
-      label: t("menu.settings"),
-      href: "/dashboard/student/settings",
+      label: t("menu:settings"),
+      href: "/dashboard/gs/settings",
       icon: GearIcon,
     },
   ];
+
   return (
     <div className="min-h-screen">
       <BrowserRouter>
@@ -158,7 +153,7 @@ function App() {
             element={
               <DashboardLayout
                 sidebarLinks={gsDashboardSidebarLinks}
-                title={t("dashboardLayout.gs")}
+                title={t("gs_dashboard:titles.dashboard")}
               />
             }
           >
@@ -181,7 +176,7 @@ function App() {
             element={
               <DashboardLayout
                 sidebarLinks={studentDashboardSidebarLinks}
-                title={t("dashboardLayout.student")}
+                title={t("student_dashboard:titles.dashboard")}
               />
             }
           >
@@ -202,7 +197,7 @@ function App() {
             element={
               <DashboardLayout
                 sidebarLinks={employerDashboardSidebarLinks}
-                title={t("dashboardLayout.employer")}
+                title={t("employer_dashboard:titles.dashboard")}
               />
             }
           >

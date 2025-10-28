@@ -1,0 +1,30 @@
+{
+  "title": "Créer une nouvelle offre de stage",
+  "description": "Remplissez le formulaire ci-dessous pour publier votre offre de stage aux étudiants.",
+  "form": {
+    "title": "Titre",
+    "description": "Description",
+    "program": "Programme visé",
+    "deadline": "Date limite",
+    "placeholders": {
+      "title": "Ex : Stage en intelligence artificielle à l’Institut Health Research",
+      "description": "Décrivez les tâches, attentes et environnement du stage.",
+      "program": "Sélectionnez un programme"
+    }
+  },
+  "submit": "Publier l’offre",
+  "success": {
+    "create": "Offre de stage créée avec succès !"
+  },
+  "errors": {
+    "create": "Échec de la création de l’offre de stage.",
+    "fillFields": "Veuillez remplir tous les champs requis."
+  },
+  "validation": {
+    "title_required": "Un titre est obligatoire.",
+    "description_required": "Une description est obligatoire.",
+    "program_required": "Un programme est obligatoire.",
+    "invalid_email": "Veuillez entrer un courriel valide.",
+    "expiration_required": "Une date limite est obligatoire."
+  }
+}

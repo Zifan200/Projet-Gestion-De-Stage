@@ -1,0 +1,30 @@
+{
+  "title": "Create a new internship offer",
+  "description": "Fill in the form below to publish your internship offer to students.",
+  "form": {
+    "title": "Title",
+    "description": "Description",
+    "program": "Targeted Program",
+    "deadline": "Deadline",
+    "placeholders": {
+      "title": "Ex: AI internship at Health Research Institute",
+      "description": "Describe the tasks, expectations, and environment of the internship.",
+      "program": "Select a program"
+    }
+  },
+  "submit": "Publish Offer",
+  "success": {
+    "create": "Internship offer successfully created!"
+  },
+  "errors": {
+    "create": "Failed to create internship offer.",
+    "fillFields": "Please fill in all required fields."
+  },
+  "validation": {
+    "title_required": "A title is required.",
+    "description_required": "A description is required.",
+    "program_required": "A program is required.",
+    "invalid_email": "Please enter a valid email address.",
+    "expiration_required": "A deadline is required."
+  }
+}
