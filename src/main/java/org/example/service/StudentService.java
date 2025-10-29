@@ -52,11 +52,5 @@ public class StudentService {
     }
 
 
-    public List<EtudiantDTO> getAllStudentsAppliedToAInternshipOffer(){
-        List<EtudiantDTO> studentList = new ArrayList<>();
-        for(Etudiant etudiant : etudiantRepository.findByApplicationsIsNotEmpty()){
-            studentList.add(EtudiantDTO.fromEntity(etudiant));
-        }
-        return studentList;
-    }
+
 }

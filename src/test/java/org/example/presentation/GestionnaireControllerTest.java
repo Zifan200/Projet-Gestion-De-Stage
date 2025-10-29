@@ -1,9 +1,12 @@
 package org.example.presentation;
 
 import org.example.presentation.exception.EmployerControllerException;
+import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.service.CVService;
+import org.example.service.InternshipApplicationService;
 import org.example.service.StudentService;
 import org.example.service.dto.student.EtudiantDTO;
+import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GestionnaireControllerTest {
 
     @Mock
-    private CVService cvService;
-
-    @Mock
-    private StudentService studentService;
+    private InternshipApplicationService internshipApplicationService;
 
     @InjectMocks
     private GestionnaireController gestionnaireController;
@@ -45,6 +45,54 @@ class GestionnaireControllerTest {
                 .build();
     }
 
-    private static final String PATH = "/api/v1/gs/";
+    private static final String BASE_PATH = "/api/v1/gs";
+    @Test
+    void getAllStudentsWithApplication_shouldReturn200() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(gestionnaireController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
 
+        EtudiantDTO student = EtudiantDTO.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john.doe@mail.com")
+                .build();
+
+        when(internshipApplicationService.getAllStudentsAppliedToAInternshipOffer())
+                .thenReturn(List.of(student));
+
+        // Act + Assert
+        mockMvc.perform(get(BASE_PATH + "/get-all/students/with-application")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName").value("John"))
+                .andExpect(jsonPath("$[0].lastName").value("Doe"))
+                .andExpect(jsonPath("$[0].email").value("john.doe@mail.com"));
+    }
+
+    @Test
+    void getAllStudentsWithApplication_shouldReturn400_whenNoStudentsFound() throws Exception {
+        // Arrange
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(gestionnaireController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        when(internshipApplicationService.getAllStudentsAppliedToAInternshipOffer())
+                .thenThrow(new InvalidInternshipApplicationException("No students found"));
+
+        // Act
+        var result = mockMvc.perform(get(BASE_PATH + "/get-all/students/with-application")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        // Assert
+        Exception resolved = result.getResolvedException();
+        assert resolved != null;
+        org.junit.jupiter.api.Assertions.assertInstanceOf(InvalidInternshipApplicationException.class, resolved);
+    }
 }
+

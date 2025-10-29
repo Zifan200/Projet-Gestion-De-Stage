@@ -5,6 +5,7 @@ import org.example.model.enums.ApprovalStatus;
 import org.example.repository.*;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDTO;
 import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -640,6 +644,50 @@ public class InternshipApplicationServiceTest {
                                 application.getId()
                         )
         );
+    }
+
+    @Test
+    void getAllStudentsThatHasAppliedToInternship_shouldReturnStudentsWithApplications() {
+        // Arrange
+        Etudiant student = Etudiant.builder()
+                .id(1L)
+                .firstName("Jimmy")
+                .lastName("Junior")
+                .email("jimmyJunior@gmail.com")
+                .phone("514-123-4567")
+                .adresse("123 Rue Test")
+                .program("Informatique")
+                .since(LocalDate.now())
+                .build();
+
+        when(studentRepository.findByApplicationsIsNotEmpty())
+                .thenReturn(List.of(student));
+
+        // Act
+        List<EtudiantDTO> students = internshipApplicationService.getAllStudentsAppliedToAInternshipOffer();
+
+        // Assert
+        assertThat(students)
+                .isNotEmpty()
+                .hasSize(1);
+
+        EtudiantDTO dto = students.get(0);
+        assertEquals("jimmyJunior@gmail.com", dto.getEmail());
+        assertEquals("Informatique", dto.getProgram());
+        assertEquals("Jimmy", dto.getFirstName());
+    }
+
+    @Test
+    void getAllStudentsThatHasAppliedToInternship_shouldReturnEmptyList_whenNoStudentsHaveApplications() {
+        // Arrange
+        when(studentRepository.findByApplicationsIsNotEmpty())
+                .thenReturn(Collections.emptyList());
+
+        // Act
+        List<EtudiantDTO> result = internshipApplicationService.getAllStudentsAppliedToAInternshipOffer();
+
+        // Assert
+        assertThat(result).isEmpty();
     }
 
     @Test

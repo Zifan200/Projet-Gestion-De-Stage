@@ -28,34 +28,5 @@ class StudentServiceTest {
     @InjectMocks
     private StudentService studentService;
 
-    @Test
-    void getAllStudentsThatHasAppliedToInternship_shouldReturnStudentsWithApplications() {
-        // Arrange
-        Etudiant student = Etudiant.builder()
-                .id(1L)
-                .firstName("Jimmy")
-                .lastName("Junior")
-                .email("jimmyJunior@gmail.com")
-                .phone("514-123-4567")
-                .adresse("123 Rue Test")
-                .program("Informatique")
-                .since(LocalDate.now())
-                .build();
 
-        when(etudiantRepository.findByApplicationsIsNotEmpty())
-                .thenReturn(List.of(student));
-
-        // Act
-        List<EtudiantDTO> students = studentService.getAllStudentsAppliedToAInternshipOffer();
-
-        // Assert
-        assertThat(students)
-                .isNotEmpty()
-                .hasSize(1);
-
-        EtudiantDTO dto = students.get(0);
-        assertThat(dto.getEmail()).isEqualTo("jimmyJunior@gmail.com");
-        assertThat(dto.getProgram()).isEqualTo("Informatique");
-        assertThat(dto.getFirstName()).isEqualTo("Jimmy");
-    }
 }
