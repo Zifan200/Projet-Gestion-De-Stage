@@ -21,7 +21,6 @@ export const StudentDashboard = () => {
   const token = useAuthStore((s) => s.token);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-  // 👇 Important : charge le namespace `student_dashboard`
   const { t } = useTranslation("student_dashboard");
 
   const navigate = useNavigate();

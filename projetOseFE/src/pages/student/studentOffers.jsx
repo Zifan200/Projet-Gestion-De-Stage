@@ -93,7 +93,7 @@ export const StudentOffers = () => {
           label: (
             <>
               <EyeOpenIcon className="w-4 h-4" />
-              <span>{t("actions.view")}</span>
+              <span>{t("actions.apply")}</span>
             </>
           ),
         },

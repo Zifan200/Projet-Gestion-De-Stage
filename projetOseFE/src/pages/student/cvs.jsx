@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
 import { Table } from "../../components/ui/table.jsx";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
 import PdfViewer from "../../components/CvViewer.jsx";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "../../components/ui/popover.jsx";
 import { EyeOpenIcon, DownloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 export const StudentCVs = () => {
@@ -12,6 +18,7 @@ export const StudentCVs = () => {
 
   const { cvs, loadCvs, uploadCv, downloadCv, deleteCv } = useCvStore();
   const [previewId, setPreviewId] = useState(null);
+  const [filterStatus, setFilterStatus] = useState(null);
 
   useEffect(() => {
     loadCvs();
@@ -61,11 +68,34 @@ export const StudentCVs = () => {
     }
   };
 
-  const rows = cvs.map((cv) => (
+  const getStatusColor = (status) => {
+    const statusColors = {
+      pending: "bg-yellow-100 text-yellow-800",
+      accepted: "bg-green-100 text-green-800",
+      rejected: "bg-red-100 text-red-800",
+    };
+    return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
+  };
+
+  const sortedAndFilteredCvs = useMemo(() => {
+    const filtered = filterStatus
+      ? cvs.filter((cv) => cv.status === filterStatus)
+      : cvs;
+    return [...filtered].sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+  }, [cvs, filterStatus]);
+
+  const rows = sortedAndFilteredCvs.map((cv) => (
     <tr key={cv.id} className="border-t border-gray-200 text-gray-700 text-sm">
       <td className="px-4 py-3">{cv.fileName}</td>
       <td className="px-4 py-3">{getFriendlyType(cv.fileType)}</td>
       <td className="px-4 py-3">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
+      <td className="px-4 py-3">
+        <span
+          className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(cv.status)}`}
+        >
+          {t(`status.${cv.status?.toLowerCase()}`)}
+        </span>
+      </td>
       <td className="px-4 py-3">
         {new Date(cv.uploadedAt).toLocaleDateString()}
       </td>
@@ -110,11 +140,67 @@ export const StudentCVs = () => {
         className="hidden"
         onChange={handleUpload}
       />
+
+      {/* Filter */}
+      <Popover>
+        {({ open, setOpen, triggerRef, contentRef }) => (
+          <>
+            <PopoverTrigger
+              open={open}
+              setOpen={setOpen}
+              triggerRef={triggerRef}
+            >
+              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                {t("filter.status")}:{" "}
+                {filterStatus
+                  ? t(`status.${filterStatus.toLowerCase()}`)
+                  : t("filter.all")}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent open={open} contentRef={contentRef}>
+              <div className="flex flex-col gap-2 min-w-[150px]">
+                {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setFilterStatus(status);
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      filterStatus === status
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t(`status.${status.toLowerCase()}`)}
+                  </button>
+                ))}
+                <button
+                  onClick={() => {
+                    setFilterStatus(null);
+                    setOpen(false);
+                  }}
+                  className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                >
+                  {t("filter.all")}
+                </button>
+                <PopoverClose setOpen={setOpen}>
+                  <span className="text-sm text-gray-600">
+                    {t("menu.close")}
+                  </span>
+                </PopoverClose>
+              </div>
+            </PopoverContent>
+          </>
+        )}
+      </Popover>
+
       <Table
         headers={[
           t("table.fileName"),
           t("table.type"),
           t("table.size"),
+          t("table.status"),
           t("table.date"),
           t("table.actions"),
         ]}
@@ -129,7 +215,7 @@ export const StudentCVs = () => {
               onClick={() => setPreviewId(null)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
             >
-              <span>{t("actions.close", { defaultValue: "Close" })}</span>
+              <span>{t("actions.close")}</span>
             </button>
           </div>
           <PdfViewer cvId={previewId} role="student" />

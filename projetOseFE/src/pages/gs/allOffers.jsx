@@ -5,6 +5,12 @@ import React, { useEffect, useState } from "react";
 import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "../../components/ui/popover.jsx";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
 
 export const AllOffers = () => {
@@ -26,7 +32,7 @@ export const AllOffers = () => {
   const [currentOfferStatus, setCurrentOfferStatus] = useState(
     offerStatuses.ALL,
   );
-  const [currentProgram, setCurrentProgram] = useState(t("filter.program.all"));
+  const [currentProgram, setCurrentProgram] = useState(null);
 
   const {
     offers,
@@ -85,7 +91,7 @@ export const AllOffers = () => {
     }
 
     let filtered = listToFilter;
-    if (currentProgram !== t("filter.program.all")) {
+    if (currentProgram && currentProgram !== t("programAll")) {
       filtered = listToFilter.filter(
         (o) => o.targetedProgramme === currentProgram,
       );
@@ -154,6 +160,15 @@ export const AllOffers = () => {
     }
   };
 
+  const getStatusColor = (status) => {
+    const statusColors = {
+      pending: "bg-yellow-100 text-yellow-800",
+      accepted: "bg-green-100 text-green-800",
+      rejected: "bg-red-100 text-red-800",
+    };
+    return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
+  };
+
   const tableRows = () =>
     currentOffers.map((offer) => (
       <tr key={offer.id} className="border-t border-gray-200 text-gray-700 text-sm">
@@ -161,7 +176,11 @@ export const AllOffers = () => {
         <td className="px-4 py-3">{offer.enterpriseName}</td>
         <td className="px-4 py-3">{offer.targetedProgramme}</td>
         <td className="px-4 py-3">
-          {t(`status.${offer.status?.toLowerCase()}`)}
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(offer.status)}`}
+          >
+            {t(`status.${offer.status?.toLowerCase()}`)}
+          </span>
         </td>
         <td className="px-4 py-3">
           {new Date(offer.expirationDate).toLocaleDateString()}
@@ -189,36 +208,111 @@ export const AllOffers = () => {
 
   return (
     <div className="space-y-6">
-      <select
-        value={currentProgram}
-        onChange={(e) => setCurrentProgram(e.target.value)}
-      >
-        <option value={t("filter.program.all")}>
-          {t("filter.program.all")}
-        </option>
-        {programs.map((p) => (
-          <option key={p} value={p}>
-            {p}
-          </option>
-        ))}
-      </select>
+      <Header title={t("title")} />
 
-      <select
-        value={currentOfferStatus}
-        onChange={(e) => setCurrentOfferStatus(e.target.value)}
-      >
-        {Object.values(offerStatuses).map((s) => (
-          <option key={s} value={s}>
-            {s}
-          </option>
-        ))}
-      </select>
+      {/* Filters */}
+      <div className="flex items-center gap-4">
+        <Popover>
+          {({ open, setOpen, triggerRef, contentRef }) => (
+            <>
+              <PopoverTrigger
+                open={open}
+                setOpen={setOpen}
+                triggerRef={triggerRef}
+              >
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                  {t("filter.status")}: {currentOfferStatus}
+                </span>
+              </PopoverTrigger>
+              <PopoverContent open={open} contentRef={contentRef}>
+                <div className="flex flex-col gap-2 min-w-[150px]">
+                  {Object.values(offerStatuses).map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => {
+                        setCurrentOfferStatus(status);
+                        setOpen(false);
+                      }}
+                      className={`px-3 py-1 rounded text-left ${
+                        currentOfferStatus === status
+                          ? "bg-blue-100 font-semibold"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                  <PopoverClose setOpen={setOpen}>
+                    <span className="text-sm text-gray-600">
+                      {t("menu.close")}
+                    </span>
+                  </PopoverClose>
+                </div>
+              </PopoverContent>
+            </>
+          )}
+        </Popover>
+
+        <Popover>
+          {({ open, setOpen, triggerRef, contentRef }) => (
+            <>
+              <PopoverTrigger
+                open={open}
+                setOpen={setOpen}
+                triggerRef={triggerRef}
+              >
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                  {t("filter.program")}:{" "}
+                  {currentProgram || t("programAll")}
+                </span>
+              </PopoverTrigger>
+              <PopoverContent open={open} contentRef={contentRef}>
+                <div className="flex flex-col gap-2 min-w-[150px]">
+                  <button
+                    onClick={() => {
+                      setCurrentProgram(null);
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      !currentProgram
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t("programAll")}
+                  </button>
+                  {programs.map((program) => (
+                    <button
+                      key={program}
+                      onClick={() => {
+                        setCurrentProgram(program);
+                        setOpen(false);
+                      }}
+                      className={`px-3 py-1 rounded text-left ${
+                        currentProgram === program
+                          ? "bg-blue-100 font-semibold"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {program}
+                    </button>
+                  ))}
+                  <PopoverClose setOpen={setOpen}>
+                    <span className="text-sm text-gray-600">
+                      {t("menu.close")}
+                    </span>
+                  </PopoverClose>
+                </div>
+              </PopoverContent>
+            </>
+          )}
+        </Popover>
+      </div>
 
       {loading ? (
         <p>{t("table.loading")}</p>
       ) : (
         <>
-          <Header title={t("title")} />
           <Table
             headers={[
               t("table.offerTitle"),

@@ -20,7 +20,7 @@ export const GsManageCvs = () => {
     useGeStore();
 
   const [previewId, setPreviewId] = useState(null);
-  const [filterStatus, setFilterStatus] = useState("PENDING");
+  const [filterStatus, setFilterStatus] = useState(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedCv, setSelectedCv] = useState(null);
 
@@ -64,6 +64,15 @@ export const GsManageCvs = () => {
     setShowReasonModal(true);
   };
 
+  const getStatusColor = (status) => {
+    const statusColors = {
+      pending: "bg-yellow-100 text-yellow-800",
+      accepted: "bg-green-100 text-green-800",
+      rejected: "bg-red-100 text-red-800",
+    };
+    return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
+  };
+
   const rows = sortedAndFilteredCvs.map((cv) => (
     <tr key={cv.id} className="border-t border-gray-200 text-gray-700 text-sm">
       <td className="px-4 py-3">
@@ -72,7 +81,13 @@ export const GsManageCvs = () => {
           : t("unknownStudent")}
       </td>
       <td className="px-4 py-3">{cv.fileName}</td>
-      <td className="px-4 py-3">{t(`status.${cv.status.toLowerCase()}`)}</td>
+      <td className="px-4 py-3">
+        <span
+          className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(cv.status)}`}
+        >
+          {t(`status.${cv.status.toLowerCase()}`)}
+        </span>
+      </td>
       <td className="px-4 py-3">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
       <td className="px-4 py-3">
         {new Date(cv.uploadedAt).toLocaleDateString()}
@@ -135,8 +150,11 @@ export const GsManageCvs = () => {
               setOpen={setOpen}
               triggerRef={triggerRef}
             >
-              <span className="px-4 hover:bg-zinc-200 transition py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer">
-                {t("filter")}: {t(`status.${filterStatus.toLowerCase()}`)}
+              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                {t("filter.status")}:{" "}
+                {filterStatus
+                  ? t(`status.${filterStatus.toLowerCase()}`)
+                  : t("filter.all")}
               </span>
             </PopoverTrigger>
 
@@ -158,6 +176,15 @@ export const GsManageCvs = () => {
                     {t(`status.${status.toLowerCase()}`)}
                   </button>
                 ))}
+                <button
+                  onClick={() => {
+                    setFilterStatus(null);
+                    setOpen(false);
+                  }}
+                  className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                >
+                  {t("filter.all")}
+                </button>
                 <PopoverClose setOpen={setOpen}>
                   <span className="text-sm text-gray-600">
                     {t("menu.close")}

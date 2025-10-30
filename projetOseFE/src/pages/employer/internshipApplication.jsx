@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { Header } from "../../components/ui/header.jsx";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "../../components/ui/popover.jsx";
 
 import {
   EyeOpenIcon,
@@ -26,6 +32,7 @@ export const InternshipApplications = () => {
 
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(null);
 
   useEffect(() => {
     fetchApplications();
@@ -93,7 +100,14 @@ export const InternshipApplications = () => {
     },
   ];
 
-  const tableData = applications.map((app) => ({
+  const sortedAndFilteredApplications = useMemo(() => {
+    const filtered = filterStatus
+      ? applications.filter((app) => app.status === filterStatus)
+      : applications;
+    return [...filtered].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }, [applications, filterStatus]);
+
+  const tableData = sortedAndFilteredApplications.map((app) => ({
     ...app,
     studentName: `${app.studentFirstName} ${app.studentLastName}`,
     rawStatus: app.status?.toLowerCase(),
@@ -103,6 +117,61 @@ export const InternshipApplications = () => {
   return (
     <div className="space-y-6">
       <Header title={t("title")} />
+
+      {/* Filter */}
+      <Popover>
+        {({ open, setOpen, triggerRef, contentRef }) => (
+          <>
+            <PopoverTrigger
+              open={open}
+              setOpen={setOpen}
+              triggerRef={triggerRef}
+            >
+              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                {t("filter.status")}:{" "}
+                {filterStatus
+                  ? t(`status.${filterStatus.toLowerCase()}`)
+                  : t("filter.all")}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent open={open} contentRef={contentRef}>
+              <div className="flex flex-col gap-2 min-w-[150px]">
+                {["PENDING", "ACCEPTED", "REJECTED", "REVIEWING"].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setFilterStatus(status);
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      filterStatus === status
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t(`status.${status.toLowerCase()}`)}
+                  </button>
+                ))}
+                <button
+                  onClick={() => {
+                    setFilterStatus(null);
+                    setOpen(false);
+                  }}
+                  className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                >
+                  {t("filter.all")}
+                </button>
+                <PopoverClose setOpen={setOpen}>
+                  <span className="text-sm text-gray-600">
+                    {t("menu.close")}
+                  </span>
+                </PopoverClose>
+              </div>
+            </PopoverContent>
+          </>
+        )}
+      </Popover>
+
       <DataTable columns={columns} data={tableData} onAction={handleAction} />
 
       {/* CV Preview */}
