@@ -1,15 +1,22 @@
 {
-  "title": "Candidatures de stage",
+  "title": "Candidatures",
   "table": {
     "offerTitle": "Titre de l'offre",
     "studentName": "Nom de l'étudiant",
     "studentEmail": "Courriel de l'étudiant",
     "cv": "CV",
     "download": "Télécharger",
+    "preview": "Aperçu",
     "noCv": "Aucun CV",
     "status": "Statut",
     "action": "Action",
     "actionView": "Voir"
+  },
+  "status": {
+    "pending": "En attente",
+    "accepted": "Accepté",
+    "rejected": "Rejeté",
+    "reviewing": "En révision"
   },
   "modal": {
     "email": "Courriel",
@@ -20,7 +27,7 @@
     "close": "Fermer"
   },
   "previewCv": "Aperçu du CV",
-  "closeCvPreview": "Fermer l’aperçu",
+  "closeCvPreview": "Fermer l'aperçu",
   "errors": {
     "downloadCv": "Erreur lors du téléchargement du CV."
   }

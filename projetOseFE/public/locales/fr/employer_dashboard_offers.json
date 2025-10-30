@@ -1,6 +1,7 @@
 {
+  "title": "Mes offres",
   "table": {
-    "title": "Vos offres de stage",
+    "title": "Mes offres",
     "offerTitle": "Titre",
     "enterprise": "Entreprise",
     "program": "Programme",

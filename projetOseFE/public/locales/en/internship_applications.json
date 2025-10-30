@@ -1,15 +1,22 @@
 {
-  "title": "Internship Applications",
+  "title": "Applications",
   "table": {
     "offerTitle": "Offer Title",
     "studentName": "Student Name",
     "studentEmail": "Student Email",
     "cv": "CV",
     "download": "Download",
+    "preview": "Preview",
     "noCv": "No CV",
     "status": "Status",
     "action": "Action",
     "actionView": "View"
+  },
+  "status": {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "reviewing": "Reviewing"
   },
   "modal": {
     "email": "Email",
