@@ -91,7 +91,7 @@ public class EtudiantController {
         return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromStudent(email));
     }
 
-    @GetMapping("/get-all-internship-applications/{status}")
+    @GetMapping("/get-internship-applications/{status}")
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsForStudentByStatus(
             HttpServletRequest request,
             @PathVariable String status
