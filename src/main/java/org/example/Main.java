@@ -297,19 +297,17 @@ public class Main {
             // [11] Mise à jour des statuts des applications
             // ---------------------------------------------
 
-            internshipApplicationService.updateApplicationStatus(
-                    savedApplication1.getId(),
-                    ApprovalStatus.ACCEPTED,
-                    ""
+            internshipApplicationService.approveInternshipApplication(
+                    savedApplication1.getEmployerEmail(),
+                    savedApplication1.getId()
             );
-            internshipApplicationService.updateApplicationStatus(
-                    savedApplication3.getId(),
-                    ApprovalStatus.ACCEPTED,
-                    ""
+            internshipApplicationService.approveInternshipApplication(
+                    savedApplication3.getEmployerEmail(),
+                    savedApplication3.getId()
             );
-            internshipApplicationService.updateApplicationStatus(
+            internshipApplicationService.rejectInternshipApplication(
+                    savedApplication4.getEmployerEmail(),
                     savedApplication4.getId(),
-                    ApprovalStatus.REJECTED,
                     "Thank you for taking the time to consider TechCorp. We wanted to let you know that we " +
                             "have chosen to move forward with a different candidate for the AI & Data Engineer position."
             );

@@ -207,18 +207,40 @@ public class InternshipApplicationService {
         return list.stream().map(InternshipApplicationResponseDTO::create).toList();
     }
 
-    public InternshipApplicationResponseDTO updateApplicationStatus(
-            Long applicationId, ApprovalStatus status, String reasons
-    ) {
-        if (status == null || reasons == null) {
-            throw new InvalidInternshipApplicationException("Application not found");
-        }
+
+    public InternshipApplicationResponseDTO approveInternshipApplication(String email, Long applicationId) {
+        Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
+        if(employer.isEmpty())
+            throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
+
         InternshipApplication application = internshipApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new InvalidInternshipApplicationException(
                         "Application not found with id: " + applicationId
                 ));
 
-        application.setStatus(status);
+        application.setStatus(ApprovalStatus.ACCEPTED);
+        internshipApplicationRepository.save(application);
+
+        eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+        return InternshipApplicationResponseDTO.create(application);
+    }
+
+    public InternshipApplicationResponseDTO rejectInternshipApplication(
+            String email, Long applicationId, String reasons
+    ) {
+        Optional<Employer> employer = employerRepository.findByCredentialsEmail(email);
+        if(employer.isEmpty())
+            throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
+
+        if (reasons == null)
+            throw new InvalidInternshipApplicationException("Must provide a reason when rejecting an application");
+
+        InternshipApplication application = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new InvalidInternshipApplicationException(
+                        "Application not found with id: " + applicationId
+                ));
+
+        application.setStatus(ApprovalStatus.REJECTED);
         application.setReason(reasons);
         internshipApplicationRepository.save(application);
 
