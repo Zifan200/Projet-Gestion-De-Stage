@@ -104,7 +104,9 @@ export const InternshipApplications = () => {
     const filtered = filterStatus
       ? applications.filter((app) => app.status === filterStatus)
       : applications;
-    return [...filtered].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    return [...filtered].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+    );
   }, [applications, filterStatus]);
 
   const tableData = sortedAndFilteredApplications.map((app) => ({
@@ -136,7 +138,7 @@ export const InternshipApplications = () => {
             </PopoverTrigger>
             <PopoverContent open={open} contentRef={contentRef}>
               <div className="flex flex-col gap-2 min-w-[150px]">
-                {["PENDING", "ACCEPTED", "REJECTED", "REVIEWING"].map((status) => (
+                {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
                   <button
                     key={status}
                     onClick={() => {
