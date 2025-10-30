@@ -10,6 +10,7 @@ import org.example.model.enums.SimpleEnumUtils;
 import org.example.repository.*;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDTO;
 import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -169,6 +171,14 @@ public class InternshipApplicationService {
 
         InternshipApplication savedApplication = application.get();
         return InternshipApplicationResponseDTO.create(savedApplication);
+    }
+
+    public List<EtudiantDTO> getAllStudentsAppliedToAInternshipOffer(){
+        List<EtudiantDTO> studentList = new ArrayList<>();
+        for(Etudiant etudiant : etudiantRepository.findByApplicationsIsNotEmpty()){
+            studentList.add(EtudiantDTO.fromEntity(etudiant));
+        }
+        return studentList;
     }
 
     public List<InternshipApplicationResponseDTO> getAllApplicationsFromStudent(String email) {

@@ -5,9 +5,10 @@ import {internshipApplicationService} from "../services/internshipApplicationSer
 const useGeStore = create(
     persist(
         (set, get) => ({
+            studentsWithApplications: [],
             cvs: [],
             downloadingId: null,
-            studentsWithApplications: [],
+            loading: false,
             error: null,
 
             loadAllsStudentCvs: async () => {
