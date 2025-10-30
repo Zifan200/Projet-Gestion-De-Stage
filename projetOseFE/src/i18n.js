@@ -15,10 +15,19 @@ export const resources = {
           cv: "CV",
           status: "Status",
           action: "Action",
-          actionView: "View",
           studentEmail: "Email",
           download: "Download",
           noCv: "No resume",
+        },
+        actions: {
+          view: "View",
+          approve: "Accept",
+          reject: "Reject",
+        },
+        toast: {
+          approved: "Internship application accepted",
+          rejected: "Internship application rejected",
+          approveError: "Error while approving the internship application",
         },
         modal: {
           offerTitle: "Offer title",
@@ -412,10 +421,19 @@ export const resources = {
           cv: "CV",
           status: "Statut",
           action: "Action",
-          actionView: "Voir",
           studentEmail: "Courriel",
           download: "Télécharger",
           noCv: "Aucun CV",
+        },
+        actions: {
+          view: "Voir",
+          approve: "Accepter",
+          reject: "Rejeter",
+        },
+        toast: {
+          approved: "Candidature de stage acceptée",
+          rejected: "Candidature de stage refusée",
+          approveError: "Erreur lors de l'approbation de la candidature",
         },
         modal: {
           offerTitle: "Titre de l'offre",

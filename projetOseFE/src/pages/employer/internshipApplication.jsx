@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
-    const { applications, fetchApplications } = useEmployerStore();
+    const { applications, fetchApplications, approveInternshipApplication } = useEmployerStore();
     const {
         previewUrl,
         previewType,
@@ -15,6 +15,8 @@ export const InternshipApplications = () => {
         downloadCvForEmployer,
         closePreview,
     } = useCvStore();
+    const user = useAuthStore((s) => s.user);
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -25,6 +27,15 @@ export const InternshipApplications = () => {
     const handleViewApplication = (application) => {
         setSelectedApplication(application);
         setIsModalOpen(true);
+    };
+
+    const handleApproveApplication = (application) => {
+        try {
+            approveInternshipApplication(user.token, application.id);
+            toast.success(t("internshipApplications.toast.approved"));
+        } catch {
+            toast.error(t("internshipApplications.toast.approveError"));
+        }
     };
 
     const handlePreviewCv = (application) => {
@@ -87,12 +98,19 @@ export const InternshipApplications = () => {
                             <td className="px-4 py-2">{app.status}</td>
                             <td className="px-4 py-2">
                                 <button
-                                    className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                    className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
                                     onClick={() => handleViewApplication(app)}
                                 >
-                                    {t("internshipApplications.table.actionView") || "Voir"}
+                                    {t("internshipApplications.actions.view") || "Voir"}
                                 </button>
-
+                                { app.status === "PENDING" &&
+                                    <button
+                                        className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                        onClick={() => handleApproveApplication(app)}
+                                    >
+                                        {t("internshipApplications.actions.approve") || "Accepter"}
+                                    </button>
+                                }
                             </td>
                         </tr>
                     ))}
