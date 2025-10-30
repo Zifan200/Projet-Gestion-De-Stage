@@ -4,8 +4,8 @@ import { Header } from "../../components/ui/header.jsx";
 import React, { useEffect, useState } from "react";
 import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
-import { Button } from "../../components/ui/button.jsx";
 import { toast } from "sonner";
+import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
 
 export const AllOffers = () => {
   const { t } = useTranslation("gs_dashboard_all_internships");
@@ -156,27 +156,33 @@ export const AllOffers = () => {
 
   const tableRows = () =>
     currentOffers.map((offer) => (
-      <tr key={offer.id} className="border-t border-gray-300">
-        <td className="px-4 py-2">{offer.title}</td>
-        <td className="px-4 py-2">{offer.enterpriseName}</td>
-        <td className="px-4 py-2">{offer.targetedProgramme}</td>
-        <td className="px-4 py-2">
+      <tr key={offer.id} className="border-t border-gray-200 text-gray-700 text-sm">
+        <td className="px-4 py-3">{offer.title}</td>
+        <td className="px-4 py-3">{offer.enterpriseName}</td>
+        <td className="px-4 py-3">{offer.targetedProgramme}</td>
+        <td className="px-4 py-3">
           {t(`status.${offer.status?.toLowerCase()}`)}
         </td>
-        <td className="px-4 py-2">
+        <td className="px-4 py-3">
           {new Date(offer.expirationDate).toLocaleDateString()}
         </td>
-        <td className="px-4 py-2 flex space-x-2">
-          <Button
-            label={t("actions.view")}
-            className="w-1/2"
-            onClick={() => openOffer(offer.id)}
-          />
-          <Button
-            onClick={() => handleDownload(offer.id)}
-            label={t("actions.download")}
-            className="w-1/2 bg-amber-200 hover:bg-amber-50"
-          />
+        <td className="px-4 py-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => openOffer(offer.id)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200"
+            >
+              <EyeOpenIcon className="w-4 h-4" />
+              <span>{t("actions.view")}</span>
+            </button>
+            <button
+              onClick={() => handleDownload(offer.id)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+            >
+              <DownloadIcon className="w-4 h-4" />
+              <span>{t("actions.download")}</span>
+            </button>
+          </div>
         </td>
       </tr>
     ));

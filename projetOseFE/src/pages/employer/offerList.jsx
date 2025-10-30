@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
-import { Table } from "../../components/ui/table.jsx";
-import { Button } from "../../components/ui/button.jsx";
+import { DataTable } from "../../components/ui/data-table.jsx";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
@@ -13,6 +12,8 @@ import {
   PopoverClose,
 } from "../../components/ui/popover.jsx";
 import useAuthStore from "../../stores/authStore.js";
+
+import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
 
 const Modal = ({ open, onClose, title, children }) => {
   if (!open) return null;
@@ -45,9 +46,7 @@ export const OfferList = () => {
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
-    loadOffers().catch(() => {
-      toast.error(t("error.load"));
-    });
+    loadOffers().catch(() => toast.error(t("error.load")));
   }, []);
 
   const handleDownload = async (id) => {
@@ -57,6 +56,11 @@ export const OfferList = () => {
     } catch {
       toast.error(t("error.download"));
     }
+  };
+
+  const handleAction = (action, offer) => {
+    if (action === "view") setSelectedOffer(offer);
+    else if (action === "download") handleDownload(offer.id);
   };
 
   const sortedAndFilteredOffers = useMemo(() => {
@@ -73,43 +77,56 @@ export const OfferList = () => {
     });
   }, [offers, filterStatus, sortKey]);
 
-  const rows = sortedAndFilteredOffers.map((offer) => (
-    <tr key={offer.id} className="border-t border-gray-300">
-      <td className="px-4 py-2">{offer.title}</td>
-      <td className="px-4 py-2">{offer.enterpriseName}</td>
-      <td className="px-4 py-2">{offer.targetedProgramme}</td>
-      <td className="px-4 py-2">
-        {new Date(offer.expirationDate).toLocaleDateString()}
-      </td>
-      <td className="px-4 py-2">
-        {t(`status.${offer.status?.toLowerCase()}`)}
-      </td>
-      <td className="px-4 py-2 text-center">{offer.applicationCount}</td>
-      <td className="px-4 py-2 flex space-x-2">
-        <Button
-          onClick={() => setSelectedOffer(offer)}
-          label={t("actions.view")}
-          className="bg-blue-300 hover:bg-blue-100 rounded-lg"
-        />
-        <Button
-          onClick={() => handleDownload(offer.id)}
-          label={t("actions.download")}
-          className="bg-amber-200 hover:bg-amber-50 rounded-lg"
-        />
-      </td>
-    </tr>
-  ));
+  const columns = [
+    { key: "title", label: t("table.offerTitle") },
+    { key: "enterpriseName", label: t("table.enterprise") },
+    { key: "targetedProgramme", label: t("table.program") },
+    { key: "expirationDate", label: t("table.deadline") },
+    { key: "status", label: t("table.status") },
+    { key: "applicationCount", label: t("table.applications") },
+    {
+      key: "actions",
+      label: t("table.actions"),
+      actions: [
+        {
+          key: "view",
+          label: (
+            <>
+              <EyeOpenIcon className="w-4 h-4" />
+              <span>{t("actions.view")}</span>
+            </>
+          ),
+        },
+        {
+          key: "download",
+          label: (
+            <>
+              <DownloadIcon className="w-4 h-4" />
+              <span>{t("actions.download")}</span>
+            </>
+          ),
+        },
+      ],
+    },
+  ];
+
+  const tableData = sortedAndFilteredOffers.map((offer) => ({
+    ...offer,
+    expirationDate: new Date(offer.expirationDate).toLocaleDateString(),
+    rawStatus: offer.status?.toLowerCase(),
+    status: t(`status.${offer.status?.toLowerCase()}`),
+  }));
 
   return (
     <div className="space-y-6">
       <Header
-        title={t("table.title")}
+        title={t("title")}
         actionLabel={t("actions.create_another")}
         onAction={() => navigate("/dashboard/employer/add-intership")}
       />
 
+      {/* Filters & Sorting */}
       <div className="flex items-center gap-4">
-        {/* Filter */}
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
             <>
@@ -162,73 +179,13 @@ export const OfferList = () => {
             </>
           )}
         </Popover>
-
-        {/* Sort */}
-        <Popover>
-          {({ open, setOpen, triggerRef, contentRef }) => (
-            <>
-              <PopoverTrigger
-                open={open}
-                setOpen={setOpen}
-                triggerRef={triggerRef}
-              >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("sort.by")}:{" "}
-                  {sortKey === "date" ? t("sort.date") : t("sort.applications")}
-                </span>
-              </PopoverTrigger>
-              <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px]">
-                  <button
-                    onClick={() => {
-                      setSortKey("date");
-                      setOpen(false);
-                    }}
-                    className={`px-3 py-1 rounded text-left ${
-                      sortKey === "date"
-                        ? "bg-blue-100 font-semibold"
-                        : "hover:bg-gray-100"
-                    }`}
-                  >
-                    {t("sort.date")}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSortKey("applications");
-                      setOpen(false);
-                    }}
-                    className={`px-3 py-1 rounded text-left ${
-                      sortKey === "applications"
-                        ? "bg-blue-100 font-semibold"
-                        : "hover:bg-gray-100"
-                    }`}
-                  >
-                    {t("sort.applications")}
-                  </button>
-                  <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
-                  </PopoverClose>
-                </div>
-              </PopoverContent>
-            </>
-          )}
-        </Popover>
       </div>
 
       {/* Table */}
-      <Table
-        headers={[
-          t("table.offerTitle"),
-          t("table.enterprise"),
-          t("table.program"),
-          t("table.deadline"),
-          t("table.status"),
-          t("table.applications"),
-          t("table.actions"),
-        ]}
-        rows={rows}
+      <DataTable
+        columns={columns}
+        data={tableData}
+        onAction={handleAction}
         emptyMessage={t("table.noOffers")}
       />
 
@@ -254,7 +211,7 @@ export const OfferList = () => {
           <strong>{t("table.status")}:</strong>{" "}
           {t(`status.${selectedOffer?.status?.toLowerCase()}`)}
         </p>
-        {selectedOffer?.reason && selectedOffer.reason.trim() !== "" && (
+        {selectedOffer?.reason && (
           <p className="mb-4 text-gray-700">
             <strong>{t("table.reason")}:</strong> {selectedOffer.reason}
           </p>

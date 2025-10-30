@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
 import { Table } from "../../components/ui/table.jsx";
-import { Button } from "../../components/ui/button.jsx";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
 import PdfViewer from "../../components/CvViewer.jsx";
+import { EyeOpenIcon, DownloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 export const StudentCVs = () => {
   const { t } = useTranslation("student_dashboard_cvs");
@@ -62,29 +62,37 @@ export const StudentCVs = () => {
   };
 
   const rows = cvs.map((cv) => (
-    <tr key={cv.id} className="border-t border-gray-300">
-      <td className="px-4 py-2">{cv.fileName}</td>
-      <td className="px-4 py-2">{getFriendlyType(cv.fileType)}</td>
-      <td className="px-4 py-2">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
-      <td className="px-4 py-2">
+    <tr key={cv.id} className="border-t border-gray-200 text-gray-700 text-sm">
+      <td className="px-4 py-3">{cv.fileName}</td>
+      <td className="px-4 py-3">{getFriendlyType(cv.fileType)}</td>
+      <td className="px-4 py-3">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
+      <td className="px-4 py-3">
         {new Date(cv.uploadedAt).toLocaleDateString()}
       </td>
-      <td className="px-4 py-2 flex space-x-2">
-        <Button
-          onClick={() => handlePreview(cv)}
-          label={t("actions.preview")}
-          className="bg-indigo-300 hover:bg-indigo-100 p-1 rounded-lg"
-        />
-        <Button
-          onClick={() => downloadCv(cv.id, cv.fileName)}
-          label={t("actions.download")}
-          className="bg-blue-300 hover:bg-blue-100 rounded-lg"
-        />
-        <Button
-          onClick={() => deleteCv(cv.id)}
-          label={t("actions.delete")}
-          className="bg-red-300 hover:bg-red-100 rounded-lg"
-        />
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => handlePreview(cv)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+          >
+            <EyeOpenIcon className="w-4 h-4" />
+            <span>{t("actions.preview")}</span>
+          </button>
+          <button
+            onClick={() => downloadCv(cv.id, cv.fileName)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+          >
+            <DownloadIcon className="w-4 h-4" />
+            <span>{t("actions.download")}</span>
+          </button>
+          <button
+            onClick={() => deleteCv(cv.id)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+          >
+            <TrashIcon className="w-4 h-4" />
+            <span>{t("actions.delete")}</span>
+          </button>
+        </div>
       </td>
     </tr>
   ));
@@ -117,11 +125,12 @@ export const StudentCVs = () => {
       {previewId && (
         <div className="mt-4">
           <div className="flex justify-end mb-2">
-            <Button
+            <button
               onClick={() => setPreviewId(null)}
-              label={t("actions.close", { defaultValue: "Close" })}
-              className="bg-zinc-200 hover:bg-zinc-100 p-1 rounded-lg"
-            />
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              <span>{t("actions.close", { defaultValue: "Close" })}</span>
+            </button>
           </div>
           <PdfViewer cvId={previewId} role="student" />
         </div>

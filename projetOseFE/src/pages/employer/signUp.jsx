@@ -53,79 +53,85 @@ export const EmployerSignUpPage = () => {
 
   return (
     <>
-      <Toaster position="top-right" />
-      <FormTemplate
-        title={t("form.employer.title")}
-        description={t("form.employer.description")}
-      >
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit, onError)}>
-            <div className="flex flex-col mb-7">
-              <Label name="email" label={t("form.fields.email")} />
-              <Input name="email" placeholder={t("form.fields.email")} />
-            </div>
+      <div className="flex">
+        <div className="lg:w-full w-7/10 m-auto">
+          <FormTemplate
+            title={t("form.employer.title")}
+            description={t("form.employer.description")}
+          >
+            <FormProvider {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+                <div className="flex flex-col mb-7">
+                  <Label name="email" label={t("form.fields.email")} />
+                  <Input name="email" placeholder={t("form.fields.email")} />
+                </div>
 
-            <div className="flex flex-col mb-7">
-              <Label name="firstName" label={t("form.fields.firstName")} />
-              <Input
-                name="firstName"
-                placeholder={t("form.fields.firstName")}
-              />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label name="firstName" label={t("form.fields.firstName")} />
+                  <Input
+                    name="firstName"
+                    placeholder={t("form.fields.firstName")}
+                  />
+                </div>
 
-            <div className="flex flex-col mb-7">
-              <Label name="lastName" label={t("form.fields.lastName")} />
-              <Input name="lastName" placeholder={t("form.fields.lastName")} />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label name="lastName" label={t("form.fields.lastName")} />
+                  <Input
+                    name="lastName"
+                    placeholder={t("form.fields.lastName")}
+                  />
+                </div>
 
-            <div className="flex flex-col mb-7">
-              <Label name="password" label={t("form.fields.password")} />
-              <Input
-                name="password"
-                type="password"
-                placeholder={t("form.fields.password")}
-              />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label name="password" label={t("form.fields.password")} />
+                  <Input
+                    name="password"
+                    type="password"
+                    placeholder={t("form.fields.password")}
+                  />
+                </div>
 
-            <div className="flex flex-col mb-7">
-              <Label
-                name="confirmPassword"
-                label={t("form.fields.passwordConfirm")}
-              />
-              <Input
-                name="confirmPassword"
-                type="password"
-                placeholder={t("form.fields.passwordConfirm")}
-              />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label
+                    name="confirmPassword"
+                    label={t("form.fields.passwordConfirm")}
+                  />
+                  <Input
+                    name="confirmPassword"
+                    type="password"
+                    placeholder={t("form.fields.passwordConfirm")}
+                  />
+                </div>
 
-            <div className="flex flex-col mb-7">
-              <Label
-                name="enterpriseName"
-                label={t("form.employer.enterprise")}
-              />
-              <Input
-                name="enterpriseName"
-                placeholder={t("form.employer.enterprise")}
-              />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label
+                    name="enterpriseName"
+                    label={t("form.employer.enterprise")}
+                  />
+                  <Input
+                    name="enterpriseName"
+                    placeholder={t("form.employer.enterprise")}
+                  />
+                </div>
 
-            <div className="flex flex-col mb-7">
-              <Label name="phone" label={t("form.fields.phone")} />
-              <Input name="phone" placeholder={t("form.fields.phone")} />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label name="phone" label={t("form.fields.phone")} />
+                  <Input name="phone" placeholder={t("form.fields.phone")} />
+                </div>
 
-            <Button className="p-2" label={t("form.createBtn")} />
+                <Button className="p-2" label={t("form.createBtn")} />
 
-            <div className="text-center mt-2 text-zinc-600">
-              {t("form.login.accountExist")}{" "}
-              <span className="text-blue-400">
-                <Link to="/login">{t("form.login.title")}</Link>
-              </span>
-            </div>
-          </form>
-        </FormProvider>
-      </FormTemplate>
+                <div className="text-center mt-2 text-zinc-600">
+                  {t("form.login.accountExist")}{" "}
+                  <span className="text-blue-400">
+                    <Link to="/login">{t("form.login.title")}</Link>
+                  </span>
+                </div>
+              </form>
+            </FormProvider>
+          </FormTemplate>
+        </div>
+      </div>
     </>
   );
 };

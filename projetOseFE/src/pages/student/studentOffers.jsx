@@ -5,6 +5,9 @@ import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
+import { DataTable } from "../../components/ui/data-table.jsx";
+import { Header } from "../../components/ui/header.jsx";
+import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
 
 export const StudentOffers = () => {
   const { t } = useTranslation("student_dashboard_offers");
@@ -69,50 +72,55 @@ export const StudentOffers = () => {
     }
   };
 
+  const handleAction = (action, offer) => {
+    if (action === "view") {
+      handleViewOffer(offer.id);
+    } else if (action === "download") {
+      handleDownload(offer.id);
+    }
+  };
+
+  const columns = [
+    { key: "title", label: t("table.title") },
+    { key: "enterpriseName", label: t("table.company") },
+    { key: "expirationDate", label: t("table.deadline") },
+    {
+      key: "actions",
+      label: t("table.action"),
+      actions: [
+        {
+          key: "view",
+          label: (
+            <>
+              <EyeOpenIcon className="w-4 h-4" />
+              <span>{t("actions.view")}</span>
+            </>
+          ),
+        },
+        {
+          key: "download",
+          label: (
+            <>
+              <DownloadIcon className="w-4 h-4" />
+              <span>{t("actions.download")}</span>
+            </>
+          ),
+        },
+      ],
+    },
+  ];
+
+  const tableData = offers.map((offer) => ({
+    ...offer,
+    expirationDate: offer.expirationDate
+      ? new Date(offer.expirationDate).toLocaleDateString()
+      : "-",
+  }));
+
   return (
-    <div className="p-10">
-      <div className="overflow-x-auto bg-white shadow rounded">
-        <table className="w-full text-sm text-left border-collapse">
-          <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
-            <tr>
-              <th className="px-4 py-3">{t("table.title")}</th>
-              <th className="px-4 py-3">{t("table.company")}</th>
-              <th className="px-4 py-3">{t("table.deadline")}</th>
-              <th className="px-4 py-3">{t("table.action")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {offers.map((offer) => (
-              <tr
-                key={offer.id}
-                className="border-t border-zinc-300 text-zinc-700"
-              >
-                <td className="px-4 py-2">{offer.title}</td>
-                <td className="px-4 py-2">{offer.enterpriseName}</td>
-                <td className="px-4 py-2">
-                  {offer.expirationDate
-                    ? new Date(offer.expirationDate).toLocaleDateString()
-                    : "-"}
-                </td>
-                <td className="px-4 py-2 flex space-x-2">
-                  <button
-                    className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
-                    onClick={() => handleViewOffer(offer.id)}
-                  >
-                    {t("actions.view")}
-                  </button>
-                  <button
-                    className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
-                    onClick={() => handleDownload(offer.id)}
-                  >
-                    {t("actions.download")}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="space-y-6">
+      <Header title={t("title")} />
+      <DataTable columns={columns} data={tableData} onAction={handleAction} />
 
       {/* Modal */}
       {isModalOpen && selectedOffer && (

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
 import { Table } from "../../components/ui/table.jsx";
-import { Button } from "../../components/ui/button.jsx";
 import useGeStore from "../../stores/geStore.js";
 import { toast } from "sonner";
 import PdfViewer from "../../components/CvViewer.jsx";
@@ -13,6 +12,7 @@ import {
   PopoverClose,
 } from "../../components/ui/popover.jsx";
 import { ReasonModal } from "../../components/ui/reason-modal.jsx";
+import { EyeOpenIcon, DownloadIcon, CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 
 export const GsManageCvs = () => {
   const { t } = useTranslation("gs_dashboard_manage_cvs");
@@ -65,44 +65,59 @@ export const GsManageCvs = () => {
   };
 
   const rows = sortedAndFilteredCvs.map((cv) => (
-    <tr key={cv.id} className="border-t border-gray-300">
-      <td className="px-4 py-2">
-        {cv.firstName + " " + cv.lastName ?? t("unknownStudent")}
+    <tr key={cv.id} className="border-t border-gray-200 text-gray-700 text-sm">
+      <td className="px-4 py-3">
+        {cv.firstName && cv.lastName
+          ? `${cv.firstName} ${cv.lastName}`
+          : t("unknownStudent")}
       </td>
-      <td className="px-4 py-2">{cv.fileName}</td>
-      <td className="px-4 py-2">{t(`status.${cv.status.toLowerCase()}`)}</td>
-      <td className="px-4 py-2">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
-      <td className="px-4 py-2">
+      <td className="px-4 py-3">{cv.fileName}</td>
+      <td className="px-4 py-3">{t(`status.${cv.status.toLowerCase()}`)}</td>
+      <td className="px-4 py-3">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
+      <td className="px-4 py-3">
         {new Date(cv.uploadedAt).toLocaleDateString()}
       </td>
-      <td className="px-4 py-2 flex space-x-2">
-        <Button
-          onClick={() => handlePreview(cv)}
-          label={
-            cv.fileType === "application/pdf"
-              ? t("actions.preview")
-              : t("actions.download")
-          }
-          className={
-            cv.fileType === "application/pdf"
-              ? "bg-blue-300 hover:bg-blue-100 rounded-lg"
-              : "bg-indigo-300 hover:bg-indigo-100 rounded-lg"
-          }
-        />
-        {cv.status === "PENDING" && (
-          <>
-            <Button
-              onClick={() => handleAccept(cv)}
-              label={t("actions.accept")}
-              className="bg-green-300 hover:bg-green-100 rounded-lg"
-            />
-            <Button
-              onClick={() => handleReject(cv)}
-              label={t("actions.reject")}
-              className="bg-red-400 hover:bg-red-100 p-1 rounded-lg"
-            />
-          </>
-        )}
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => handlePreview(cv)}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              cv.fileType === "application/pdf"
+                ? "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                : "bg-green-100 text-green-700 hover:bg-green-200"
+            }`}
+          >
+            {cv.fileType === "application/pdf" ? (
+              <>
+                <EyeOpenIcon className="w-4 h-4" />
+                <span>{t("actions.preview")}</span>
+              </>
+            ) : (
+              <>
+                <DownloadIcon className="w-4 h-4" />
+                <span>{t("actions.download")}</span>
+              </>
+            )}
+          </button>
+          {cv.status === "PENDING" && (
+            <>
+              <button
+                onClick={() => handleAccept(cv)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+              >
+                <CheckIcon className="w-4 h-4" />
+                <span>{t("actions.accept")}</span>
+              </button>
+              <button
+                onClick={() => handleReject(cv)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+              >
+                <Cross2Icon className="w-4 h-4" />
+                <span>{t("actions.reject")}</span>
+              </button>
+            </>
+          )}
+        </div>
       </td>
     </tr>
   ));
@@ -172,11 +187,13 @@ export const GsManageCvs = () => {
       {previewId && (
         <div className="mt-4">
           <div className="flex justify-end mb-2">
-            <Button
+            <button
               onClick={() => setPreviewId(null)}
-              label={t("menu.close")}
-              className="bg-gray-400"
-            />
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              <Cross2Icon className="w-4 h-4" />
+              <span>{t("menu.close")}</span>
+            </button>
           </div>
           <PdfViewer cvId={previewId} role="gs" />
         </div>
