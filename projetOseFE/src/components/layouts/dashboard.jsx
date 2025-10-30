@@ -45,7 +45,7 @@ export const DashboardLayout = ({ sidebarLinks, title }) => {
     <div className="flex h-screen bg-white relative">
       <button
         onClick={toggleSidebar}
-        className="absolute top-4 left-4 z-50 p-2 bg-white border border-zinc-300 rounded-full shadow-sm md:hidden"
+        className="absolute top-4 left-4 z-50 p-2 bg-white border border-zinc-300 rounded-full shadow-sm hidden"
       >
         {isOpen ? (
           <X
@@ -60,9 +60,9 @@ export const DashboardLayout = ({ sidebarLinks, title }) => {
       <aside
         ref={asideRef}
         id="aside"
-        className="hidden min-w-[250px]  md:flex md:flex-col w-64 bg-[#FAFAFA] border-r border-gray-200 p-6"
+        className="min-w-[250px]  md:flex md:flex-col w-64 bg-[#FAFAFA] border-r border-gray-200 p-6"
       >
-        <h1 className="text-xl mt-10 font-bold mb-6">{title}</h1>
+        <h1 className="text-xl  font-bold mb-6">{title}</h1>
         <nav className="space-y-3">
           {sidebarLinks.map((link) => {
             const isActive = location.pathname.endsWith(link.href);
