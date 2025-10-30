@@ -11,14 +11,12 @@
   },
   "filter": {
     "status": "Filtrer par statut",
-    "program": {
-      "all": "Tous les programmes"
-    },
+    "program": "Filtrer par programme",
     "all": "Toutes"
   },
   "status": {
-    "pending": "En attente",
-    "accepted": "Acceptée",
+    "pending": "En attente d'approbation",
+    "accepted": "Approuvée",
     "rejected": "Rejetée"
   },
   "actions": {
@@ -39,7 +37,7 @@
     "rejectFailed": "Échec du rejet de l’offre."
   },
   "modal": {
-    "companyEmail": "Courriel de l’entreprise",
+    "companyEmail": "Courriel de l'entreprise",
     "targetedProgramme": "Programme visé",
     "publishedDate": "Date de publication",
     "deadline": "Date limite",
@@ -53,5 +51,9 @@
     "close": "Fermer",
     "accepted": "Offre acceptée avec succès !",
     "rejectSuccess": "Offre rejetée avec succès !"
-  }
+  },
+  "menu": {
+    "close": "Fermer"
+  },
+  "programAll": "Tous les programmes"
 }

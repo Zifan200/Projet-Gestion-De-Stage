@@ -13,9 +13,9 @@
     "actionView": "Voir"
   },
   "status": {
-    "pending": "En attente",
-    "accepted": "Accepté",
-    "rejected": "Rejeté",
+    "pending": "En cours d'examen",
+    "accepted": "Acceptée",
+    "rejected": "Refusée",
     "reviewing": "En révision"
   },
   "modal": {
@@ -30,5 +30,12 @@
   "closeCvPreview": "Fermer l'aperçu",
   "errors": {
     "downloadCv": "Erreur lors du téléchargement du CV."
+  },
+  "filter": {
+    "status": "Filtrer par statut",
+    "all": "Toutes"
+  },
+  "menu": {
+    "close": "Fermer"
   }
 }

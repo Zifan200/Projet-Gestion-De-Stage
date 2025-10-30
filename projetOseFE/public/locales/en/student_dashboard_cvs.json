@@ -7,13 +7,27 @@
     "fileName": "File name",
     "type": "File type",
     "size": "Size",
+    "status": "Status",
     "date": "Upload date",
     "actions": "Actions"
+  },
+  "status": {
+    "pending": "Pending Validation",
+    "accepted": "Approved",
+    "rejected": "Rejected"
   },
   "actions": {
     "preview": "Preview",
     "download": "Download",
-    "delete": "Delete"
+    "delete": "Delete",
+    "close": "Close"
+  },
+  "filter": {
+    "status": "Filter by status",
+    "all": "All"
+  },
+  "menu": {
+    "close": "Close"
   },
   "success": {
     "uploadCv": "The CV '{{fileName}}' has been successfully uploaded!"

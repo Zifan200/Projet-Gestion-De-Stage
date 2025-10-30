@@ -28,9 +28,9 @@
     "applications": "Nombre de candidatures"
   },
   "status": {
-    "pending": "En attente",
-    "accepted": "Acceptée",
-    "rejected": "Rejetée"
+    "pending": "En attente d'approbation",
+    "accepted": "Publiée",
+    "rejected": "Refusée"
   },
   "success": {
     "download": "Offre téléchargée avec succès !"
@@ -39,5 +39,8 @@
     "load": "Échec du chargement des offres.",
     "download": "Échec du téléchargement de l'offre."
   },
-  "noDescription": "Aucune description fournie pour cette offre."
+  "noDescription": "Aucune description fournie pour cette offre.",
+  "menu": {
+    "close": "Fermer"
+  }
 }

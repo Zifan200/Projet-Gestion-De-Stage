@@ -28,8 +28,8 @@
     "applications": "Number of Applications"
   },
   "status": {
-    "pending": "Pending",
-    "accepted": "Accepted",
+    "pending": "Pending Approval",
+    "accepted": "Published",
     "rejected": "Rejected"
   },
   "success": {
@@ -39,5 +39,8 @@
     "load": "Failed to load offers.",
     "download": "Failed to download the offer."
   },
-  "noDescription": "No description provided for this offer."
+  "noDescription": "No description provided for this offer.",
+  "menu": {
+    "close": "Close"
+  }
 }

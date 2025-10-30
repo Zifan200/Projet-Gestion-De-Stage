@@ -1,9 +1,12 @@
 {
   "title": "Manage Student CVs",
-  "filter": "Filter by Status",
+  "filter": {
+    "status": "Filter by Status",
+    "all": "All"
+  },
   "status": {
-    "pending": "Pending",
-    "accepted": "Accepted",
+    "pending": "Pending Review",
+    "accepted": "Approved",
     "rejected": "Rejected"
   },
   "table": {
@@ -19,6 +22,9 @@
     "download": "Download",
     "accept": "Accept",
     "reject": "Reject"
+  },
+  "menu": {
+    "close": "Close"
   },
   "empty": "No CVs available.",
   "unknownStudent": "Unknown student",

@@ -13,10 +13,10 @@
     "actionView": "View"
   },
   "status": {
-    "pending": "Pending",
+    "pending": "Under Review",
     "accepted": "Accepted",
-    "rejected": "Rejected",
-    "reviewing": "Reviewing"
+    "rejected": "Declined",
+    "reviewing": "In Review"
   },
   "modal": {
     "email": "Email",
@@ -30,5 +30,12 @@
   "closeCvPreview": "Close Preview",
   "errors": {
     "downloadCv": "Error while downloading the CV."
+  },
+  "filter": {
+    "status": "Filter by Status",
+    "all": "All"
+  },
+  "menu": {
+    "close": "Close"
   }
 }

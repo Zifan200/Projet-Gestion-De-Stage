@@ -1,19 +1,33 @@
 {
   "title": "Mes CVs",
   "addCv": "Ajouter un CV",
-  "noCvs": "Tu n’as encore ajouté aucun CV.",
+  "noCvs": "Tu n'as encore ajouté aucun CV.",
   "myCvs": "Mes CVs",
   "table": {
     "fileName": "Nom du fichier",
     "type": "Type de fichier",
     "size": "Taille",
+    "status": "Statut",
     "date": "Date d'envoi",
     "actions": "Actions"
+  },
+  "status": {
+    "pending": "Validation en attente",
+    "accepted": "Approuvé",
+    "rejected": "Refusé"
   },
   "actions": {
     "preview": "Prévisualiser",
     "download": "Télécharger",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "close": "Fermer"
+  },
+  "filter": {
+    "status": "Filtrer par statut",
+    "all": "Tous"
+  },
+  "menu": {
+    "close": "Fermer"
   },
   "success": {
     "uploadCv": "Le CV '{{fileName}}' a été téléversé avec succès !"

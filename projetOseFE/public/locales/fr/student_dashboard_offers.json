@@ -8,6 +8,7 @@
   },
   "actions": {
     "view": "Voir",
+    "apply": "Appliquer",
     "download": "Télécharger"
   },
   "modal": {

@@ -11,14 +11,12 @@
   },
   "filter": {
     "status": "Filter by status",
-    "program": {
-      "all": "All programs"
-    },
+    "program": "Filter by program",
     "all": "All"
   },
   "status": {
-    "pending": "Pending",
-    "accepted": "Accepted",
+    "pending": "Pending Approval",
+    "accepted": "Approved",
     "rejected": "Rejected"
   },
   "actions": {
@@ -53,5 +51,9 @@
     "close": "Close",
     "accepted": "Offer accepted successfully!",
     "rejectSuccess": "Offer rejected successfully!"
-  }
+  },
+  "menu": {
+    "close": "Close"
+  },
+  "programAll": "All programs"
 }
