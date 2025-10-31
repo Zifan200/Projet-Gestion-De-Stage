@@ -42,7 +42,7 @@ export const GsAllStudentsWithApplications = () => {
             {/*<td className="px-4 py-2">{new Date(offer.expirationDate).toLocaleDateString()}</td>*/}
             <td>
                 <Button
-                    label={t("detail")}
+                    label={t("gsStudentsWithApplications.btnLabels.listApplications")}
                     className="w-1/2"
                     // onClick={() => openOffer(offer.id)}
                 />
@@ -51,18 +51,18 @@ export const GsAllStudentsWithApplications = () => {
     ));
 //TODO add translations
     return <div>
-        {loading ? <p>{t("offer.table.loading")}</p> :
+        {loading ? <p>{t("gsStudentsWithApplications.loading")}</p> :
             <>
-                <Header title={t("All students")} />
+                <Header title={t("gsStudentsWithApplications.title")} />
                 <Table
                     headers={[
-                        t("student name"),
-                        t("programme"),
-                        t("number of applicaitons"),
-                        t("")
+                        t("gsStudentsWithApplications.tableHeader.studentName"),
+                        t("gsStudentsWithApplications.tableHeader.studentProgramme"),
+                        t("gsStudentsWithApplications.tableHeader.numberOfApplications"),
+                        t("gsStudentsWithApplications.tableHeader.applications")
                     ]}
                     rows={tableRows()}
-                    emptyMessage={t("offer.table.noOffers")}
+                    emptyMessage={t("gsStudentsWithApplications.noApplicants")}
                 />
             </>
         }

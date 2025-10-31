@@ -167,6 +167,21 @@ export const resources = {
           downloadError: "Error while downloading the resume",
         },
       },
+      gsStudentsWithApplications:{
+          loading:"...loading",
+        title: "All student internship applicants",
+          noApplicants:"no student internship applicants",
+          tableHeader:{
+            studentName:"student name",
+              studentProgramme:"student programme",
+              numberOfApplications:"number of applications",
+              applications:"applications"
+          },
+          btnLabels:{
+            detail:"details",
+              listApplications:"list"
+          }
+      },
       offer: {
         title: "Create an internship offer",
         description: "Fill in the details to publish a new offer.",
