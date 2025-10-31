@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
-import useAuthStore from "../../stores/authStore.js";
+import {useEffect, useState} from "react";
+import {Header} from "../../components/ui/header.jsx";
+import {Table} from "../../components/ui/table.jsx";
 import useGeStore  from "../../stores/geStore.js";
 import {useTranslation} from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "../../components/ui/button.jsx";
-import {Header} from "../../components/ui/header.jsx";
-import {Table} from "../../components/ui/table.jsx";
+import useAuthStore from "../../stores/authStore.js";
 
 export const GsAllStudentsWithApplications = () => {
 
@@ -18,52 +18,48 @@ export const GsAllStudentsWithApplications = () => {
     //name filter
 
     const {
-        studentsWithApplications, loadAllStudentWithApplications,
+        students, loadStudentsWithApplications,
         loading,
+        error
     } = useGeStore();
 
     useEffect(() => {
-        setCurrentStudentApplications(studentsWithApplications);
-    },[]);
+        const loadAllData = async () => {
+            await loadStudentsWithApplications();
+        };
+        loadAllData();
+    }, []);
+    //
+    useEffect(() => {
+        setCurrentStudentApplications(students);
+    });
 
     const tableRows = () => currentStudentApplications.map((student) => (
         <tr key={student.id} className="border-t border-gray-300">
-            <td className="px-4 py-2">{student.firstName}</td>
-            <td className="px-4 py-2">{student.lastName}</td>
+            <td className="px-4 py-2">{student.firstName} {student.lastName}</td>
             <td className="px-4 py-2">{student.program}</td>
+            <td className="px-4 py-2"></td>
             {/*<td className="px-4 py-2">{new Date(offer.expirationDate).toLocaleDateString()}</td>*/}
-            {/*<td>*/}
-            {/*    <Button*/}
-            {/*        label={t("offer.actions.view")}*/}
-            {/*        className="w-1/2"*/}
-            {/*        onClick={() => openOffer(offer.id)}*/}
-            {/*    />*/}
-            {/*    <Button*/}
-            {/*        onClick={() => handleDownload(offer.id)}*/}
-            {/*        label={t("offer.actions.download")}*/}
-            {/*        className="w-1/2 bg-amber-200 hover:bg-amber-50"*/}
-            {/*    />*/}
-            {/*</td>*/}
+            <td>
+                <Button
+                    label={t("detail")}
+                    className="w-1/2"
+                    // onClick={() => openOffer(offer.id)}
+                />
+            </td>
         </tr>
     ));
 //TODO add translations
     return <div>
         {loading ? <p>{t("offer.table.loading")}</p> :
             <>
-                <Header title={t("menu.allOffers")} />
+                <Header title={t("All students")} />
                 <Table
                     headers={[
-                        // t("offer.table.offerTitle"),
-                        // t("offer.table.enterprise"),
-                        // t("offer.table.program"),
-                        // t("offer.table.status"),
-                        // t("offer.table.deadline"),
-                        // t("offer.actions.view")
                         t("student name"),
                         t("programme"),
-                        t("offer title"),
-                        t("applyed to"),
-                        t("date of applicaiton")
+                        t("number of applicaitons"),
+                        t("")
                     ]}
                     rows={tableRows()}
                     emptyMessage={t("offer.table.noOffers")}

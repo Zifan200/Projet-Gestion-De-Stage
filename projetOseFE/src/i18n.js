@@ -132,6 +132,7 @@ export const resources = {
           min: "The reason must be at least 10 characters long.",
         },
       },
+      gsManageStudentsWithApplications: {},
       gsManageCvs: {
         title: "Student Resume Management",
         filter: "Filter",

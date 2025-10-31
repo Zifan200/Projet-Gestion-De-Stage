@@ -16,7 +16,7 @@ export const GsDashboard = () => {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const { cvs, loadAllsStudentCvs } = useGeStore();
+  const { cvs, loadAllsStudentCvs, loadStudentsWithApplications} = useGeStore();
 
   const [pendingCount, setPendingCount] = useState(0);
 
