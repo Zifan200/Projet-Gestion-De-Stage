@@ -2,8 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/menu/Navbar.jsx";
 
-import { StudentOffers } from "./pages/student/studentOffers.jsx";
-
 import { LoginPage } from "./pages/login.jsx";
 
 // Pages Employeur
@@ -182,10 +180,7 @@ function App() {
           >
             <Route index element={<StudentDashboard />} />
             <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-            <Route
-              path="/dashboard/student/offers"
-              element={<StudentOffers />}
-            />
+
             <Route
               path="/dashboard/student/settings"
               element={<DashboardSettings />}
