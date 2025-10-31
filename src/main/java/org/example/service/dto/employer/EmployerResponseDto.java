@@ -1,13 +1,9 @@
-package org.example.service.dto;
+package org.example.service.dto.employer;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import org.example.model.Employer;
-import org.example.model.auth.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

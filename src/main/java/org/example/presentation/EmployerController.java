@@ -4,16 +4,18 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.model.CV;
+import org.example.model.enums.ApprovalStatus;
 import org.example.service.*;
-import org.example.service.dto.*;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.employer.EmployerResponseDto;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.utils.JwtTokenUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.example.service.dto.InternshipApplication.*;
+import org.example.service.dto.internshipApplication.*;
 
 import java.util.List;
 
@@ -66,6 +68,29 @@ public class EmployerController {
     ){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
         return ResponseEntity.ok(internshipApplicationService.getApplicationByEmployerAndId(email, id));
+    }
+
+    @PutMapping("/get-internship-application/{id}/approve")
+    public ResponseEntity<InternshipApplicationResponseDTO> approveInternshipApplication(
+            HttpServletRequest request,
+            @PathVariable Long id
+    ) {
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(
+                internshipApplicationService.approveInternshipApplication(email, id)
+        );
+    }
+
+    @PutMapping("/get-internship-application/{id}/reject")
+    public ResponseEntity<InternshipApplicationResponseDTO> rejectInternshipApplication(
+            HttpServletRequest request,
+            @PathVariable Long id,
+            @RequestBody String reason
+    ) {
+        String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(
+                internshipApplicationService.rejectInternshipApplication(email, id, reason)
+        );
     }
 
     @GetMapping("/get-all-internship-applications")

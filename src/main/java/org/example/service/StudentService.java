@@ -1,19 +1,25 @@
 package org.example.service;
 
+import lombok.AllArgsConstructor;
 import org.example.model.Etudiant;
+import org.example.model.InternshipApplication;
 import org.example.repository.EtudiantRepository;
-import org.example.service.dto.EtudiantDTO;
+import org.example.repository.InternshipApplicationRepository;
+import org.example.service.dto.student.EtudiantDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StudentService {
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     EtudiantRepository etudiantRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
 
     public StudentService(EtudiantRepository etudiantRepository) {
@@ -44,5 +50,7 @@ public class StudentService {
 
         return EtudiantDTO.fromEntity(etudiantSaved);
     }
+
+
 
 }

@@ -3,7 +3,7 @@ package org.example.service;
 import org.example.model.Gestionnaire;
 import org.example.model.auth.Role;
 import org.example.repository.GestionnaireRepository;
-import org.example.service.dto.GestionnaireDTO;
+import org.example.service.dto.gestionnaire.GestionnaireDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

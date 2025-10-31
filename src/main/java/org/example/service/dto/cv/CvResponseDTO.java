@@ -1,8 +1,8 @@
-package org.example.service.dto;
+package org.example.service.dto.cv;
 
 import lombok.*;
 import org.example.model.CV;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +18,7 @@ public class CvResponseDTO {
     private String fileType;
     private Long fileSize;
     private LocalDateTime uploadedAt;
-    private InternshipOfferStatus status;
+    private ApprovalStatus status;
     private String reason;
     private  String firstName;
     private String lastName;

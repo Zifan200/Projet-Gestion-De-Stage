@@ -6,7 +6,7 @@ import org.example.security.exception.InvalidJwtTokenException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.AuthService;
 import org.example.service.UserAppService;
-import org.example.service.dto.*;
+import org.example.service.dto.util.*;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,9 +15,6 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.*;
-import org.example.security.exception.UsedEmailAddressException;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

@@ -1,4 +1,4 @@
-package org.example.service.dto.InternshipApplication;
+package org.example.service.dto.internshipApplication;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,10 +28,12 @@ public class InternshipApplicationDTO {
 
     private ApprovalStatus status =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
+    private String reason;
 
     @Builder
     public InternshipApplicationDTO(
-            Long id, String studentEmail, Long selectedCvID, Long internshipOfferId, String employerEmail, ApprovalStatus status, LocalDateTime createdAt
+            Long id, String studentEmail, Long selectedCvID, Long internshipOfferId,
+            String employerEmail, ApprovalStatus status, LocalDateTime createdAt, String reason
     ){
         this.id = id;
         this.studentEmail = studentEmail;
@@ -39,6 +41,7 @@ public class InternshipApplicationDTO {
         this.internshipOfferId = internshipOfferId;
         this.status = status;
         this.createdAt = createdAt;
+        this.reason = reason;
     }
 
     public static InternshipApplicationDTO create(InternshipApplication internshipApplication) {
@@ -48,6 +51,7 @@ public class InternshipApplicationDTO {
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .status(internshipApplication.getStatus())
+                .reason(internshipApplication.getReason())
                 .build();
     }
 

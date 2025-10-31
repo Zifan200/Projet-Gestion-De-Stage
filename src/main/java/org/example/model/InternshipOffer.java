@@ -3,11 +3,10 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,13 +35,13 @@ public class InternshipOffer {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
+    private ApprovalStatus status = ApprovalStatus.PENDING;
 
     private String reason;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, InternshipOfferStatus status, String reason, Set<InternshipApplication> applications
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications
     ){
         this.id = id;
         this.title = title;
@@ -53,7 +52,7 @@ public class InternshipOffer {
 
         this.publishedDate = publishedDate; // date when posted
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
-        this.status = status != null ? status : InternshipOfferStatus.PENDING;
+        this.status = status != null ? status : ApprovalStatus.PENDING;
         this.reason = reason;
     }
 }

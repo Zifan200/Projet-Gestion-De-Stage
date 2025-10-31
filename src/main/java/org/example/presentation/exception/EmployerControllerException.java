@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.security.exception.APIException;
 import org.example.security.exception.InvalidJwtTokenException;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.ErrorResponseDTO;
+import org.example.service.dto.util.ErrorResponseDTO;
 import org.example.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -85,6 +84,13 @@ public class EmployerControllerException {
     @ExceptionHandler(InvalidJwtTokenException.class)
     public ResponseEntity<ErrorResponseDTO> handleInvalidJwt(InvalidJwtTokenException ex) {
         return buildError(HttpStatus.UNAUTHORIZED, "INVALID_JWT_TOKEN", ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidInternshipApplicationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidInternshipApplication(
+            InvalidInternshipApplicationException ex
+    ) {
+        return buildError(HttpStatus.BAD_REQUEST, "INVALID_INTERNSHIP_APPLICATION", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

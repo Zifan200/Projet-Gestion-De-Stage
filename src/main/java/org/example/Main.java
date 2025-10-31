@@ -2,19 +2,20 @@ package org.example;
 
 
 
-import org.example.repository.EtudiantRepository;
-import org.example.service.dto.InternshipApplication.InternshipApplicationDTO;
-import org.example.service.dto.InternshipApplication.InternshipApplicationResponseDTO;
-import lombok.Builder;
-import org.example.model.Employer;
+import org.example.service.dto.cv.CvResponseDTO;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.gestionnaire.GestionnaireDTO;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
+import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
+import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.model.auth.Role;
 import org.example.model.CV;
-import org.example.model.Etudiant;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.CvRepository;
-import org.example.repository.EmployerRepository;
 import org.example.service.*;
-import org.example.service.dto.*;
+import org.example.service.dto.student.EtudiantDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -123,6 +124,24 @@ public class Main {
                     .build();
             InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer("alice@example.com", offer4);
 
+            InternshipOfferDto offer5 = InternshipOfferDto.builder()
+                    .title("Frontend Angular")
+                    .description("Stage développement frontend Angular")
+                    .targetedProgramme("Informatique")
+                    .employerEmail("alice@example.com")
+                    .expirationDate(LocalDate.now().plusMonths(1))
+                    .build();
+            InternshipOfferResponseDto savedOffer5 = internshipOfferService.saveInternshipOffer("alice@example.com", offer5);
+
+            InternshipOfferDto offer6 = InternshipOfferDto.builder()
+                    .title("AI & Data Engineer")
+                    .description("Experience required in Python and Machine Learning algorithms")
+                    .targetedProgramme("Informatique")
+                    .employerEmail("alice@example.com")
+                    .expirationDate(LocalDate.now().plusMonths(1))
+                    .build();
+            InternshipOfferResponseDto savedOffer6 = internshipOfferService.saveInternshipOffer("alice@example.com", offer6);
+
             EtudiantDTO etudiantDTO = studentService.inscriptionEtudiant(
               EtudiantDTO.builder()
                       .firstName("Alexandre")
@@ -154,9 +173,11 @@ public class Main {
             // -----------------------------
             // 4️⃣ Mise à jour des statuts
             // -----------------------------
-            internshipOfferService.updateOfferStatus(savedOffer1.getId(), InternshipOfferStatus.ACCEPTED, "je taimes");
-            internshipOfferService.updateOfferStatus(savedOffer2.getId(), InternshipOfferStatus.ACCEPTED, "t cool");
-            internshipOfferService.updateOfferStatus(savedOffer4.getId(), InternshipOfferStatus.REJECTED, "pas intéressant");
+            internshipOfferService.updateOfferStatus(savedOffer1.getId(), ApprovalStatus.ACCEPTED, "je taimes");
+            internshipOfferService.updateOfferStatus(savedOffer2.getId(), ApprovalStatus.ACCEPTED, "t cool");
+            internshipOfferService.updateOfferStatus(savedOffer4.getId(), ApprovalStatus.REJECTED, "pas intéressant");
+            internshipOfferService.updateOfferStatus(savedOffer5.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(savedOffer6.getId(), ApprovalStatus.ACCEPTED, "");
 
             // -----------------------------
             // 5️⃣ Afficher toutes les offres
@@ -194,7 +215,7 @@ public class Main {
                     System.out.println("ID: " + o.getId() + " | " + o.getTitle())
             );
 
-            // [9] creation student + application
+            // [9] creation student
             StudentService studentService = context.getBean(StudentService.class);
             CvRepository cvRepository = context.getBean(CvRepository.class);
             InternshipApplicationService internshipApplicationService = context.getBean(InternshipApplicationService.class);
@@ -218,20 +239,148 @@ public class Main {
                     .fileType("pdf")
                     .reason("")
                     .uploadedAt(LocalDateTime.now())
-                    .status(InternshipOfferStatus.ACCEPTED)
+                    .status(ApprovalStatus.ACCEPTED)
                     .build();
             //cant get cv id
             cvRepository.save(studentCV);
 
-            InternshipApplicationDTO internshipApplicationDTO = InternshipApplicationDTO.builder()
+            // ----------------------------
+            // [10] Création d'applications
+            // ----------------------------
+
+            InternshipApplicationDTO internshipApplicationDTO1 = InternshipApplicationDTO.builder()
                             .internshipOfferId(savedOffer1.getId())
                                     .employerEmail(employer.getEmail())
                                             .studentEmail(studentDTO.getEmail())
                                                     .selectedCvID(studentCV.getId()).build();
 
-            InternshipApplicationResponseDTO savedInternshipApplication = internshipApplicationService.saveInternshipApplication(internshipApplicationDTO);
+            InternshipApplicationDTO internshipApplicationDTO2 = InternshipApplicationDTO.builder()
+                            .internshipOfferId(savedOffer2.getId())
+                                    .employerEmail(employer.getEmail())
+                                            .studentEmail(studentDTO.getEmail())
+                                                    .selectedCvID(studentCV.getId()).build();
 
+            InternshipApplicationDTO internshipApplicationDTO3 = InternshipApplicationDTO.builder()
+                            .internshipOfferId(savedOffer5.getId())
+                                    .employerEmail(employer.getEmail())
+                                            .studentEmail(studentDTO.getEmail())
+                                                    .selectedCvID(studentCV.getId()).build();
 
+            InternshipApplicationDTO internshipApplicationDTO4 = InternshipApplicationDTO.builder()
+                            .internshipOfferId(savedOffer6.getId())
+                                    .employerEmail(employer.getEmail())
+                                            .studentEmail(studentDTO.getEmail())
+                                                    .selectedCvID(studentCV.getId()).build();
+
+            InternshipApplicationDTO internshipApplicationDTO5 = InternshipApplicationDTO.builder()
+                            .internshipOfferId(savedOffer5.getId())
+                                    .employerEmail(employer.getEmail())
+                                            .studentEmail(etudiantDTO.getEmail())
+                                                    .selectedCvID(studentCV.getId()).build();
+
+            InternshipApplicationResponseDTO savedApplication1 =
+                    internshipApplicationService.saveInternshipApplication(internshipApplicationDTO1);
+
+            InternshipApplicationResponseDTO savedApplication2 =
+                    internshipApplicationService.saveInternshipApplication(internshipApplicationDTO2);
+
+            InternshipApplicationResponseDTO savedApplication3 =
+                    internshipApplicationService.saveInternshipApplication(internshipApplicationDTO3);
+
+            InternshipApplicationResponseDTO savedApplication4 =
+                    internshipApplicationService.saveInternshipApplication(internshipApplicationDTO4);
+
+            InternshipApplicationResponseDTO savedApplication5 =
+                    internshipApplicationService.saveInternshipApplication(internshipApplicationDTO5);
+
+            // ---------------------------------------------
+            // [11] Mise à jour des statuts des applications
+            // ---------------------------------------------
+
+            internshipApplicationService.approveInternshipApplication(
+                    savedApplication1.getEmployerEmail(),
+                    savedApplication1.getId()
+            );
+            internshipApplicationService.approveInternshipApplication(
+                    savedApplication3.getEmployerEmail(),
+                    savedApplication3.getId()
+            );
+            internshipApplicationService.rejectInternshipApplication(
+                    savedApplication4.getEmployerEmail(),
+                    savedApplication4.getId(),
+                    "Thank you for taking the time to consider TechCorp. We wanted to let you know that we " +
+                            "have chosen to move forward with a different candidate for the AI & Data Engineer position."
+            );
+
+            List<InternshipApplicationResponseDTO> allAlexandreApplications =
+                    internshipApplicationService.getAllApplicationsFromStudent(etudiantDTO.getEmail());
+
+            List<InternshipApplicationResponseDTO> allJimmyApplications =
+                    internshipApplicationService.getAllApplicationsFromStudent(studentDTO.getEmail());
+
+            List<InternshipApplicationResponseDTO> jimmyAcceptedApplications =
+                    internshipApplicationService.getAllApplicationsFromStudentByStatus(
+                            studentDTO.getEmail(),
+                            "ACCEPTED"
+                    );
+            List<InternshipApplicationResponseDTO> jimmyPendingApplications =
+                    internshipApplicationService.getAllApplicationsFromStudentByStatus(
+                            studentDTO.getEmail(),
+                            "PENDING"
+                    );
+            List<InternshipApplicationResponseDTO> jimmyRejectedApplications = internshipApplicationService
+                    .getAllApplicationsFromStudentByStatus(
+                            studentDTO.getEmail(),
+                            "REJECTED"
+                    );
+
+            InternshipApplicationResponseDTO jimmyApplicationWithID2 = internshipApplicationService
+                    .getApplicationByStudentAndId(
+                        studentDTO.getEmail(),
+                        savedApplication2.getId()
+                    );
+
+            // ---------------------------------------------
+            // [12] Affichage des applications des étudiants
+            // ---------------------------------------------
+
+            System.out.println("\n=== Applications Alexandre ===");
+            allAlexandreApplications.forEach((a) -> System.out.println(
+                    a.getId() + " | " + a.getInternshipOfferTitle() + " | " +
+                    a.getStatus() + " | " + a.getStudentEmail()
+            ));
+
+            System.out.println("\n=== Applications jimmy jammer ===");
+            allJimmyApplications.forEach((a) -> System.out.println(
+                    a.getId() + " | " + a.getInternshipOfferTitle() + " | " +
+                    a.getStatus() + " | " + a.getStudentEmail()
+            ));
+
+            System.out.println("\n=== Application jimmy jammer (ID:2) ===");
+            System.out.println(
+                    jimmyApplicationWithID2.getId() + " | " +
+                    jimmyApplicationWithID2.getInternshipOfferTitle() + " | " +
+                    jimmyApplicationWithID2.getStatus() + " | " +
+                    jimmyApplicationWithID2.getStudentEmail()
+            );
+
+            System.out.println("\n=== Applications ACCEPTED pour jimmy jammer ===");
+            jimmyAcceptedApplications.forEach((a) -> System.out.println(
+                    a.getId() + " | " + a.getInternshipOfferTitle() + " | " +
+                    a.getStatus() + " | " + a.getStudentEmail()
+            ));
+
+            System.out.println("\n=== Applications PENDING pour jimmy jammer ===");
+            jimmyPendingApplications.forEach((a) -> System.out.println(
+                    a.getId() + " | " + a.getInternshipOfferTitle() + " | " +
+                    a.getStatus() + " | " + a.getStudentEmail()
+            ));
+
+            System.out.println("\n=== Applications REJECTED pour jimmy jammer ===");
+            jimmyRejectedApplications.forEach((a) -> System.out.println(
+                    a.getId() + " | " + a.getInternshipOfferTitle() + " | " +
+                    a.getStatus() + " | " + a.getStudentEmail()
+            ));
         };
     }
 }

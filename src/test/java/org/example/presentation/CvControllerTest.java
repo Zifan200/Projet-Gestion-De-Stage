@@ -1,13 +1,11 @@
 package org.example.presentation;
 
 import org.example.model.CV;
-import org.example.model.auth.Role;
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.service.CVService;
 import org.example.service.UserAppService;
-import org.example.service.dto.CvResponseDTO;
-import org.example.service.dto.EtudiantDTO;
-import org.example.service.dto.UserDTO;
+import org.example.service.dto.cv.CvResponseDTO;
+import org.example.service.dto.student.EtudiantDTO;
 import org.example.service.exception.AccessDeniedException;
 import org.example.service.exception.CvNotFoundException;
 import org.example.service.exception.InvalidFileFormatException;
@@ -18,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;

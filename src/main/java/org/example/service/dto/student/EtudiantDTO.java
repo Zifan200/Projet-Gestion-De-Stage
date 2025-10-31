@@ -1,14 +1,11 @@
-package org.example.service.dto;
+package org.example.service.dto.student;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.example.model.Etudiant;
-import org.example.model.UserApp;
 import org.example.model.auth.Role;
+import org.example.service.dto.util.UserDTO;
 
 
 import java.time.LocalDate;

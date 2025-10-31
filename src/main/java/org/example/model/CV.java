@@ -2,7 +2,7 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
@@ -38,7 +38,7 @@ public class CV {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private InternshipOfferStatus status = InternshipOfferStatus.PENDING;
+    private ApprovalStatus status = ApprovalStatus.PENDING;
 
     @Column(name = "reason")
     private String reason;

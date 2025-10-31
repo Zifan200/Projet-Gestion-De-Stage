@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.model.Gestionnaire;
 import org.example.repository.GestionnaireRepository;
-import org.example.service.dto.GestionnaireDTO;
+import org.example.service.dto.gestionnaire.GestionnaireDTO;
 import org.example.service.exception.DuplicateUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

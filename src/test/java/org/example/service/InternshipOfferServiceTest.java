@@ -1,18 +1,17 @@
 package org.example.service;
 
 import org.example.event.EmployerCreatedInternshipOfferEvent;
-import org.example.event.UserCreatedEvent;
 import org.example.model.Employer;
 import org.example.model.InternshipApplication;
 import org.example.model.InternshipOffer;
-import org.example.model.enums.InternshipOfferStatus;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.EmployerRepository;
 import org.example.repository.InternshipOfferRepository;
 import org.example.security.exception.UserNotFoundException;
-import org.example.service.dto.EmployerDto;
-import org.example.service.dto.InternshipOfferDto;
-import org.example.service.dto.InternshipOfferListDto;
-import org.example.service.dto.InternshipOfferResponseDto;
+import org.example.service.dto.employer.EmployerDto;
+import org.example.service.dto.internship.InternshipOfferDto;
+import org.example.service.dto.internship.InternshipOfferListDto;
+import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.exception.InvalidInternShipOffer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -280,10 +279,10 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(offer);
 
         // Act
-        internshipOfferService.updateOfferStatus(1L, InternshipOfferStatus.ACCEPTED, "valid offer");
+        internshipOfferService.updateOfferStatus(1L, ApprovalStatus.ACCEPTED, "valid offer");
 
         // Assert
-        assertThat(offer.getStatus()).isEqualTo(InternshipOfferStatus.ACCEPTED);
+        assertThat(offer.getStatus()).isEqualTo(ApprovalStatus.ACCEPTED);
         verify(internshipOfferRepository).save(offer);
     }
 
@@ -293,7 +292,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findById(99L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, InternshipOfferStatus.ACCEPTED, "offer looks valid :3"))
+        assertThatThrownBy(() -> internshipOfferService.updateOfferStatus(99L, ApprovalStatus.ACCEPTED, "offer looks valid :3"))
                 .isInstanceOf(InvalidInternShipOffer.class)
                 .hasMessageContaining("Offer not found");
         verify(internshipOfferRepository, never()).save(any());
@@ -306,17 +305,17 @@ public class InternshipOfferServiceTest {
 
         InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
         offer1.setId(1L);
-        offer1.setStatus(InternshipOfferStatus.ACCEPTED);
+        offer1.setStatus(ApprovalStatus.ACCEPTED);
 
         InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
         offer2.setId(2L);
-        offer2.setStatus(InternshipOfferStatus.PENDING);
+        offer2.setStatus(ApprovalStatus.PENDING);
 
         InternshipOffer offer3 = buildInternshipOffer(employer, LocalDate.now());
         offer3.setId(3L);
-        offer3.setStatus(InternshipOfferStatus.ACCEPTED);
+        offer3.setStatus(ApprovalStatus.ACCEPTED);
 
-        when(internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED))
+        when(internshipOfferRepository.findDistinctByStatus(ApprovalStatus.ACCEPTED))
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
@@ -332,7 +331,7 @@ public class InternshipOfferServiceTest {
     @Test
     void getAcceptedOffers_whenNoAcceptedOffers_shouldReturnEmptyList() {
         // Arrange
-        when(internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.ACCEPTED))
+        when(internshipOfferRepository.findDistinctByStatus(ApprovalStatus.ACCEPTED))
                 .thenReturn(List.of());
 
         // Act
@@ -349,17 +348,17 @@ public class InternshipOfferServiceTest {
         Employer employer = buildEmployer();
         InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
         offer1.setId(1L);
-        offer1.setStatus(InternshipOfferStatus.PENDING);
+        offer1.setStatus(ApprovalStatus.PENDING);
 
         InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
         offer2.setId(2L);
-        offer2.setStatus(InternshipOfferStatus.ACCEPTED);
+        offer2.setStatus(ApprovalStatus.ACCEPTED);
 
         InternshipOffer offer3 = buildInternshipOffer(employer, LocalDate.now());
         offer3.setId(3L);
-        offer3.setStatus(InternshipOfferStatus.PENDING);
+        offer3.setStatus(ApprovalStatus.PENDING);
 
-        when(internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING))
+        when(internshipOfferRepository.findDistinctByStatus(ApprovalStatus.PENDING))
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
@@ -374,7 +373,7 @@ public class InternshipOfferServiceTest {
     @Test
     void getPendingOffers_whenNoPendingOffers_shouldReturnEmptyList() {
         // Arrange
-        when(internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.PENDING))
+        when(internshipOfferRepository.findDistinctByStatus(ApprovalStatus.PENDING))
                 .thenReturn(List.of());
 
         // Act
@@ -390,17 +389,17 @@ public class InternshipOfferServiceTest {
         Employer employer = buildEmployer();
         InternshipOffer offer1 = buildInternshipOffer(employer, LocalDate.now());
         offer1.setId(1L);
-        offer1.setStatus(InternshipOfferStatus.REJECTED);
+        offer1.setStatus(ApprovalStatus.REJECTED);
 
         InternshipOffer offer2 = buildInternshipOffer(employer, LocalDate.now());
         offer2.setId(2L);
-        offer2.setStatus(InternshipOfferStatus.ACCEPTED);
+        offer2.setStatus(ApprovalStatus.ACCEPTED);
 
         InternshipOffer offer3 = buildInternshipOffer(employer, LocalDate.now());
         offer3.setId(3L);
-        offer3.setStatus(InternshipOfferStatus.REJECTED);
+        offer3.setStatus(ApprovalStatus.REJECTED);
 
-        when(internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED))
+        when(internshipOfferRepository.findDistinctByStatus(ApprovalStatus.REJECTED))
                 .thenReturn(List.of(offer1, offer3));
 
         // Act
@@ -415,7 +414,7 @@ public class InternshipOfferServiceTest {
     @Test
     void getRejectedOffers_whenNoRefusedOffers_shouldReturnEmptyList() {
         // Arrange
-        when(internshipOfferRepository.findDistinctByStatus(InternshipOfferStatus.REJECTED))
+        when(internshipOfferRepository.findDistinctByStatus(ApprovalStatus.REJECTED))
                 .thenReturn(List.of());
 
         // Act
@@ -433,7 +432,7 @@ public class InternshipOfferServiceTest {
         offer.setId(1L);
         offer.setTargetedProgramme("Informatique");
         offer.setExpirationDate(LocalDate.now().plusMonths(1));
-        offer.setStatus(InternshipOfferStatus.ACCEPTED);
+        offer.setStatus(ApprovalStatus.ACCEPTED);
 
         when(internshipOfferRepository.findInternshipOffersById(1L))
                 .thenReturn(Optional.of(offer));
@@ -479,7 +478,7 @@ public class InternshipOfferServiceTest {
                 .targetedProgramme("Informatique")
                 .reason("Bon profil")
                 .applications(new HashSet<>(Set.of(app1)))
-                .status(InternshipOfferStatus.ACCEPTED)
+                .status(ApprovalStatus.ACCEPTED)
                 .build();
 
         InternshipOffer offer2 = InternshipOffer.builder()
@@ -490,7 +489,7 @@ public class InternshipOfferServiceTest {
                 .targetedProgramme("Design")
                 .reason("Bon candidat")
                 .applications(new HashSet<>(Set.of(app1)))
-                .status(InternshipOfferStatus.PENDING)
+                .status(ApprovalStatus.PENDING)
                 .build();
 
         when(employer.getInternshipOffers()).thenReturn(Set.of(offer1, offer2));

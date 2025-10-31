@@ -1,7 +1,7 @@
 package org.example.event;
 
 import lombok.Getter;
-import org.example.service.dto.UserDTO;
+import org.example.service.dto.util.UserDTO;
 
 @Getter
 public class PasswordResetRequestEvent {
