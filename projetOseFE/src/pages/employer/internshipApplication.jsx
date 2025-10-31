@@ -5,6 +5,7 @@ import { useCvStore } from "../../stores/cvStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
 import {ReasonModal} from "../../components/ui/reason-modal.jsx";
+import {Button} from "../../components/ui/button.jsx";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
@@ -113,26 +114,23 @@ export const InternshipApplications = () => {
                                 {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
                             </td>
                             <td className="px-4 py-2">
-                                <button
-                                    className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                <Button
+                                    label={t("internshipApplications.actions.view")}
                                     onClick={() => handleViewApplication(app)}
-                                >
-                                    {t("internshipApplications.actions.view") || "Voir"}
-                                </button>
+                                    className={"bg-blue-300 hover:bg-blue-100 rounded-lg"}
+                                />
                                 { app.status === "PENDING" &&
                                     <>
-                                        <button
-                                            className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                        <Button
+                                            label={t("internshipApplications.actions.approve")}
                                             onClick={() => handleApproveApplication(app)}
-                                        >
-                                            {t("internshipApplications.actions.approve") || "Accepter"}
-                                        </button>
-                                        <button
-                                            className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                            className={"w-1/2 rounded-lg"}
+                                        />
+                                        <Button
+                                            label={t("internshipApplications.actions.reject")}
                                             onClick={() => handleRejectApplication(app)}
-                                        >
-                                            {t("internshipApplications.actions.reject") || "Rejeter"}
-                                        </button>
+                                            className={"bg-red-300 hover:bg-red-400 w-1/2 rounded-lg"}
+                                        />
                                     </>
                                 }
                             </td>
