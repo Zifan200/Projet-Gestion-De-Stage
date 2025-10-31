@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
+import {ReasonModal} from "../../components/ui/reason-modal.jsx";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
-    const { applications, fetchApplications, approveInternshipApplication } = useEmployerStore();
+    const { applications, fetchApplications, approveApplication, rejectApplication } = useEmployerStore();
     const {
         previewUrl,
         previewType,
@@ -19,6 +20,7 @@ export const InternshipApplications = () => {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
 
     useEffect(() => {
         fetchApplications();
@@ -31,11 +33,23 @@ export const InternshipApplications = () => {
 
     const handleApproveApplication = (application) => {
         try {
-            approveInternshipApplication(user.token, application.id);
+            approveApplication(user.token, application.id);
             toast.success(t("internshipApplications.toast.approved"));
         } catch {
             toast.error(t("internshipApplications.toast.approveError"));
         }
+    };
+
+    const handleRejectApplication = (application) => {
+        setSelectedApplication(application);
+        setIsReasonModalOpen(true);
+
+        /*try {
+            rejectApplication(user.token, application.id, reason);
+            toast.success(t("internshipApplications.toast.rejected"));
+        } catch {
+            toast.error(t("internshipApplications.toast.approveError"));
+        }*/
     };
 
     const handlePreviewCv = (application) => {
@@ -106,12 +120,20 @@ export const InternshipApplications = () => {
                                     {t("internshipApplications.actions.view") || "Voir"}
                                 </button>
                                 { app.status === "PENDING" &&
-                                    <button
-                                        className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
-                                        onClick={() => handleApproveApplication(app)}
-                                    >
-                                        {t("internshipApplications.actions.approve") || "Accepter"}
-                                    </button>
+                                    <>
+                                        <button
+                                            className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                            onClick={() => handleApproveApplication(app)}
+                                        >
+                                            {t("internshipApplications.actions.approve") || "Accepter"}
+                                        </button>
+                                        <button
+                                            className="px-5 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
+                                            onClick={() => handleRejectApplication(app)}
+                                        >
+                                            {t("internshipApplications.actions.reject") || "Rejeter"}
+                                        </button>
+                                    </>
                                 }
                             </td>
                         </tr>
@@ -124,7 +146,7 @@ export const InternshipApplications = () => {
             {previewUrl && (
                 <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
                     <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
+                    <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
                         <button
                             className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                             onClick={closePreview}
@@ -199,6 +221,28 @@ export const InternshipApplications = () => {
                     </div>
                 </div>
             )}
+
+            {/* Modal refus de candidature */}
+            <ReasonModal
+                open={isReasonModalOpen}
+                onClose={() => setIsReasonModalOpen(false)}
+                description={t("internshipApplications.rejectModal.description")}
+                onSubmit={async (reason) => {
+                    if (!reason.trim()) {
+                        toast.error(t("internshipApplications.toast.missingReason"));
+                        return;
+                    }
+                    try {
+                        await rejectApplication(user.token, selectedApplication.id, reason);
+                        toast.error(
+                            t("internshipApplications.toast.rejected"),
+                        );
+                        setIsReasonModalOpen(false);
+                    } catch {
+                        toast.error(t("internshipApplications.toast.rejectError"));
+                    }
+                }}
+            />
         </div>
     );
 };

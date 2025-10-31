@@ -7,6 +7,13 @@ import { initReactI18next } from "react-i18next";
 export const resources = {
   en: {
     translation: {
+      rejectModal: {
+        title: "Reason of rejection",
+        reason: "Reason",
+        confirm: "Confirm",
+        cancel: "Cancel",
+        placeholder: "Ex: The profile does not meet the position's requirements...",
+      },
       internshipApplications: {
         title: "Internship applications",
         loading: "Loading applications...",
@@ -36,6 +43,8 @@ export const resources = {
           approved: "Internship application accepted",
           rejected: "Internship application rejected",
           approveError: "Error while approving the internship application",
+          rejectError: "Error while rejecting the internship application",
+          missingReason: "Please provide a reason before rejecting this application",
         },
         modal: {
           offerTitle: "Offer title",
@@ -52,6 +61,9 @@ export const resources = {
           appliedAt: "Applied on",
           close: "Close",
           email: "Email",
+        },
+        rejectModal: {
+          description: "Explain why you are rejecting this application.",
         },
         previewCv: "CV preview",
         closeCvPreview: "Close",
@@ -196,6 +208,9 @@ export const resources = {
           missingReason: "Please provide a reason before rejecting this resume",
           downloadSuccess: "{{fileName}} downloaded",
           downloadError: "Error while downloading the resume",
+        },
+        rejectModal: {
+          description: "Explain why you are rejecting this resume.",
         },
       },
       offer: {
@@ -436,6 +451,13 @@ export const resources = {
   },
   fr: {
     translation: {
+      rejectModal: {
+        title: "Raison du rejet",
+        reason: "Raison",
+        confirm: "Confirmer",
+        cancel: "Annuler",
+        placeholder: "Ex: Le profil ne correspond pas aux exigences du poste...",
+      },
       internshipApplications: {
         title: "Candidatures de stage",
         loading: "Chargement des candidatures...",
@@ -465,6 +487,8 @@ export const resources = {
           approved: "Candidature de stage acceptée",
           rejected: "Candidature de stage refusée",
           approveError: "Erreur lors de l'approbation de la candidature",
+          rejectError: "Erreur lors du rejet de la candidature",
+          missingReason: "Veuillez donner une raison avant de rejeter cette candidature",
         },
         modal: {
           offerTitle: "Titre de l'offre",
@@ -480,7 +504,10 @@ export const resources = {
           reason: "Raison",
           appliedAt: "Postulé le",
           close: "Fermer",
-          email: "Email"
+          email: "Email",
+        },
+        rejectModal: {
+          description: "Expliquez pourquoi vous rejetez cette candidature.",
         },
         closeCvPreview: "Fermer",
         settings: {
@@ -632,6 +659,9 @@ export const resources = {
           missingReason: "Veuillez ajouter une raison avant de rejeter ce CV",
           downloadSuccess: "{{fileName}} téléchargé",
           downloadError: "Erreur lors du téléchargement du CV",
+        },
+        rejectModal: {
+          description: "Expliquez pourquoi vous rejetez ce CV.",
         },
       },
       offer: {

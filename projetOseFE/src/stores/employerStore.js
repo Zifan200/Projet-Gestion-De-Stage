@@ -35,12 +35,25 @@ export const useEmployerStore = create()(
                 }
             },
 
-            approveInternshipApplication: async(token, id) => {
-                const res = employerService.approveIntenshipApplication(token, id);
+            approveApplication: async(token, id) => {
+                const res = employerService.approveApplication(token, id);
                 try {
                     set((state) => ({
                         applications: state.applications.map((app) =>
                             app.id === id ? { ...app, status: "ACCEPTED" } : app
+                        ),
+                    }));
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            rejectApplication: async(token, id, reason) => {
+                const res = employerService.rejectApplication(token, id, reason);
+                try {
+                    set((state) => ({
+                        applications: state.applications.map((app) =>
+                            app.id === id ? { ...app, status: "REJECTED", reason } : app
                         ),
                     }));
                 } catch (err) {

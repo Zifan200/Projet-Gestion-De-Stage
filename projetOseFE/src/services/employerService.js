@@ -58,10 +58,23 @@ export const employerService = {
     }
   },
 
-  approveIntenshipApplication: async(token, id) => {
+  approveApplication: async(token, id) => {
     const res = api.put(
         `/employer/get-internship-application/${id}/approve`,
         null,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+    );
+    return res;
+  },
+
+  rejectApplication: async(token, id, reason) => {
+    const res = api.put(
+        `/employer/get-internship-application/${id}/reject`,
+        { reason },
         {
           headers: {
             "Authorization": `Bearer ${token}`,

@@ -187,6 +187,7 @@ export const GsManageCvs = () => {
       <ReasonModal
         open={showReasonModal}
         onClose={() => setShowReasonModal(false)}
+        description={t("gsManageCvs.rejectModal.description")}
         onSubmit={async (reason) => {
           if (!reason.trim()) {
             toast.error(t("gsManageCvs.toast.missingReason"));
