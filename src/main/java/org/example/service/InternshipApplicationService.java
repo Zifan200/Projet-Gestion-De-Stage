@@ -85,14 +85,13 @@ public class InternshipApplicationService {
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
-    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOffer(Long offerId){
+    public List<InternshipApplicationResponseDTO> getAllApplicationsFromOfferId(Long offerId){
         //check if offer exists
         Optional<InternshipOffer> offer = internshipOfferRepository.findById(offerId);
         if(offer.isEmpty()){
             throw new InvalidInternshipApplicationException("Invalid internship offer : offer does not exist");
         }
-
-        List<InternshipApplication> applicationList = internshipApplicationRepository.findAllByOffer(offer.get());
+        List<InternshipApplication> applicationList = internshipApplicationRepository.findAllByOfferId(offer.get().getId());
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).toList();
     }
 
@@ -173,7 +172,7 @@ public class InternshipApplicationService {
         return InternshipApplicationResponseDTO.create(savedApplication);
     }
 
-    public List<EtudiantDTO> getAllStudentsAppliedToAInternshipOffer(){
+    public List<EtudiantDTO> getAllStudentsWithApplication(){
         List<EtudiantDTO> studentList = new ArrayList<>();
         for(Etudiant etudiant : etudiantRepository.findByApplicationsIsNotEmpty()){
             studentList.add(EtudiantDTO.fromEntity(etudiant));

@@ -184,7 +184,7 @@ export const resources = {
           actions: "actions"
         },
         btnLabels: {
-          details: "details",
+          applicationsList: "applications list",
         }
       },
 
@@ -609,8 +609,8 @@ export const resources = {
           numberOfApplications:"nombre de postulations",
           actions:"actions"
         },
-        btnLabels:{
-          details:"détails",
+        btnLabels: {
+          applicationsList: "list d'application",
         }
       },
       offer: {

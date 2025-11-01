@@ -1,14 +1,15 @@
-import { useTranslation } from "react-i18next";
-import { Table } from "../../components/ui/table.jsx";
-import { Header } from "../../components/ui/header.jsx";
-import React, { useEffect, useState } from "react";
-import { useOfferStore } from "../../stores/offerStore.js";
+import {useTranslation} from "react-i18next";
+import {Table} from "../../components/ui/table.jsx";
+import {Header} from "../../components/ui/header.jsx";
+import React, {useEffect, useState} from "react";
+import {useOfferStore} from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
-import { Button } from "../../components/ui/button.jsx";
-import { toast } from "sonner";
+import {Button} from "../../components/ui/button.jsx";
+import {toast} from "sonner";
+import {useGeStore} from "../../stores/geStore.js";
 
 export const AllOffers = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const user = useAuthStore((s) => s.user);
 
     const [selectedOffer, setSelectedOffer] = useState(null);
@@ -38,6 +39,12 @@ export const AllOffers = () => {
         downloadOfferPdf
     } = useOfferStore();
 
+    const {
+        students,
+        error,
+        loadAllApplicationsFromInternshipOffer,
+    } = useGeStore();
+
     // --- Charger le store au montage ---
     useEffect(() => {
         const loadAllData = async () => {
@@ -59,10 +66,18 @@ export const AllOffers = () => {
     const applyCurrentFilter = () => {
         let listToFilter = [];
         switch (currentOfferStatus) {
-            case offerStatuses.PENDING: listToFilter = pendingOffers; break;
-            case offerStatuses.ACCEPTED: listToFilter = acceptedOffers; break;
-            case offerStatuses.REJECTED: listToFilter = rejectedOffers; break;
-            case offerStatuses.ALL: listToFilter = offers; break;
+            case offerStatuses.PENDING:
+                listToFilter = pendingOffers;
+                break;
+            case offerStatuses.ACCEPTED:
+                listToFilter = acceptedOffers;
+                break;
+            case offerStatuses.REJECTED:
+                listToFilter = rejectedOffers;
+                break;
+            case offerStatuses.ALL:
+                listToFilter = offers;
+                break;
         }
 
         let filtered = listToFilter;
@@ -76,7 +91,7 @@ export const AllOffers = () => {
     const openOffer = async (offerId) => {
         try {
             await viewOffer(user.token, offerId);
-            const { selectedOffer, isModalOpen } = useOfferStore.getState();
+            const {selectedOffer, isModalOpen} = useOfferStore.getState();
             setSelectedOffer(selectedOffer);
             setIsModalOpen(isModalOpen);
         } catch (err) {
@@ -158,6 +173,49 @@ export const AllOffers = () => {
         </tr>
     ));
 
+    function choseOfferStatus() {
+        return <>
+            {/* Rejet */}
+            <div className="mt-4">
+                <label className="block font-medium mb-1">{t("offer.modal.rejectReason")}</label>
+                <textarea
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    placeholder={t("offer.modal.reasonPlaceholder")}
+                    className="w-full border rounded p-2"
+                    rows={3}
+                />
+            </div>
+
+            <div className="flex justify-between mt-6">
+                <div className="flex space-x-2">
+                    <button
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        onClick={handleAccept}
+                    >
+                        {t("offer.modal.accept")}
+                    </button>
+
+                    <button
+                        className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
+                        disabled={!rejectReason.trim()}
+                        onClick={handleReject}
+                    >
+                        {t("offer.actions.reject")}
+                    </button>
+                </div>
+            </div>
+        </>;
+    }
+
+    function viewApplicants(){
+        return <>
+            <div className="bg-amber-700">
+                <p>hola</p>
+            </div>
+        </>
+    }
+
     return (
         <div className="space-y-6">
             {/* Filtrage programmes */}
@@ -173,7 +231,7 @@ export const AllOffers = () => {
 
             {loading ? <p>{t("offer.table.loading")}</p> :
                 <>
-                    <Header title={t("menu.allOffers")} />
+                    <Header title={t("menu.allOffers")}/>
                     <Table
                         headers={[
                             t("offer.table.offerTitle"),
@@ -196,41 +254,20 @@ export const AllOffers = () => {
                         <h2 className="text-xl font-semibold mb-4">{selectedOffer.title}</h2>
                         <p><strong>{t("offer.modal.companyEmail")}: </strong>{selectedOffer.employerEmail}</p>
                         <p><strong>{t("offer.modal.targetedProgramme")}: </strong>{selectedOffer.targetedProgramme}</p>
-                        <p><strong>{t("offer.modal.publishedDate")}: </strong>{selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
-                        <p><strong>{t("offer.modal.deadline")}: </strong>{selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}</p>
+                        <p>
+                            <strong>{t("offer.modal.publishedDate")}: </strong>{selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}
+                        </p>
+                        <p>
+                            <strong>{t("offer.modal.deadline")}: </strong>{selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}
+                        </p>
                         <p><strong>{t("offer.modal.description")}: </strong>{selectedOffer.description}</p>
                         <p><strong>{t("offer.modal.status")}: </strong>{selectedOffer.status}</p>
 
-                        {/* Rejet */}
-                        <div className="mt-4">
-                            <label className="block font-medium mb-1">{t("offer.modal.rejectReason")}</label>
-                            <textarea
-                                value={rejectReason}
-                                onChange={(e) => setRejectReason(e.target.value)}
-                                placeholder={t("offer.modal.reasonPlaceholder")}
-                                className="w-full border rounded p-2"
-                                rows={3}
-                            />
-                        </div>
 
-                        <div className="flex justify-between mt-6">
-                            <div className="flex space-x-2">
-                                <button
-                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                                    onClick={handleAccept}
-                                >
-                                    {t("offer.modal.accept")}
-                                </button>
+                        {(currentOfferStatus.toUpperCase() === offerStatuses.PENDING.toUpperCase()) && choseOfferStatus()}
+                        {(selectedOffer.status.toUpperCase() === offerStatuses.ACCEPTED.toUpperCase()) && viewApplicants()}
 
-                                <button
-                                    className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
-                                    disabled={!rejectReason.trim()}
-                                    onClick={handleReject}
-                                >
-                                    {t("offer.actions.reject")}
-                                </button>
-                            </div>
-
+                        <div className="flex w-auto justify-between mt-6 justify-end">
                             <button
                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                 onClick={() => {
@@ -243,6 +280,7 @@ export const AllOffers = () => {
                             </button>
                         </div>
                     </div>
+
                 </div>
             )}
         </div>

@@ -46,12 +46,6 @@ function App() {
             icon: BackpackIcon,
         },
         {
-            key: "manageApplicants",
-            label: t("menu.manageApplicants"),
-            href: "/dashboard/gs/student-with-applications",
-            icon: PersonIcon,
-        },
-        {
             key: "manageCvs",
             label: t("menu.manageCvs"),
             href: "/dashboard/gs/manage-students-cvs",
@@ -63,6 +57,12 @@ function App() {
             href: "/dashboard/gs/internships",
             icon: EnvelopeClosedIcon,
         },
+        // {
+        //     key: "manageApplicants",
+        //     label: t("menu.manageApplicants"),
+        //     href: "/dashboard/gs/student-with-applications",
+        //     icon: PersonIcon,
+        // },
         {
             key: "settings",
             label: t("menu.settings"),
@@ -169,15 +169,16 @@ function App() {
                         }
                     >
                         <Route index element={<GsDashboard/>}/>
-                        <Route
-                            path="/dashboard/gs/student-with-applications"
-                            element={<GsAllStudentsWithApplications/>}
-                        />
+
                         <Route
                             path="/dashboard/gs/manage-students-cvs"
                             element={<GsManageCvs/>}
                         />
                         <Route path="/dashboard/gs/internships" element={<AllOffers/>}/>
+                        {/*<Route*/}
+                        {/*    path="/dashboard/gs/student-with-applications"*/}
+                        {/*    element={<GsAllStudentsWithApplications/>}*/}
+                        {/*/>*/}
                         <Route
                             path="/dashboard/gs/settings"
                             element={<DashboardSettings/>}

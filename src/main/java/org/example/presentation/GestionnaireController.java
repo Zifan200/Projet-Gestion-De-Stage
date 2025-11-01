@@ -60,7 +60,7 @@ public class GestionnaireController {
     @GetMapping("/get-all/students/with-application")
     public ResponseEntity<List<EtudiantDTO>> getAllStudentsWithApplication() {
         return ResponseEntity.ok(
-                internshipApplicationService.getAllStudentsAppliedToAInternshipOffer()
+                internshipApplicationService.getAllStudentsWithApplication()
         );
     }
 

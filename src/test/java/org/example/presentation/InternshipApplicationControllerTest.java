@@ -118,7 +118,7 @@ class InternshipApplicationControllerTest {
                 .internshipOfferTitle("Java Developer")
                 .build();
 
-        when(internshipApplicationService.getAllApplicationsFromOffer(10L))
+        when(internshipApplicationService.getAllApplicationsFromOfferId(10L))
                 .thenReturn(List.of(responseDto));
 
         mockMvc.perform(get(path+"/get-all/internship-offer/10")
@@ -135,7 +135,7 @@ class InternshipApplicationControllerTest {
                 .setControllerAdvice(new InternshipApplicationControllerException())
                 .build();
 
-        when(internshipApplicationService.getAllApplicationsFromOffer(999L))
+        when(internshipApplicationService.getAllApplicationsFromOfferId(999L))
                 .thenThrow(new InvalidInternshipApplicationException("Offer does not exist"));
 
         MvcResult result = mockMvc.perform(get(path+"/get-all/internship-offer/999")

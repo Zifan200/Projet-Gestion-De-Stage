@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from "react";
 import {Header} from "../../components/ui/header.jsx";
 import {Table} from "../../components/ui/table.jsx";
-import {useGeStore}  from "../../stores/geStore.js";
+import {useGeStore} from "../../stores/geStore.js";
 import {useTranslation} from "react-i18next";
-import { toast } from "sonner";
-import { Button } from "../../components/ui/button.jsx";
+import {toast} from "sonner";
+import {Button} from "../../components/ui/button.jsx";
 import useAuthStore from "../../stores/authStore.js";
 import {useOfferStore} from "../../stores/offerStore.js";
 import {
     ReaderIcon
 } from "@radix-ui/react-icons";
+
 export const GsAllStudentsWithApplications = () => {
 
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const user = useAuthStore((s) => s.user);
 
     const [currentProgram, setCurrentProgram] = useState([]);
@@ -29,30 +30,30 @@ export const GsAllStudentsWithApplications = () => {
         students,
         loading,
         error,
-        loadStudentsWithApplications,
+        loadAllStudentsWithApplications,
     } = useGeStore();
 
     const {
         programs, loadPrograms,
-    }= useOfferStore();
+    } = useOfferStore();
 
     useEffect(() => {
         const loadAllData = async () => {
             //
-            await loadStudentsWithApplications();
+            await loadAllStudentsWithApplications();
             //
             await loadPrograms();
         };
         loadAllData();
-    },[]);
+    }, []);
 
     //
     useEffect(() => {
         applyCurrentFilter();
-    },[currentStudentNameFilter]);
+    }, [currentStudentNameFilter]);
 
     const sortStudentsNameAlphabetical = (studentsList) => {
-        let list = [... studentsList].sort((a, b) => a.firstName.localeCompare(b.firstName))
+        let list = [...studentsList].sort((a, b) => a.firstName.localeCompare(b.firstName))
         return list;
     };
 
@@ -64,8 +65,12 @@ export const GsAllStudentsWithApplications = () => {
     const applyCurrentFilter = () => {
         let listToFilter = [];
         switch (currentStudentNameFilter) {
-            case studentNameFilterTypes.ALPHABETICAL: listToFilter = sortStudentsNameAlphabetical(students); break;
-            case studentNameFilterTypes.REVERSE_ALPHABETICAL: listToFilter = sortStudentsNameReverseAlphabetical(students); break;
+            case studentNameFilterTypes.ALPHABETICAL:
+                listToFilter = sortStudentsNameAlphabetical(students);
+                break;
+            case studentNameFilterTypes.REVERSE_ALPHABETICAL:
+                listToFilter = sortStudentsNameReverseAlphabetical(students);
+                break;
         }
 
         let filtered = listToFilter;
@@ -75,7 +80,7 @@ export const GsAllStudentsWithApplications = () => {
     const openStudentApplicaitonsList = async (studentEmail) => {
         try {
             await viewStudentApplicaitonList(studentEmail);
-            const { selectedOffer, isModalOpen } = useOfferStore.getState();
+            const {selectedOffer, isModalOpen} = useOfferStore.getState();
             setSelectedOffer(selectedOffer);
             setIsModalOpen(isModalOpen);
         } catch (err) {
@@ -84,17 +89,61 @@ export const GsAllStudentsWithApplications = () => {
         }
     };
 
+
+    const PillButton = ({ onClick, label, Icon, className = "" }) => (
+        <button
+            onClick={onClick}
+            // 👇 use a uniquely named group for this button only
+            className={`max-w-32 group/button flex items-center justify-center md:justify-start gap-2 rounded-full
+                w-full md:w-10 hover:w-auto max-w-full px-3 py-2 transition-all duration-300 overflow-hidden ${className}`}
+        >
+            {/* Icon — visible only on medium screens and up */}
+            <Icon
+                className="hidden md:block group-hover:hidden text-white transition-colors duration-300 flex-shrink-0"
+            />
+
+            {/* Label — always visible on small screens, animated on desktop */}
+            <span
+                className="text-sm text-white text-start
+                 overflow-hidden whitespace-nowrap
+                 md:group-hover/button:whitespace-normal break-words
+                 opacity-100
+                 md:opacity-0
+                 md:group-hover/button:opacity-100
+                 transition-opacity duration-300 ease-in-out
+                 md:inset-0 flex items-center justify-center"
+            >
+      {label}
+    </span>
+
+
+
+
+
+        </button>
+    );
+
+
     const tableRows = () => currentStudentApplications.map((student) => (
         <tr key={student.id} className="border-t border-gray-300">
-            <td className="px-4 py-2">{student.firstName} {student.lastName}</td>
-            <td className="px-4 py-2">{student.program}</td>
-            <td className="px-4 py-2">{student.numberOfApplications}</td>
+            <td className="px-4 py-1 w-auto">{student.firstName} {student.lastName}</td>
+            <td className="px-4 py-1 w-auto">{student.program}</td>
+            <td className="px-4 py-1 "><div className="flex justify-center">{student.numberOfApplications}</div></td>
             {/*<td className="px-4 py-2">{new Date(offer.expirationDate).toLocaleDateString()}</td>*/}
-            <td>
-                <button  className="rounded-full p-2 bg-lime-300 hover:bg-lime-600" onClick={() => openStudentApplicaitonsList(student.email)}>
-                    <ReaderIcon/>
-                </button>
+            <td className="px-4 py-1 relative w-[160px] text-center"> {/* fixed width, centered */}
+                <div className="relative flex justify-center items-center gap-2 group">
+                    <div className="flex justify-center items-center gap-2 transition-all duration-300">
+                        <PillButton
+                            onClick={() => openStudentApplicaitonsList(student.email)}
+                            label={t("gsManageApplicants.btnLabels.applicationsList")}
+                            Icon={ReaderIcon}
+                            className="bg-sky-300 hover:bg-sky-600 w-auto max-w-full"
+                        />
+                    </div>
+                </div>
             </td>
+
+
         </tr>
     ));
 
@@ -102,9 +151,10 @@ export const GsAllStudentsWithApplications = () => {
     return <div className="space-y-6">
         {loading ? <p>{t("gsManageApplicants.loading")}</p> :
             <>
-                <Header title={t("gsManageApplicants.title")} />
+                <Header title={t("gsManageApplicants.title")}/>
                 {/* Filtrage status */}
-                <select className="px-2" value={currentStudentNameFilter} onChange={e => setCurrentStudentNameFilter(e.target.value)}>
+                <select className="px-2" value={currentStudentNameFilter}
+                        onChange={e => setCurrentStudentNameFilter(e.target.value)}>
                     {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
 

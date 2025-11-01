@@ -57,10 +57,10 @@ export const useGeStore = create(
                 set({downloadingId: null});
             },
 
-            loadStudentsWithApplications: async ()=> {
+            loadAllApplicationsFromInternshipOffer: async (offerId) =>{
                 try{
                     set({loading: true, error: null });
-                    const data = await internshipApplicationService.loadStudentsWithApplications();
+                    const data = await internshipApplicationService.loadAllApplicationsFromInternshipOffer(offerId);
                     set({students:data, loading: false});
                 }catch (err){
                     set({error: err, loading: false});
