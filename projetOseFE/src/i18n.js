@@ -8,23 +8,38 @@ export const resources = {
   en: {
     translation: {
       internshipApplications: {
+        title: "Internship applications",
         loading: "Loading applications...",
         table: {
           offerTitle: "Offer title",
           studentName: "Student name",
           cv: "CV",
-          status: "Status",
+          statusTitle: "Status",
+          status: {
+            accepted: "Accepted",
+            rejected: "Rejected",
+            pending: "Pending approval",
+          },
+          applicationDate: "Applied on",
           action: "Action",
           actionView: "View",
           studentEmail: "Email",
           download: "Download",
           noCv: "No resume",
+          noApplications: "No applications for now.",
         },
         modal: {
           offerTitle: "Offer title",
           studentName: "Student",
           cv: "CV",
-          status: "Status",
+          statusTitle: "Status",
+          status: {
+            accepted: "Accepted",
+            rejected: "Rejected",
+            pending: "Pending approval",
+          },
+          deadline: "Deadline",
+          reason: "Reason",
           appliedAt: "Applied on",
           close: "Close",
           email: "Email",
@@ -46,15 +61,23 @@ export const resources = {
           en: "English",
           fr: "French",
         },
+        filter: {
+          all: "All statuses",
+        },
+        status: {
+          accepted: "Accepted",
+          rejected: "Rejected",
+          pending: "Pending approval",
+        },
       },
       success: {
         loginSucces: "Login successful!",
         registerEnterpriseSuccess:
-          "Hello {{firstName}}, your account for {{enterpriseName}} has been successfully created!",
+            "Hello {{firstName}}, your account for {{enterpriseName}} has been successfully created!",
         emailSent: "A password reset email has been sent",
         passwordChange: "Password changed successfully!",
         registerStudentSuccess:
-          "Welcome {{firstName}} 🎉! You have successfully registered for the platform ose 2.0 with the porgramme : {{program}}.",
+            "Welcome {{firstName}} 🎉! You have successfully registered for the platform ose 2.0 with the porgramme : {{program}}.",
       },
       menu: {
         hello: "Hello",
@@ -82,8 +105,7 @@ export const resources = {
         applicationSend: "Application send",
         allOffers: "All offers",
         manageCvs: "Submitted CV",
-        manageApplicants: "Internship Applicants",
-        applications: "Internship Applications",
+        applications: "Internship applications",
         settings: "Settings",
       },
       errors: {
@@ -92,7 +114,7 @@ export const resources = {
         lastName: { min: "Last name must be at least 2 characters" },
         password: {
           regex:
-            "Password must be 8–50 characters with at least one uppercase, one lowercase, one number, and one special character (@$!%*?&)",
+              "Password must be 8–50 characters with at least one uppercase, one lowercase, one number, and one special character (@$!%*?&)",
           match: "Passwords do not match",
         },
         enterpriseName: { min: "Company name must be at least 2 characters" },
@@ -125,7 +147,7 @@ export const resources = {
         description: "Explain why you are rejecting this resume.",
         label: "Reason",
         placeholder:
-          "Ex: The profile does not meet the requirements of the position...",
+            "Ex: The profile does not meet the requirements of the position...",
         cancel: "Cancel",
         confirm: "Confirm",
         errors: {
@@ -257,7 +279,7 @@ export const resources = {
           rejectReason: "Please specify a reason",
           reasonRequired: "A reason is required",
           reasonPlaceholder:
-            "Ex: The profile does not match the position requirements...",
+              "Ex: The profile does not match the position requirements...",
         },
 
         filter: {
@@ -298,13 +320,13 @@ export const resources = {
         employer: {
           title: "Create an employer account",
           description:
-            "Join OSE 2.0 and start posting your internship offers to connect your company with talented students.",
+              "Join OSE 2.0 and start posting your internship offers to connect your company with talented students.",
           enterprise: "*Enter the name of the company you represent",
         },
         student: {
           title: "Create an student account",
           description:
-            "Create your student account to access the OSE 2.0 platform, manage your profile, and find an internship that matches your program.",
+              "Create your student account to access the OSE 2.0 platform, manage your profile, and find an internship that matches your program.",
           adress: "*Enter you adress",
           programmes: "*Enter you program",
           selectProgram: "Select a program from the following:",
@@ -315,7 +337,7 @@ export const resources = {
         login: {
           title: "Login",
           description:
-            "Login to the OSE 2.0 platform to manage your internships",
+              "Login to the OSE 2.0 platform to manage your internships",
           button: "Login",
           accountExist: "Already have an account?",
           forgetPassword: "Forgot password?",
@@ -323,7 +345,7 @@ export const resources = {
         passwordRequest: {
           title: "Reset your password",
           description:
-            "Enter your email to receive a link to reset your password.",
+              "Enter your email to receive a link to reset your password.",
           button: "Send reset link",
           backToLogin: "Back to login",
         },
@@ -350,7 +372,7 @@ export const resources = {
         myCvs: "My Resumes",
         addCv: "Add a Resume",
         description:
-          "Here you can manage your resumes: add one, view them, download or delete them.",
+            "Here you can manage your resumes: add one, view them, download or delete them.",
         noCvs: "No resumes yet",
         table: {
           fileName: "File Name",
@@ -380,7 +402,7 @@ export const resources = {
           previewCv: "Unable to preview resume",
           unsupportedFormat: "Unsupported format",
           fileExists:
-            "A resume with this name already exists. Please rename the file before uploading.",
+              "A resume with this name already exists. Please rename the file before uploading.",
         },
       },
       studentOffers: {
@@ -427,23 +449,38 @@ export const resources = {
   fr: {
     translation: {
       internshipApplications: {
+        title: "Candidatures de stage",
         loading: "Chargement des candidatures...",
         table: {
           offerTitle: "Titre de l'offre",
           studentName: "Nom de l'Étudiant",
           cv: "CV",
-          status: "Statut",
+          statusTitle: "Statut",
+          status: {
+            accepted: "Acceptée",
+            rejected: "Rejetée",
+            pending: "En attente d'approbation",
+          },
+          applicationDate: "Postulé le",
           action: "Action",
           actionView: "Voir",
           studentEmail: "Courriel",
           download: "Télécharger",
           noCv: "Aucun CV",
+          noApplications: "Aucune postulation pour le moment.",
         },
         modal: {
           offerTitle: "Titre de l'offre",
           studentName: "Étudiant",
           cv: "CV",
-          status: "Statut",
+          statusTitle: "Statut",
+          status: {
+            accepted: "Acceptée",
+            rejected: "Rejetée",
+            pending: "En attente d'approbation",
+          },
+          deadline: "Date limite",
+          reason: "Raison",
           appliedAt: "Postulé le",
           close: "Fermer",
           email: "Email"
@@ -459,6 +496,14 @@ export const resources = {
         languages: {
           en: "Anglais",
           fr: "Français",
+        },
+        filter: {
+          all: "Tous les statuts",
+        },
+        status: {
+          accepted: "Acceptées",
+          rejected: "Rejetées",
+          pending: "En attente d'approbation",
         },
       },
       success: {
@@ -498,7 +543,6 @@ export const resources = {
         offerConfirm: "Offres signer",
         allOffers: "Toutes les offres",
         manageCvs: "CV soumis",
-        manageApplicants: "Les candidats stagiaires",
         applications: "Candidatures de stage",
         settings: "Paramètres",
       },
@@ -592,26 +636,6 @@ export const resources = {
           downloadSuccess: "{{fileName}} téléchargé",
           downloadError: "Erreur lors du téléchargement du CV",
         },
-      },
-      gsManageApplicants:{
-        loading:"...chargement",
-        title: "Les candidats stagiaires",
-        noApplicants:"Aucun étudiant n'a postulé pour un stage.",
-        filters:{
-          studentNameFilters:{
-            alphabetical:"a-z",
-            reverseAlphabetical:"z-a"
-          }
-        },
-        tableHeader:{
-          studentName:"nom",
-          studentProgramme:"programme d'études",
-          numberOfApplications:"nombre de postulations",
-          actions:"actions"
-        },
-        btnLabels: {
-          applicationsList: "list d'application",
-        }
       },
       offer: {
         title: "Créer une offre de stage",
