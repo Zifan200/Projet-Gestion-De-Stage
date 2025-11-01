@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
-import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
+import {FormTemplate} from "../../components/ui/form-template.jsx";
+import {FormProvider, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {authService} from "../../services/authService.js";
+import Label from "../../components/ui/label.js";
+import Input from "../../components/ui/Input.jsx";
+import {convocationSchema} from "../../models/convocation.js";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
@@ -17,6 +23,29 @@ export const InternshipApplications = () => {
     } = useCvStore();
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isConvocationClicked, setIsConvocationClicked] = useState(false);
+    const [employer, setEmployer] = useState(null);
+
+    useEffect(() => {
+        const fetchEmployer = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+            const data = await authService.getMe(token);
+            setEmployer(data);
+        };
+        fetchEmployer();
+    }, []);
+
+    const form = useForm({
+        resolver: zodResolver(convocationSchema),
+        defaultValues: {
+            etudiant: selectedApplication?.studentEmail | "",
+            employer: employer?.email | "",
+            dateConvocation: "",
+            location: "",
+            link:""
+        },
+    });
 
     useEffect(() => {
         fetchApplications();
@@ -26,6 +55,12 @@ export const InternshipApplications = () => {
         setSelectedApplication(application);
         setIsModalOpen(true);
     };
+
+    const handleConvocation = (application) => {
+        setSelectedApplication(application);
+        setIsModalOpen(true);
+        setIsConvocationClicked(true);
+    }
 
     const handlePreviewCv = (application) => {
         try {
@@ -41,6 +76,14 @@ export const InternshipApplications = () => {
         } catch (err) {
             toast.error(t("internshipApplications.errors.downloadCv"));
         }
+    };
+
+    const onSubmit = async (data) => {
+        toast("test");
+    }
+
+    const onError = (err) => {
+        toast(t("errors.fillFields"));
     };
 
     return (
@@ -95,6 +138,18 @@ export const InternshipApplications = () => {
                                     {t("internshipApplications.table.actionView") || "Voir"}
                                 </button>
 
+                            </td>
+                            <td className="px-4 py-2">
+                                <button
+                                    disabled={app.status !== "ACCEPTED"}
+                                    className={`px-10 py-0.5 rounded-full font-bold text-lg transition-all duration-200
+                                        ${app.status === "ACCEPTED"
+                                        ? "bg-amber-200 hover:bg-amber-50 cursor-pointer"
+                                        : "bg-gray-300 cursor-not-allowed opacity-60"}`}
+                                    onClick={() => handleConvocation(app)}
+                                >
+                                    Convoquer
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -178,6 +233,76 @@ export const InternshipApplications = () => {
                                 {t("internshipApplications.modal.close") || "Fermer"}
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {isModalOpen && selectedApplication && isConvocationClicked && (
+                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+                        <h2 className="text-xl font-semibold mb-4">
+                            Convocation pour {selectedApplication.studentFirstName}{" "}
+                            {selectedApplication.studentLastName}
+                        </h2>
+
+                        <FormProvider {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+                                <div className="flex flex-col mb-7">
+                                    <Label name="dateConvocation" label="Date de convocation" />
+                                    <Input type="date" name="dateConvocation" />
+                                </div>
+
+                                <div className="flex flex-col mb-4">
+                                    <Label name="typeConvocation" label="Type de convocation" />
+                                    <select
+                                        {...form.register("typeConvocation")}
+                                        className="border px-2 py-1 rounded"
+                                        defaultValue="placeholder"
+                                    >
+                                        <option value="placeholder" disabled hidden placeholder>Veuillez sélectionner un type de convocation</option>
+                                        <option value="inPerson">En personne</option>
+                                        <option value="online">En ligne</option>
+                                    </select>
+                                </div>
+
+                                {form.watch("typeConvocation") === "inPerson" ? (
+                                    <div className="flex flex-col mb-4">
+                                        <Label name="location" label="Adresse" />
+                                        <Input type="text" name="location" />
+                                    </div>
+                                ) : form.watch("typeConvocation") === "online" ?
+
+                                (
+                                    <div className="flex flex-col mb-4">
+                                        <Label name="link" label="Lien de vidéoconférence" />
+                                        <Input type="text" name="link" />
+                                    </div>
+                                )
+                                :
+                                    <div className="flex flex-col mb-24"></div>
+                                }
+
+                                <div className="flex justify-end space-x-3 mt-6">
+                                    <button
+                                        type="button"
+                                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                        onClick={() => {
+                                            setIsModalOpen(false);
+                                            setSelectedApplication(null);
+                                        }}
+                                    >
+                                        {t("internshipApplications.modal.close") || "Fermer"}
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    >
+                                        {t("internshipApplications.modal.submit") || "Fermer"}
+                                    </button>
+                                </div>
+                            </form>
+                        </FormProvider>
                     </div>
                 </div>
             )}

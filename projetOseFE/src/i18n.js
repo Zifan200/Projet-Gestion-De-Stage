@@ -42,6 +42,7 @@ export const resources = {
           reason: "Reason",
           appliedAt: "Applied on",
           close: "Close",
+          submit: "Send",
           email: "Email",
         },
         previewCv: "CV preview",
@@ -462,6 +463,7 @@ export const resources = {
           reason: "Raison",
           appliedAt: "Postulé le",
           close: "Fermer",
+          submit: "Envoyer",
           email: "Email"
         },
         closeCvPreview: "Fermer",
