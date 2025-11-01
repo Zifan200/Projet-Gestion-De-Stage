@@ -68,6 +68,7 @@ public class ConvocationService {
                 .dateConvocation(convocationDTO.getConvocationDate())
                 .location(convocationDTO.getLocation())
                 .link(convocationDTO.getLink())
+                .internshipApplication(internship)
                 .build();
 
         var savedConvocation = convocationRepository.save(convocation);
