@@ -83,6 +83,7 @@ export const resources = {
           fr: "French",
         },
         filter: {
+          filter: "Filter",
           all: "All statuses",
         },
         status: {
@@ -522,6 +523,7 @@ export const resources = {
           fr: "Français",
         },
         filter: {
+          filter: "Filtre",
           all: "Tous les statuts",
         },
         status: {

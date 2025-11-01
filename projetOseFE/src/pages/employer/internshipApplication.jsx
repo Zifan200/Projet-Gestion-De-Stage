@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
@@ -6,6 +6,8 @@ import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
 import {ReasonModal} from "../../components/ui/reason-modal.jsx";
 import {Button} from "../../components/ui/button.jsx";
+import {Header} from "../../components/ui/header.jsx";
+import {Popover, PopoverClose, PopoverContent, PopoverTrigger} from "../../components/ui/popover.jsx";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
@@ -23,9 +25,25 @@ export const InternshipApplications = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
 
+    const statuses = {
+        PENDING: t("internshipApplications.status.pending"),
+        ACCEPTED: t("internshipApplications.status.accepted"),
+        REJECTED: t("internshipApplications.status.rejected"),
+        ALL: t("internshipApplications.filter.all"),
+    };
+    const ALL_INDEX = 3;
+    const PENDING_INDEX = 0;
+    const [currentStatus, setCurrentStatus] = useState(Object.entries(statuses)[PENDING_INDEX][0]);
+
     useEffect(() => {
         fetchApplications();
     }, []);
+
+    const filteredApplications = useMemo(() => {
+        const filtered = currentStatus === Object.entries(statuses)[ALL_INDEX][0] ?
+            applications : applications.filter((a) => a.status === currentStatus);
+        return [...filtered];
+    }, [currentStatus, applications]);
 
     const handleViewApplication = (application) => {
         setSelectedApplication(application);
@@ -44,13 +62,6 @@ export const InternshipApplications = () => {
     const handleRejectApplication = (application) => {
         setSelectedApplication(application);
         setIsReasonModalOpen(true);
-
-        /*try {
-            rejectApplication(user.token, application.id, reason);
-            toast.success(t("internshipApplications.toast.rejected"));
-        } catch {
-            toast.error(t("internshipApplications.toast.approveError"));
-        }*/
     };
 
     const handlePreviewCv = (application) => {
@@ -70,7 +81,60 @@ export const InternshipApplications = () => {
     };
 
     return (
-        <div className="p-10">
+        <div className="space-y-6">
+            <Header title={t("internshipApplications.title")} />
+
+            {/* Filtre */}
+            <Popover>
+                {({ open, setOpen, triggerRef, contentRef }) => (
+                    <>
+                        <PopoverTrigger
+                            open={open}
+                            setOpen={setOpen}
+                            triggerRef={triggerRef}
+                        >
+                          <span className="px-4 hover:bg-zinc-200 transition py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer">
+                            {t("internshipApplications.filter.filter")}:{" "}
+                              { currentStatus === "ALL" ?
+                                  t(`internshipApplications.filter.${Object.entries(statuses)[ALL_INDEX][0].toLowerCase()}`) :
+                                  t(`internshipApplications.status.${currentStatus.toLowerCase()}`)
+                              }
+                          </span>
+                        </PopoverTrigger>
+
+                        <PopoverContent open={open} contentRef={contentRef}>
+                            <div className="flex flex-col gap-2 min-w-[150px]">
+                                {Object.entries(statuses).map((status) => (
+                                    <button
+                                        key={status[0]}
+                                        onClick={() => {
+                                            setCurrentStatus(status[0]);
+                                            setOpen(false);
+                                        }}
+                                        className={`px-3 py-1 rounded text-left ${
+                                            currentStatus === status[0]
+                                                ? "bg-blue-100 font-semibold"
+                                                : "hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        {
+                                            status[0] === "ALL" ?
+                                                t(`internshipApplications.filter.${status[0].toLowerCase()}`) :
+                                                t(`internshipApplications.status.${status[0].toLowerCase()}`)
+                                        }
+                                    </button>
+                                ))}
+                                <PopoverClose setOpen={setOpen}>
+                                  <span className="text-sm text-gray-600">
+                                    {t("menu.close")}
+                                  </span>
+                                </PopoverClose>
+                            </div>
+                        </PopoverContent>
+                    </>
+                )}
+            </Popover>
+
             {/* Table des candidatures */}
             <div className="overflow-x-auto bg-white shadow rounded">
                 <table className="w-full text-sm text-left border-collapse">
@@ -85,7 +149,7 @@ export const InternshipApplications = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {applications.map((app) => (
+                    {filteredApplications.map((app) => (
                         <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
                             <td className="px-4 py-2">{app.internshipOfferTitle}</td>
                             <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
