@@ -15,6 +15,7 @@ export const AllOffers = () => {
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentOffers, setCurrentOffers] = useState([]);
+    const [selectedselectedOfferApplicationsList, setSelectedselectedOfferApplicationsList] = useState([]);
     const [rejectReason, setRejectReason] = useState("");
 
     const offerStatuses = {
@@ -40,9 +41,9 @@ export const AllOffers = () => {
     } = useOfferStore();
 
     const {
-        students,
-        error,
+        selectedOfferApplications,
         loadAllApplicationsFromInternshipOffer,
+        error,
     } = useGeStore();
 
     // --- Charger le store au montage ---
@@ -92,7 +93,14 @@ export const AllOffers = () => {
         try {
             await viewOffer(user.token, offerId);
             const {selectedOffer, isModalOpen} = useOfferStore.getState();
+
+
             setSelectedOffer(selectedOffer);
+            if(selectedOffer.status.toUpperCase() === offerStatuses.ACCEPTED.toUpperCase()) {
+                await loadAllApplicationsFromInternshipOffer(offerId);
+                setSelectedselectedOfferApplicationsList(selectedOfferApplications);
+            }
+
             setIsModalOpen(isModalOpen);
         } catch (err) {
             console.error(err);
@@ -173,7 +181,7 @@ export const AllOffers = () => {
         </tr>
     ));
 
-    function choseOfferStatus() {
+    function componentChoseOfferStatus() {
         return <>
             {/* Rejet */}
             <div className="mt-4">
@@ -208,10 +216,42 @@ export const AllOffers = () => {
         </>;
     }
 
-    function viewApplicants(){
+    //LIST d'applicaiton de l'offre selectionné
+    function componentViewOfferApplicationsList(){
         return <>
-            <div className="bg-amber-700">
-                <p>hola</p>
+            <div className="py-2 h-auto overflow-y-auto ">
+                {loading ? <p>{t("selectedOfferApplicationsList.loading")}</p> :
+                <>
+                    <h4 className="font-bold py-2">Les applications</h4>
+                    <Table
+                        headers={[
+                            t("selectedOfferApplicationsList.tableHeader.studentName"),
+                            t("selectedOfferApplicationsList.tableHeader.studentProgramme"),
+                            t("selectedOfferApplicationsList.tableHeader.applicationDate"),
+                            t("selectedOfferApplicationsList.tableHeader.details")
+                        ]}
+                        rows={
+                            selectedOfferApplications.map((application) => (
+                                <tr key={application.id} className="border-t border-gray-300">
+                                    <td className="px-4 py-2">{application.studentFirstName} {application.studentLastName}</td>
+                                    <td className="px-4 py-2">{application.studentProgrammeName}</td>
+                                    <td className="px-4 py-2">{application.createdAt}</td>
+                                    <td>
+                                        <Button
+                                            label={t("selectedOfferApplicationsList.tableHeader.details")}
+                                            onClick={() => {
+                                                setIsModalOpen(false);
+                                                setSelectedOffer(null);
+                                            }}
+                                        />
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                        emptyMessage={t("selectedOfferApplicationsList.noApplicants")}
+                    />
+                    </>
+                }
             </div>
         </>
     }
@@ -264,8 +304,8 @@ export const AllOffers = () => {
                         <p><strong>{t("offer.modal.status")}: </strong>{selectedOffer.status}</p>
 
 
-                        {(currentOfferStatus.toUpperCase() === offerStatuses.PENDING.toUpperCase()) && choseOfferStatus()}
-                        {(selectedOffer.status.toUpperCase() === offerStatuses.ACCEPTED.toUpperCase()) && viewApplicants()}
+                        {(selectedOffer.status.toUpperCase() === "PENDING") && componentChoseOfferStatus()}
+                        {(selectedOffer.status.toUpperCase() === "ACCEPTED") && componentViewOfferApplicationsList()}
 
                         <div className="flex w-auto justify-between mt-6 justify-end">
                             <button

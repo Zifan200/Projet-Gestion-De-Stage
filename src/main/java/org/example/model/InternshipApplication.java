@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -26,7 +27,7 @@ public class InternshipApplication {
     @Column(nullable = false)
     private ApprovalStatus status =  ApprovalStatus.PENDING;
 
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     private String reason;
 
@@ -40,7 +41,7 @@ public class InternshipApplication {
         this.offer = offer;
         this.selectedStudentCV = selectedStudentCV;
         this.status = status;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDate.now();
         this.reason = reason;
     }
 }

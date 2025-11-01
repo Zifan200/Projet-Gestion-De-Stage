@@ -20,6 +20,7 @@ public class InternshipApplicationResponseDTO {
     private String studentEmail;
     private String studentFirstName;
     private String studentLastName;
+    private String studentProgrammeName;
 
     private Long selectedCvID;
     private String selectedCvFileName;
@@ -33,21 +34,22 @@ public class InternshipApplicationResponseDTO {
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
     private ApprovalStatus status;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private String reason;
 
     @Builder
     public InternshipApplicationResponseDTO(
-            Long id, String studentEmail, String  studentFirstName, String studentLastName,
+            Long id, String studentEmail, String  studentFirstName, String studentLastName, String studentProgrammeName,
             Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferDescription,
             LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail,
-            ApprovalStatus status, LocalDateTime createdAt, String reason
+            ApprovalStatus status, LocalDate createdAt, String reason
     ){
         this.id = id;
         this.studentEmail = studentEmail;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
+        this.studentProgrammeName = studentProgrammeName;
         this.selectedCvID = selectedCvID;
         this.selectedCvFileName = selectedCvFileName;
         this.selectedCvFileSize = selectedCvFileSize;
@@ -71,6 +73,7 @@ public class InternshipApplicationResponseDTO {
                 .studentEmail(internshipApplication.getStudent().getEmail())
                 .studentFirstName(internshipApplication.getStudent().getFirstName())
                 .studentLastName(internshipApplication.getStudent().getLastName())
+                .studentProgrammeName(internshipApplication.getStudent().getProgram())
                 .employerEmail(internshipApplication.getOffer().getEmployer().getEmail())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())

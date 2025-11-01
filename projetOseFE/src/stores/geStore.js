@@ -5,7 +5,7 @@ import {internshipApplicationService} from "../services/internshipApplicationSer
 export const useGeStore = create(
     persist(
         (set, get) => ({
-            students:[],
+            selectedOfferApplications:[],
             cvs: [],
             downloadingId: null,
             loading: false,
@@ -61,7 +61,7 @@ export const useGeStore = create(
                 try{
                     set({loading: true, error: null });
                     const data = await internshipApplicationService.loadAllApplicationsFromInternshipOffer(offerId);
-                    set({students:data, loading: false});
+                    set({selectedOfferApplications:data, loading: false});
                 }catch (err){
                     set({error: err, loading: false});
                 }

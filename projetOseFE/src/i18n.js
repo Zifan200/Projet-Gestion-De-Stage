@@ -189,10 +189,11 @@ export const resources = {
           downloadError: "Error while downloading the resume",
         },
       },
-      gsManageApplicants: {
+      selectedOfferApplicationsList: {
         loading: "...loading",
-        title: "Internship Applicants",
-        noApplicants: "No students have applied for an internship.",
+        title: "Applications",
+        noApplicants: "No applications yet.",
+        numberOfApplicants: "number of applicants",
         filters:{
           studentNameFilters:{
             alphabetical:"a-z",
@@ -201,12 +202,9 @@ export const resources = {
         },
         tableHeader: {
           studentName: "name",
-          studentProgramme: "study program",
-          numberOfApplications: "number of applications",
-          actions: "actions"
-        },
-        btnLabels: {
-          applicationsList: "applications list",
+          studentProgramme: "student's program",
+          applicationDate:"application date",
+          details: "details"
         }
       },
 
@@ -636,6 +634,24 @@ export const resources = {
           downloadSuccess: "{{fileName}} téléchargé",
           downloadError: "Erreur lors du téléchargement du CV",
         },
+      },
+      selectedOfferApplicationsList: {
+        loading: "...chargement",
+        title: "Candidatures",
+        noApplicants: "Aucune candidature pour le moment.",
+        numberOfApplicants: "nombre de candidats",
+        filters: {
+          studentNameFilters: {
+            alphabetical: "a-z",
+            reverseAlphabetical: "z-a"
+          }
+        },
+        tableHeader: {
+          studentName: "nom",
+          studentProgramme: "programme de l'étudiant",
+          applicationDate: "date de postulation",
+          details: "détails"
+        }
       },
       offer: {
         title: "Créer une offre de stage",
