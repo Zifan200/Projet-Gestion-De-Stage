@@ -8,6 +8,7 @@ import {ReasonModal} from "../../components/ui/reason-modal.jsx";
 import {Button} from "../../components/ui/button.jsx";
 import {Header} from "../../components/ui/header.jsx";
 import {Popover, PopoverClose, PopoverContent, PopoverTrigger} from "../../components/ui/popover.jsx";
+import {Table} from "../../components/ui/table.jsx";
 
 export const InternshipApplications = () => {
     const { t } = useTranslation();
@@ -20,7 +21,6 @@ export const InternshipApplications = () => {
         closePreview,
     } = useCvStore();
     const user = useAuthStore((s) => s.user);
-    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
@@ -80,22 +80,76 @@ export const InternshipApplications = () => {
         }
     };
 
+    const rows = filteredApplications.map((app) => (
+        <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
+            <td className="px-4 py-2">{app.internshipOfferTitle}</td>
+            <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
+            <td className="px-4 py-2">{app.studentEmail}</td>
+            <td className="px-4 py-2">
+                {app.selectedCvFileName ? (
+                    <>
+                        <button
+                            className="text-blue-600 underline hover:text-blue-800 mr-2"
+                            onClick={() => handlePreviewCv(app)}
+                        >
+                            {app.selectedCvFileName}
+                        </button>
+                        <button
+                            className="text-green-600 underline hover:text-green-800"
+                            onClick={() => handleDownloadCv(app)}
+                        >
+                            {t("internshipApplications.table.download")}
+                        </button>
+                    </>
+                ) : (
+                    t("internshipApplications.table.noCv")
+                )}
+            </td>
+            <td className="px-4 py-2">
+                {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
+            </td>
+            <td className="px-4 py-2">
+                <Button
+                    label={t("internshipApplications.actions.view")}
+                    onClick={() => handleViewApplication(app)}
+                    className={"bg-blue-300 hover:bg-blue-100 rounded-lg"}
+                />
+                {app.status === "PENDING" &&
+                    <>
+                        <Button
+                            label={t("internshipApplications.actions.approve")}
+                            onClick={() => handleApproveApplication(app)}
+                            className={"w-1/2 rounded-lg"}
+                        />
+                        <Button
+                            label={t("internshipApplications.actions.reject")}
+                            onClick={() => handleRejectApplication(app)}
+                            className={"bg-red-300 hover:bg-red-400 w-1/2 rounded-lg"}
+                        />
+                    </>
+                }
+            </td>
+        </tr>
+    ));
+
     return (
         <div className="space-y-6">
-            <Header title={t("internshipApplications.title")} />
+            <Header title={t("internshipApplications.title")}/>
 
             {/* Filtre */}
             <Popover>
-                {({ open, setOpen, triggerRef, contentRef }) => (
+                {({open, setOpen, triggerRef, contentRef}) => (
                     <>
                         <PopoverTrigger
                             open={open}
                             setOpen={setOpen}
                             triggerRef={triggerRef}
                         >
-                          <span className="px-4 hover:bg-zinc-200 transition py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer">
+                          <span
+                              className="px-4 hover:bg-zinc-200 transition py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer">
                             {t("internshipApplications.filter.filter")}:{" "}
-                              { currentStatus === "ALL" ?
+                              {
+                                  currentStatus === "ALL" ?
                                   t(`internshipApplications.filter.${Object.entries(statuses)[ALL_INDEX][0].toLowerCase()}`) :
                                   t(`internshipApplications.status.${currentStatus.toLowerCase()}`)
                               }
@@ -136,73 +190,18 @@ export const InternshipApplications = () => {
             </Popover>
 
             {/* Table des candidatures */}
-            <div className="overflow-x-auto bg-white shadow rounded">
-                <table className="w-full text-sm text-left border-collapse">
-                    <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
-                    <tr>
-                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle") || "Offre"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.statusTitle") || "Statut"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredApplications.map((app) => (
-                        <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
-                            <td className="px-4 py-2">{app.internshipOfferTitle}</td>
-                            <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
-                            <td className="px-4 py-2">{app.studentEmail}</td>
-                            <td className="px-4 py-2">
-                                {app.selectedCvFileName ? (
-                                    <>
-                                        <button
-                                            className="text-blue-600 underline hover:text-blue-800 mr-2"
-                                            onClick={() => handlePreviewCv(app)}
-                                        >
-                                            {app.selectedCvFileName}
-                                        </button>
-                                        <button
-                                            className="text-green-600 underline hover:text-green-800"
-                                            onClick={() => handleDownloadCv(app)}
-                                        >
-                                            {t("internshipApplications.table.download")}
-                                        </button>
-                                    </>
-                                ) : (
-                                    t("internshipApplications.table.noCv")
-                                )}
-                            </td>
-                            <td className="px-4 py-2">
-                                {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
-                            </td>
-                            <td className="px-4 py-2">
-                                <Button
-                                    label={t("internshipApplications.actions.view")}
-                                    onClick={() => handleViewApplication(app)}
-                                    className={"bg-blue-300 hover:bg-blue-100 rounded-lg"}
-                                />
-                                { app.status === "PENDING" &&
-                                    <>
-                                        <Button
-                                            label={t("internshipApplications.actions.approve")}
-                                            onClick={() => handleApproveApplication(app)}
-                                            className={"w-1/2 rounded-lg"}
-                                        />
-                                        <Button
-                                            label={t("internshipApplications.actions.reject")}
-                                            onClick={() => handleRejectApplication(app)}
-                                            className={"bg-red-300 hover:bg-red-400 w-1/2 rounded-lg"}
-                                        />
-                                    </>
-                                }
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
+            <Table
+                headers={[
+                    t("internshipApplications.table.offerTitle"),
+                    t("internshipApplications.table.studentName"),
+                    t("internshipApplications.table.studentEmail"),
+                    t("internshipApplications.table.cv"),
+                    t("internshipApplications.table.statusTitle"),
+                    t("internshipApplications.table.action")
+                ]}
+                rows={rows}
+                emptyMessage={t("internshipApplications.table.noApplications")}
+            />
 
             {/* Preview CV */}
             {previewUrl && (
