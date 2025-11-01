@@ -46,8 +46,8 @@ function App() {
             icon: BackpackIcon,
         },
         {
-            key: "seeStudentsWhoApplied",
-            label: t("menu.seeStudents"),
+            key: "manageApplicants",
+            label: t("menu.manageApplicants"),
             href: "/dashboard/gs/student-with-applications",
             icon: PersonIcon,
         },

@@ -2,7 +2,7 @@ import {create} from "zustand";
 import {persist} from "zustand/middleware";
 import {geService} from "../services/geService.js";
 import {internshipApplicationService} from "../services/internshipApplicationService.js"
-const useGeStore = create(
+export const useGeStore = create(
     persist(
         (set, get) => ({
             students:[],
@@ -65,7 +65,7 @@ const useGeStore = create(
                 }catch (err){
                     set({error: err, loading: false});
                 }
-            }
+            },
         }),
         {name: "ge-storage"},
     ),

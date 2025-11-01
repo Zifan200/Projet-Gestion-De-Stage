@@ -82,6 +82,7 @@ export const resources = {
         applicationSend: "Application send",
         allOffers: "All offers",
         manageCvs: "Submitted CV",
+        manageApplicants: "Internship Applicants",
         applications: "Internship Applications",
         settings: "Settings",
       },
@@ -132,7 +133,6 @@ export const resources = {
           min: "The reason must be at least 10 characters long.",
         },
       },
-      gsManageStudentsWithApplications: {},
       gsManageCvs: {
         title: "Student Resume Management",
         filter: "Filter",
@@ -167,21 +167,27 @@ export const resources = {
           downloadError: "Error while downloading the resume",
         },
       },
-      gsStudentsWithApplications:{
-          loading:"...loading",
-        title: "All student internship applicants",
-          noApplicants:"no student internship applicants",
-          tableHeader:{
-            studentName:"student name",
-              studentProgramme:"student programme",
-              numberOfApplications:"number of applications",
-              applications:"applications"
-          },
-          btnLabels:{
-            detail:"details",
-              listApplications:"list"
+      gsManageApplicants: {
+        loading: "...loading",
+        title: "Internship Applicants",
+        noApplicants: "No students have applied for an internship.",
+        filters:{
+          studentNameFilters:{
+            alphabetical:"a-z",
+            reverseAlphabetical:"z-a"
           }
+        },
+        tableHeader: {
+          studentName: "name",
+          studentProgramme: "study program",
+          numberOfApplications: "number of applications",
+          actions: "actions"
+        },
+        btnLabels: {
+          details: "details",
+        }
       },
+
       offer: {
         title: "Create an internship offer",
         description: "Fill in the details to publish a new offer.",
@@ -492,6 +498,7 @@ export const resources = {
         offerConfirm: "Offres signer",
         allOffers: "Toutes les offres",
         manageCvs: "CV soumis",
+        manageApplicants: "Les candidats stagiaires",
         applications: "Candidatures de stage",
         settings: "Paramètres",
       },
@@ -585,6 +592,26 @@ export const resources = {
           downloadSuccess: "{{fileName}} téléchargé",
           downloadError: "Erreur lors du téléchargement du CV",
         },
+      },
+      gsManageApplicants:{
+        loading:"...chargement",
+        title: "Les candidats stagiaires",
+        noApplicants:"Aucun étudiant n'a postulé pour un stage.",
+        filters:{
+          studentNameFilters:{
+            alphabetical:"a-z",
+            reverseAlphabetical:"z-a"
+          }
+        },
+        tableHeader:{
+          studentName:"nom",
+          studentProgramme:"programme d'études",
+          numberOfApplications:"nombre de postulations",
+          actions:"actions"
+        },
+        btnLabels:{
+          details:"détails",
+        }
       },
       offer: {
         title: "Créer une offre de stage",
