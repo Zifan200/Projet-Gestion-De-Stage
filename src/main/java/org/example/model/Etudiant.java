@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class Etudiant extends UserApp {
     private List<CV> cv = new ArrayList<>();
 
     @OneToMany(mappedBy = "student")
-    private Set<InternshipApplication> applications;
+    private Set<InternshipApplication> applications = new HashSet<>();
 
     @Builder
     public Etudiant(Long id, String firstName, String lastName, String email, String password, boolean active

@@ -3,7 +3,6 @@ package org.example.presentation;
 import lombok.RequiredArgsConstructor;
 import org.example.service.CVService;
 import org.example.service.InternshipApplicationService;
-import org.example.service.StudentService;
 import org.example.service.dto.cv.CvDownloadDTO;
 import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.dto.cv.CvStatusDTO;
