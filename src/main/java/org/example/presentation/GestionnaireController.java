@@ -2,9 +2,12 @@ package org.example.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.CVService;
+import org.example.service.InternshipApplicationService;
+import org.example.service.StudentService;
 import org.example.service.dto.cv.CvDownloadDTO;
 import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.dto.cv.CvStatusDTO;
+import org.example.service.dto.student.EtudiantDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import java.util.List;
 public class GestionnaireController {
 
     private final CVService cvService;
+    private final InternshipApplicationService internshipApplicationService;
 
     @GetMapping("/list")
     public ResponseEntity<List<CvResponseDTO>> listAllCvs() {
@@ -53,4 +57,12 @@ public class GestionnaireController {
                 .header("Content-Type", dto.getFileType())
                 .body(dto.getData());
     }
+
+    @GetMapping("/get-all/students/with-application")
+    public ResponseEntity<List<EtudiantDTO>> getAllStudentsWithApplication() {
+        return ResponseEntity.ok(
+                internshipApplicationService.getAllStudentsAppliedToAInternshipOffer()
+        );
+    }
+
 }

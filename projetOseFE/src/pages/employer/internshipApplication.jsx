@@ -54,7 +54,7 @@ export const InternshipApplications = () => {
                         <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
                         <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
                         <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.status") || "Statut"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.statusTitle") || "Statut"}</th>
                         <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
                     </tr>
                     </thead>
@@ -84,7 +84,9 @@ export const InternshipApplications = () => {
                                     t("internshipApplications.table.noCv")
                                 )}
                             </td>
-                            <td className="px-4 py-2">{app.status}</td>
+                            <td className="px-4 py-2">
+                                {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
+                            </td>
                             <td className="px-4 py-2">
                                 <button
                                     className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
@@ -138,11 +140,32 @@ export const InternshipApplications = () => {
                         <h2 className="text-xl font-semibold mb-4">
                             {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
                         </h2>
-                        <p><strong>{t("internshipApplications.modal.email") || "Email"}:</strong> {selectedApplication.studentEmail}</p>
-                        <p><strong>{t("internshipApplications.modal.cv") || "CV"}:</strong> {selectedApplication.selectedCvFileName || "Aucun CV"}</p>
-                        <p><strong>{t("internshipApplications.modal.offerTitle") || "Offre"}:</strong> {selectedApplication.internshipOfferTitle}</p>
-                        <p><strong>{t("internshipApplications.modal.status") || "Statut"}:</strong> {selectedApplication.status}</p>
-                        <p><strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}:</strong> {new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.email") || "Email"}: </strong>
+                            {selectedApplication.studentEmail}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.cv") || "CV"}: </strong>
+                            {selectedApplication.selectedCvFileName || "Aucun CV"}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}: </strong>
+                            {selectedApplication.internshipOfferTitle}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}: </strong>
+                            {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.statusTitle") || "Statut"}: </strong>
+                            {t(`internshipApplications.modal.status.${selectedApplication.status.toLowerCase()}`)}
+                        </p>
+                        {selectedApplication.status === "REJECTED" &&
+                            <p>
+                                <strong>{t("internshipApplications.modal.reason") || "Raison"}: </strong>
+                                {selectedApplication.reason}
+                            </p>
+                        }
 
                         <div className="mt-6 flex justify-end">
                             <button
