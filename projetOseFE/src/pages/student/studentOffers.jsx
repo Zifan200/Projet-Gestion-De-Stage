@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
-import {useStudentStore} from "../../stores/studentStore.js";
-import {Table} from "../../components/ui/table.jsx";
-import {Header} from "../../components/ui/header.jsx";
+import { useStudentStore } from "../../stores/studentStore.js";
+import { Table } from "../../components/ui/table.jsx";
+import { Header } from "../../components/ui/header.jsx";
 
 export const StudentOffers = () => {
     const { t } = useTranslation();
@@ -15,21 +15,22 @@ export const StudentOffers = () => {
 
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [filterSession, setFilterSession] = useState("All");
+    const [filterYear, setFilterYear] = useState("All");
+    const [selectedCv, setSelectedCv] = useState(null);
 
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-    const { offers, loading, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
-    const { cvs, loadCvs, applyCvStore } = useCvStore(); // <- ici le nom correspond au store
+    const { offers, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
+    const { cvs, loadCvs, applyCvStore } = useCvStore();
     const { applications, loadAllApplications } = useStudentStore();
-
-    const [selectedCv, setSelectedCv] = useState(null); // CV choisi pour postuler
 
     useEffect(() => {
         if (!isAuthenticated || !user) navigate("/");
         else {
             loadOffersSummary();
-            loadCvs(); // charge les CV dès que le composant est monté
+            loadCvs();
             loadAllApplications();
         }
     }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs, loadAllApplications]);
@@ -63,38 +64,49 @@ export const StudentOffers = () => {
             return;
         }
         try {
-            await applyCvStore(selectedOffer.id, selectedCv.id); // <- utiliser applyCvStore ici
+            await applyCvStore(selectedOffer.id, selectedCv.id);
             toast.success(t("studentOffers.success.applyOffer"));
             setIsModalOpen(false);
             setSelectedOffer(null);
             setSelectedCv(null);
         } catch (err) {
             console.error(err);
-            toast.error(t("studentOffers.errors.applyOffer"))
+            toast.error(t("studentOffers.errors.applyOffer"));
         }
         loadAllApplications();
     };
 
-    const rows = () => {
-        if (applications.length === offers.length) return [];
+    const filteredOffers = useMemo(() => {
+        let filtered = offers;
+        if (filterSession && filterSession !== "All") {
+            filtered = filtered.filter((offer) => offer.session === filterSession);
+        }
+        if (filterYear && filterYear !== "All") {
+            filtered = filtered.filter(
+                (offer) =>
+                    offer.startDate &&
+                    new Date(offer.startDate).getFullYear().toString() === filterYear
+            );
+        }
+        return filtered;
+    }, [offers, filterSession, filterYear]);
 
-        return offers.map((offer) => (
-            !applications.find((a) => a.internshipOfferId === offer.id) &&
+    const rows = filteredOffers
+        .filter((offer) => !applications.find((a) => a.internshipOfferId === offer.id))
+        .map((offer) => (
             <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
                 <td className="px-4 py-2">{offer.title}</td>
                 <td className="px-4 py-2">{offer.enterpriseName}</td>
                 <td className="px-4 py-2">
-                    {offer.expirationDate ? new Date(offer.expirationDate).toLocaleDateString() : "-"}
+                    {offer.startDate ? new Date(offer.startDate).toLocaleDateString() : "-"}
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 flex gap-2">
                     <button
                         className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
                         onClick={() => handleViewOffer(offer.id)}
                     >
                         {t("studentOffers.actions.view") || "View"}
                     </button>
-                </td>
-                <td className="px-4 py-2">
                     <button
                         className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
                         onClick={() => handleDownload(offer.id)}
@@ -104,22 +116,59 @@ export const StudentOffers = () => {
                 </td>
             </tr>
         ));
-    };
+
+    const availableYears = useMemo(() => {
+        const years = new Set();
+        offers.forEach((offer) => {
+            if (offer.startDate) years.add(new Date(offer.startDate).getFullYear());
+        });
+        return ["All", ...Array.from(years).sort()];
+    }, [offers]);
 
     return (
-        <div className="space-y-6">
-            <Header title={"Offers"} />
+        <div className="space-y-6 p-10">
+            <div className="flex items-center justify-between mb-4">
+                <h1 className="text-2xl font-bold">{t("studentOffers.title")}</h1>
 
-            {/* Table des offres */}
-            {/*<div className="overflow-x-auto bg-white shadow rounded">*/}
+                <div className="flex gap-4">
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
+                        <select
+                            className="rounded border border-zinc-300 p-1"
+                            value={filterSession}
+                            onChange={(e) => setFilterSession(e.target.value)}
+                        >
+                            <option value="All">{t("offer.session.all")}</option>
+                            <option value="Automne">{t("offer.session.autumn")}</option>
+                            <option value="Hiver">{t("offer.session.winter")}</option>
+                        </select>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">{t("offer.filter.year")}:</label>
+                        <select
+                            className="rounded border border-zinc-300 p-1"
+                            value={filterYear}
+                            onChange={(e) => setFilterYear(e.target.value)}
+                        >
+                            {availableYears.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {/* Tableau des offres */}
             <Table
                 headers={[
                     t("studentOffers.table.title"),
                     t("studentOffers.table.company"),
                     t("studentOffers.table.deadline"),
-                    t("studentOffers.table.action")
+                    t("studentOffers.table.action"),
                 ]}
-                rows={rows()}
+                rows={rows}
                 emptyMessage={t("studentOffers.noOffers")}
             />
 
@@ -128,11 +177,30 @@ export const StudentOffers = () => {
                 <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
                         <h2 className="text-xl font-semibold mb-4">{selectedOffer.title}</h2>
-                        <p><strong>{t("studentOffers.modal.companyEmail")}:</strong> {selectedOffer.employerEmail}</p>
-                        <p><strong>{t("studentOffers.modal.targetedProgramme")}:</strong> {selectedOffer.targetedProgramme}</p>
-                        <p><strong>{t("studentOffers.modal.publishedDate")}:</strong> {selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
-                        <p><strong>{t("studentOffers.modal.deadline")}:</strong> {selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}</p>
-                        <p><strong>{t("studentOffers.modal.description")}:</strong> {selectedOffer.description}</p>
+                        <p>
+                            <strong>{t("studentOffers.modal.companyEmail")}:</strong>{" "}
+                            {selectedOffer.employerEmail}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.targetedProgramme")}:</strong>{" "}
+                            {selectedOffer.targetedProgramme}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.publishedDate")}:</strong>{" "}
+                            {selectedOffer.publishedDate
+                                ? new Date(selectedOffer.publishedDate).toLocaleDateString()
+                                : "-"}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.deadline")}:</strong>{" "}
+                            {selectedOffer.expirationDate
+                                ? new Date(selectedOffer.expirationDate).toLocaleDateString()
+                                : "-"}
+                        </p>
+                        <p>
+                            <strong>{t("studentOffers.modal.description")}:</strong>{" "}
+                            {selectedOffer.description}
+                        </p>
 
                         {/* Sélecteur de CV */}
                         <div className="mt-4">
@@ -142,12 +210,16 @@ export const StudentOffers = () => {
                             <select
                                 className="w-full border rounded px-2 py-1"
                                 value={selectedCv?.id || ""}
-                                onChange={(e) => setSelectedCv(cvs.find(cv => cv.id.toString() === e.target.value))}
+                                onChange={(e) =>
+                                    setSelectedCv(
+                                        cvs.find((cv) => cv.id.toString() === e.target.value)
+                                    )
+                                }
                             >
                                 <option value="">-- {t("studentOffers.modal.chooseCv")} --</option>
                                 {cvs
-                                    .filter(cv => cv.status === "ACCEPTED")
-                                    .map(cv => (
+                                    .filter((cv) => cv.status === "ACCEPTED")
+                                    .map((cv) => (
                                         <option key={cv.id} value={cv.id}>
                                             {cv.name || cv.fileName}
                                         </option>
@@ -155,16 +227,19 @@ export const StudentOffers = () => {
                             </select>
                         </div>
 
-                        {/* Boutons Apply et Close */}
+                        {/* Boutons */}
                         <div className="mt-6 flex justify-between">
                             <button
-                                className={`px-4 py-2 rounded text-white ${selectedCv ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"}`}
+                                className={`px-4 py-2 rounded text-white ${
+                                    selectedCv
+                                        ? "bg-green-500 hover:bg-green-600"
+                                        : "bg-gray-400 cursor-not-allowed"
+                                }`}
                                 onClick={handleApply}
                                 disabled={!selectedCv}
                             >
                                 {t("studentOffers.modal.apply")}
                             </button>
-
                             <button
                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                 onClick={() => {
@@ -180,5 +255,6 @@ export const StudentOffers = () => {
                 </div>
             )}
         </div>
+
     );
 };
