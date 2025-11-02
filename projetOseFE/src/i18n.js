@@ -90,7 +90,7 @@ export const resources = {
         student: "Student",
         manager: "Manager",
         employer: "Employer",
-        cvs: "My cv's",
+        cvs: "My Resumes",
         post: "Postulation",
         //myOffer: "My offer",
         lastActivity: "Last activity",
