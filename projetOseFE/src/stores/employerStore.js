@@ -6,7 +6,7 @@ export const useEmployerStore = create()(
     devtools(
         (set, get) => ({
             employers: [],
-            applications: [], // <-- toutes les candidatures de l'employeur
+            applications: [],
             loading: false,
             error: null,
 

@@ -482,4 +482,3 @@ export const AllOffers = () => {
     </div>
   );
 };
-

@@ -18,18 +18,28 @@ public class InternshipOfferListDto {
     private String targetedProgramme;
     private ApprovalStatus status;
     private String reason;
+    private Integer applicationCount;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String session;
 
-
-    public static InternshipOfferListDto create(InternshipOffer internshipOffers) {
+    public static InternshipOfferListDto create(InternshipOffer internshipOffer) {
         return InternshipOfferListDto.builder()
-                .id(internshipOffers.getId())
-                .title(internshipOffers.getTitle())
-                .enterpriseName("N/A")
-                .expirationDate(internshipOffers.getExpirationDate())
-                .targetedProgramme(internshipOffers.getTargetedProgramme())
-                .status(internshipOffers.getStatus())
-                .reason(internshipOffers.getReason())
+                .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
+                .enterpriseName(
+                        internshipOffer.getEmployer() != null && internshipOffer.getEmployer().getEnterpriseName() != null
+                                ? internshipOffer.getEmployer().getEnterpriseName()
+                                : "N/A"
+                )
+                .description(internshipOffer.getDescription())
+                .expirationDate(internshipOffer.getExpirationDate())
+                .targetedProgramme(internshipOffer.getTargetedProgramme())
+                .status(internshipOffer.getStatus())
+                .reason(internshipOffer.getReason())
+                .startDate(internshipOffer.getStartDate())
+                .endDate(internshipOffer.getEndDate())
+                .session(internshipOffer.getSession())
                 .build();
     }
-    private Integer applicationCount;
 }

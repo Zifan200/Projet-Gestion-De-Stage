@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -27,13 +28,14 @@ public class InternshipApplication {
     private ApprovalStatus status =  ApprovalStatus.PENDING;
 
     private LocalDateTime createdAt;
+    private String session;
+    private LocalDate startDate;
 
     private String reason;
 
     @Builder
     public InternshipApplication(
-            Long id, Etudiant student, InternshipOffer offer,
-            CV selectedStudentCV, ApprovalStatus status, String reason
+            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status, String session, LocalDate startDate
     ){
         this.id = id;
         this.student = student;
@@ -41,6 +43,8 @@ public class InternshipApplication {
         this.selectedStudentCV = selectedStudentCV;
         this.status = status;
         this.createdAt = LocalDateTime.now();
+        this.session = session;
+        this.startDate = startDate;
         this.reason = reason;
     }
 }
