@@ -38,10 +38,13 @@ public class InternshipOffer {
     private ApprovalStatus status = ApprovalStatus.PENDING;
 
     private String reason;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String session;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, LocalDate startDate, LocalDate endDate, String session
     ){
         this.id = id;
         this.title = title;
@@ -54,5 +57,8 @@ public class InternshipOffer {
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
         this.status = status != null ? status : ApprovalStatus.PENDING;
         this.reason = reason;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.session = session;
     }
 }

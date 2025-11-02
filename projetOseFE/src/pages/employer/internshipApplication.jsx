@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
@@ -15,12 +15,15 @@ export const InternshipApplications = () => {
         downloadCvForEmployer,
         closePreview,
     } = useCvStore();
+
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [filterSession, setFilterSession] = useState("All");
+    const [filterYear, setFilterYear] = useState("All");
 
     useEffect(() => {
         fetchApplications();
-    }, []);
+    }, [fetchApplications]);
 
     const handleViewApplication = (application) => {
         setSelectedApplication(application);
@@ -43,8 +46,70 @@ export const InternshipApplications = () => {
         }
     };
 
+    // 🔹 Filtrage par session et année
+    const filteredApplications = useMemo(() => {
+        let filtered = applications;
+
+        if (filterSession !== "All") {
+            filtered = filtered.filter((a) => a.session === filterSession);
+        }
+
+        if (filterYear !== "All") {
+            filtered = filtered.filter((a) => {
+                const date = a.startDate ? new Date(a.startDate) : new Date(a.createdAt);
+                return date.getFullYear().toString() === filterYear;
+            });
+        }
+
+        return filtered;
+    }, [applications, filterSession, filterYear]);
+
+    // 🔹 Extraire dynamiquement les années disponibles
+    const availableYears = useMemo(() => {
+        const years = new Set();
+        applications.forEach((a) => {
+            const date = a.startDate ? new Date(a.startDate) : new Date(a.createdAt);
+            if (!isNaN(date)) years.add(date.getFullYear().toString());
+        });
+        return Array.from(years).sort();
+    }, [applications]);
+
     return (
-        <div className="p-10">
+        <div className="p-10 space-y-6">
+            {/* 🔹 Filtres en haut à droite */}
+            <div className="flex justify-end mb-4 gap-6">
+                {/* Filtre Session */}
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
+                    <select
+                        className="rounded border border-zinc-300 p-1"
+                        value={filterSession}
+                        onChange={(e) => setFilterSession(e.target.value)}
+                    >
+                        <option value="All">{t("offer.session.all")}</option>
+                        <option value="Automne">{t("offer.session.autumn")}</option>
+                        <option value="Hiver">{t("offer.session.winter")}</option>
+                    </select>
+                </div>
+
+                {/* Filtre Année */}
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">Filter by year:</label>
+                    <select
+                        className="rounded border border-zinc-300 p-1"
+                        value={filterYear}
+                        onChange={(e) => setFilterYear(e.target.value)}
+                    >
+                        <option value="All">{t("offer.session.year")}</option>
+                        {availableYears.map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             {/* Table des candidatures */}
             <div className="overflow-x-auto bg-white shadow rounded">
                 <table className="w-full text-sm text-left border-collapse">
@@ -59,7 +124,7 @@ export const InternshipApplications = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {applications.map((app) => (
+                    {filteredApplications.map((app) => (
                         <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
                             <td className="px-4 py-2">{app.internshipOfferTitle}</td>
                             <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
@@ -92,9 +157,8 @@ export const InternshipApplications = () => {
                                     className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
                                     onClick={() => handleViewApplication(app)}
                                 >
-                                    {t("internshipApplications.table.actionView") || "Voir"}
+                                    {t("internshipApplications.table.actionView")}
                                 </button>
-
                             </td>
                         </tr>
                     ))}
@@ -175,7 +239,7 @@ export const InternshipApplications = () => {
                                     setSelectedApplication(null);
                                 }}
                             >
-                                {t("internshipApplications.modal.close") || "Fermer"}
+                                {t("internshipApplications.modal.close")}
                             </button>
                         </div>
                     </div>

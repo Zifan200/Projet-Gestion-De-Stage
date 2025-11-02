@@ -1,6 +1,5 @@
 package org.example.service.dto.internshipApplication;
 
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -32,18 +31,35 @@ public class InternshipApplicationResponseDTO {
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
+
     private ApprovalStatus status;
     private LocalDateTime createdAt;
+    private LocalDate startDate;
+    private String session;
     private String reason;
 
     @Builder
     public InternshipApplicationResponseDTO(
-            Long id, String studentEmail, String  studentFirstName, String studentLastName,
-            Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
-            Long internshipOfferId, String internshipOfferTitle, String internshipOfferDescription,
-            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail,
-            ApprovalStatus status, LocalDateTime createdAt, String reason
-    ){
+            Long id,
+            String studentEmail,
+            String studentFirstName,
+            String studentLastName,
+            Long selectedCvID,
+            String selectedCvFileName,
+            Long selectedCvFileSize,
+            byte[] selectedCvFileData,
+            Long internshipOfferId,
+            String internshipOfferTitle,
+            String internshipOfferDescription,
+            LocalDate internshipOfferPublishedDate,
+            LocalDate internshipOfferExpirationDate,
+            String employerEmail,
+            ApprovalStatus status,
+            LocalDateTime createdAt,
+            LocalDate startDate,
+            String session,
+            String reason
+    ) {
         this.id = id;
         this.studentEmail = studentEmail;
         this.studentFirstName = studentFirstName;
@@ -60,12 +76,12 @@ public class InternshipApplicationResponseDTO {
         this.employerEmail = employerEmail;
         this.status = status;
         this.createdAt = createdAt;
+        this.startDate = startDate;
+        this.session = session;
         this.reason = reason;
     }
-    //
-    //added application details for the next backend prog or front end warrior (idk if it helps)
-    //
-    public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication){
+
+    public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication) {
         return InternshipApplicationResponseDTO.builder()
                 .id(internshipApplication.getId())
                 .studentEmail(internshipApplication.getStudent().getEmail())
@@ -77,13 +93,14 @@ public class InternshipApplicationResponseDTO {
                 .selectedCvFileName(internshipApplication.getSelectedStudentCV().getFileName())
                 .selectedCvFileSize(internshipApplication.getSelectedStudentCV().getFileSize())
                 .selectedCvFileData(internshipApplication.getSelectedStudentCV().getData())
-                .internshipOfferId(internshipApplication.getOffer().getId())
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
                 .status(internshipApplication.getStatus())
                 .createdAt(internshipApplication.getCreatedAt())
+                .startDate(internshipApplication.getStartDate())
+                .session(internshipApplication.getSession())
                 .reason(internshipApplication.getReason())
                 .build();
     }

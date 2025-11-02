@@ -211,7 +211,12 @@ export const resources = {
           description: "Description",
           program: "Targeted Program",
           email: "Employer Email",
-          deadline: "Deadline",
+          deadline: "Offer Expiration Date",
+          startDate: "Offer Start Date",
+          expiration_before_start: "Expiration date must be before start date.",
+          end_after_start: "End date must be after start date.",
+          endDate: "Offer End Date",
+          expiration_not_past: "Expiration date cannot be in the past.",
           placeholders: {
             title: "Ex: Internship at the Health Research Institute",
             description: "Ex: Computer science internship in the medical field",
@@ -241,6 +246,7 @@ export const resources = {
           noOffers: "No offers published yet.",
           loading: "Loading...",
           reason: "Reason for rejection",
+          description: "Description",
         },
 
         modal: {
@@ -263,10 +269,20 @@ export const resources = {
 
         filter: {
           status: "Filter by status",
+          session: "Filter by session",
+          //session_automne: "Fall",
+          //session_hiver: "Winter",
           all: "All statuses",
+          year: "Filter by year",
           program: {
             all: "All programs",
           },
+        },
+        session: {
+          all: "All sessions",
+          autumn: "Autumn",
+          winter: "Winter",
+          year: "all years"
         },
 
         sort: {
@@ -639,7 +655,12 @@ export const resources = {
           description: "Description",
           program: "Programme visé",
           email: "Courriel de l'employeur",
-          deadline: "Date limite",
+          deadline: "Date d'expiration de l'offre",
+          startDate: "Date de début de l'offre",
+          endDate: "Date de fin de l'offre",
+          expiration_before_start: "La date d'expiration doit être avant la date de début.",
+          end_after_start: "La date de fin doit être après la date de début.",
+          expiration_not_past: "La date d'expiration ne peut pas être dans le passé.",
           placeholders: {
             title: "Ex : Stage à l'institut de recherche en santé",
             description: "Ex : Stage en informatique dans le domaine médical",
@@ -654,6 +675,7 @@ export const resources = {
           program_required: "Un programme est obligatoire.",
           invalid_email: "Courriel invalide.",
           expiration_required: "Une date limite est obligatoire.",
+          endDate_after_startDate: "La date de fin doit être postérieure à la date de début.",
         },
 
         table: {
@@ -669,6 +691,7 @@ export const resources = {
           noOffers: "Aucune offre publiée pour le moment.",
           loading: "Chargement...",
           reason: "Raison du refus",
+          description: "Description",
         },
 
         modal: {
@@ -691,10 +714,19 @@ export const resources = {
 
         filter: {
           status: "Filtrer par statut",
+          session: "Filtrer par session",
+          //session_automne: "Automne",
+          //session_hiver: "Hiver",
+          year: "Filtrer par année",
           all: "Tous les statuts",
           program: {
             all: "Tous les programmes",
           },
+        },
+        session: {
+          all: "Toutes les sessions",
+          autumn: "Automne",
+          winter: "Hiver"
         },
 
         sort: {

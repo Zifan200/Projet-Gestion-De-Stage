@@ -19,6 +19,7 @@ import java.time.LocalDate;
 @Builder
 public class InternshipOfferDto {
     private Long id;
+
     @NotBlank(message = "required: title")
     @Size(min = 4)
     @NotEmpty
@@ -37,16 +38,20 @@ public class InternshipOfferDto {
     private String employerEmail;
 
     private LocalDate publishedDate;
-
     private LocalDate expirationDate;
 
     @Builder.Default
     private ApprovalStatus status = ApprovalStatus.PENDING;
+
     private String reason;
+    private LocalDate startDate;
+    private LocalDate EndDate;
+    private String session;
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason) {
+                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
+                              ApprovalStatus status, String reason, LocalDate startDate, LocalDate EndDate, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -56,11 +61,15 @@ public class InternshipOfferDto {
         this.expirationDate = expirationDate;
         this.status = status;
         this.reason = reason;
+        this.startDate = startDate;
+        this.EndDate = EndDate;
+        this.session = session;
     }
 
     @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status) {
+                              Employer employer, LocalDate publishedDate, LocalDate expirationDate,
+                              ApprovalStatus status, LocalDate startDate, LocalDate EndDate, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -69,11 +78,15 @@ public class InternshipOfferDto {
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.startDate = startDate;
+        this.EndDate = EndDate;
+        this.session = session;
     }
 
     @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status) {
+                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate,
+                              ApprovalStatus status, LocalDate startDate, LocalDate EndDate, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -82,9 +95,12 @@ public class InternshipOfferDto {
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.startDate = startDate;
+        this.EndDate = EndDate;
+        this.session = session;
     }
 
-    public InternshipOfferDto(){}
+    public InternshipOfferDto() {}
 
     public static InternshipOfferDto create(InternshipOffer internshipOffer) {
         return InternshipOfferDto.builder()
@@ -97,6 +113,9 @@ public class InternshipOfferDto {
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
                 .reason(internshipOffer.getReason())
+                .startDate(internshipOffer.getStartDate())
+                .EndDate(internshipOffer.getEndDate())
+                .session(internshipOffer.getSession())
                 .build();
     }
 
