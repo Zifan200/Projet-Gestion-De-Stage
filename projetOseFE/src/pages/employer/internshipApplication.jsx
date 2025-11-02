@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
-import {FormTemplate} from "../../components/ui/form-template.jsx";
 import {FormProvider, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {authService} from "../../services/authService.js";
