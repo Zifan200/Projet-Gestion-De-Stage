@@ -1,3 +1,4 @@
+
 import { useTranslation } from "react-i18next";
 import { Table } from "../../components/ui/table.jsx";
 import { Header } from "../../components/ui/header.jsx";
@@ -33,6 +34,8 @@ export const AllOffers = () => {
     offerStatuses.ALL,
   );
   const [currentProgram, setCurrentProgram] = useState(null);
+  const [currentSession, setCurrentSession] = useState("All");
+  const [currentYear, setCurrentYear] = useState("All");
 
   const {
     offers,
@@ -67,6 +70,8 @@ export const AllOffers = () => {
   }, [
     currentOfferStatus,
     currentProgram,
+    currentSession,
+    currentYear,
     offers,
     pendingOffers,
     acceptedOffers,
@@ -91,13 +96,37 @@ export const AllOffers = () => {
     }
 
     let filtered = listToFilter;
-    if (currentProgram && currentProgram !== t("programAll")) {
-      filtered = listToFilter.filter(
-        (o) => o.targetedProgramme === currentProgram,
-      );
+
+    // Filter by program
+    if (currentProgram) {
+      filtered = filtered.filter((o) => o.targetedProgramme === currentProgram);
     }
+
+    // Filter by session
+    if (currentSession !== "All") {
+      filtered = filtered.filter((o) => o.session === currentSession);
+    }
+
+    // Filter by year
+    if (currentYear !== "All") {
+      filtered = filtered.filter((o) => {
+        if (!o.startDate) return false;
+        const year = new Date(o.startDate).getFullYear();
+        return year.toString() === currentYear;
+      });
+    }
+
     setCurrentOffers(filtered);
   };
+
+  // Extract available years
+  const availableYears = Array.from(
+    new Set(
+      offers
+        .filter((o) => o.startDate)
+        .map((o) => new Date(o.startDate).getFullYear())
+    )
+  ).sort((a, b) => b - a);
 
   const openOffer = async (offerId) => {
     try {
@@ -212,6 +241,7 @@ export const AllOffers = () => {
 
       {/* Filters */}
       <div className="flex items-center gap-4">
+        {/* Status Filter */}
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
             <>
@@ -253,6 +283,7 @@ export const AllOffers = () => {
           )}
         </Popover>
 
+        {/* Program Filter */}
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
             <>
@@ -307,25 +338,61 @@ export const AllOffers = () => {
             </>
           )}
         </Popover>
+
+        {/* Session and Year Filters */}
+        <div className="ml-auto flex items-center gap-4">
+          {/* Session Filter */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">
+              {t("filter.session")}:
+            </label>
+            <select
+              className="rounded border border-zinc-300 p-1"
+              value={currentSession}
+              onChange={(e) => setCurrentSession(e.target.value)}
+            >
+              <option value="All">{t("session.all")}</option>
+              <option value="Automne">{t("session.autumn")}</option>
+              <option value="Hiver">{t("session.winter")}</option>
+            </select>
+          </div>
+
+          {/* Year Filter */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">
+              {t("filter.year")}:
+            </label>
+            <select
+              className="rounded border border-zinc-300 p-1"
+              value={currentYear}
+              onChange={(e) => setCurrentYear(e.target.value)}
+            >
+              <option value="All">{t("session.year")}</option>
+              {availableYears.map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       {loading ? (
         <p>{t("table.loading")}</p>
       ) : (
-        <>
-          <Table
-            headers={[
-              t("table.offerTitle"),
-              t("table.enterprise"),
-              t("table.program"),
-              t("table.status"),
-              t("table.deadline"),
-              t("actions.view"),
-            ]}
-            rows={tableRows()}
-            emptyMessage={t("table.noOffers")}
-          />
-        </>
+        <Table
+          headers={[
+            t("table.offerTitle"),
+            t("table.enterprise"),
+            t("table.program"),
+            t("table.status"),
+            t("table.deadline"),
+            t("actions.view"),
+          ]}
+          rows={tableRows()}
+          emptyMessage={t("table.noOffers")}
+        />
       )}
 
       {isModalOpen && selectedOffer && (
@@ -415,3 +482,4 @@ export const AllOffers = () => {
     </div>
   );
 };
+

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
+import { useStudentStore } from "../../stores/studentStore.js";
 import { toast } from "sonner";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { Header } from "../../components/ui/header.jsx";
@@ -15,6 +16,9 @@ export const StudentOffers = () => {
 
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterSession, setFilterSession] = useState("All");
+  const [filterYear, setFilterYear] = useState("All");
+  const [selectedCv, setSelectedCv] = useState(null);
 
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -22,8 +26,7 @@ export const StudentOffers = () => {
   const { offers, loadOffersSummary, viewOffer, downloadOfferPdf } =
     useOfferStore();
   const { cvs, loadCvs, applyCvStore } = useCvStore();
-
-  const [selectedCv, setSelectedCv] = useState(null);
+  const { applications, loadAllApplications } = useStudentStore();
 
   useEffect(() => {
     if (!isAuthenticated || !user) {
@@ -31,8 +34,9 @@ export const StudentOffers = () => {
     } else if (user.role === "STUDENT") {
       loadOffersSummary();
       loadCvs();
+      loadAllApplications();
     }
-  }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs]);
+  }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs, loadAllApplications]);
 
   if (!isAuthenticated || !user) return null;
 
@@ -67,10 +71,46 @@ export const StudentOffers = () => {
       setIsModalOpen(false);
       setSelectedOffer(null);
       setSelectedCv(null);
+      loadAllApplications();
     } catch {
       toast.error(t("errors.applyOffer"));
     }
   };
+
+  // Filter offers by session, year, and exclude already applied offers
+  const filteredOffers = useMemo(() => {
+    let filtered = offers;
+
+    // Filter by session
+    if (filterSession && filterSession !== "All") {
+      filtered = filtered.filter((offer) => offer.session === filterSession);
+    }
+
+    // Filter by year
+    if (filterYear && filterYear !== "All") {
+      filtered = filtered.filter(
+        (offer) =>
+          offer.startDate &&
+          new Date(offer.startDate).getFullYear().toString() === filterYear
+      );
+    }
+
+    // Exclude offers already applied to
+    filtered = filtered.filter(
+      (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
+    );
+
+    return filtered;
+  }, [offers, filterSession, filterYear, applications]);
+
+  // Extract available years
+  const availableYears = useMemo(() => {
+    const years = new Set();
+    offers.forEach((offer) => {
+      if (offer.startDate) years.add(new Date(offer.startDate).getFullYear());
+    });
+    return Array.from(years).sort((a, b) => b - a);
+  }, [offers]);
 
   const handleAction = (action, offer) => {
     if (action === "view") {
@@ -110,7 +150,7 @@ export const StudentOffers = () => {
     },
   ];
 
-  const tableData = offers.map((offer) => ({
+  const tableData = filteredOffers.map((offer) => ({
     ...offer,
     expirationDate: offer.expirationDate
       ? new Date(offer.expirationDate).toLocaleDateString()
@@ -120,6 +160,41 @@ export const StudentOffers = () => {
   return (
     <div className="space-y-6">
       <Header title={t("title")} />
+
+      {/* Session and Year Filters */}
+      <div className="flex items-center justify-end gap-4">
+        {/* Session Filter */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">{t("filter.session")}:</label>
+          <select
+            className="rounded border border-zinc-300 p-1"
+            value={filterSession}
+            onChange={(e) => setFilterSession(e.target.value)}
+          >
+            <option value="All">{t("session.all")}</option>
+            <option value="Automne">{t("session.autumn")}</option>
+            <option value="Hiver">{t("session.winter")}</option>
+          </select>
+        </div>
+
+        {/* Year Filter */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">{t("filter.year")}:</label>
+          <select
+            className="rounded border border-zinc-300 p-1"
+            value={filterYear}
+            onChange={(e) => setFilterYear(e.target.value)}
+          >
+            <option value="All">{t("session.year")}</option>
+            {availableYears.map((year) => (
+              <option key={year} value={year.toString()}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <DataTable columns={columns} data={tableData} onAction={handleAction} />
 
       {/* Modal */}
@@ -209,4 +284,3 @@ export const StudentOffers = () => {
     </div>
   );
 };
-

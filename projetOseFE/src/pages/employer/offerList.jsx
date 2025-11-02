@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
@@ -6,13 +7,12 @@ import { useOfferStore } from "../../stores/offerStore.js";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverClose,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverClose,
 } from "../../components/ui/popover.jsx";
 import useAuthStore from "../../stores/authStore.js";
-
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
 
 const Modal = ({ open, onClose, title, children }) => {
@@ -43,6 +43,8 @@ export const OfferList = () => {
 
   const [filterStatus, setFilterStatus] = useState(null);
   const [sortKey, setSortKey] = useState("date");
+  const [filterSession, setFilterSession] = useState("All");
+  const [filterYear, setFilterYear] = useState("All");
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
@@ -63,11 +65,41 @@ export const OfferList = () => {
     else if (action === "download") handleDownload(offer.id);
   };
 
-  const sortedAndFilteredOffers = useMemo(() => {
-    let filtered = filterStatus
-      ? offers.filter((o) => o.status === filterStatus)
-      : offers;
+  // Extract available years from offers
+  const availableYears = useMemo(() => {
+    const years = new Set();
+    offers.forEach((offer) => {
+      if (offer.startDate) {
+        const year = new Date(offer.startDate).getFullYear();
+        years.add(year);
+      }
+    });
+    return Array.from(years).sort((a, b) => b - a);
+  }, [offers]);
 
+  const sortedAndFilteredOffers = useMemo(() => {
+    let filtered = offers;
+
+    // Filter by status
+    if (filterStatus) {
+      filtered = filtered.filter((o) => o.status === filterStatus);
+    }
+
+    // Filter by session
+    if (filterSession !== "All") {
+      filtered = filtered.filter((o) => o.session === filterSession);
+    }
+
+    // Filter by year
+    if (filterYear !== "All") {
+      filtered = filtered.filter(
+        (o) =>
+          o.startDate &&
+          new Date(o.startDate).getFullYear().toString() === filterYear
+      );
+    }
+
+    // Sort
     return [...filtered].sort((a, b) => {
       if (sortKey === "date")
         return new Date(b.expirationDate) - new Date(a.expirationDate);
@@ -75,7 +107,7 @@ export const OfferList = () => {
         return (b.applicationCount || 0) - (a.applicationCount || 0);
       return 0;
     });
-  }, [offers, filterStatus, sortKey]);
+  }, [offers, filterStatus, filterSession, filterYear, sortKey]);
 
   const columns = [
     { key: "title", label: t("table.offerTitle") },
@@ -127,6 +159,7 @@ export const OfferList = () => {
 
       {/* Filters & Sorting */}
       <div className="flex items-center gap-4">
+        {/* Filter by Status */}
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
             <>
@@ -179,6 +212,97 @@ export const OfferList = () => {
             </>
           )}
         </Popover>
+
+        {/* Sort */}
+        <Popover>
+          {({ open, setOpen, triggerRef, contentRef }) => (
+            <>
+              <PopoverTrigger
+                open={open}
+                setOpen={setOpen}
+                triggerRef={triggerRef}
+              >
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                  {t("sort.by")}:{" "}
+                  {sortKey === "date" ? t("sort.date") : t("sort.applications")}
+                </span>
+              </PopoverTrigger>
+              <PopoverContent open={open} contentRef={contentRef}>
+                <div className="flex flex-col gap-2 min-w-[150px]">
+                  <button
+                    onClick={() => {
+                      setSortKey("date");
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      sortKey === "date"
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t("sort.date")}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSortKey("applications");
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      sortKey === "applications"
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t("sort.applications")}
+                  </button>
+                  <PopoverClose setOpen={setOpen}>
+                    <span className="text-sm text-gray-600">
+                      {t("menu.close")}
+                    </span>
+                  </PopoverClose>
+                </div>
+              </PopoverContent>
+            </>
+          )}
+        </Popover>
+
+        {/* Filter by Session and Year */}
+        <div className="ml-auto flex items-center gap-4">
+          {/* Filter by session */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">
+              {t("filter.session")}:
+            </label>
+            <select
+              className="rounded border border-zinc-300 p-1"
+              value={filterSession}
+              onChange={(e) => setFilterSession(e.target.value)}
+            >
+              <option value="All">{t("session.all")}</option>
+              <option value="Automne">{t("session.autumn")}</option>
+              <option value="Hiver">{t("session.winter")}</option>
+            </select>
+          </div>
+
+          {/* Filter by year */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">
+              {t("filter.year")}:
+            </label>
+            <select
+              className="rounded border border-zinc-300 p-1"
+              value={filterYear}
+              onChange={(e) => setFilterYear(e.target.value)}
+            >
+              <option value="All">{t("session.year")}</option>
+              {availableYears.map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* Table */}
@@ -195,31 +319,59 @@ export const OfferList = () => {
         onClose={() => setSelectedOffer(null)}
         title={selectedOffer?.title}
       >
-        <p className="mb-2 text-gray-700">
-          <strong>{t("table.enterprise")}:</strong>{" "}
-          {selectedOffer?.enterpriseName}
-        </p>
-        <p className="mb-2 text-gray-700">
-          <strong>{t("table.program")}:</strong>{" "}
-          {selectedOffer?.targetedProgramme}
-        </p>
-        <p className="mb-2 text-gray-700">
-          <strong>{t("table.deadline")}:</strong>{" "}
-          {new Date(selectedOffer?.expirationDate).toLocaleDateString()}
-        </p>
-        <p className="mb-4 text-gray-700">
-          <strong>{t("table.status")}:</strong>{" "}
-          {t(`status.${selectedOffer?.status?.toLowerCase()}`)}
-        </p>
-        {selectedOffer?.reason && (
-          <p className="mb-4 text-gray-700">
-            <strong>{t("table.reason")}:</strong> {selectedOffer.reason}
-          </p>
-        )}
-        <p className="text-gray-800 whitespace-pre-line">
-          {selectedOffer?.description || t("noDescription")}
-        </p>
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <span className="font-semibold">
+              {t("table.enterprise")}:
+            </span>
+            <span>{selectedOffer?.enterpriseName}</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="font-semibold">
+              {t("table.program")}:
+            </span>
+            <span>{selectedOffer?.targetedProgramme}</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="font-semibold">
+              {t("table.deadline")}:
+            </span>
+            <span>
+              {new Date(selectedOffer?.expirationDate).toLocaleDateString()}
+            </span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="font-semibold">
+              {t("table.status")}:
+            </span>
+            <span>
+              {t(`status.${selectedOffer?.status?.toLowerCase()}`)}
+            </span>
+          </div>
+
+          {selectedOffer?.reason?.trim() && (
+            <div className="flex gap-2">
+              <span className="font-semibold">
+                {t("table.reason")}:
+              </span>
+              <span>{selectedOffer.reason}</span>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold">
+              {t("table.description")}:
+            </span>
+            <p className="text-gray-800 whitespace-pre-line">
+              {selectedOffer?.description || t("noDescription")}
+            </p>
+          </div>
+        </div>
       </Modal>
     </div>
   );
 };
+
