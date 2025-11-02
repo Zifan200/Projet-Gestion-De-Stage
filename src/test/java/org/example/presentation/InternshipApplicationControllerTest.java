@@ -1,9 +1,11 @@
 package org.example.presentation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.enums.ApprovalStatus;
 import org.example.presentation.exception.InternshipApplicationControllerException;
 import org.example.service.InternshipApplicationService;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDecisionDTO;
 import org.example.service.exception.InvalidApprovalStatus;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -209,6 +212,67 @@ class InternshipApplicationControllerTest {
         Exception resolved = result.getResolvedException();
         assertNotNull(resolved);
         assertInstanceOf(InvalidInternshipApplicationException.class, resolved);
+    }
+
+    @Test
+    void acceptOfferByStudent_Success() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Java Developer")
+                .status(ApprovalStatus.CONFIRMED_BY_STUDENT)
+                .build();
+
+        EtudiantDecisionDTO request = new EtudiantDecisionDTO();
+        request.setStudentEmail("student@mail.com");
+
+        when(internshipApplicationService.acceptOfferByStudent("student@mail.com", 1L))
+                .thenReturn(responseDto);
+
+        mockMvc.perform(post(path + "/student/1/accept")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("$.status").value("CONFIRMED_BY_STUDENT"));
+    }
+
+    @Test
+    void rejectOfferByStudent_Success() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Java Developer")
+                .status(ApprovalStatus.REJECTED_BY_STUDENT)
+                .reason("Je préfère une autre offre.")
+                .build();
+
+        EtudiantDecisionDTO request = new EtudiantDecisionDTO();
+        request.setStudentEmail("student@mail.com");
+        request.setReason("Je préfère une autre offre.");
+
+        when(internshipApplicationService.rejectOfferByStudent("student@mail.com", 1L, "Je préfère une autre offre."))
+                .thenReturn(responseDto);
+
+        mockMvc.perform(post(path + "/student/1/reject")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("$.status").value("REJECTED_BY_STUDENT"))
+                .andExpect(jsonPath("$.reason").value("Je préfère une autre offre."));
     }
 }
 
