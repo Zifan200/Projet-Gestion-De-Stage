@@ -195,15 +195,17 @@ export const resources = {
         noApplicants: "No applications yet.",
         numberOfApplicants: "number of applicants",
         filters:{
+          filterName:"filter the names",
           studentNameFilters:{
-            alphabetical:"a-z",
-            reverseAlphabetical:"z-a"
+            alphabetical:"alphabetical",
+            reverseAlphabetical:"reverse alphabetical"
           }
         },
         tableHeader: {
           studentName: "name",
-          studentProgramme: "student's program",
+          studentProgramme: "study program",
           applicationDate:"application date",
+          applicationStatus: "applicaiton status",
           details: "details"
         }
       },
@@ -641,15 +643,17 @@ export const resources = {
         noApplicants: "Aucune candidature pour le moment.",
         numberOfApplicants: "nombre de candidats",
         filters: {
+          filterName:"filtrer les noms",
           studentNameFilters: {
-            alphabetical: "a-z",
-            reverseAlphabetical: "z-a"
+            alphabetical: "alphabétique",
+            reverseAlphabetical: "alphabétique inversé"
           }
         },
         tableHeader: {
-          studentName: "nom",
-          studentProgramme: "programme de l'étudiant",
+          studentName: "Nom",
+          studentProgramme: "programme d'étude",
           applicationDate: "date de postulation",
+          applicationStatus: "status de la candidature",
           details: "détails"
         }
       },

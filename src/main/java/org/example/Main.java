@@ -26,6 +26,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -229,6 +230,8 @@ public class Main {
                     .program("Technique Informatique")
                     .build();
 
+
+
             EtudiantDTO savedEtudiant = studentService.inscriptionEtudiant(studentDTO);
             byte[] bytes = new byte[9];
             CV studentCV = CV.builder()
@@ -241,8 +244,41 @@ public class Main {
                     .uploadedAt(LocalDateTime.now())
                     .status(ApprovalStatus.ACCEPTED)
                     .build();
-            //cant get cv id
             cvRepository.save(studentCV);
+
+
+            List<EtudiantDTO> tempStudents = new ArrayList<>();
+            for(int index = 0; index < 20; index++){
+                EtudiantDTO tempStudent = EtudiantDTO.builder()
+                        .firstName("student"+index)
+                        .lastName("lastName"+index)
+                        .email("student"+index+"@hotmail.com")
+                        .password("Test123!")
+                        .phone("123-123-1234")
+                        .program("Technique Informatique")
+                        .build();
+                tempStudents.add(tempStudent);
+                EtudiantDTO savedStudent = studentService.inscriptionEtudiant(tempStudent);
+                CV tempCv = CV.builder()
+                        .etudiant(EtudiantDTO.toEntity(savedStudent))
+                        .data(bytes)
+                        .fileName("My Cv")
+                        .fileSize(1L)
+                        .fileType("pdf")
+                        .reason("")
+                        .uploadedAt(LocalDateTime.now())
+                        .status(ApprovalStatus.ACCEPTED)
+                        .build();
+                CV savedCv = (CV)cvRepository.save(tempCv);
+                InternshipApplicationDTO tempApplication = InternshipApplicationDTO.builder()
+                        .internshipOfferId(savedOffer1.getId())
+                        .employerEmail(employer.getEmail())
+                        .studentEmail(savedStudent.getEmail())
+                        .selectedCvID(savedCv.getId()).build();
+                InternshipApplicationResponseDTO savedTempApplication =
+                        internshipApplicationService.saveInternshipApplication(tempApplication);
+            }
+
 
             // ----------------------------
             // [10] Création d'applications

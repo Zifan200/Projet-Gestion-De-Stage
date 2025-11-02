@@ -7,15 +7,28 @@ import useAuthStore from "../../stores/authStore.js";
 import {Button} from "../../components/ui/button.jsx";
 import {toast} from "sonner";
 import {useGeStore} from "../../stores/geStore.js";
+import {html} from "framer-motion/m";
+import {ModalSelectedOfferApplicants} from "./gsModalSelectedOfferApplicants.jsx";
 
 export const AllOffers = () => {
     const {t} = useTranslation();
     const user = useAuthStore((s) => s.user);
 
+    //student application
+    const [selectedApplication, setSelectedApplication] = useState(null);
+
+    const studentNameFilterTypes = {
+        ALPHABETICAL: t("selectedOfferApplicationsList.filters.studentNameFilters.alphabetical"),
+        REVERSE_ALPHABETICAL: t("selectedOfferApplicationsList.filters.studentNameFilters.reverseAlphabetical"),
+    };
+    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(studentNameFilterTypes.ALPHABETICAL)
+    //
+
     const [selectedOffer, setSelectedOffer] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+    const [isOfferApplicationListModalOpen, setIsOfferApplicationListModalOpen] = useState(false);
+    
     const [currentOffers, setCurrentOffers] = useState([]);
-    const [selectedselectedOfferApplicationsList, setSelectedselectedOfferApplicationsList] = useState([]);
     const [rejectReason, setRejectReason] = useState("");
 
     const offerStatuses = {
@@ -27,7 +40,7 @@ export const AllOffers = () => {
 
     const [currentOfferStatus, setCurrentOfferStatus] = useState(offerStatuses.ALL);
     const [currentProgram, setCurrentProgram] = useState(t("offer.filter.program.all"));
-
+    const [electedOfferApplicationsList, setSelectedOfferApplicationsList] = useState([])
     const {
         offers, loadAllOffersSummary,
         acceptedOffers, loadAcceptedOffers,
@@ -40,11 +53,13 @@ export const AllOffers = () => {
         downloadOfferPdf
     } = useOfferStore();
 
+    //student application
     const {
         selectedOfferApplications,
         loadAllApplicationsFromInternshipOffer,
         error,
     } = useGeStore();
+    //
 
     // --- Charger le store au montage ---
     useEffect(() => {
@@ -88,20 +103,18 @@ export const AllOffers = () => {
         setCurrentOffers(filtered);
     };
 
+
     // --- Ouvrir le modal d'une offre ---
     const openOffer = async (offerId) => {
         try {
             await viewOffer(user.token, offerId);
+            await loadAllApplicationsFromInternshipOffer(offerId);
             const {selectedOffer, isModalOpen} = useOfferStore.getState();
-
+            const {selectedOfferApplicationsList} = useGeStore.getState();
+            console.log(selectedOfferApplicationsList)
 
             setSelectedOffer(selectedOffer);
-            if(selectedOffer.status.toUpperCase() === offerStatuses.ACCEPTED.toUpperCase()) {
-                await loadAllApplicationsFromInternshipOffer(offerId);
-                setSelectedselectedOfferApplicationsList(selectedOfferApplications);
-            }
-
-            setIsModalOpen(isModalOpen);
+            setIsOfferModalOpen(isModalOpen);
         } catch (err) {
             console.error(err);
             toast.error(t("offer.errors.loadOffer"));
@@ -113,7 +126,7 @@ export const AllOffers = () => {
         try {
             await updateOfferStatus(user.token, selectedOffer.id, "ACCEPTED", "");
             toast.success(t("offer.modal.accepted"));
-            setIsModalOpen(false);
+            setIsOfferModalOpen(false);
             setSelectedOffer(null);
 
             // Recharge le store
@@ -135,7 +148,7 @@ export const AllOffers = () => {
         try {
             await updateOfferStatus(user.token, selectedOffer.id, "REJECTED", rejectReason);
             toast.success(t("offer.modal.reject"));
-            setIsModalOpen(false);
+            setIsOfferModalOpen(false);
             setSelectedOffer(null);
             setRejectReason("");
 
@@ -181,7 +194,7 @@ export const AllOffers = () => {
         </tr>
     ));
 
-    function componentChoseOfferStatus() {
+    function componentViewChoseOfferStatus() {
         return <>
             {/* Rejet */}
             <div className="mt-4">
@@ -216,44 +229,48 @@ export const AllOffers = () => {
         </>;
     }
 
-    //LIST d'applicaiton de l'offre selectionné
+    //List d'application de l'offre selectionné
     function componentViewOfferApplicationsList(){
-        return <>
-            <div className="py-2 h-auto overflow-y-auto ">
-                {loading ? <p>{t("selectedOfferApplicationsList.loading")}</p> :
-                <>
-                    <h4 className="font-bold py-2">Les applications</h4>
-                    <Table
-                        headers={[
-                            t("selectedOfferApplicationsList.tableHeader.studentName"),
-                            t("selectedOfferApplicationsList.tableHeader.studentProgramme"),
-                            t("selectedOfferApplicationsList.tableHeader.applicationDate"),
-                            t("selectedOfferApplicationsList.tableHeader.details")
-                        ]}
-                        rows={
-                            selectedOfferApplications.map((application) => (
-                                <tr key={application.id} className="border-t border-gray-300">
-                                    <td className="px-4 py-2">{application.studentFirstName} {application.studentLastName}</td>
-                                    <td className="px-4 py-2">{application.studentProgrammeName}</td>
-                                    <td className="px-4 py-2">{application.createdAt}</td>
-                                    <td>
-                                        <Button
-                                            label={t("selectedOfferApplicationsList.tableHeader.details")}
-                                            onClick={() => {
-                                                setIsModalOpen(false);
-                                                setSelectedOffer(null);
-                                            }}
-                                        />
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                        emptyMessage={t("selectedOfferApplicationsList.noApplicants")}
-                    />
-                    </>
-                }
+        return <div className="py-5">
+            {/*<div className="py-3">*/}
+            {/*    <Header title={t("selectedOfferApplicationsList.title")}/>*/}
+            {/*    <div className="flex-row">*/}
+            {/*        <span>{t("selectedOfferApplicationsList.filters.filterName")} : </span>*/}
+            {/*        <select className="px-0" value={currentStudentNameFilter}*/}
+            {/*                onChange={e => setCurrentStudentNameFilter(e.target.value)}>*/}
+            {/*            {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}*/}
+            {/*        </select>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            <div className="py-2 overflow-auto h-75">
+                <Button label="see applicants"
+                        onClick={() => {
+                            setIsOfferApplicationListModalOpen(true);
+                            setIsOfferModalOpen(false);
+                        }}
+                />
             </div>
-        </>
+        </div>
+    }
+
+    //affich les modals
+    function componentCustomModal(modalTitle, content, onBtnClose){
+        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+                <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
+                {content}
+                <div className="flex w-auto justify-between mt-6 justify-end">
+                    <button
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        onClick={() => {
+                            onBtnClose()
+                        }}
+                    >
+                        {t("offer.modal.close")}
+                    </button>
+                </div>
+            </div>
+        </div>
     }
 
     return (
@@ -288,40 +305,31 @@ export const AllOffers = () => {
             }
 
             {/* Modal */}
-            {isModalOpen && selectedOffer && (
-                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                        <h2 className="text-xl font-semibold mb-4">{selectedOffer.title}</h2>
+            {isOfferModalOpen && selectedOffer && (
+                componentCustomModal(selectedOffer.title,
+                        <div>
                         <p><strong>{t("offer.modal.companyEmail")}: </strong>{selectedOffer.employerEmail}</p>
                         <p><strong>{t("offer.modal.targetedProgramme")}: </strong>{selectedOffer.targetedProgramme}</p>
-                        <p>
-                            <strong>{t("offer.modal.publishedDate")}: </strong>{selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}
-                        </p>
-                        <p>
-                            <strong>{t("offer.modal.deadline")}: </strong>{selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}
-                        </p>
+                        <p> <strong>{t("offer.modal.publishedDate")}: </strong>{selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
+                        <p><strong>{t("offer.modal.deadline")}: </strong>{selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}</p>
                         <p><strong>{t("offer.modal.description")}: </strong>{selectedOffer.description}</p>
                         <p><strong>{t("offer.modal.status")}: </strong>{selectedOffer.status}</p>
 
 
-                        {(selectedOffer.status.toUpperCase() === "PENDING") && componentChoseOfferStatus()}
+                        {(selectedOffer.status.toUpperCase() === "PENDING") && componentViewChoseOfferStatus()}
                         {(selectedOffer.status.toUpperCase() === "ACCEPTED") && componentViewOfferApplicationsList()}
 
-                        <div className="flex w-auto justify-between mt-6 justify-end">
-                            <button
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                onClick={() => {
-                                    setIsModalOpen(false);
-                                    setSelectedOffer(null);
-                                    setRejectReason("");
-                                }}
-                            >
-                                {t("offer.modal.close")}
-                            </button>
-                        </div>
-                    </div>
+                    </div>, (()=>{  setIsOfferModalOpen(false);
+                        setSelectedOffer(null);
+                        setRejectReason("");})
+                )
+            )}
 
-                </div>
+            {isOfferApplicationListModalOpen && selectedOffer && (
+                componentCustomModal((selectedOffer.title) +" : "+ `${t("selectedOfferApplicationsList.title")}` ,<ModalSelectedOfferApplicants/>, ()=>{
+                    setIsOfferApplicationListModalOpen(false);
+                    setIsOfferModalOpen(true);
+                })
             )}
         </div>
     );

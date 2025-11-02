@@ -10,9 +10,10 @@ import {useOfferStore} from "../../stores/offerStore.js";
 import {
     ReaderIcon
 } from "@radix-ui/react-icons";
+import {useNavigate} from "react-router";
 
-export const GsAllStudentsWithApplications = () => {
-
+export const ModalSelectedOfferApplicants = () => {
+    const navigate = useNavigate();
     const {t} = useTranslation();
     const user = useAuthStore((s) => s.user);
 
@@ -21,16 +22,15 @@ export const GsAllStudentsWithApplications = () => {
 
 
     const studentNameFilterTypes = {
-        ALPHABETICAL: t("gsManageApplicants.filters.studentNameFilters.alphabetical"),
-        REVERSE_ALPHABETICAL: t("gsManageApplicants.filters.studentNameFilters.reverseAlphabetical"),
+        ALPHABETICAL: t("selectedOfferApplicationsList.filters.studentNameFilters.alphabetical"),
+        REVERSE_ALPHABETICAL: t("selectedOfferApplicationsList.filters.studentNameFilters.reverseAlphabetical"),
     };
     const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(studentNameFilterTypes.ALPHABETICAL)
 
     const {
-        students,
+        selectedOfferApplications,
         loading,
         error,
-        loadAllStudentsWithApplications,
     } = useGeStore();
 
     const {
@@ -39,11 +39,9 @@ export const GsAllStudentsWithApplications = () => {
 
     useEffect(() => {
         const loadAllData = async () => {
-            //
-            await loadAllStudentsWithApplications();
-            //
             await loadPrograms();
         };
+
         loadAllData();
     }, []);
 
@@ -66,10 +64,10 @@ export const GsAllStudentsWithApplications = () => {
         let listToFilter = [];
         switch (currentStudentNameFilter) {
             case studentNameFilterTypes.ALPHABETICAL:
-                listToFilter = sortStudentsNameAlphabetical(students);
+                listToFilter = sortStudentsNameAlphabetical(selectedOfferApplications);
                 break;
             case studentNameFilterTypes.REVERSE_ALPHABETICAL:
-                listToFilter = sortStudentsNameReverseAlphabetical(students);
+                listToFilter = sortStudentsNameReverseAlphabetical(selectedOfferApplications);
                 break;
         }
 
@@ -90,7 +88,7 @@ export const GsAllStudentsWithApplications = () => {
     };
 
 
-    const PillButton = ({ onClick, label, Icon, className = "" }) => (
+    const PillButton = ({onClick, label, Icon, className = ""}) => (
         <button
             onClick={onClick}
             // 👇 use a uniquely named group for this button only
@@ -117,25 +115,41 @@ export const GsAllStudentsWithApplications = () => {
     </span>
 
 
-
-
-
         </button>
     );
 
+
+    //affich les modals
+    function componentCustomModal(modalTitle, content, onBtnClose) {
+        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+                <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
+                {content}
+                <div className="flex w-auto justify-between mt-6 justify-end">
+                    <button
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        onClick={() => {
+                            onBtnClose()
+                        }}
+                    >
+                        {t("offer.modal.close")}
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 
     const tableRows = () => currentStudentApplications.map((student) => (
         <tr key={student.id} className="border-t border-gray-300">
             <td className="px-4 py-1 w-auto">{student.firstName} {student.lastName}</td>
             <td className="px-4 py-1 w-auto">{student.program}</td>
-            <td className="px-4 py-1 "><div className="flex justify-center">{student.numberOfApplications}</div></td>
-            {/*<td className="px-4 py-2">{new Date(offer.expirationDate).toLocaleDateString()}</td>*/}
+
             <td className="px-4 py-1 relative w-[160px] text-center"> {/* fixed width, centered */}
                 <div className="relative flex justify-center items-center gap-2 group">
                     <div className="flex justify-center items-center gap-2 transition-all duration-300">
                         <PillButton
                             onClick={() => openStudentApplicaitonsList(student.email)}
-                            label={t("gsManageApplicants.btnLabels.applicationsList")}
+                            label={t("selectedOfferApplicationsList.btnLabels.applicationsList")}
                             Icon={ReaderIcon}
                             className="bg-sky-300 hover:bg-sky-600 w-auto max-w-full"
                         />
@@ -148,34 +162,29 @@ export const GsAllStudentsWithApplications = () => {
     ));
 
 
-    return <div className="space-y-6">
-        {loading ? <p>{t("gsManageApplicants.loading")}</p> :
-            <>
-                <Header title={t("gsManageApplicants.title")}/>
-                {/* Filtrage status */}
-                <select className="px-2" value={currentStudentNameFilter}
-                        onChange={e => setCurrentStudentNameFilter(e.target.value)}>
-                    {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
+    return <div className="flex flex-col gap-1 py-5">
+        <div>
+            <span>{t("selectedOfferApplicationsList.filters.filterName")} : </span>
+            <select className="px-2" value={currentStudentNameFilter}
+                    onChange={e => setCurrentStudentNameFilter(e.target.value)}>
+                {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+        </div>
+        <div className="overflow-auto h-132">
+            {loading ? <p>{t("selectedOfferApplicationsList.loading")}</p> :
+                <>
 
-                {/*TODO add translations for programs*/}
-                {/*/!* Filtrage programmes *!/*/}
-                {/*<select className="px-2" value={currentProgram} onChange={e => setCurrentProgram(e.target.value)}>*/}
-                {/*    <option value={t("offer.filter.program.all")}>{t("offer.filter.program.all")}</option>*/}
-                {/*    {programs.map(p => <option key={p} value={p}>{p}</option>)}*/}
-                {/*</select>*/}
-
-                <Table
-                    headers={[
-                        t("gsManageApplicants.tableHeader.studentName"),
-                        t("gsManageApplicants.tableHeader.studentProgramme"),
-                        t("gsManageApplicants.tableHeader.numberOfApplications"),
-                        t("gsManageApplicants.tableHeader.actions")
-                    ]}
-                    rows={tableRows()}
-                    emptyMessage={t("gsManageApplicants.noApplicants")}
-                />
-            </>
-        }
+                    <Table
+                        headers={[
+                            t("selectedOfferApplicationsList.tableHeader.studentName"),
+                            t("selectedOfferApplicationsList.tableHeader.studentProgramme"),
+                        ]}
+                        rows={tableRows()}
+                        emptyMessage={t("selectedOfferApplicationsList.noApplicants")}
+                    />
+                </>
+            }
+        </div>
     </div>
+
 }
