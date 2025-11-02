@@ -35,14 +35,13 @@ public class InternshipApplicationResponseDTO {
     private ApprovalStatus status =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
     private LocalDate startDate;
-    private LocalDate endDate;
     private String session;
 
     @Builder
     public InternshipApplicationResponseDTO(
             Long id, String studentEmail, String  studentFirstName, String studentLastName, Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
             Long internshipOfferId, String internshipOfferTitle, String internshipOfferEmployerEmail,
-            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt, LocalDate startDate, LocalDate endDate, String session
+            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail, ApprovalStatus status, LocalDateTime createdAt, LocalDate startDate, String session
             ){
         this.id = id;
         this.studentEmail = studentEmail;
@@ -61,7 +60,6 @@ public class InternshipApplicationResponseDTO {
         this.status = status;
         this.createdAt = createdAt;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.session = session;
     }
     //
@@ -86,7 +84,6 @@ public class InternshipApplicationResponseDTO {
                 .status(internshipApplication.getStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .startDate(internshipApplication.getStartDate())
-                .endDate(internshipApplication.getEndDate())
                 .session(internshipApplication.getSession())
                 .build();
     }

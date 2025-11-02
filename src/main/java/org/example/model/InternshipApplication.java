@@ -26,11 +26,10 @@ public class InternshipApplication {
     private LocalDateTime createdAt;
     private String session;
     private LocalDate startDate;
-    private LocalDate endDate;
 
     @Builder
     public InternshipApplication(
-            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status, String session, LocalDate startDate, LocalDate endDate
+            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status, String session, LocalDate startDate
     ){
         this.id = id;
         this.student = student;
@@ -40,7 +39,6 @@ public class InternshipApplication {
         this.createdAt = LocalDateTime.now();
         this.session = session;
         this.startDate = startDate;
-        this.endDate = endDate;
     }
 }
 
