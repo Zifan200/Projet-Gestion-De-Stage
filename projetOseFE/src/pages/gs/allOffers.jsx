@@ -52,6 +52,11 @@ export const AllOffers = () => {
         downloadOfferPdf
     } = useOfferStore();
 
+    const {
+        selectedOfferApplications,
+        error,
+    } = useGeStore();
+
     // --- Charger le store au montage ---
     useEffect(() => {
         const loadAllData = async () => {
@@ -219,19 +224,12 @@ export const AllOffers = () => {
 
     //List d'application de l'offre selectionné
     function componentViewOfferApplicationsList(){
-        return <div className="py-5">
-            {/*<div className="py-3">*/}
-            {/*    <Header title={t("selectedOfferApplicationsList.title")}/>*/}
-            {/*    <div className="flex-row">*/}
-            {/*        <span>{t("selectedOfferApplicationsList.filters.filterName")} : </span>*/}
-            {/*        <select className="px-0" value={currentStudentNameFilter}*/}
-            {/*                onChange={e => setCurrentStudentNameFilter(e.target.value)}>*/}
-            {/*            {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}*/}
-            {/*        </select>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-            <div className="py-2 overflow-auto h-75">
-                <Button label="see applicants"
+        return <div className="py-3 mt-4">
+            <div className="flex flex-row">
+                <span>{t("selectedOfferApplicationsList.numberOfApplicants")} : </span>
+            </div>
+            <div className="py-2 h-fit">
+                <Button label={t("selectedOfferApplicationsList.modal.BtnSeeApplications")}
                         onClick={() => {
                             setIsOfferApplicationListModalOpen(true);
                             setIsOfferModalOpen(false);
@@ -243,8 +241,18 @@ export const AllOffers = () => {
 
     //affich les modals
     function componentCustomModal(modalTitle, content, onBtnClose, customCloseBtnLabel=""){
-        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-fit">
+        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+
+        >
+            {/*close when click off*/}
+            <div className="absolute z-51 w-full h-full "
+                 onClick={() => {
+                     onBtnClose()
+                 }}
+            >
+            {/*content*/}
+            </div>
+            <div className="absolute bg-white p-6 rounded shadow-lg h-fit w-fit z-52">
                 <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
                 {content}
                 <div className="flex w-auto justify-between mt-6 justify-end">
@@ -295,7 +303,7 @@ export const AllOffers = () => {
             {/* Modal */}
             {isOfferModalOpen && selectedOffer && (
                 componentCustomModal(selectedOffer.title,
-                        <div>
+                        <div className="">
                         <p><strong>{t("offer.modal.companyEmail")}: </strong>{selectedOffer.employerEmail}</p>
                         <p><strong>{t("offer.modal.targetedProgramme")}: </strong>{selectedOffer.targetedProgramme}</p>
                         <p> <strong>{t("offer.modal.publishedDate")}: </strong>{selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
@@ -314,7 +322,7 @@ export const AllOffers = () => {
             )}
 
             {isOfferApplicationListModalOpen && selectedOffer && (
-                componentCustomModal((selectedOffer.title) +" : "+ `${t("selectedOfferApplicationsList.title")}` ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
+                componentCustomModal(`${t("selectedOfferApplicationsList.title")}`+" : "+(selectedOffer.title) ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
                     ()=>{
                     setIsOfferApplicationListModalOpen(false);
                     setIsOfferModalOpen(true);

@@ -209,7 +209,8 @@ export const resources = {
           details: "details"
         },
         modal:{
-          BtnBackLabel:"back"
+          BtnBackLabel:"back",
+          BtnSeeApplications:"see applications"
         }
       },
 
@@ -660,7 +661,8 @@ export const resources = {
           details: "détails"
         },
         modal:{
-          BtnBackLabel:"retour"
+          BtnBackLabel:"retour",
+          BtnSeeApplications:"voir les candidats"
         }
       },
       offer: {

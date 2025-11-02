@@ -8,6 +8,7 @@ import {Button} from "../../components/ui/button.jsx";
 import useAuthStore from "../../stores/authStore.js";
 import {useOfferStore} from "../../stores/offerStore.js";
 import {
+    FileIcon,
     ReaderIcon
 } from "@radix-ui/react-icons";
 import {useNavigate} from "react-router";
@@ -94,31 +95,18 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
     };
 
 
-    //affich les modals
-    function componentCustomModal(modalTitle, content, onBtnClose) {
-        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
-                {content}
-                <div className="flex w-auto justify-between mt-6 justify-end">
-                    <button
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        onClick={() => {
-                            onBtnClose()
-                        }}
-                    >
-                        {t("offer.modal.close")}
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
-
     const tableRows = () => selectedOfferApplicationsList.map((application) => (
-        <tr key={application.id} className="border-t border-gray-300">
+        <tr key={application.id}
+            className="select-none border-t border-gray-300 hover:bg-lime-300"
+            onClick={()=>{
+
+            }}
+        >
             <td className="px-4 py-1 w-auto">{application.studentFirstName} {application.studentLastName}</td>
             <td className="px-4 py-1 w-auto">{application.studentProgrammeName}</td>
-            <td className="px-4 py-1 w-auto">N/A</td>
+            <td className="px-4 py-1 w-auto">
+                <button className="items-center justify-center p-2 w-10 bg-lime-300 rounded"><FileIcon className="justify-center"/></button>
+            </td>
             <td className="px-4 py-1 w-auto">{application.status}</td>
             <td className="px-4 py-1 w-auto">{application.internshipOfferPublishedDate}</td>
 
