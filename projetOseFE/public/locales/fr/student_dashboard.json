@@ -1,6 +1,8 @@
 {
   "stats": {
-    "cvs": "Mes CVs",
+    "cvs": "Total CVs",
+    "acceptedCvs": "CVs acceptés",
+    "pendingCvs": "CVs en attente",
     "availableOffers": "Offres disponibles",
     "acceptedOffers": "Offres acceptées",
     "pendingOffers": "Offres en attente"

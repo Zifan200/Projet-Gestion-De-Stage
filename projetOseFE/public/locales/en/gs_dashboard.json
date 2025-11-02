@@ -1,7 +1,9 @@
 {
   "stats": {
-    "pending": "Pending CVs",
-    "availableOffers": "Available Offers",
+    "pendingCvs": "Pending CVs",
+    "acceptedCvs": "Accepted CVs",
+    "availableOffers": "Total Offers",
+    "pendingOffers": "Pending Offers",
     "manageCvs": "Manage Student CVs",
     "allOffers": "All Internship Offers"
   },

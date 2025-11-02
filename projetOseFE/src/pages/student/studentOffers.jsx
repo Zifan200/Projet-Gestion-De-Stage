@@ -28,7 +28,7 @@ export const StudentOffers = () => {
   useEffect(() => {
     if (!isAuthenticated || !user) {
       navigate("/");
-    } else {
+    } else if (user.role === "STUDENT") {
       loadOffersSummary();
       loadCvs();
     }

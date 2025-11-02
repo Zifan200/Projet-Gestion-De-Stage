@@ -1,7 +1,9 @@
 {
   "stats": {
-    "pending": "CVs en attente",
-    "availableOffers": "Offres disponibles",
+    "pendingCvs": "CVs en attente",
+    "acceptedCvs": "CVs acceptés",
+    "availableOffers": "Total offres",
+    "pendingOffers": "Offres en attente",
     "manageCvs": "Gérer les CVs étudiants",
     "allOffers": "Toutes les offres de stage"
   },

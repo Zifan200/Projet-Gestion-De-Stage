@@ -12,17 +12,21 @@ import {
   PopoverClose,
 } from "../../components/ui/popover.jsx";
 import { EyeOpenIcon, DownloadIcon, TrashIcon } from "@radix-ui/react-icons";
+import useAuthStore from "../../stores/authStore.js";
 
 export const StudentCVs = () => {
   const { t } = useTranslation("student_dashboard_cvs");
 
   const { cvs, loadCvs, uploadCv, downloadCv, deleteCv } = useCvStore();
+  const user = useAuthStore((s) => s.user);
   const [previewId, setPreviewId] = useState(null);
   const [filterStatus, setFilterStatus] = useState(null);
 
   useEffect(() => {
-    loadCvs();
-  }, []);
+    if (user?.role === "STUDENT") {
+      loadCvs();
+    }
+  }, [user]);
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];

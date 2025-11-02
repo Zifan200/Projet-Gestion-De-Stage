@@ -17,8 +17,10 @@ export const GsDashboard = () => {
   const { cvs, loadAllsStudentCvs } = useGeStore();
   const { offers, loadAllOffersSummary } = useOfferStore();
 
-  const [pendingCount, setPendingCount] = useState(0);
+  const [pendingCvCount, setPendingCvCount] = useState(0);
+  const [acceptedCvCount, setAcceptedCvCount] = useState(0);
   const [availableOffers, setAvailableOffers] = useState(0);
+  const [pendingOffers, setPendingOffers] = useState(0);
 
   useEffect(() => {
     if (!isAuthenticated || !user) navigate("/");
@@ -35,26 +37,39 @@ export const GsDashboard = () => {
   useEffect(() => {
     if (cvs?.length) {
       const pending = cvs.filter((cv) => cv.status === "PENDING").length;
-      setPendingCount(pending);
+      const accepted = cvs.filter((cv) => cv.status === "ACCEPTED").length;
+      setPendingCvCount(pending);
+      setAcceptedCvCount(accepted);
     }
   }, [cvs]);
 
   useEffect(() => {
     if (offers?.length) {
       setAvailableOffers(offers.length);
+      const pending = offers.filter((offer) => offer.status === "PENDING").length;
+      setPendingOffers(pending);
     }
   }, [offers]);
 
   const stats = [
     {
-      title: t("stats.pending"),
-      value: pendingCount,
-      change: t("stats.thisMonth"),
+      title: t("stats.pendingCvs"),
+      value: pendingCvCount,
+      icon: FileTextIcon,
+    },
+    {
+      title: t("stats.acceptedCvs"),
+      value: acceptedCvCount,
       icon: FileTextIcon,
     },
     {
       title: t("stats.availableOffers"),
       value: availableOffers,
+      icon: EyeOpenIcon,
+    },
+    {
+      title: t("stats.pendingOffers"),
+      value: pendingOffers,
       icon: EyeOpenIcon,
     },
   ];

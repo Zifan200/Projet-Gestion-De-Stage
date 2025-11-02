@@ -1,8 +1,10 @@
 {
   "stats": {
     "myOffers": "Mes offres",
-    "offerConfirm": "Offres confirmées",
-    "applications": "Candidatures",
+    "offerConfirm": "Candidatures confirmées",
+    "applications": "Total candidatures",
+    "activeApplications": "Candidatures actives",
+    "totalStudents": "Étudiants uniques",
     "createOffer": "Créer une offre"
   },
   "titles": {

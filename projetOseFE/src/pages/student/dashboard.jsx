@@ -28,7 +28,7 @@ export const StudentDashboard = () => {
   useEffect(() => {
     if (!isAuthenticated || !user) {
       navigate("/");
-    } else {
+    } else if (user.role === "STUDENT") {
       loadCvs();
       if (token) {
         loadOffersSummary(token);
@@ -52,10 +52,23 @@ export const StudentDashboard = () => {
     const totalCvs = cvs.length;
     const availableOffers = offers.length;
 
+    const acceptedCvs = cvs.filter((cv) => cv.status === "ACCEPTED").length;
+    const pendingCvs = cvs.filter((cv) => cv.status === "PENDING").length;
+
     return [
       {
         title: t("stats.cvs"),
         value: totalCvs,
+        icon: FileTextIcon,
+      },
+      {
+        title: t("stats.acceptedCvs"),
+        value: acceptedCvs,
+        icon: FileTextIcon,
+      },
+      {
+        title: t("stats.pendingCvs"),
+        value: pendingCvs,
         icon: FileTextIcon,
       },
       {
@@ -64,7 +77,7 @@ export const StudentDashboard = () => {
         icon: EyeOpenIcon,
       },
     ];
-  }, [cvs, offers, thisMonthCount, t]);
+  }, [cvs, offers, t]);
 
   return (
     <div className="space-y-6">

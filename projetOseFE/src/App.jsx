@@ -11,6 +11,7 @@ import { ResetPasswordPage } from "./pages/auth/resetPassword.jsx";
 import { RequestPassword } from "./pages/auth/requestPassword.jsx";
 import { StudentDashboard } from "./pages/student/dashboard.jsx";
 import { StudentSignUpPage } from "./pages/student/signUp.jsx";
+import { StudentOffers } from "./pages/student/studentOffers.jsx";
 import Home from "./pages/home.jsx";
 import { EmployerDashboard } from "./pages/employer/dashboard.jsx";
 import { DashboardLayout } from "./components/layouts/dashboard.jsx";
@@ -60,12 +61,6 @@ function App() {
       label: t("student_dashboard:stats.availableOffers"),
       href: "/dashboard/student/offers",
       icon: EnvelopeOpenIcon,
-    },
-    {
-      key: "applications",
-      label: t("student_dashboard:stats.pendingOffers"),
-      href: "/dashboard/student/applications",
-      icon: EnvelopeClosedIcon,
     },
     {
       key: "settings",
@@ -180,7 +175,7 @@ function App() {
           >
             <Route index element={<StudentDashboard />} />
             <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-
+            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
             <Route
               path="/dashboard/student/settings"
               element={<DashboardSettings />}
@@ -218,10 +213,6 @@ function App() {
           <Route path="/signup/employer" element={<EmployerSignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/employer/ajout_stages" element={<AjoutStage />} />
-          <Route
-            path="/dashboard/employer/settings"
-            element={<DashboardSettings />}
-          />
         </Routes>
         <DevMode />
       </BrowserRouter>
