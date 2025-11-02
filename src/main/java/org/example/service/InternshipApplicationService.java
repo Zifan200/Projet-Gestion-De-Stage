@@ -59,7 +59,7 @@ public class InternshipApplicationService {
         // Récupérer session et dates depuis l'offre
         String session = saveOffer.getSession();
         LocalDate startDate = saveOffer.getStartDate();
-        LocalDate endDate = saveOffer.getEndDate();
+        //LocalDate endDate = saveOffer.getEndDate();
 
         InternshipApplication application = InternshipApplication.builder()
                 .student(student.get())
@@ -67,7 +67,7 @@ public class InternshipApplicationService {
                 .offer(saveOffer)
                 .status(ApprovalStatus.PENDING)
                 .startDate(startDate)
-                .endDate(endDate)
+                //.endDate(endDate)
                 .session(session)
                 .build();
 
