@@ -205,8 +205,11 @@ export const resources = {
           studentName: "name",
           studentProgramme: "study program",
           applicationDate:"application date",
-          applicationStatus: "applicaiton status",
+          applicationStatus: "application status",
           details: "details"
+        },
+        modal:{
+          BtnBackLabel:"back"
         }
       },
 
@@ -655,6 +658,9 @@ export const resources = {
           applicationDate: "date de postulation",
           applicationStatus: "status de la candidature",
           details: "détails"
+        },
+        modal:{
+          BtnBackLabel:"retour"
         }
       },
       offer: {

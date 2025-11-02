@@ -12,13 +12,14 @@ import {
 } from "@radix-ui/react-icons";
 import {useNavigate} from "react-router";
 
-export const ModalSelectedOfferApplicants = () => {
+export const ModalSelectedOfferApplicants = ({offerId}) => {
     const navigate = useNavigate();
     const {t} = useTranslation();
     const user = useAuthStore((s) => s.user);
 
     const [currentProgram, setCurrentProgram] = useState([]);
     const [currentStudentApplications, setCurrentStudentApplications] = useState([]);
+    const [selectedOfferApplicationsList, setSelectedOfferApplicationsList] = useState([])
 
 
     const studentNameFilterTypes = {
@@ -29,6 +30,7 @@ export const ModalSelectedOfferApplicants = () => {
 
     const {
         selectedOfferApplications,
+        loadAllApplicationsFromInternshipOffer,
         loading,
         error,
     } = useGeStore();
@@ -40,23 +42,27 @@ export const ModalSelectedOfferApplicants = () => {
     useEffect(() => {
         const loadAllData = async () => {
             await loadPrograms();
+            await loadAllApplicationsFromInternshipOffer(offerId)
+            const {selectedOfferApplicationsList} = useGeStore.getState();
+            setSelectedOfferApplicationsList(selectedOfferApplicationsList)
+            console.log(offerId)
         };
-
         loadAllData();
+        applyCurrentFilter();
     }, []);
 
     //
     useEffect(() => {
         applyCurrentFilter();
-    }, [currentStudentNameFilter]);
+    }, [selectedOfferApplicationsList, currentStudentNameFilter]);
 
-    const sortStudentsNameAlphabetical = (studentsList) => {
-        let list = [...studentsList].sort((a, b) => a.firstName.localeCompare(b.firstName))
+    const sortStudentsNameAlphabetical = (applicationsList) => {
+        let list = [...applicationsList].sort((a, b) => a.studentFirstName.localeCompare(b.studentFirstName))
         return list;
     };
 
-    const sortStudentsNameReverseAlphabetical = (studentsList) => {
-        let list = [...studentsList].sort((b, a) => a.firstName.localeCompare(b.firstName));
+    const sortStudentsNameReverseAlphabetical = (applicationsList) => {
+        let list = [...applicationsList].sort((b, a) => a.studentFirstName.localeCompare(b.studentFirstName));
         return list;
     };
 
@@ -64,18 +70,18 @@ export const ModalSelectedOfferApplicants = () => {
         let listToFilter = [];
         switch (currentStudentNameFilter) {
             case studentNameFilterTypes.ALPHABETICAL:
-                listToFilter = sortStudentsNameAlphabetical(selectedOfferApplications);
+                listToFilter = sortStudentsNameAlphabetical(selectedOfferApplicationsList);
                 break;
             case studentNameFilterTypes.REVERSE_ALPHABETICAL:
-                listToFilter = sortStudentsNameReverseAlphabetical(selectedOfferApplications);
+                listToFilter = sortStudentsNameReverseAlphabetical(selectedOfferApplicationsList);
                 break;
         }
 
         let filtered = listToFilter;
-        setCurrentStudentApplications(filtered);
+        setSelectedOfferApplicationsList(filtered);
     };
 
-    const openStudentApplicaitonsList = async (studentEmail) => {
+    const openStudentApplicationsList = async (studentEmail) => {
         try {
             await viewStudentApplicaitonList(studentEmail);
             const {selectedOffer, isModalOpen} = useOfferStore.getState();
@@ -86,37 +92,6 @@ export const ModalSelectedOfferApplicants = () => {
             toast.error(t("offer.errors.loadOffer"));
         }
     };
-
-
-    const PillButton = ({onClick, label, Icon, className = ""}) => (
-        <button
-            onClick={onClick}
-            // 👇 use a uniquely named group for this button only
-            className={`max-w-32 group/button flex items-center justify-center md:justify-start gap-2 rounded-full
-                w-full md:w-10 hover:w-auto max-w-full px-3 py-2 transition-all duration-300 overflow-hidden ${className}`}
-        >
-            {/* Icon — visible only on medium screens and up */}
-            <Icon
-                className="hidden md:block group-hover:hidden text-white transition-colors duration-300 flex-shrink-0"
-            />
-
-            {/* Label — always visible on small screens, animated on desktop */}
-            <span
-                className="text-sm text-white text-start
-                 overflow-hidden whitespace-nowrap
-                 md:group-hover/button:whitespace-normal break-words
-                 opacity-100
-                 md:opacity-0
-                 md:group-hover/button:opacity-100
-                 transition-opacity duration-300 ease-in-out
-                 md:inset-0 flex items-center justify-center"
-            >
-      {label}
-    </span>
-
-
-        </button>
-    );
 
 
     //affich les modals
@@ -139,24 +114,13 @@ export const ModalSelectedOfferApplicants = () => {
         </div>
     }
 
-    const tableRows = () => currentStudentApplications.map((student) => (
-        <tr key={student.id} className="border-t border-gray-300">
-            <td className="px-4 py-1 w-auto">{student.firstName} {student.lastName}</td>
-            <td className="px-4 py-1 w-auto">{student.program}</td>
-
-            <td className="px-4 py-1 relative w-[160px] text-center"> {/* fixed width, centered */}
-                <div className="relative flex justify-center items-center gap-2 group">
-                    <div className="flex justify-center items-center gap-2 transition-all duration-300">
-                        <PillButton
-                            onClick={() => openStudentApplicaitonsList(student.email)}
-                            label={t("selectedOfferApplicationsList.btnLabels.applicationsList")}
-                            Icon={ReaderIcon}
-                            className="bg-sky-300 hover:bg-sky-600 w-auto max-w-full"
-                        />
-                    </div>
-                </div>
-            </td>
-
+    const tableRows = () => selectedOfferApplicationsList.map((application) => (
+        <tr key={application.id} className="border-t border-gray-300">
+            <td className="px-4 py-1 w-auto">{application.studentFirstName} {application.studentLastName}</td>
+            <td className="px-4 py-1 w-auto">{application.studentProgrammeName}</td>
+            <td className="px-4 py-1 w-auto">N/A</td>
+            <td className="px-4 py-1 w-auto">{application.status}</td>
+            <td className="px-4 py-1 w-auto">{application.internshipOfferPublishedDate}</td>
 
         </tr>
     ));
@@ -178,6 +142,10 @@ export const ModalSelectedOfferApplicants = () => {
                         headers={[
                             t("selectedOfferApplicationsList.tableHeader.studentName"),
                             t("selectedOfferApplicationsList.tableHeader.studentProgramme"),
+                            t("Cv"),
+                            t("selectedOfferApplicationsList.tableHeader.applicationStatus"),
+                            t("selectedOfferApplicationsList.tableHeader.applicationDate"),
+
                         ]}
                         rows={tableRows()}
                         emptyMessage={t("selectedOfferApplicationsList.noApplicants")}

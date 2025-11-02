@@ -7,7 +7,6 @@ import useAuthStore from "../../stores/authStore.js";
 import {Button} from "../../components/ui/button.jsx";
 import {toast} from "sonner";
 import {useGeStore} from "../../stores/geStore.js";
-import {html} from "framer-motion/m";
 import {ModalSelectedOfferApplicants} from "./gsModalSelectedOfferApplicants.jsx";
 
 export const AllOffers = () => {
@@ -40,7 +39,7 @@ export const AllOffers = () => {
 
     const [currentOfferStatus, setCurrentOfferStatus] = useState(offerStatuses.ALL);
     const [currentProgram, setCurrentProgram] = useState(t("offer.filter.program.all"));
-    const [electedOfferApplicationsList, setSelectedOfferApplicationsList] = useState([])
+
     const {
         offers, loadAllOffersSummary,
         acceptedOffers, loadAcceptedOffers,
@@ -52,14 +51,6 @@ export const AllOffers = () => {
         updateOfferStatus,
         downloadOfferPdf
     } = useOfferStore();
-
-    //student application
-    const {
-        selectedOfferApplications,
-        loadAllApplicationsFromInternshipOffer,
-        error,
-    } = useGeStore();
-    //
 
     // --- Charger le store au montage ---
     useEffect(() => {
@@ -108,10 +99,7 @@ export const AllOffers = () => {
     const openOffer = async (offerId) => {
         try {
             await viewOffer(user.token, offerId);
-            await loadAllApplicationsFromInternshipOffer(offerId);
             const {selectedOffer, isModalOpen} = useOfferStore.getState();
-            const {selectedOfferApplicationsList} = useGeStore.getState();
-            console.log(selectedOfferApplicationsList)
 
             setSelectedOffer(selectedOffer);
             setIsOfferModalOpen(isModalOpen);
@@ -254,9 +242,9 @@ export const AllOffers = () => {
     }
 
     //affich les modals
-    function componentCustomModal(modalTitle, content, onBtnClose){
+    function componentCustomModal(modalTitle, content, onBtnClose, customCloseBtnLabel=""){
         return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+            <div className="bg-white p-6 rounded shadow-lg w-fit">
                 <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
                 {content}
                 <div className="flex w-auto justify-between mt-6 justify-end">
@@ -266,7 +254,7 @@ export const AllOffers = () => {
                             onBtnClose()
                         }}
                     >
-                        {t("offer.modal.close")}
+                        {!(customCloseBtnLabel.length === 0) ? customCloseBtnLabel : t("offer.modal.close")}
                     </button>
                 </div>
             </div>
@@ -326,10 +314,11 @@ export const AllOffers = () => {
             )}
 
             {isOfferApplicationListModalOpen && selectedOffer && (
-                componentCustomModal((selectedOffer.title) +" : "+ `${t("selectedOfferApplicationsList.title")}` ,<ModalSelectedOfferApplicants/>, ()=>{
+                componentCustomModal((selectedOffer.title) +" : "+ `${t("selectedOfferApplicationsList.title")}` ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
+                    ()=>{
                     setIsOfferApplicationListModalOpen(false);
                     setIsOfferModalOpen(true);
-                })
+                }, `${t("selectedOfferApplicationsList.modal.BtnBackLabel")}`)
             )}
         </div>
     );
