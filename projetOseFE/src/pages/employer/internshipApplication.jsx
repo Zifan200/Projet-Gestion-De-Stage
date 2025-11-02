@@ -56,7 +56,6 @@ export const InternshipApplications = () => {
 
         if (filterYear !== "All") {
             filtered = filtered.filter((a) => {
-                // On suppose que "createdAt" ou "startDate" indique l'année
                 const date = a.startDate ? new Date(a.startDate) : new Date(a.createdAt);
                 return date.getFullYear().toString() === filterYear;
             });
@@ -101,7 +100,7 @@ export const InternshipApplications = () => {
                         value={filterYear}
                         onChange={(e) => setFilterYear(e.target.value)}
                     >
-                        <option value="Year">{t("offer.session.year")}</option>
+                        <option value="All">{t("offer.session.year")}</option>
                         {availableYears.map((year) => (
                             <option key={year} value={year}>
                                 {year}
@@ -116,12 +115,12 @@ export const InternshipApplications = () => {
                 <table className="w-full text-sm text-left border-collapse">
                     <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
                     <tr>
-                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle")}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentName")}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail")}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.cv")}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.status")}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.action")}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle") || "Offre"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.statusTitle") || "Statut"}</th>
+                        <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -150,7 +149,9 @@ export const InternshipApplications = () => {
                                     t("internshipApplications.table.noCv")
                                 )}
                             </td>
-                            <td className="px-4 py-2">{app.status}</td>
+                            <td className="px-4 py-2">
+                                {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
+                            </td>
                             <td className="px-4 py-2">
                                 <button
                                     className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
@@ -203,11 +204,32 @@ export const InternshipApplications = () => {
                         <h2 className="text-xl font-semibold mb-4">
                             {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
                         </h2>
-                        <p><strong>Email:</strong> {selectedApplication.studentEmail}</p>
-                        <p><strong>CV:</strong> {selectedApplication.selectedCvFileName || "Aucun CV"}</p>
-                        <p><strong>Offre:</strong> {selectedApplication.internshipOfferTitle}</p>
-                        <p><strong>Statut:</strong> {selectedApplication.status}</p>
-                        <p><strong>Postulé le:</strong> {new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.email") || "Email"}: </strong>
+                            {selectedApplication.studentEmail}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.cv") || "CV"}: </strong>
+                            {selectedApplication.selectedCvFileName || "Aucun CV"}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}: </strong>
+                            {selectedApplication.internshipOfferTitle}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}: </strong>
+                            {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                        </p>
+                        <p>
+                            <strong>{t("internshipApplications.modal.statusTitle") || "Statut"}: </strong>
+                            {t(`internshipApplications.modal.status.${selectedApplication.status.toLowerCase()}`)}
+                        </p>
+                        {selectedApplication.status === "REJECTED" &&
+                            <p>
+                                <strong>{t("internshipApplications.modal.reason") || "Raison"}: </strong>
+                                {selectedApplication.reason}
+                            </p>
+                        }
 
                         <div className="mt-6 flex justify-end">
                             <button

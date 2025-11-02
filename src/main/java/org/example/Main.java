@@ -53,7 +53,6 @@ public class Main {
     @Bean
     CommandLineRunner commandLineRunner(ApplicationContext context) {
         return args -> {
-
             // -----------------------------
             // 1️⃣ Création du gestionnaire
             // -----------------------------
@@ -127,26 +126,33 @@ public class Main {
                     .build();
             InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer4);
 
+            InternshipOfferDto offer5 = InternshipOfferDto.builder()
+                    .title("Frontend Angular")
+                    .description("Stage développement frontend Angular")
+                    .targetedProgramme("Informatique")
+                    .employerEmail(employer.getEmail())
+                    .expirationDate(LocalDate.now().plusMonths(1))
+                    .build();
+            InternshipOfferResponseDto savedOffer5 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer5);
+
+            InternshipOfferDto offer6 = InternshipOfferDto.builder()
+                    .title("AI & Data Engineer")
+                    .description("Experience required in Python and Machine Learning algorithms")
+                    .targetedProgramme("Informatique")
+                    .employerEmail(employer.getEmail())
+                    .expirationDate(LocalDate.now().plusMonths(1))
+                    .build();
+            InternshipOfferResponseDto savedOffer6 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer6);
+
             // -----------------------------
             // 3️⃣1️⃣ Tester getIntershipOfferSession
             // -----------------------------
-            InternshipOffer offerEntity1 = internshipOfferRepository.findById(savedOffer1.getId()).get();
-            String session1 = internshipOfferService.getIntershipOfferSession(offerEntity1.getStartDate());
-            System.out.println("Session pour l'offre '" + savedOffer1.getTitle() + "' : " + session1);
-
-            InternshipOffer offerEntity2 = internshipOfferRepository.findById(savedOffer2.getId()).get();
-            String session2 = internshipOfferService.getIntershipOfferSession(offerEntity2.getStartDate());
-            System.out.println("Session pour l'offre '" + savedOffer2.getTitle() + "' : " + session2);
-
-            if (savedOffer3.getStartDate() != null) {
-                InternshipOffer offerEntity3 = internshipOfferRepository.findById(savedOffer3.getId()).get();
-                String session3 = internshipOfferService.getIntershipOfferSession(offerEntity3.getStartDate());
-                System.out.println("Session pour l'offre '" + savedOffer3.getTitle() + "' : " + session3);
-            }
-            if (savedOffer4.getStartDate() != null) {
-                InternshipOffer offerEntity4 = internshipOfferRepository.findById(savedOffer4.getId()).get();
-                String session4 = internshipOfferService.getIntershipOfferSession(offerEntity4.getStartDate());
-                System.out.println("Session pour l'offre '" + savedOffer4.getTitle() + "' : " + session4);
+            for (InternshipOfferResponseDto savedOffer : List.of(savedOffer1, savedOffer2, savedOffer3, savedOffer4)) {
+                if (savedOffer.getStartDate() != null) {
+                    InternshipOffer offerEntity = internshipOfferRepository.findById(savedOffer.getId()).get();
+                    String session = internshipOfferService.getIntershipOfferSession(offerEntity.getStartDate());
+                    System.out.println("Session pour l'offre '" + savedOffer.getTitle() + "' : " + session);
+                }
             }
 
             // -----------------------------
@@ -175,16 +181,17 @@ public class Main {
             cvService.approveCv(cvResponseDTO.getId());
 
             // -----------------------------
-            // 5️⃣ Mise à jour des statuts
+            // 5️⃣ Mise à jour des statuts des offres
             // -----------------------------
             internshipOfferService.updateOfferStatus(savedOffer1.getId(), ApprovalStatus.ACCEPTED, "je taimes");
             internshipOfferService.updateOfferStatus(savedOffer2.getId(), ApprovalStatus.ACCEPTED, "t cool");
             internshipOfferService.updateOfferStatus(savedOffer4.getId(), ApprovalStatus.REJECTED, "pas intéressant");
+            internshipOfferService.updateOfferStatus(savedOffer5.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(savedOffer6.getId(), ApprovalStatus.ACCEPTED, "");
 
             // -----------------------------
             // 6️⃣ Affichage offres
             // -----------------------------
-            System.out.println("\n=== Toutes les offres (résumé) ===");
             List<InternshipOfferListDto> allOffers = internshipOfferService.getAllOffersSummary();
             allOffers.forEach(o -> System.out.println(
                     "ID: " + o.getId() + " | " + o.getTitle() +
@@ -192,23 +199,11 @@ public class Main {
                             " (Expiration: " + o.getExpirationDate() + ")"
             ));
 
-            System.out.println("\n=== Offres ACCEPTED pour Informatique ===");
-            internshipOfferService.getOffersByProgramme("Informatique")
-                    .forEach(o -> System.out.println("ID: " + o.getId() + " | " + o.getTitle() + " - " + o.getEnterpriseName()));
-
-            System.out.println("\n=== Offres PENDING ===");
-            internshipOfferService.getPendingOffers()
-                    .forEach(o -> System.out.println("ID: " + o.getId() + " | " + o.getTitle()));
-
-            System.out.println("\n=== Offres REJECTED ===");
-            internshipOfferService.getRejectedOffers()
-                    .forEach(o -> System.out.println("ID: " + o.getId() + " | " + o.getTitle()));
-
             // -----------------------------
-            // 7️⃣ Création candidature étudiante
+            // 7️⃣ Création candidatures
             // -----------------------------
-            CvRepository cvRepository = context.getBean(CvRepository.class);
             InternshipApplicationService internshipApplicationService = context.getBean(InternshipApplicationService.class);
+            CvRepository cvRepository = context.getBean(CvRepository.class);
 
             byte[] bytes = new byte[9];
             CV studentCV = CV.builder()
@@ -229,6 +224,7 @@ public class Main {
                     .studentEmail(etudiantDTO.getEmail())
                     .selectedCvID(studentCV.getId())
                     .build();
+
             InternshipApplicationResponseDTO savedInternshipApplication = internshipApplicationService.saveInternshipApplication(internshipApplicationDTO);
         };
     }

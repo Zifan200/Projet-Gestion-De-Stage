@@ -5,6 +5,9 @@ import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
+import { useStudentStore } from "../../stores/studentStore.js";
+import { Table } from "../../components/ui/table.jsx";
+import { Header } from "../../components/ui/header.jsx";
 
 export const StudentOffers = () => {
     const { t } = useTranslation();
@@ -14,23 +17,23 @@ export const StudentOffers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterSession, setFilterSession] = useState("All");
     const [filterYear, setFilterYear] = useState("All");
+    const [selectedCv, setSelectedCv] = useState(null);
 
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-    const { offers, loading, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
+    const { offers, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
     const { cvs, loadCvs, applyCvStore } = useCvStore();
-
-    const [selectedCv, setSelectedCv] = useState(null);
+    const { applications, loadAllApplications } = useStudentStore();
 
     useEffect(() => {
-        if (!isAuthenticated || !user) {
-            navigate("/");
-        } else {
+        if (!isAuthenticated || !user) navigate("/");
+        else {
             loadOffersSummary();
             loadCvs();
+            loadAllApplications();
         }
-    }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs]);
+    }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs, loadAllApplications]);
 
     if (!isAuthenticated || !user) return null;
 
@@ -70,118 +73,104 @@ export const StudentOffers = () => {
             console.error(err);
             toast.error(t("studentOffers.errors.applyOffer"));
         }
+        loadAllApplications();
     };
 
-    // 🔹 Extraire les années disponibles à partir des dates d'expiration
+    const filteredOffers = useMemo(() => {
+        let filtered = offers;
+        if (filterSession && filterSession !== "All") {
+            filtered = filtered.filter((offer) => offer.session === filterSession);
+        }
+        if (filterYear && filterYear !== "All") {
+            filtered = filtered.filter(
+                (offer) =>
+                    offer.startDate &&
+                    new Date(offer.startDate).getFullYear().toString() === filterYear
+            );
+        }
+        return filtered;
+    }, [offers, filterSession, filterYear]);
+
+    const rows = filteredOffers
+        .filter((offer) => !applications.find((a) => a.internshipOfferId === offer.id))
+        .map((offer) => (
+            <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
+                <td className="px-4 py-2">{offer.title}</td>
+                <td className="px-4 py-2">{offer.enterpriseName}</td>
+                <td className="px-4 py-2">
+                    {offer.startDate ? new Date(offer.startDate).toLocaleDateString() : "-"}
+                </td>
+                <td className="px-4 py-2 flex gap-2">
+                    <button
+                        className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
+                        onClick={() => handleViewOffer(offer.id)}
+                    >
+                        {t("studentOffers.actions.view") || "View"}
+                    </button>
+                    <button
+                        className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
+                        onClick={() => handleDownload(offer.id)}
+                    >
+                        {t("studentOffers.actions.download")}
+                    </button>
+                </td>
+            </tr>
+        ));
+
     const availableYears = useMemo(() => {
         const years = new Set();
         offers.forEach((offer) => {
-            if (offer.expirationDate) {
-                years.add(new Date(offer.expirationDate).getFullYear());
-            }
+            if (offer.startDate) years.add(new Date(offer.startDate).getFullYear());
         });
         return ["All", ...Array.from(years).sort()];
     }, [offers]);
 
-    // 🔹 Filtrage par session et année
-    const filteredOffers = useMemo(() => {
-        let filtered = offers;
-
-        if (filterSession && filterSession !== "All") {
-            filtered = filtered.filter((offer) => offer.session === filterSession);
-        }
-
-        if (filterYear && filterYear !== "All") {
-            filtered = filtered.filter(
-                (offer) =>
-                    offer.expirationDate &&
-                    new Date(offer.expirationDate).getFullYear().toString() === filterYear
-            );
-        }
-
-        console.log("🎯 Offres filtrées :", { filterSession, filterYear, filtered });
-        return filtered;
-    }, [offers, filterSession, filterYear]);
-
     return (
-        <div className="p-10">
-            {/* 🔹 Filtres Session et Année */}
-            <div className="flex justify-end mb-4 gap-4">
-                {/* Filtre par session */}
-                <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">
-                        {t("offer.filter.session")}:
-                    </label>
-                    <select
-                        className="rounded border border-zinc-300 p-1"
-                        value={filterSession}
-                        onChange={(e) => setFilterSession(e.target.value)}
-                    >
-                        <option value="All">{t("offer.session.all")}</option>
-                        <option value="Automne">{t("offer.session.autumn")}</option>
-                        <option value="Hiver">{t("offer.session.winter")}</option>
-                    </select>
-                </div>
+        <div className="space-y-6 p-10">
+            <div className="flex items-center justify-between mb-4">
+                <h1 className="text-2xl font-bold">{t("studentOffers.title")}</h1>
 
-                {/* Filtre par année */}
-                <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">
-                        {t("offer.filter.year")}:
-                    </label>
-                    <select
-                        className="rounded border border-zinc-300 p-1"
-                        value={filterYear}
-                        onChange={(e) => setFilterYear(e.target.value)}
-                    >
-                        {availableYears.map((year) => (
-                            <option key={year} value={year}>
-                                {year}
-                            </option>
-                        ))}
-                    </select>
+                <div className="flex gap-4">
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
+                        <select
+                            className="rounded border border-zinc-300 p-1"
+                            value={filterSession}
+                            onChange={(e) => setFilterSession(e.target.value)}
+                        >
+                            <option value="All">{t("offer.session.all")}</option>
+                            <option value="Automne">{t("offer.session.autumn")}</option>
+                            <option value="Hiver">{t("offer.session.winter")}</option>
+                        </select>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">{t("offer.filter.year")}:</label>
+                        <select
+                            className="rounded border border-zinc-300 p-1"
+                            value={filterYear}
+                            onChange={(e) => setFilterYear(e.target.value)}
+                        >
+                            {availableYears.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            {/* Table des offres */}
-            <div className="overflow-x-auto bg-white shadow rounded">
-                <table className="w-full text-sm text-left border-collapse">
-                    <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
-                    <tr>
-                        <th className="px-4 py-3">{t("studentOffers.table.title")}</th>
-                        <th className="px-4 py-3">{t("studentOffers.table.company")}</th>
-                        <th className="px-4 py-3">{t("studentOffers.table.deadline") || "Deadline"}</th>
-                        <th className="px-4 py-3">{t("studentOffers.table.action") || "Action"}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredOffers.map((offer) => (
-                        <tr key={offer.id} className="border-t border-zinc-300 text-zinc-700">
-                            <td className="px-4 py-2">{offer.title}</td>
-                            <td className="px-4 py-2">{offer.enterpriseName}</td>
-                            <td className="px-4 py-2">
-                                {offer.expirationDate
-                                    ? new Date(offer.expirationDate).toLocaleDateString()
-                                    : "-"}
-                            </td>
-                            <td className="px-4 py-2 flex gap-2">
-                                <button
-                                    className="px-3 py-1 bg-[#B3FE3B] rounded-full font-bold hover:bg-green-400"
-                                    onClick={() => handleViewOffer(offer.id)}
-                                >
-                                    {t("studentOffers.actions.view") || "View"}
-                                </button>
-                                <button
-                                    className="px-3 py-1 bg-amber-200 hover:bg-amber-50 rounded-full font-bold"
-                                    onClick={() => handleDownload(offer.id)}
-                                >
-                                    {t("studentOffers.actions.download")}
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
+            {/* Tableau des offres */}
+            <Table
+                headers={[
+                    t("studentOffers.table.title"),
+                    t("studentOffers.table.company"),
+                    t("studentOffers.table.deadline"),
+                    t("studentOffers.table.action"),
+                ]}
+                rows={rows}
+                emptyMessage={t("studentOffers.noOffers")}
+            />
 
             {/* Modal */}
             {isModalOpen && selectedOffer && (
@@ -251,7 +240,6 @@ export const StudentOffers = () => {
                             >
                                 {t("studentOffers.modal.apply")}
                             </button>
-
                             <button
                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                 onClick={() => {
@@ -267,5 +255,6 @@ export const StudentOffers = () => {
                 </div>
             )}
         </div>
+
     );
 };

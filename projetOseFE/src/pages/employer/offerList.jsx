@@ -278,7 +278,7 @@ export const OfferList = () => {
                             value={filterYear}
                             onChange={(e) => setFilterYear(e.target.value)}
                         >
-                            <option value="Year">{t("offer.session.year")}</option>
+                            <option value="All">{t("offer.session.year")}</option>
                             {availableYears.map((year) => (
                                 <option key={year} value={year.toString()}>
                                     {year}
