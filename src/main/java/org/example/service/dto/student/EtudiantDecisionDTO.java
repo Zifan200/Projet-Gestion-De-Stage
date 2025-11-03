@@ -15,5 +15,5 @@ public class EtudiantDecisionDTO  {
     @NotBlank(message = "required: student email")
     @NotEmpty
     private String studentEmail;
-    private String reason;
+    private String etudiantRaison;
 }

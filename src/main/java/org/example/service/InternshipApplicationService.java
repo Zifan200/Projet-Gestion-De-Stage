@@ -279,7 +279,7 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Student is not allowed to approve this application");
         }
 
-        application.setStatus(ApprovalStatus.CONFIRMED_BY_STUDENT);
+        application.setEtudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT);
         internshipApplicationRepository.save(application);
 
         eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
@@ -309,8 +309,8 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Student is not allowed to reject this application at this time.");
         }
 
-        application.setStatus(ApprovalStatus.REJECTED_BY_STUDENT);
-        application.setReason(reason);
+        application.setEtudiantStatus(ApprovalStatus.REJECTED_BY_STUDENT);
+        application.setEtudiantRaison(reason);
         internshipApplicationRepository.save(application);
 
         eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
