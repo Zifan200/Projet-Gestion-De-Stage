@@ -1,7 +1,5 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
-import useGeStore from "../../stores/geStore.js";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { Header } from "../../components/ui/header.jsx";
 import {
@@ -14,36 +12,53 @@ import {
 import {
     EyeOpenIcon,
     DownloadIcon,
-    FileTextIcon,
     Cross2Icon,
 } from "@radix-ui/react-icons";
 
 export const InternshipApplicationsGE = () => {
     const { t } = useTranslation("internship_applications");
-    const { applications, loadAllInternshipApplications, downloadCv } = useGeStore();
+
+    // Mock data pour tester le design
+    const applications = [
+        {
+            id: 1,
+            studentFirstName: "Alice",
+            studentLastName: "Dupont",
+            studentEmail: "alice.dupont@mail.com",
+            selectedCvFileName: "alice_cv.pdf",
+            selectedCvID: 101,
+            internshipOfferTitle: "Développeur Java",
+            status: "PENDING",
+            createdAt: "2025-11-02T12:00:00Z",
+        },
+        {
+            id: 2,
+            studentFirstName: "Bob",
+            studentLastName: "Martin",
+            studentEmail: "bob.martin@mail.com",
+            selectedCvFileName: "bob_cv.pdf",
+            selectedCvID: 102,
+            internshipOfferTitle: "Frontend React",
+            status: "ACCEPTED",
+            createdAt: "2025-10-28T08:30:00Z",
+        },
+    ];
+
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterStatus, setFilterStatus] = useState(null);
 
-    useEffect(() => {
-        loadAllInternshipApplications();
-    }, [loadAllInternshipApplications]);
-
     const handleAction = (action, app) => {
-        try {
-            switch (action) {
-                case "view":
-                    setSelectedApplication(app);
-                    setIsModalOpen(true);
-                    break;
-                case "download":
-                    downloadCv(app.selectedCvID, { preview: false });
-                    break;
-                default:
-                    break;
-            }
-        } catch (err) {
-            toast.error(err.message || t("errors.downloadCv"));
+        switch (action) {
+            case "view":
+                setSelectedApplication(app);
+                setIsModalOpen(true);
+                break;
+            case "download":
+                alert(`Téléchargement CV: ${app.selectedCvFileName}`);
+                break;
+            default:
+                break;
         }
     };
 

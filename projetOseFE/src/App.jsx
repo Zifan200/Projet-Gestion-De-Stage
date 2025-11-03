@@ -34,6 +34,7 @@ import { GsManageCvs } from "./pages/gs/cvs.jsx";
 import { InternshipApplications } from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 import { DevMode } from "./components/tools/dev-mode.jsx";
+import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -124,9 +125,9 @@ function App() {
     },
     {
       key: "applications",
-      label: t("gs_dashboard:stats.internshipApplications"),
+      label: t("gs_dashboard:stats.application"),
       href: "/dashboard/gs/applications",
-      icon: FileTextIcon,
+      icon: PersonIcon,
     },
     {
       key: "settings",
@@ -162,6 +163,10 @@ function App() {
               element={<GsManageCvs />}
             />
             <Route path="/dashboard/gs/internships" element={<AllOffers />} />
+            <Route
+                path="/dashboard/gs/applications"
+                element={<InternshipApplicationsGE />}
+            />
             <Route
               path="/dashboard/gs/settings"
               element={<DashboardSettings />}
