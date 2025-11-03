@@ -40,5 +40,8 @@
     "fall": "Automne",
     "winter": "Hiver",
     "year" : "Toutes les années"
+  },
+  "menu": {
+    "close": "Fermer"
   }
 }

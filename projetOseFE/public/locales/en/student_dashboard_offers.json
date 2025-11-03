@@ -39,5 +39,8 @@
     "fall": "Fall",
     "winter": "Winter",
     "year" : "All years"
+  },
+  "menu": {
+    "close": "Close"
   }
 }
