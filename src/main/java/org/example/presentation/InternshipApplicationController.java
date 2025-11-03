@@ -59,7 +59,8 @@ public class InternshipApplicationController {
             @RequestBody EtudiantDecisionDTO request
     ) {
         InternshipApplicationResponseDTO response =
-                internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId, request.getReason());
+                internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId,
+                        request.getEtudiantRaison());
         return ResponseEntity.ok(response);
     }
 }

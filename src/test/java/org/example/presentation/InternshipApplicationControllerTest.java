@@ -226,7 +226,7 @@ class InternshipApplicationControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Java Developer")
-                .status(ApprovalStatus.CONFIRMED_BY_STUDENT)
+                .etudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT)
                 .build();
 
         EtudiantDecisionDTO request = new EtudiantDecisionDTO();
@@ -240,7 +240,7 @@ class InternshipApplicationControllerTest {
                         .content(new ObjectMapper().writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$.status").value("CONFIRMED_BY_STUDENT"));
+                .andExpect(jsonPath("$.etudiantStatus").value("CONFIRMED_BY_STUDENT"));
     }
 
     @Test
@@ -255,13 +255,13 @@ class InternshipApplicationControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Java Developer")
-                .status(ApprovalStatus.REJECTED_BY_STUDENT)
-                .reason("Je préfère une autre offre.")
+                .etudiantStatus(ApprovalStatus.REJECTED_BY_STUDENT)
+                .etudiantRaison("Je préfère une autre offre.")
                 .build();
 
         EtudiantDecisionDTO request = new EtudiantDecisionDTO();
         request.setStudentEmail("student@mail.com");
-        request.setReason("Je préfère une autre offre.");
+        request.setEtudiantRaison("Je préfère une autre offre.");
 
         when(internshipApplicationService.rejectOfferByStudent("student@mail.com", 1L, "Je préfère une autre offre."))
                 .thenReturn(responseDto);
@@ -271,8 +271,8 @@ class InternshipApplicationControllerTest {
                         .content(new ObjectMapper().writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$.status").value("REJECTED_BY_STUDENT"))
-                .andExpect(jsonPath("$.reason").value("Je préfère une autre offre."));
+                .andExpect(jsonPath("$.etudiantStatus").value("REJECTED_BY_STUDENT"))
+                .andExpect(jsonPath("$.etudiantRaison").value("Je préfère une autre offre."));
     }
 }
 

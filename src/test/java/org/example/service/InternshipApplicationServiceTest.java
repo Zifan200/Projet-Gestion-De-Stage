@@ -1060,7 +1060,7 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(app.getId(), response.getId());
-        assertEquals(ApprovalStatus.CONFIRMED_BY_STUDENT, response.getStatus());
+        assertEquals(ApprovalStatus.CONFIRMED_BY_STUDENT, response.getEtudiantStatus());
     }
 
     @Test
@@ -1102,8 +1102,8 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(app.getId(), response.getId());
-        assertEquals(ApprovalStatus.REJECTED_BY_STUDENT, response.getStatus());
-        assertEquals(reason, response.getReason());
+        assertEquals(ApprovalStatus.REJECTED_BY_STUDENT, response.getEtudiantStatus());
+        assertEquals(reason, response.getEtudiantRaison());
     }
 
     @Test
