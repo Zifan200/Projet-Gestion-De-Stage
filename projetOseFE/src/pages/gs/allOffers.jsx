@@ -557,7 +557,13 @@ export const AllOffers = () => {
                 {/*    {t("modal.close")}*/}
                 {/*</button>*/}
             </div>
-        </div>, `${t("modal.close")}`
+        </div>,
+              ()=>{
+                  setIsModalOpen(false);
+                  setSelectedOffer(null);
+                  setRejectReason("");
+              },
+              `${t("modal.close")}`
             )
             )}
 
