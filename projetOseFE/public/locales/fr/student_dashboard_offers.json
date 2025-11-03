@@ -29,5 +29,16 @@
     "viewOffer": "Erreur lors de la visualisation de l'offre.",
     "applyOffer": "Échec de la postulation à l'offre.",
     "selectCv": "Veuillez sélectionner un CV avant de postuler."
+  },
+  "filter": {
+    "session": "Filter par session",
+    "year": "Filter par année"
+  },
+
+  "session": {
+    "all": "Toutes les sessions",
+    "fall": "Automne",
+    "winter": "Hiver",
+    "year" : "Toutes les années"
   }
 }

@@ -165,27 +165,27 @@ export const StudentOffers = () => {
       <div className="flex items-center justify-end gap-4">
         {/* Session Filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">{t("filter.session")}:</label>
+          <label className="text-sm font-medium">{t("student_dashboard_offers:filter.session")}:</label>
           <select
             className="rounded border border-zinc-300 p-1"
             value={filterSession}
             onChange={(e) => setFilterSession(e.target.value)}
           >
-            <option value="All">{t("session.all")}</option>
-            <option value="Automne">{t("session.autumn")}</option>
-            <option value="Hiver">{t("session.winter")}</option>
+            <option value="All">{t("student_dashboard_offers:session.all")}</option>
+            <option value="Automne">{t("student_dashboard_offers:session.fall")}</option>
+            <option value="Hiver">{t("student_dashboard_offers:session.winter")}</option>
           </select>
         </div>
 
         {/* Year Filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">{t("filter.year")}:</label>
+          <label className="text-sm font-medium">{t("student_dashboard_offers:filter.year")}:</label>
           <select
             className="rounded border border-zinc-300 p-1"
             value={filterYear}
             onChange={(e) => setFilterYear(e.target.value)}
           >
-            <option value="All">{t("session.year")}</option>
+            <option value="All">{t("student_dashboard_offers:session.year")}</option>
             {availableYears.map((year) => (
               <option key={year} value={year.toString()}>
                 {year}
