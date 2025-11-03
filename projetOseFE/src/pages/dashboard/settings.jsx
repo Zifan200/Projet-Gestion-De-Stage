@@ -1,11 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useUserStore } from "../../stores/userStore.js";
-import { FormTemplate } from "../../components/ui/form-template.jsx";
 import { Card } from "../../components/ui/Card.jsx";
+import { toast } from "sonner";
 
 export const DashboardSettings = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("dashboard_settings");
   const { settings, loading, loadSettings, updateLanguage } = useUserStore();
 
   React.useEffect(() => {
@@ -20,20 +20,26 @@ export const DashboardSettings = () => {
 
   const handleLanguageChange = async (e) => {
     const lang = e.target.value;
-    i18n.changeLanguage(lang);
-    await updateLanguage(lang);
+    try {
+      i18n.changeLanguage(lang);
+      await updateLanguage(lang);
+      toast.success(t("toast.success"));
+    } catch (err) {
+      toast.error(t("toast.error"));
+    }
   };
 
   return (
-    <>
-      <h1 className="text-4xl mb-18">{t("menu.settings")}</h1>
-      <Card title={t("settings.lang.title")}>
+    <div className="p-6 space-y-6">
+      <h1 className="text-4xl mb-8">{t("title")}</h1>
+
+      <Card title={t("lang.title")}>
         <div className="flex flex-col gap-2">
           <label
             htmlFor="language"
             className="text-sm font-medium text-gray-700 mt-2 mb-6"
           >
-            {t("settings.lang.language_description")}
+            {t("lang.language_description")}
           </label>
 
           <select
@@ -48,6 +54,6 @@ export const DashboardSettings = () => {
           </select>
         </div>
       </Card>
-    </>
+    </div>
   );
 };

@@ -32,7 +32,7 @@ export const StudentDashboard = () => {
     useEffect(() => {
         if (!isAuthenticated || !user) {
             navigate("/");
-        } else {
+        } else if (user.role === "STUDENT") {
             loadCvs();
         }
     }, [isAuthenticated, user, navigate]);
