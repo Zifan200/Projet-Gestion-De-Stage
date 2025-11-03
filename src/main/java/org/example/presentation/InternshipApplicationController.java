@@ -2,7 +2,6 @@ package org.example.presentation;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.enums.ApprovalStatus;
 import org.example.service.InternshipApplicationService;
 import org.example.service.UserAppService;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
@@ -63,11 +62,5 @@ public class InternshipApplicationController {
                 internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId,
                         request.getEtudiantRaison());
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/etudiant-statuses")
-    public ResponseEntity<List<ApprovalStatus>> getAllEtudiantStatuses() {
-        List<ApprovalStatus> statuses = internshipApplicationService.getAllEtudiantStatusesFromInternshipApplication();
-        return ResponseEntity.ok(statuses);
     }
 }

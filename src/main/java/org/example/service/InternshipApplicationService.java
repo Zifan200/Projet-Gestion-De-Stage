@@ -319,12 +319,4 @@ public class InternshipApplicationService {
 
         return InternshipApplicationResponseDTO.create(application);
     }
-    public List<ApprovalStatus> getAllEtudiantStatusesFromInternshipApplication() {
-        return internshipApplicationRepository.findAll()
-                .stream()
-                .map(InternshipApplication::getEtudiantStatus)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
 }
