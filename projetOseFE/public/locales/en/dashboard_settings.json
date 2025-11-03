@@ -1,0 +1,15 @@
+{
+  "title": "Settings",
+  "lang": {
+    "title": "Language",
+    "language_description": "Select the language used for the interface"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "French"
+  },
+  "toast": {
+    "success": "Language updated successfully!",
+    "error": "An error occurred while updating the language."
+  }
+}

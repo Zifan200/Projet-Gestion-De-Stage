@@ -1,0 +1,27 @@
+{
+  "stats": {
+    "pendingCvs": "Pending CVs",
+    "acceptedCvs": "Accepted CVs",
+    "availableOffers": "Total Offers",
+    "pendingOffers": "Pending Offers",
+    "manageCvs": "Manage Student CVs",
+    "allOffers": "All Internship Offers"
+  },
+  "titles": {
+    "home": "Home",
+    "dashboard": "Manager Dashboard",
+    "manageCvs": "Manage Student CVs",
+    "allOffers": "All Offers",
+    "settings": "Settings"
+  },
+  "messages": {
+    "welcome": "Welcome back, {{firstName}}!",
+    "noCvs": "No student CVs available yet.",
+    "noOffers": "No internship offers found.",
+    "loadPrompt": "Start by reviewing or validating CVs."
+  },
+  "errors": {
+    "loadCvs": "Error while loading student CVs.",
+    "loadOffers": "Error while loading internship offers."
+  }
+}

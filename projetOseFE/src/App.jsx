@@ -2,8 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/menu/Navbar.jsx";
 
-import { StudentOffers } from "./pages/student/studentOffers.jsx";
-
 import { LoginPage } from "./pages/login.jsx";
 
 // Pages Employeur
@@ -13,6 +11,7 @@ import { ResetPasswordPage } from "./pages/auth/resetPassword.jsx";
 import { RequestPassword } from "./pages/auth/requestPassword.jsx";
 import { StudentDashboard } from "./pages/student/dashboard.jsx";
 import { StudentSignUpPage } from "./pages/student/signUp.jsx";
+import { StudentOffers } from "./pages/student/studentOffers.jsx";
 import Home from "./pages/home.jsx";
 import { EmployerDashboard } from "./pages/employer/dashboard.jsx";
 import { DashboardLayout } from "./components/layouts/dashboard.jsx";
@@ -32,35 +31,41 @@ import { OfferList } from "./pages/employer/offerList.jsx";
 import { AllOffers } from "./pages/gs/allOffers.jsx";
 import { GsDashboard } from "./pages/gs/dashboard.jsx";
 import { GsManageCvs } from "./pages/gs/cvs.jsx";
-import {InternshipApplications} from "./pages/employer/internshipApplication.jsx";
+import { InternshipApplications } from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
-import {StudentApplications} from "./pages/student/internshipApplications.jsx";
+import { DevMode } from "./components/tools/dev-mode.jsx";
 
 function App() {
-  const { t } = useTranslation();
-  const gsDashboardSidebarLinks = [
+  const { t } = useTranslation([
+    "student_dashboard",
+    "employer_dashboard",
+    "gs_dashboard",
+    "menu",
+  ]);
+
+  const studentDashboardSidebarLinks = [
     {
-      key: "dashboard",
-      label: t("menu.dashboard"),
-      href: "/dashboard/gs/",
+      key: "home",
+      label: t("student_dashboard:titles.home"),
+      href: "/dashboard/student",
       icon: BackpackIcon,
     },
     {
-      key: "manageCvs",
-      label: t("menu.manageCvs"),
-      href: "/dashboard/gs/manage-students-cvs",
-      icon: BackpackIcon,
+      key: "cvs",
+      label: t("student_dashboard:stats.cvs"),
+      href: "/dashboard/student/cvs",
+      icon: FileTextIcon,
     },
     {
-      key: "seeOffers",
-      label: t("menu.allOffers"),
-      href: "/dashboard/gs/internships",
-      icon: EnvelopeClosedIcon,
+      key: "offers",
+      label: t("student_dashboard:stats.availableOffers"),
+      href: "/dashboard/student/offers",
+      icon: EnvelopeOpenIcon,
     },
     {
       key: "settings",
-      label: t("menu.settings"),
-      href: "/dashboard/gs/settings",
+      label: t("menu:settings"),
+      href: "/dashboard/student/settings",
       icon: GearIcon,
     },
   ];
@@ -68,177 +73,150 @@ function App() {
   const employerDashboardSidebarLinks = [
     {
       key: "dashboard",
-      label: t("menu.dashboard"),
+      label: t("employer_dashboard:titles.home"),
       href: "/dashboard/employer/",
       icon: BackpackIcon,
     },
     {
       key: "applications",
-      label: t("menu.applications"),
+      label: t("employer_dashboard:stats.applications"),
       href: "/dashboard/employer/applications",
-      icon: PersonIcon, // ou un autre icône
+      icon: PersonIcon,
     },
     {
       key: "createOffers",
-      label: t("menu.createOffer"),
+      label: t("employer_dashboard:stats.createOffer"),
       href: "/dashboard/employer/add-intership",
       icon: EnvelopeClosedIcon,
     },
     {
       key: "seeOffers",
-      label: t("menu.seeOffer"),
+      label: t("employer_dashboard:stats.myOffers"),
       href: "/dashboard/employer/my-offers",
       icon: EnvelopeOpenIcon,
     },
     {
       key: "settings",
-      label: t("menu.settings"),
+      label: t("menu:settings"),
       href: "/dashboard/employer/settings",
       icon: GearIcon,
     },
-    // {
-    //   key: "applications",
-    //   label: t("menu.post"),
-    //   href: "/employer/applications",
-    //   icon: PersonIcon,
-    // },
-    // {
-    //   key: "students",
-    //   label: t("menu.student"),
-    //   href: "/employer/students",
-    //   icon: CheckIcon,
-    // },
   ];
 
-  const studentDashboardSidebarLinks = [
+  const gsDashboardSidebarLinks = [
     {
-      key: "home",
-      label: "Dashboard",
-      href: "/dashboard/student",
+      key: "dashboard",
+      label: t("gs_dashboard:titles.home"),
+      href: "/dashboard/gs/",
       icon: BackpackIcon,
     },
     {
-      key: "cvs",
-      label: t("menu.cvs"),
-      href: "/dashboard/student/cvs",
-      icon: FileTextIcon,
+      key: "manageCvs",
+      label: t("gs_dashboard:stats.manageCvs"),
+      href: "/dashboard/gs/manage-students-cvs",
+      icon: BackpackIcon,
     },
     {
-      key: "offers",
-      label: t("menu.myOffer"),
-      href: "/dashboard/student/offers",
-      icon: EnvelopeOpenIcon,
-    },
-    {
-      key: "applications",
-      label: t("menu.applications"),
-      href: "/dashboard/student/applications",
+      key: "seeOffers",
+      label: t("gs_dashboard:stats.allOffers"),
+      href: "/dashboard/gs/internships",
       icon: EnvelopeClosedIcon,
     },
     {
       key: "settings",
-      label: t("menu.settings"),
-      href: "/dashboard/student/settings",
+      label: t("menu:settings"),
+      href: "/dashboard/gs/settings",
       icon: GearIcon,
     },
   ];
+
   return (
-      <div className="min-h-screen">
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            {/* Pages principales */}
-            <Route path="/" element={<Home />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/request-password" element={<RequestPassword />} />
+    <div className="min-h-screen">
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          {/* Pages principales */}
+          <Route path="/" element={<Home />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/request-password" element={<RequestPassword />} />
 
-            {/* Routes Ge */}
+          {/* Routes Ge */}
+          <Route
+            path="/dashboard/gs/"
+            element={
+              <DashboardLayout
+                sidebarLinks={gsDashboardSidebarLinks}
+                title={t("gs_dashboard:titles.dashboard")}
+              />
+            }
+          >
+            <Route index element={<GsDashboard />} />
             <Route
-                path="/dashboard/gs/"
-                element={
-                  <DashboardLayout
-                      sidebarLinks={gsDashboardSidebarLinks}
-                      title={t("dashboardLayout.gs")}
-                  />
-                }
-            >
-              <Route index element={<GsDashboard />} />
-              <Route
-                  path="/dashboard/gs/manage-students-cvs"
-                  element={<GsManageCvs />}
-              />
-              <Route path="/dashboard/gs/internships" element={<AllOffers />} />
-              <Route
-                  path="/dashboard/gs/settings"
-                  element={<DashboardSettings />}
-              />
-            </Route>
-
-            {/* Routes Étudiant */}
-            <Route path="/signup/student" element={<StudentSignUpPage />} />
-            <Route
-                path="/dashboard/student/"
-                element={
-                  <DashboardLayout
-                      sidebarLinks={studentDashboardSidebarLinks}
-                      title={t("dashboardLayout.student")}
-                  />
-                }
-            >
-              <Route index element={<StudentDashboard />} />
-              <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-              <Route
-                  path="/dashboard/student/offers"
-                  element={<StudentOffers />}
-              />
-              <Route
-                  path="/dashboard/student/applications"
-                  element={<StudentApplications />}
-              />
-              <Route
-                  path="/dashboard/student/settings"
-                  element={<DashboardSettings />}
-              />
-            </Route>
-
-            <Route
-                path="/dashboard/employer/"
-                element={
-                  <DashboardLayout
-                      sidebarLinks={employerDashboardSidebarLinks}
-                      title={t("dashboardLayout.employer")}
-                  />
-                }
-            >
-              <Route index element={<EmployerDashboard />} />
-              <Route
-                  path="/dashboard/employer/add-intership"
-                  element={<AddIntership />}
-              />
-              <Route
-                  path="/dashboard/employer/my-offers"
-                  element={<OfferList />}
-              />
-              <Route
-                  path="/dashboard/employer/applications"
-                  element={<InternshipApplications />}
-              />
-              <Route
-                  path="/dashboard/employer/settings"
-                  element={<DashboardSettings />}
-              />
-            </Route>
-            {/* Routes Employeur */}
-            <Route path="/signup/employer" element={<EmployerSignUpPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/employer/ajout_stages" element={<AjoutStage />} />
-            <Route
-                path="/dashboard/employer/settings"
-                element={<DashboardSettings />}
+              path="/dashboard/gs/manage-students-cvs"
+              element={<GsManageCvs />}
             />
-          </Routes>
-        </BrowserRouter>
-      </div>
+            <Route path="/dashboard/gs/internships" element={<AllOffers />} />
+            <Route
+              path="/dashboard/gs/settings"
+              element={<DashboardSettings />}
+            />
+          </Route>
+
+          {/* Routes Étudiant */}
+          <Route path="/signup/student" element={<StudentSignUpPage />} />
+          <Route
+            path="/dashboard/student/"
+            element={
+              <DashboardLayout
+                sidebarLinks={studentDashboardSidebarLinks}
+                title={t("student_dashboard:titles.dashboard")}
+              />
+            }
+          >
+            <Route index element={<StudentDashboard />} />
+            <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
+            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
+            <Route
+              path="/dashboard/student/settings"
+              element={<DashboardSettings />}
+            />
+          </Route>
+
+          <Route
+            path="/dashboard/employer/"
+            element={
+              <DashboardLayout
+                sidebarLinks={employerDashboardSidebarLinks}
+                title={t("employer_dashboard:titles.dashboard")}
+              />
+            }
+          >
+            <Route index element={<EmployerDashboard />} />
+            <Route
+              path="/dashboard/employer/add-intership"
+              element={<AddIntership />}
+            />
+            <Route
+              path="/dashboard/employer/my-offers"
+              element={<OfferList />}
+            />
+            <Route
+              path="/dashboard/employer/applications"
+              element={<InternshipApplications />}
+            />
+            <Route
+              path="/dashboard/employer/settings"
+              element={<DashboardSettings />}
+            />
+          </Route>
+          {/* Routes Employeur */}
+          <Route path="/signup/employer" element={<EmployerSignUpPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/employer/ajout_stages" element={<AjoutStage />} />
+        </Routes>
+        <DevMode />
+      </BrowserRouter>
+    </div>
   );
 }
 

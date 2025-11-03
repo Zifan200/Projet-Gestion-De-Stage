@@ -1,0 +1,40 @@
+{
+  "title": "Gérer les CVs des étudiants",
+  "filter": {
+    "status": "Filtrer par statut",
+    "all": "Tous"
+  },
+  "status": {
+    "pending": "En attente de révision",
+    "accepted": "Approuvé",
+    "rejected": "Refusé"
+  },
+  "table": {
+    "student": "Étudiant",
+    "fileName": "Nom du fichier",
+    "status": "Statut",
+    "size": "Taille",
+    "date": "Date d'envoi",
+    "actions": "Actions"
+  },
+  "actions": {
+    "preview": "Aperçu",
+    "download": "Télécharger",
+    "accept": "Accepter",
+    "reject": "Rejeter"
+  },
+  "menu": {
+    "close": "Fermer"
+  },
+  "empty": "Aucun CV disponible.",
+  "unknownStudent": "Étudiant inconnu",
+  "toast": {
+    "downloadSuccess": "{{fileName}} téléchargé avec succès !",
+    "downloadError": "Échec du téléchargement du CV.",
+    "accepted": "{{fileName}} approuvé avec succès !",
+    "acceptError": "Échec de l'approbation du CV.",
+    "rejected": "{{fileName}} rejeté avec succès !",
+    "rejectError": "Échec du rejet du CV.",
+    "missingReason": "Vous devez indiquer une raison pour rejeter ce CV."
+  }
+}
