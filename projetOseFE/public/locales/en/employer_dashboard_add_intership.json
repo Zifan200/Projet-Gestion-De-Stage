@@ -6,6 +6,8 @@
     "description": "Description",
     "program": "Targeted Program",
     "deadline": "Deadline",
+    "startDate": "Internship Start Date",
+    "endDate": "Internship End Date",
     "placeholders": {
       "title": "Ex: AI internship at Health Research Institute",
       "description": "Describe the tasks, expectations, and environment of the internship.",

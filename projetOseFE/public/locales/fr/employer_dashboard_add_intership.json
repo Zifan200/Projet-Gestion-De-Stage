@@ -6,6 +6,8 @@
     "description": "Description",
     "program": "Programme visé",
     "deadline": "Date limite",
+    "startDate": "Date de début du stage",
+    "endDate": "Date de fin du stage",
     "placeholders": {
       "title": "Ex : Stage en intelligence artificielle à l’Institut Health Research",
       "description": "Décrivez les tâches, attentes et environnement du stage.",
