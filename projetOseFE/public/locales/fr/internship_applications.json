@@ -32,8 +32,16 @@
     "downloadCv": "Erreur lors du téléchargement du CV."
   },
   "filter": {
-    "status": "Filtrer par statut",
-    "all": "Toutes"
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "fall": "Automne",
+    "winter": "Hiver",
+    "AllYears": "Toutes les Années"
   },
   "menu": {
     "close": "Fermer"

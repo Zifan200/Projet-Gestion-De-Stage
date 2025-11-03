@@ -33,8 +33,17 @@
   },
   "filter": {
     "status": "Filter by Status",
-    "all": "All"
+    "all": "All Statuses",
+    "session": "Filter by Session",
+    "year": "Filter by Year"
   },
+  "session": {
+    "all": "All Sessions",
+    "fall": "Fall",
+    "winter": "Winter",
+    "AllYears": "All Years"
+  },
+
   "menu": {
     "close": "Close"
   }
