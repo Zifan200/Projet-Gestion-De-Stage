@@ -25,6 +25,11 @@
     "description_required": "A description is required.",
     "program_required": "A program is required.",
     "invalid_email": "Please enter a valid email address.",
-    "expiration_required": "A deadline is required."
+    "expiration_required": "A deadline is required.",
+    "start_required": "A start date is required.",
+    "end_required": "An end date is required.",
+    "end_after_start": "The end date must be after the start date.",
+    "expiration_before_start": "The deadline must be before the start date.",
+    "expiration_not_past": "The deadline cannot be in the past."
   }
 }
