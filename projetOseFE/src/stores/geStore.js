@@ -17,6 +17,14 @@ const useGeStore = create(
           set({ error: err.message });
         }
       },
+        loadAllInternshipApplications: async () => {
+            try {
+                const data = await geService.getAllInternshipApplications();
+                set({ applications: data, error: null });
+            } catch (err) {
+                set({ error: err.message });
+            }
+        },
 
       approveCv: async (cvId) => {
         const res = await geService.approveCv(cvId);

@@ -123,6 +123,12 @@ function App() {
       icon: EnvelopeClosedIcon,
     },
     {
+      key: "applications",
+      label: t("gs_dashboard:stats.internshipApplications"),
+      href: "/dashboard/gs/applications",
+      icon: FileTextIcon,
+    },
+    {
       key: "settings",
       label: t("menu:settings"),
       href: "/dashboard/gs/settings",
