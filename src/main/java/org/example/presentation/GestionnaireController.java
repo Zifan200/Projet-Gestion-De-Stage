@@ -1,13 +1,17 @@
 package org.example.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.service.CVService;
 import org.example.service.InternshipApplicationService;
+import org.example.service.InternshipOfferService;
 import org.example.service.StudentService;
 import org.example.service.dto.cv.CvDownloadDTO;
 import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.dto.cv.CvStatusDTO;
+import org.example.service.dto.internship.InternshipOfferListDto;
 import org.example.service.dto.student.EtudiantDTO;
+import org.example.utils.JwtTokenUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +25,7 @@ public class GestionnaireController {
 
     private final CVService cvService;
     private final InternshipApplicationService internshipApplicationService;
+    private final InternshipOfferService internshipOfferService;
 
     @GetMapping("/list")
     public ResponseEntity<List<CvResponseDTO>> listAllCvs() {
@@ -63,6 +68,13 @@ public class GestionnaireController {
         return ResponseEntity.ok(
                 internshipApplicationService.getAllStudentsAppliedToAInternshipOffer()
         );
+    }
+
+    @GetMapping("/get-all-internship-offers")
+    public ResponseEntity<List<InternshipOfferListDto>> getAllInternshipOffers(
+            HttpServletRequest request
+    ){
+        return ResponseEntity.ok(internshipOfferService.getAllOffersSummary());
     }
 
 }
