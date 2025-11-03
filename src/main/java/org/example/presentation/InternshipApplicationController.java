@@ -4,6 +4,7 @@ package org.example.presentation;
 import lombok.RequiredArgsConstructor;
 import org.example.service.InternshipApplicationService;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDecisionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +40,26 @@ public class InternshipApplicationController {
             @PathVariable String status
     ){
         return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOfferWithStatus(id, status));
+    }
+
+    @PostMapping("/student/{applicationId}/accept")
+    public ResponseEntity<InternshipApplicationResponseDTO> acceptOfferByStudent(
+            @PathVariable Long applicationId,
+            @RequestBody EtudiantDecisionDTO request
+    ) {
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.acceptOfferByStudent(request.getStudentEmail(), applicationId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/student/{applicationId}/reject")
+    public ResponseEntity<InternshipApplicationResponseDTO> rejectOfferByStudent(
+            @PathVariable Long applicationId,
+            @RequestBody EtudiantDecisionDTO request
+    ) {
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId,
+                        request.getEtudiantRaison());
+        return ResponseEntity.ok(response);
     }
 }

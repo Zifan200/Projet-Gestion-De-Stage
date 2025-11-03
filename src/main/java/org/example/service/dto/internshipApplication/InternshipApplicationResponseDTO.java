@@ -35,10 +35,12 @@ public class InternshipApplicationResponseDTO {
     private String employerEmail;
 
     private ApprovalStatus status;
+    private ApprovalStatus etudiantStatus;
     private LocalDateTime createdAt;
     private LocalDate startDate;
     private String session;
     private String reason;
+    private String etudiantRaison;
 
     @Builder
     public InternshipApplicationResponseDTO(
@@ -58,10 +60,12 @@ public class InternshipApplicationResponseDTO {
             LocalDate internshipOfferExpirationDate,
             String employerEmail,
             ApprovalStatus status,
+            ApprovalStatus etudiantStatus,
             LocalDateTime createdAt,
             LocalDate startDate,
             String session,
-            String reason
+            String reason,
+            String etudiantRaison
     ) {
         this.id = id;
         this.studentEmail = studentEmail;
@@ -79,10 +83,12 @@ public class InternshipApplicationResponseDTO {
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
         this.status = status;
+        this.etudiantStatus = etudiantStatus;
         this.createdAt = createdAt;
         this.startDate = startDate;
         this.session = session;
         this.reason = reason;
+        this.etudiantRaison = etudiantRaison;
     }
 
     public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication) {
@@ -103,10 +109,12 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
                 .status(internshipApplication.getStatus())
+                .etudiantStatus(internshipApplication.getEtudiantStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .startDate(internshipApplication.getStartDate())
                 .session(internshipApplication.getSession())
                 .reason(internshipApplication.getReason())
+                .etudiantRaison(internshipApplication.getEtudiantRaison())
                 .build();
     }
 }
