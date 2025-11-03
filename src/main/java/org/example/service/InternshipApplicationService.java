@@ -258,4 +258,65 @@ public class InternshipApplicationService {
         eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
         return InternshipApplicationResponseDTO.create(application);
     }
+
+    public InternshipApplicationResponseDTO acceptOfferByStudent(String studentEmail, Long applicationId) {
+        Optional<Etudiant> student = etudiantRepository.findByCredentialsEmail(studentEmail);
+
+        if (student.isEmpty()) {
+            throw new InvalidInternshipApplicationException("Student not found : " + studentEmail);
+        }
+
+        InternshipApplication application = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new InvalidInternshipApplicationException(
+                        "Application not found with ID : " + applicationId
+                ));
+
+        if (!application.getStudent().getCredentials().getEmail().equals(studentEmail)) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to modify this application");
+        }
+
+        if (application.getStatus() != ApprovalStatus.ACCEPTED) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to approve this application");
+        }
+
+        application.setEtudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT);
+        internshipApplicationRepository.save(application);
+
+        eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+
+        logger.info("L'étudiant {} a accepté l'offre {}", studentEmail, application.getOffer().getTitle());
+
+        return InternshipApplicationResponseDTO.create(application);
+    }
+
+    public InternshipApplicationResponseDTO rejectOfferByStudent(String studentEmail, Long applicationId, String reason) {
+        Optional<Etudiant> student = etudiantRepository.findByCredentialsEmail(studentEmail);
+
+        if (student.isEmpty()) {
+            throw new InvalidInternshipApplicationException("Student not found : " + studentEmail);
+        }
+
+        InternshipApplication application = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new InvalidInternshipApplicationException(
+                        "Application introuvable avec l'id : " + applicationId
+                ));
+
+        if (!application.getStudent().getCredentials().getEmail().equals(studentEmail)) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to modify this application");
+        }
+
+        if (application.getStatus() != ApprovalStatus.ACCEPTED) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to reject this application at this time.");
+        }
+
+        application.setEtudiantStatus(ApprovalStatus.REJECTED_BY_STUDENT);
+        application.setEtudiantRaison(reason);
+        internshipApplicationRepository.save(application);
+
+        eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+
+        logger.info("L'étudiant {} a refusé l'offre {}", studentEmail, application.getOffer().getTitle());
+
+        return InternshipApplicationResponseDTO.create(application);
+    }
 }

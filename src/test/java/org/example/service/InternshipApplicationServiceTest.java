@@ -1023,6 +1023,105 @@ public class InternshipApplicationServiceTest {
                         .rejectInternshipApplication(EMPLOYER_EMAIL, app.getId(), null)
         );
     }
+
+    @Test
+    void acceptOfferByStudent_shouldSetStatusToConfirmed() {
+        // Arrange
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .build();
+
+        CV cv = CV.builder().id(1L).build();
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .employer(employer)
+                .title("Java Developer")
+                .build();
+
+        InternshipApplication app = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .status(ApprovalStatus.ACCEPTED)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findById(app.getId())).thenReturn(Optional.of(app));
+        when(internshipApplicationRepository.save(any(InternshipApplication.class))).thenReturn(app);
+
+        // Act
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.acceptOfferByStudent(STUDENT_EMAIL, app.getId());
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(app.getId(), response.getId());
+        assertEquals(ApprovalStatus.CONFIRMED_BY_STUDENT, response.getEtudiantStatus());
+    }
+
+    @Test
+    void rejectOfferByStudent_shouldSetStatusToRejectedByStudent() {
+        // Arrange
+        String reason = "Je préfère une autre offre.";
+
+        Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
+
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .build();
+
+        CV cv = CV.builder().id(1L).build();
+
+
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .employer(employer)
+                .title("Java Developer")
+                .build();
+
+        InternshipApplication app = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .status(ApprovalStatus.ACCEPTED)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findById(app.getId())).thenReturn(Optional.of(app));
+        when(internshipApplicationRepository.save(any(InternshipApplication.class))).thenReturn(app);
+
+        // Act
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.rejectOfferByStudent(STUDENT_EMAIL, app.getId(), reason);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(app.getId(), response.getId());
+        assertEquals(ApprovalStatus.REJECTED_BY_STUDENT, response.getEtudiantStatus());
+        assertEquals(reason, response.getEtudiantRaison());
+    }
+
+    @Test
+    void acceptOfferByStudent_shouldThrowWhenApplicationNotFound() {
+        // Arrange
+        Etudiant student = Etudiant.builder()
+                .email(STUDENT_EMAIL)
+                .build();
+
+        when(studentRepository.findByCredentialsEmail(STUDENT_EMAIL)).thenReturn(Optional.of(student));
+        when(internshipApplicationRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // Act + Assert
+        assertThrows(
+                InvalidInternshipApplicationException.class,
+                () -> internshipApplicationService.acceptOfferByStudent(STUDENT_EMAIL, 999L)
+        );
+    }
 }
 
 
