@@ -16,4 +16,5 @@ public interface InternshipOfferRepository extends JpaRepository<InternshipOffer
     Optional<Set<InternshipOffer>> findInternshipOffersByEmployerId(Long employerId);
     Optional<Set<InternshipOffer>> findInternshipOffersByPublishedDate(LocalDate publishedDate);
     List<InternshipOffer> findDistinctByStatus(ApprovalStatus status);
+
 }

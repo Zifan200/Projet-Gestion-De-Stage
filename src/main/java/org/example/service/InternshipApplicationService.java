@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,7 @@ public class InternshipApplicationService {
     private final InternshipOfferRepository internshipOfferRepository;
     private final InternshipApplicationRepository internshipApplicationRepository;
     private final EtudiantRepository etudiantRepository;
+
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -58,12 +61,19 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
         }
 
+        // Récupérer session et dates depuis l'offre
+        String session = saveOffer.getSession();
+        LocalDate startDate = saveOffer.getStartDate();
+
         InternshipApplication application = InternshipApplication.builder()
                 .student(student.get())
                 .selectedStudentCV(selectedCV.get())
-                .offer(offer.get())
+                .offer(saveOffer)
                 .status(ApprovalStatus.PENDING)
+                .startDate(startDate)
+                .session(session)
                 .build();
+
 
         var savedInternshipApplication = internshipApplicationRepository.save(application);
         eventPublisher.publishEvent(new StudentCreatedInternshipApplicationCreatedEvent());
@@ -135,6 +145,7 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
         }
         List<InternshipApplication> applicationList = internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(email);
+        System.out.println(applicationList);
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 

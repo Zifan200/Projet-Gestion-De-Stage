@@ -27,21 +27,24 @@ public class InternshipApplication {
     @Column(nullable = false)
     private ApprovalStatus status =  ApprovalStatus.PENDING;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
+    private String session;
+    private LocalDate startDate;
 
     private String reason;
 
     @Builder
     public InternshipApplication(
-            Long id, Etudiant student, InternshipOffer offer,
-            CV selectedStudentCV, ApprovalStatus status, String reason
+            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status, String session, LocalDate startDate
     ){
         this.id = id;
         this.student = student;
         this.offer = offer;
         this.selectedStudentCV = selectedStudentCV;
         this.status = status;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.session = session;
+        this.startDate = startDate;
         this.reason = reason;
     }
 }

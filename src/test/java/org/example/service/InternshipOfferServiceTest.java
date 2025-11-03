@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -47,10 +48,14 @@ public class InternshipOfferServiceTest {
     @InjectMocks
     private EmployerService employerService;
 
+    @InjectMocks
+    private InternshipOfferService service;
+
     @Mock
     private InternshipOfferRepository internshipOfferRepository;
     @InjectMocks
     private InternshipOfferService internshipOfferService;
+
 
     private EmployerDto buildEmployerDto() {
         return EmployerDto.builder()
@@ -526,6 +531,33 @@ public class InternshipOfferServiceTest {
                 .hasMessageContaining("userNotFound");
 
         verify(employerRepository).findByCredentialsEmail(email);
+    }
+
+    @Test
+    void testSessionHiver() {
+        LocalDate dateDebut = LocalDate.of(2025, 2, 15);
+        String session = service.getIntershipOfferSession(dateDebut);
+        assertEquals("Hiver", session);
+    }
+
+    @Test
+    void testSessionAutomne() {
+        LocalDate dateDebut = LocalDate.of(2025, 10, 10);
+        String session = service.getIntershipOfferSession(dateDebut);
+        assertEquals("Automne", session);
+    }
+
+    @Test
+    void testSessionEte() {
+        LocalDate dateDebut = LocalDate.of(2025, 6, 15);
+        String session = service.getIntershipOfferSession(dateDebut);
+        assertEquals("Été", session);  // correction du texte attendu
+    }
+
+    @Test
+    void testDateDebutNull() {
+        String session = service.getIntershipOfferSession(null);
+        assertEquals("Aucune session (date non définie)", session);
     }
 
 }
