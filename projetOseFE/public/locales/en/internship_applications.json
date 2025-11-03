@@ -10,13 +10,16 @@
     "noCv": "No CV",
     "status": "Status",
     "action": "Action",
-    "actionView": "View"
+    "actionView": "View",
+    "studentChoice": "Student's Choice"
   },
   "status": {
     "pending": "Under Review",
     "accepted": "Accepted",
     "rejected": "Declined",
-    "reviewing": "In Review"
+    "reviewing": "In Review",
+    "confirmed_by_student": "Accepted by Student",
+    "rejected_by_student": "Declined by Student"
   },
   "modal": {
     "email": "Email",

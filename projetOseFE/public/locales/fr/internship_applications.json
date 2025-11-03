@@ -10,13 +10,16 @@
     "noCv": "Aucun CV",
     "status": "Statut",
     "action": "Action",
-    "actionView": "Voir"
+    "actionView": "Voir",
+    "studentChoice": "Choix des étudiants"
   },
   "status": {
     "pending": "En cours d'examen",
     "accepted": "Acceptée",
     "rejected": "Refusée",
-    "reviewing": "En révision"
+    "reviewing": "En révision",
+    "confirmed_by_student": "Acceptée par l'étudiant",
+    "rejected_by_student": "Refusée par l'étudiant"
   },
   "modal": {
     "email": "Courriel",

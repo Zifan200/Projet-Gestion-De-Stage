@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { Header } from "../../components/ui/header.jsx";
@@ -15,43 +15,23 @@ import {
     Cross2Icon,
 } from "@radix-ui/react-icons";
 
+import useGeStore from "../../stores/geStore.js";
+
 export const InternshipApplicationsGE = () => {
     const { t } = useTranslation("internship_applications");
 
-    const applications = [
-        {
-            id: 1,
-            studentFirstName: "Alice",
-            studentLastName: "Dupont",
-            studentEmail: "alice.dupont@mail.com",
-            selectedCvFileName: "alice_cv.pdf",
-            selectedCvID: 101,
-            internshipOfferTitle: "Développeur Java",
-            status: "PENDING",
-            session: "Automne",
-            year: "2025",
-            createdAt: "2025-11-02T12:00:00Z",
-        },
-        {
-            id: 2,
-            studentFirstName: "Bob",
-            studentLastName: "Martin",
-            studentEmail: "bob.martin@mail.com",
-            selectedCvFileName: "bob_cv.pdf",
-            selectedCvID: 102,
-            internshipOfferTitle: "Frontend React",
-            status: "ACCEPTED",
-            session: "Hiver",
-            year: "2025",
-            createdAt: "2025-10-28T08:30:00Z",
-        },
-    ];
+    const { applications = [], loadAllInternshipApplications } = useGeStore();
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterStatus, setFilterStatus] = useState(null);
     const [filterSession, setFilterSession] = useState("All");
     const [filterYear, setFilterYear] = useState("All");
+
+    useEffect(() => {
+        loadAllInternshipApplications();
+        console.log("Applications récupérées :", applications);
+    }, [loadAllInternshipApplications]);
 
     const handleAction = (action, app) => {
         switch (action) {
@@ -66,13 +46,22 @@ export const InternshipApplicationsGE = () => {
                 break;
         }
     };
+    const getStatusColor = (status) => {
+        const statusColors = {
+            pending: "bg-yellow-100 text-yellow-800",
+            confirmed_by_student: "bg-green-100 text-green-800",
+            rejected_by_student: "bg-red-100 text-red-800"
+        };
+        return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
+    };
+
 
     const columns = [
         { key: "internshipOfferTitle", label: t("table.offerTitle") },
         { key: "studentName", label: t("table.studentName") },
         { key: "studentEmail", label: t("table.studentEmail") },
         { key: "selectedCvFileName", label: t("table.cv") },
-        { key: "status", label: t("table.status") },
+        { key: "etudiantStatus", label: t("table.studentChoice") }, // <-- ici
         {
             key: "actions",
             label: t("table.action"),
@@ -110,9 +99,25 @@ export const InternshipApplicationsGE = () => {
     const tableData = sortedAndFilteredApplications.map((app) => ({
         ...app,
         studentName: `${app.studentFirstName} ${app.studentLastName}`,
-        rawStatus: app.status?.toLowerCase(),
-        status: t(`status.${app.status?.toLowerCase()}`),
+        rawEtudiantStatus: app.etudiantStatus?.toLowerCase(),
+        etudiantStatus: app.etudiantStatus
+            ? (
+                <span
+                    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(app.etudiantStatus)}`}
+                >
+              {t(`status.${app.etudiantStatus.toLowerCase()}`)}
+            </span>
+            )
+            : (
+                <span
+                    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor("pending")}`}
+                >
+              {t("status.pending")}
+            </span>
+            ),
     }));
+
+
 
     const availableYears = Array.from(new Set(applications.map((app) => app.year))).sort((a, b) => b - a);
 
@@ -127,9 +132,9 @@ export const InternshipApplicationsGE = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
-                                </span>
+                            <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
+                            </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -159,9 +164,9 @@ export const InternshipApplicationsGE = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.session")}: {filterSession !== "All" ? filterSession : t("session.all")}
-                                </span>
+                            <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                {t("filter.session")}: {filterSession !== "All" ? filterSession : t("session.all")}
+                            </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -191,9 +196,9 @@ export const InternshipApplicationsGE = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.year")}: {filterYear !== "All" ? filterYear : t("session.AllYears")}
-                                </span>
+                            <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                {t("filter.year")}: {filterYear !== "All" ? filterYear : t("session.AllYears")}
+                            </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -248,4 +253,4 @@ export const InternshipApplicationsGE = () => {
             )}
         </div>
     );
-};
+}
