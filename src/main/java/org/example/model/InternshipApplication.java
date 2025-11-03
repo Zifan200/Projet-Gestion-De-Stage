@@ -28,7 +28,6 @@ public class InternshipApplication {
     private ApprovalStatus status =  ApprovalStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ApprovalStatus etudiantStatus =  ApprovalStatus.PENDING;
 
     private LocalDateTime createdAt;
