@@ -89,12 +89,35 @@ export const InternshipApplicationsGE = () => {
     ];
 
     const sortedAndFilteredApplications = useMemo(() => {
-        let filtered = applications;
-        if (filterStatus) filtered = filtered.filter((app) => app.status === filterStatus);
-        if (filterSession !== "All") filtered = filtered.filter((app) => app.session === filterSession);
-        if (filterYear !== "All") filtered = filtered.filter((app) => app.year === filterYear);
-        return [...filtered].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        let filtered = applications.filter(
+            (app) => app.etudiantStatus // uniquement les applications avec un statut non-null
+        );
+
+        if (filterStatus)
+            filtered = filtered.filter(
+                (app) => app.etudiantStatus?.toLowerCase() === filterStatus.toLowerCase()
+            );
+
+        if (filterSession !== "All")
+            filtered = filtered.filter((app) => app.session === filterSession);
+
+        if (filterYear !== "All")
+            filtered = filtered.filter((app) => app.year === filterYear);
+        if (filterYear !== "All") {
+            filtered = filtered.filter((app) => {
+                if (!app.createdAt) return false;
+                const year = new Date(app.createdAt).getFullYear();
+                return year.toString() === filterYear;
+            });
+        }
+
+        return [...filtered].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
     }, [applications, filterStatus, filterSession, filterYear]);
+
+
+
 
     const tableData = sortedAndFilteredApplications.map((app) => ({
         ...app,
@@ -119,7 +142,14 @@ export const InternshipApplicationsGE = () => {
 
 
 
-    const availableYears = Array.from(new Set(applications.map((app) => app.year))).sort((a, b) => b - a);
+    const availableYears = Array.from(
+        new Set(
+            applications
+                .filter(app => app.createdAt)
+                .map(app => new Date(app.createdAt).getFullYear())
+        )
+    ).sort((a, b) => b - a);
+
 
     return (
         <div className="space-y-6">
@@ -132,22 +162,26 @@ export const InternshipApplicationsGE = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                            <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
-                            </span>
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                    {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
+                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
-                                    {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
+                                    {["confirmed_by_student", "rejected_by_student"].map((status) => (
                                         <button
                                             key={status}
                                             onClick={() => { setFilterStatus(status); setOpen(false); }}
                                             className={`px-3 py-1 rounded text-left ${filterStatus === status ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                                         >
-                                            {t(`status.${status.toLowerCase()}`)}
+                                            {t(`status.${status}`)}
                                         </button>
                                     ))}
-                                    <button onClick={() => { setFilterStatus(null); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
+
+                                    <button
+                                        onClick={() => { setFilterStatus(null); setOpen(false); }}
+                                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                                    >
                                         {t("filter.all")}
                                     </button>
                                     <PopoverClose setOpen={setOpen}>
@@ -158,6 +192,7 @@ export const InternshipApplicationsGE = () => {
                         </>
                     )}
                 </Popover>
+
 
                 {/* Session Filter */}
                 <Popover>
