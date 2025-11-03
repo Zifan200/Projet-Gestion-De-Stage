@@ -18,7 +18,6 @@ import {
 export const InternshipApplicationsGE = () => {
     const { t } = useTranslation("internship_applications");
 
-    // Mock data pour tester le design
     const applications = [
         {
             id: 1,
@@ -29,6 +28,8 @@ export const InternshipApplicationsGE = () => {
             selectedCvID: 101,
             internshipOfferTitle: "Développeur Java",
             status: "PENDING",
+            session: "Automne",
+            year: "2025",
             createdAt: "2025-11-02T12:00:00Z",
         },
         {
@@ -40,6 +41,8 @@ export const InternshipApplicationsGE = () => {
             selectedCvID: 102,
             internshipOfferTitle: "Frontend React",
             status: "ACCEPTED",
+            session: "Hiver",
+            year: "2025",
             createdAt: "2025-10-28T08:30:00Z",
         },
     ];
@@ -47,6 +50,8 @@ export const InternshipApplicationsGE = () => {
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterStatus, setFilterStatus] = useState(null);
+    const [filterSession, setFilterSession] = useState("All");
+    const [filterYear, setFilterYear] = useState("All");
 
     const handleAction = (action, app) => {
         switch (action) {
@@ -95,13 +100,12 @@ export const InternshipApplicationsGE = () => {
     ];
 
     const sortedAndFilteredApplications = useMemo(() => {
-        const filtered = filterStatus
-            ? applications.filter((app) => app.status === filterStatus)
-            : applications;
-        return [...filtered].sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-    }, [applications, filterStatus]);
+        let filtered = applications;
+        if (filterStatus) filtered = filtered.filter((app) => app.status === filterStatus);
+        if (filterSession !== "All") filtered = filtered.filter((app) => app.session === filterSession);
+        if (filterYear !== "All") filtered = filtered.filter((app) => app.year === filterYear);
+        return [...filtered].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [applications, filterStatus, filterSession, filterYear]);
 
     const tableData = sortedAndFilteredApplications.map((app) => ({
         ...app,
@@ -110,57 +114,110 @@ export const InternshipApplicationsGE = () => {
         status: t(`status.${app.status?.toLowerCase()}`),
     }));
 
+    const availableYears = Array.from(new Set(applications.map((app) => app.year))).sort((a, b) => b - a);
+
     return (
         <div className="space-y-6">
             <Header title={t("title")} />
 
-            {/* Filter */}
-            <Popover>
-                {({ open, setOpen, triggerRef, contentRef }) => (
-                    <>
-                        <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                {t("filter.status")}:{" "}
-                  {filterStatus
-                      ? t(`status.${filterStatus.toLowerCase()}`)
-                      : t("filter.all")}
-              </span>
-                        </PopoverTrigger>
-                        <PopoverContent open={open} contentRef={contentRef}>
-                            <div className="flex flex-col gap-2 min-w-[150px]">
-                                {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
-                                    <button
-                                        key={status}
-                                        onClick={() => {
-                                            setFilterStatus(status);
-                                            setOpen(false);
-                                        }}
-                                        className={`px-3 py-1 rounded text-left ${
-                                            filterStatus === status
-                                                ? "bg-blue-100 font-semibold"
-                                                : "hover:bg-gray-100"
-                                        }`}
-                                    >
-                                        {t(`status.${status.toLowerCase()}`)}
+            {/* Filters */}
+            <div className="flex items-center gap-4">
+                {/* Status Filter */}
+                <Popover>
+                    {({ open, setOpen, triggerRef, contentRef }) => (
+                        <>
+                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                    {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
+                                </span>
+                            </PopoverTrigger>
+                            <PopoverContent open={open} contentRef={contentRef}>
+                                <div className="flex flex-col gap-2 min-w-[150px]">
+                                    {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
+                                        <button
+                                            key={status}
+                                            onClick={() => { setFilterStatus(status); setOpen(false); }}
+                                            className={`px-3 py-1 rounded text-left ${filterStatus === status ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                                        >
+                                            {t(`status.${status.toLowerCase()}`)}
+                                        </button>
+                                    ))}
+                                    <button onClick={() => { setFilterStatus(null); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
+                                        {t("filter.all")}
                                     </button>
-                                ))}
-                                <button
-                                    onClick={() => {
-                                        setFilterStatus(null);
-                                        setOpen(false);
-                                    }}
-                                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                                >
-                                    {t("filter.all")}
-                                </button>
-                                <PopoverClose setOpen={setOpen}>
-                                    <span className="text-sm text-gray-600">{t("menu.close")}</span>
-                                </PopoverClose>
-                            </div>
-                        </PopoverContent>
-                    </>
-                )}
-            </Popover>
+                                    <PopoverClose setOpen={setOpen}>
+                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                    </PopoverClose>
+                                </div>
+                            </PopoverContent>
+                        </>
+                    )}
+                </Popover>
+
+                {/* Session Filter */}
+                <Popover>
+                    {({ open, setOpen, triggerRef, contentRef }) => (
+                        <>
+                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                    {t("filter.session")}: {filterSession !== "All" ? filterSession : t("session.all")}
+                                </span>
+                            </PopoverTrigger>
+                            <PopoverContent open={open} contentRef={contentRef}>
+                                <div className="flex flex-col gap-2 min-w-[150px]">
+                                    {["Automne", "Hiver"].map((session) => (
+                                        <button
+                                            key={session}
+                                            onClick={() => { setFilterSession(session); setOpen(false); }}
+                                            className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                                        >
+                                            {session}
+                                        </button>
+                                    ))}
+                                    <button onClick={() => { setFilterSession("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
+                                        {t("session.all")}
+                                    </button>
+                                    <PopoverClose setOpen={setOpen}>
+                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                    </PopoverClose>
+                                </div>
+                            </PopoverContent>
+                        </>
+                    )}
+                </Popover>
+
+                {/* Year Filter */}
+                <Popover>
+                    {({ open, setOpen, triggerRef, contentRef }) => (
+                        <>
+                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                    {t("filter.year")}: {filterYear !== "All" ? filterYear : t("session.AllYears")}
+                                </span>
+                            </PopoverTrigger>
+                            <PopoverContent open={open} contentRef={contentRef}>
+                                <div className="flex flex-col gap-2 min-w-[150px]">
+                                    {availableYears.map((year) => (
+                                        <button
+                                            key={year}
+                                            onClick={() => { setFilterYear(year); setOpen(false); }}
+                                            className={`px-3 py-1 rounded text-left ${filterYear === year ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                                        >
+                                            {year}
+                                        </button>
+                                    ))}
+                                    <button onClick={() => { setFilterYear("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
+                                        {t("session.AllYears")}
+                                    </button>
+                                    <PopoverClose setOpen={setOpen}>
+                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                    </PopoverClose>
+                                </div>
+                            </PopoverContent>
+                        </>
+                    )}
+                </Popover>
+            </div>
 
             <DataTable columns={columns} data={tableData} onAction={handleAction} />
 
@@ -170,40 +227,20 @@ export const InternshipApplicationsGE = () => {
                     <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
                         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                             <EyeOpenIcon className="w-5 h-5 text-blue-500" />
-                            {selectedApplication.studentFirstName}{" "}
-                            {selectedApplication.studentLastName}
+                            {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
                         </h2>
-                        <p>
-                            <strong>{t("modal.email")}:</strong>{" "}
-                            {selectedApplication.studentEmail}
-                        </p>
-                        <p>
-                            <strong>{t("modal.cv")}:</strong>{" "}
-                            {selectedApplication.selectedCvFileName || t("table.noCv")}
-                        </p>
-                        <p>
-                            <strong>{t("modal.offerTitle")}:</strong>{" "}
-                            {selectedApplication.internshipOfferTitle}
-                        </p>
-                        <p>
-                            <strong>{t("modal.status")}:</strong>{" "}
-                            {t(`status.${selectedApplication.status?.toLowerCase()}`)}
-                        </p>
-                        <p>
-                            <strong>{t("modal.appliedAt")}:</strong>{" "}
-                            {new Date(selectedApplication.createdAt).toLocaleDateString()}
-                        </p>
+                        <p><strong>{t("modal.email")}:</strong> {selectedApplication.studentEmail}</p>
+                        <p><strong>{t("modal.cv")}:</strong> {selectedApplication.selectedCvFileName || t("table.noCv")}</p>
+                        <p><strong>{t("modal.offerTitle")}:</strong> {selectedApplication.internshipOfferTitle}</p>
+                        <p><strong>{t("modal.status")}:</strong> {t(`status.${selectedApplication.status?.toLowerCase()}`)}</p>
+                        <p><strong>{t("modal.appliedAt")}:</strong> {new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
 
                         <div className="mt-6 flex justify-end">
                             <button
                                 className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                onClick={() => {
-                                    setIsModalOpen(false);
-                                    setSelectedApplication(null);
-                                }}
+                                onClick={() => { setIsModalOpen(false); setSelectedApplication(null); }}
                             >
-                                <Cross2Icon className="w-4 h-4" />
-                                {t("modal.close")}
+                                <Cross2Icon className="w-4 h-4" /> {t("modal.close")}
                             </button>
                         </div>
                     </div>
