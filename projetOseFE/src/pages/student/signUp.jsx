@@ -20,7 +20,8 @@ const programmes = [
 
 export const StudentSignUpPage = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+
+  const { t } = useTranslation("signup_student");
 
   const form = useForm({
     resolver: zodResolver(studentSchema),
@@ -53,18 +54,21 @@ export const StudentSignUpPage = () => {
     }
   };
 
-  const onError = (err) => {
+  const onError = () => {
     toast.error(t("errors.fillFields"));
   };
 
   return (
     <>
+      <Toaster position="top-right" />
+
       <FormTemplate
         title={t("form.student.title")}
         description={t("form.student.description")}
       >
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit, onError)} className="">
+          <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+            {/* First name */}
             <div className="flex flex-col mb-7">
               <Label name="firstName" label={t("form.fields.firstName")} />
               <Input
@@ -73,26 +77,31 @@ export const StudentSignUpPage = () => {
               />
             </div>
 
+            {/* Last name */}
             <div className="flex flex-col mb-7">
               <Label name="lastName" label={t("form.fields.lastName")} />
               <Input name="lastName" placeholder={t("form.fields.lastName")} />
             </div>
 
+            {/* Email */}
             <div className="flex flex-col mb-7">
               <Label name="email" label={t("form.fields.email")} />
               <Input name="email" placeholder={t("form.fields.email")} />
             </div>
 
+            {/* Phone */}
             <div className="flex flex-col mb-7">
               <Label name="phone" label={t("form.fields.phone")} />
               <Input name="phone" placeholder={t("form.fields.phone")} />
             </div>
 
+            {/* Address */}
             <div className="flex flex-col mb-7">
               <Label name="adresse" label={t("form.student.adress")} />
               <Input name="adresse" placeholder={t("form.student.adress")} />
             </div>
 
+            {/* Program */}
             <div className="flex flex-col mb-7">
               <Label name="program" label={t("form.student.programmes")} />
               <select
@@ -109,6 +118,7 @@ export const StudentSignUpPage = () => {
               </select>
             </div>
 
+            {/* Password */}
             <div className="flex flex-col mb-7">
               <Label name="password" label={t("form.fields.password")} />
               <Input
@@ -118,6 +128,7 @@ export const StudentSignUpPage = () => {
               />
             </div>
 
+            {/* Confirm password */}
             <div className="flex flex-col mb-7">
               <Label
                 name="confirmPassword"
@@ -130,8 +141,10 @@ export const StudentSignUpPage = () => {
               />
             </div>
 
-            <Button className={"p-2"} label={t("form.createBtn")} />
+            {/* Submit button */}
+            <Button className="p-2" label={t("form.createBtn")} />
 
+            {/* Link to login */}
             <div className="text-center mt-2 text-zinc-600">
               {t("form.login.accountExist")}{" "}
               <span className="text-blue-400">

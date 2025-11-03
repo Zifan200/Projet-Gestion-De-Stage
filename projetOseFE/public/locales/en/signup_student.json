@@ -1,0 +1,53 @@
+{
+  "form": {
+    "student": {
+      "title": "Create a student account",
+      "description": "Create your student account to access the OSE 2.0 platform, manage your profile, and find an internship that matches your program.",
+      "adress": "*Enter your address",
+      "programmes": "*Enter your program",
+      "selectProgram": "Select a program from the following:"
+    },
+    "fields": {
+      "firstName": "*Enter your first name",
+      "lastName": "*Enter your last name",
+      "email": "*Enter your email",
+      "phone": "Phone number",
+      "password": "*Enter your password",
+      "passwordConfirm": "*Confirm your password"
+    },
+    "createBtn": "Create an account",
+    "login": {
+      "accountExist": "Already have an account?",
+      "title": "Login"
+    }
+  },
+  "success": {
+    "registerStudentSuccess": "Welcome {{firstName}} 🎉! You have successfully registered for the platform OSE 2.0 with the program: {{program}}."
+  },
+  "errors": {
+    "fillFields": "Please fill in the required information",
+    "genericError": "An error occurred, please try again",
+    "email": {
+      "invalid": "Invalid email address."
+    },
+    "firstName": {
+      "min": "First name must be at least 2 characters"
+    },
+    "lastName": {
+      "min": "Last name must be at least 2 characters"
+    },
+    "adresse": {
+      "min": "Address must be at least 2 characters long."
+    },
+    "program": {
+      "required": "Program selection is required."
+    },
+    "password": {
+      "regex": "Password must be 8–50 characters with at least one uppercase, one lowercase, one number, and one special character (@$!%*?&)",
+      "match": "Passwords do not match"
+    },
+    "phone": {
+      "invalid": "Phone number must contain exactly 10 digits (111-111-1111)"
+    }
+  }
+}
