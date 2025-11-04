@@ -535,7 +535,8 @@ export const AllOffers = () => {
             )}
 
         {isOfferApplicationListModalOpen && selectedOffer && (
-            componentCustomModal(`${t("modalSelectedOfferApplications.title")}`+" : "+(selectedOffer.title) ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
+            componentCustomModal(`${t("modalSelectedOfferApplications.title")}`+" : "+
+            (selectedOffer.title) ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
                 ()=>{
                     setIsOfferApplicationListModalOpen(false);
                     setIsOfferModalOpen(true);
