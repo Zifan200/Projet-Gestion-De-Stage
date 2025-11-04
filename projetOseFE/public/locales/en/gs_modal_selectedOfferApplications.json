@@ -19,5 +19,11 @@
   "filterLabels": {
     "alphabetical": "alphabetical",
     "reverseAlphabetical" : "reverse alphabetical"
+  },
+  "menu": {
+    "close": "close"
+  },
+  "errors": {
+    "openCv": "Unable to show the resume"
   }
 }
