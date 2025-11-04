@@ -8,7 +8,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reasonSchema } from "../../models/reason.js";
 
-export const ReasonModal = ({ open, onClose, onSubmit }) => {
+export const ReasonModal = ({
+  open,
+  onClose,
+  onSubmit,
+  title = "Raison du refus",
+  description = "Explique pourquoi tu refuses ce CV.",
+  placeholder = "Ex: Le profil ne correspond pas aux exigences du poste..."
+}) => {
   const form = useForm({
     resolver: zodResolver(reasonSchema),
     defaultValues: { reason: "" },
@@ -31,8 +38,8 @@ export const ReasonModal = ({ open, onClose, onSubmit }) => {
         >
           <div className="min-w-[1000px]">
             <FormTemplate
-              title="Raison du refus"
-              description="Explique pourquoi tu refuses ce CV."
+              title={title}
+              description={description}
             >
               <FormProvider {...form}>
                 <form
@@ -43,7 +50,7 @@ export const ReasonModal = ({ open, onClose, onSubmit }) => {
                     <Label name="reason" label="Raison" />
                     <Textarea
                       name="reason"
-                      placeholder="Ex: Le profil ne correspond pas aux exigences du poste..."
+                      placeholder={placeholder}
                       registration={form.register("reason")}
                       error={form.formState.errors.reason?.message}
                     />

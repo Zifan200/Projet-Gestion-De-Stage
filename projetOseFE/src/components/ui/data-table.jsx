@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "../../lib/cn.js";
+import { CheckIcon, Cross2Icon, EyeOpenIcon, DownloadIcon, TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 
-// Standardized button style variants for consistency across all tables
 const getButtonStyles = (actionKey) => {
   const baseStyles = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors";
 
@@ -16,6 +16,20 @@ const getButtonStyles = (actionKey) => {
   };
 
   return `${baseStyles} ${variants[actionKey] || "bg-gray-100 text-gray-700 hover:bg-gray-200"}`;
+};
+
+const getActionIcon = (actionKey) => {
+  const icons = {
+    view: EyeOpenIcon,
+    preview: EyeOpenIcon,
+    download: DownloadIcon,
+    delete: TrashIcon,
+    reject: Cross2Icon,
+    accept: CheckIcon,
+    edit: Pencil1Icon,
+  };
+
+  return icons[actionKey] || null;
 };
 
 export const DataTable = ({ columns, data, onAction }) => {
@@ -48,8 +62,7 @@ export const DataTable = ({ columns, data, onAction }) => {
                 className="border-t border-gray-200 text-gray-700 text-sm"
               >
                 {columns.map((col) => {
-                  if (col.key === "status") {
-                    // Use rawStatus for color mapping if available, otherwise use status
+                  if (col.key === "status" || col.key === "etudiantStatus") {
                     const statusKey = row.rawStatus || row[col.key]?.toLowerCase();
                     const statusColor =
                       {
@@ -57,33 +70,46 @@ export const DataTable = ({ columns, data, onAction }) => {
                         accepted: "bg-green-100 text-green-800",
                         rejected: "bg-red-100 text-red-800",
                         reviewing: "bg-blue-100 text-blue-800",
+                        confirmed_by_student: "bg-green-100 text-green-800",
+                        rejected_by_student: "bg-red-100 text-red-800",
+                        waiting_student_decision: "bg-yellow-100 text-yellow-800",
                       }[statusKey] ||
                       "bg-gray-100 text-gray-700";
+
+                    const displayValue = col.format ? col.format(row[col.key], row) : row[col.key];
 
                     return (
                       <td key={col.key} className="px-4 py-3 align-middle">
                         <span
                           className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor}`}
                         >
-                          {row[col.key]}
+                          {displayValue}
                         </span>
                       </td>
                     );
                   }
 
                   if (col.key === "actions") {
+                    const actions = typeof col.actions === "function" ? col.actions(row) : col.actions;
                     return (
                       <td key={col.key} className="px-4 py-3 align-middle">
                         <div className="flex items-center justify-start gap-2">
-                          {col.actions.map((action) => (
-                            <button
-                              key={action.key}
-                              onClick={() => onAction(action.key, row)}
-                              className={getButtonStyles(action.key)}
-                            >
-                              {action.label}
-                            </button>
-                          ))}
+                          {actions.map((action) => {
+                            const Icon = getActionIcon(action.key);
+                            const showIcon = action.showIcon === true;
+                            const showLabel = action.showLabel !== false;
+
+                            return (
+                              <button
+                                key={action.key}
+                                onClick={() => onAction(action.key, row)}
+                                className={getButtonStyles(action.key)}
+                              >
+                                {Icon && showIcon && <Icon className="w-4 h-4" />}
+                                {showLabel && action.label}
+                              </button>
+                            );
+                          })}
                         </div>
                       </td>
                     );
