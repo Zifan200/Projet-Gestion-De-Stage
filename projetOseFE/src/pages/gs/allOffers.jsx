@@ -300,7 +300,9 @@ export const AllOffers = () => {
                         className="inline-flex justify-center items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-green-200 text-green-900 hover:bg-green-400"
                     >
                         {t("modalSelectedOfferApplications.btnLabels.seeApplications")}
-                        <div className="relative left-3 bottom-3 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white font-bold text-md">{selectedOffer.applicationCount}</div>
+                        <div className="relative left-3 bottom-3 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white font-bold text-md">
+                        {selectedOffer.applicationCount}
+                        </div>
                     </button>
                     :
                     <div className="inline-flex select-none items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-gray-300 text-black">
