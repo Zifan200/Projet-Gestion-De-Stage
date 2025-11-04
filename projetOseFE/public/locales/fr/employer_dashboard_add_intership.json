@@ -5,7 +5,7 @@
     "title": "Titre",
     "description": "Description",
     "program": "Programme visé",
-    "deadline": "Date limite",
+    "deadline": "Date limite pour postuler",
     "startDate": "Date de début du stage",
     "endDate": "Date de fin du stage",
     "placeholders": {
