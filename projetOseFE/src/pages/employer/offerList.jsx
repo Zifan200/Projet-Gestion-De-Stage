@@ -214,7 +214,7 @@ export const OfferList = () => {
 </span>
                   </PopoverTrigger>
                   <PopoverContent open={open} contentRef={contentRef}>
-                    <div className="flex flex-col gap-2 min-w-[150px]">{["FALL", "WINTER"].map((session) => (
+                    <div className="flex flex-col gap-2 min-w-[150px]">{["automne", "hiver"].map((session) => (
                         <button
                             key={session}
                             onClick={() => { setFilterSession(session); setOpen(false); }}
