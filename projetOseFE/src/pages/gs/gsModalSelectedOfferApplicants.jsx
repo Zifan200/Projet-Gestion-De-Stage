@@ -17,6 +17,7 @@ import {useTranslation} from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import {useOfferStore} from "../../stores/offerStore.js";
 import PdfViewer from "../../components/CvViewer.jsx";
+import { toast } from "sonner";
 
 export const ModalSelectedOfferApplicants = ({offerId}) => {
     const {t} = useTranslation("gs_modal_selectedOfferApplications");
