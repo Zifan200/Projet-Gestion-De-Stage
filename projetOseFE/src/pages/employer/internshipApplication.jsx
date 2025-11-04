@@ -40,6 +40,11 @@ export const InternshipApplications = () => {
     fetchApplications();
   }, [fetchApplications]);
 
+  useEffect(() => {
+    console.log("Toutes les applications :", applications);
+  }, [applications]);
+
+
   // Extract available years from applications
   const availableYears = useMemo(() => {
     return Array.from(
@@ -184,27 +189,24 @@ export const InternshipApplications = () => {
             )}
           </Popover>
 
-          {/* Session Filter */}
           <Popover>
             {({ open, setOpen, triggerRef, contentRef }) => (
                 <>
                   <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-          {t("filter.session")}: {filterSession === "All" ? t("session.all") : filterSession}
-        </span>
+          <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+            {t("filter.session")}: {filterSession === "All" ? t("session.all") : t(`session.${filterSession.toLowerCase()}`)}
+          </span>
                   </PopoverTrigger>
                   <PopoverContent open={open} contentRef={contentRef}>
                     <div className="flex flex-col gap-2 min-w-[150px]">
-                      {["fall", "winter"].map((session) => (
+                      {["Automne", "Hiver"].map((session) => (
                           <button
                               key={session}
                               onClick={() => {
                                 setFilterSession(session);
                                 setOpen(false);
                               }}
-                              className={`px-3 py-1 rounded text-left ${
-                                  filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"
-                              }`}
+                              className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                           >
                             {t(`session.${session.toLowerCase()}`)}
                           </button>

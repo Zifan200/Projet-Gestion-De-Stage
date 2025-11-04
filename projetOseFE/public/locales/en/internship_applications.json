@@ -42,8 +42,8 @@
   },
   "session": {
     "all": "All Sessions",
-    "fall": "Fall",
-    "winter": "Winter",
+    "automne": "Fall",
+    "hiver": "Winter",
     "AllYears": "All Years"
   },
 

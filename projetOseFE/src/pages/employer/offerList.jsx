@@ -79,7 +79,10 @@ export const OfferList = () => {
     let filtered = offers;
 
     if (filterStatus) filtered = filtered.filter((o) => o.status === filterStatus);
-    if (filterSession !== "All") filtered = filtered.filter((o) => o.session === filterSession);
+    if (filterSession !== "All")
+      filtered = filtered.filter(
+          (o) => o.session?.toLowerCase() === filterSession.toLowerCase()
+      );
     if (filterYear !== "All") filtered = filtered.filter(
         (o) => o.startDate && new Date(o.startDate).getFullYear().toString() === filterYear
     );
@@ -205,21 +208,21 @@ export const OfferList = () => {
             {({ open, setOpen, triggerRef, contentRef }) => (
                 <>
                   <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.session")}: {filterSession === "All" ? t("session.all") : filterSession}
-                </span>
+                <span
+                    className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+  {t("filter.session")}: {filterSession === "All" ? t("session.all") : t(`session.${filterSession.toLowerCase()}`)}
+</span>
                   </PopoverTrigger>
                   <PopoverContent open={open} contentRef={contentRef}>
-                    <div className="flex flex-col gap-2 min-w-[150px]">
-                      {["fall", "winter"].map((session) => (
-                          <button
-                              key={session}
-                              onClick={() => { setFilterSession(session); setOpen(false); }}
-                              className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
-                          >
-                            {t(`session.${session.toLowerCase()}`)}
-                          </button>
-                      ))}
+                    <div className="flex flex-col gap-2 min-w-[150px]">{["FALL", "WINTER"].map((session) => (
+                        <button
+                            key={session}
+                            onClick={() => { setFilterSession(session); setOpen(false); }}
+                            className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                        >
+                          {t(`session.${session.toLowerCase()}`)} {/* <-- ici la traduction */}
+                        </button>
+                    ))}
                       <button onClick={() => { setFilterSession("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
                         {t("session.all")}
                       </button>

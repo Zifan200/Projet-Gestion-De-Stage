@@ -1,6 +1,6 @@
 {
-  "title": "Créer une nouvelle offre de stage",
-  "description": "Remplissez le formulaire ci-dessous pour publier votre offre de stage aux étudiants.",
+  "title": "Créer une nouvelle offre",
+  "description": "Remplissez le formulaire ci-dessous pour publier votre offre de stage.",
   "form": {
     "title": "Titre",
     "description": "Description",

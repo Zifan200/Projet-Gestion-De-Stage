@@ -57,7 +57,7 @@ export default function AddIntership() {
           <FormProvider {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit, onError)}
-                className="w-full max-w-xl flex flex-col gap-6 items-center" // <--- items-center pour centrer horizontalement
+                className="w-full max-w-xl flex flex-col gap-6 items-center"
             >
               {/* Title */}
               <div className="w-full">
