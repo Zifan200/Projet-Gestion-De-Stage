@@ -30,6 +30,7 @@ i18n
       "gs_dashboard_manage_cvs",
       "dashboard_settings",
       "internship_applications",
+      "reason_modal"
     ],
     defaultNS: "common",
     interpolation: {

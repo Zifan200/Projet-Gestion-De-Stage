@@ -10,7 +10,9 @@
     "noCv": "No CV",
     "status": "Status",
     "action": "Action",
-    "actionView": "View"
+    "actionView": "View",
+    "accept": "Accept",
+    "reject": "Reject"
   },
   "status": {
     "pending": "Under Review",
@@ -24,7 +26,11 @@
     "offerTitle": "Offer",
     "status": "Status",
     "appliedAt": "Applied on",
-    "close": "Close"
+    "close": "Close",
+    "reason": "Reason"
+  },
+  "reasonModal": {
+    "description": "Explain why you are rejecting this application."
   },
   "previewCv": "Preview CV",
   "closeCvPreview": "Close Preview",
@@ -37,5 +43,13 @@
   },
   "menu": {
     "close": "Close"
+  },
+  "success": {
+    "accepted": "Application accepted successfully",
+    "rejected": "Application rejected successfully"
+  },
+  "errors": {
+    "accept": "Failed to accept application",
+    "reject": "Failed to reject application"
   }
 }

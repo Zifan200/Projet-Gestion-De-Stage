@@ -10,7 +10,9 @@
     "noCv": "Aucun CV",
     "status": "Statut",
     "action": "Action",
-    "actionView": "Voir"
+    "actionView": "Voir",
+    "accept": "Accepter",
+    "reject": "Rejeter"
   },
   "status": {
     "pending": "En cours d'examen",
@@ -24,7 +26,11 @@
     "offerTitle": "Offre",
     "status": "Statut",
     "appliedAt": "Postulé le",
-    "close": "Fermer"
+    "close": "Fermer",
+    "reason": "Raison"
+  },
+  "reasonModal": {
+    "description": "Expliquez pourquoi vous rejetez cette candidature."
   },
   "previewCv": "Aperçu du CV",
   "closeCvPreview": "Fermer l'aperçu",
@@ -37,5 +43,13 @@
   },
   "menu": {
     "close": "Fermer"
+  },
+  "success": {
+    "accepted": "Candidature acceptée avec succès",
+    "rejected": "Candidature rejetée avec succès"
+  },
+  "errors": {
+    "reject": "Échec de l'approbation de la candidature",
+    "reject": "Échec du rejet de la candidature"
   }
 }

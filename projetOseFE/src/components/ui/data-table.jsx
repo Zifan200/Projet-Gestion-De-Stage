@@ -75,15 +75,18 @@ export const DataTable = ({ columns, data, onAction }) => {
                     return (
                       <td key={col.key} className="px-4 py-3 align-middle">
                         <div className="flex items-center justify-start gap-2">
-                          {col.actions.map((action) => (
-                            <button
-                              key={action.key}
-                              onClick={() => onAction(action.key, row)}
-                              className={getButtonStyles(action.key)}
-                            >
-                              {action.label}
-                            </button>
-                          ))}
+                          {
+                            col.actions.map((action) => (
+                                (row.rawStatus === "pending" || action.key !== "accept" && action.key !== "reject") &&
+                              <button
+                                key={action.key}
+                                onClick={() => onAction(action.key, row)}
+                                className={getButtonStyles(action.key)}
+                              >
+                                {action.label}
+                              </button>
+                            ))
+                          }
                         </div>
                       </td>
                     );
