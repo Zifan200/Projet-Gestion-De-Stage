@@ -28,7 +28,7 @@ public class EtudiantDTO extends UserDTO {
     private String program;
 
     private List<Long> ListCvId;
-    private int numberOfApplications;
+    private Integer numberOfApplications;
 
     public EtudiantDTO() {
 
@@ -36,7 +36,7 @@ public class EtudiantDTO extends UserDTO {
 
     @Builder
     public EtudiantDTO(Long id, String firstName, String lastName, String email, Role role,
-                       LocalDate since, String phone, String adresse, String program, String password, int numberOfApplications) {
+                       LocalDate since, String phone, String adresse, String program, String password, Integer numberOfApplications) {
         super(id, firstName, lastName, email, password, role);
         this.since = since;
         this.phone = phone;

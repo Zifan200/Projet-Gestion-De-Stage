@@ -46,7 +46,7 @@ public class StudentService {
 
 
         Etudiant etudiantSaved = etudiantRepository.save(student);
-        logger.info("Employer created = {}", etudiantSaved.getEmail());
+        logger.info("Student created = {}", etudiantSaved.getEmail());
 
         return EtudiantDTO.fromEntity(etudiantSaved);
     }

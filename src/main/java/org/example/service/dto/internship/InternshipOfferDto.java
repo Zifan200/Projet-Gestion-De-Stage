@@ -36,7 +36,7 @@ public class InternshipOfferDto {
     @NotBlank(message = "required: employer email")
     @Email
     private String employerEmail;
-    private int applicationCount;
+    private Integer applicationCount;
     private LocalDate publishedDate;
     private LocalDate expirationDate;
 
@@ -50,7 +50,7 @@ public class InternshipOfferDto {
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, int applicationCount, LocalDate publishedDate, LocalDate expirationDate,
+                              String employerEmail, Integer applicationCount, LocalDate publishedDate, LocalDate expirationDate,
                               ApprovalStatus status, String reason, LocalDate startDate, LocalDate EndDate, String session) {
         this.id = id;
         this.title = title;

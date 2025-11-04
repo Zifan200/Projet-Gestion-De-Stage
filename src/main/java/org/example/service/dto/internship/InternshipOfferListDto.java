@@ -18,7 +18,7 @@ public class InternshipOfferListDto {
     private String targetedProgramme;
     private ApprovalStatus status;
     private String reason;
-    private int applicationCount;
+    private Integer applicationCount;
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
@@ -37,6 +37,7 @@ public class InternshipOfferListDto {
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .status(internshipOffer.getStatus())
                 .reason(internshipOffer.getReason())
+                .applicationCount(internshipOffer.getApplications().size())
                 .startDate(internshipOffer.getStartDate())
                 .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())
