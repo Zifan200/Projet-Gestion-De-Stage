@@ -1,11 +1,9 @@
 package org.example;
 
-import org.example.model.InternshipOffer;
 import org.example.model.CV;
 import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
 import org.example.repository.CvRepository;
-import org.example.repository.InternshipOfferRepository;
 import org.example.service.*;
 import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.dto.employer.EmployerDto;
@@ -25,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SpringBootApplication
 public class Main {
@@ -33,16 +30,13 @@ public class Main {
     private final EmployerService employerService;
     private final StudentService studentService;
     private final CVService cvService;
-    private final InternshipOfferRepository internshipOfferRepository;
 
     public Main(GestionnaireService gestionnaireService, EmployerService employerService,
-                StudentService studentService, CVService cvService,
-                InternshipOfferRepository internshipOfferRepository) {
+                StudentService studentService, CVService cvService) {
         this.gestionnaireService = gestionnaireService;
         this.employerService = employerService;
         this.studentService = studentService;
         this.cvService = cvService;
-        this.internshipOfferRepository = internshipOfferRepository;
     }
 
     public static void main(String[] args) {
@@ -52,6 +46,10 @@ public class Main {
     @Bean
     CommandLineRunner commandLineRunner(ApplicationContext context) {
         return args -> {
+            InternshipOfferService internshipOfferService = context.getBean(InternshipOfferService.class);
+            InternshipApplicationService internshipApplicationService = context.getBean(InternshipApplicationService.class);
+            CvRepository cvRepository = context.getBean(CvRepository.class);
+
             // -----------------------------
             // 1️⃣ Création du gestionnaire
             // -----------------------------
@@ -80,30 +78,48 @@ public class Main {
 
             InternshipOfferService internshipOfferService = context.getBean(InternshipOfferService.class);
 
+
             // -----------------------------
             // 3️⃣ Création d’offres de stage
             // -----------------------------
-            InternshipOfferDto offer1 = InternshipOfferDto.builder()
-                    .title("Développeur Java")
-                    .description("Stage backend Java Spring Boot")
-                    .targetedProgramme("Cinéma")
-                    .employerEmail(employer.getEmail())
-                    .expirationDate(LocalDate.now().plusMonths(2))
-                    .startDate(LocalDate.of(2025, 2, 15))
-                    .EndDate(LocalDate.of(2025, 5, 15))
-                    .build();
-            InternshipOfferResponseDto savedOffer1 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer1);
 
-            InternshipOfferDto offer2 = InternshipOfferDto.builder()
-                    .title("Frontend React")
-                    .description("Stage développement frontend React")
-                    .targetedProgramme("Informatique")
-                    .employerEmail(employer.getEmail())
-                    .expirationDate(LocalDate.now().plusMonths(3))
-                    .startDate(LocalDate.of(2025, 9, 1))
-                    .EndDate(LocalDate.of(2025, 11, 30))
-                    .build();
-            InternshipOfferResponseDto savedOffer2 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer2);
+
+            InternshipOfferResponseDto offer1 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
+                    InternshipOfferDto.builder()
+                            .title("Développeur Java")
+                            .description("Stage backend Java Spring Boot")
+                            .targetedProgramme("Informatique")
+                            .expirationDate(LocalDate.now().plusMonths(2))
+                            .startDate(LocalDate.of(2025, 2, 15))
+                            .EndDate(LocalDate.of(2025, 5, 15))
+                            .employerEmail(employer.getEmail())
+                            .build());
+
+            InternshipOfferResponseDto offer2 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
+                    InternshipOfferDto.builder()
+                            .title("Frontend React")
+                            .description("Stage ReactJS avec API REST")
+                            .targetedProgramme("Informatique")
+                            .expirationDate(LocalDate.now().plusMonths(2))
+                            .startDate(LocalDate.of(2025, 3, 1))
+                            .EndDate(LocalDate.of(2025, 6, 1))
+                            .employerEmail(employer.getEmail())
+                            .build());
+
+            InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
+                    InternshipOfferDto.builder()
+                            .title("Data Analyst")
+                            .description("Stage d’analyse de données avec Python")
+                            .targetedProgramme("Informatique")
+                            .expirationDate(LocalDate.now().plusMonths(2))
+                            .startDate(LocalDate.of(2025, 4, 1))
+                            .EndDate(LocalDate.of(2025, 7, 1))
+                            .employerEmail(employer.getEmail())
+                            .build());
+
+            internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
 
             // -----------------------------
             // 4️⃣ Création étudiant + CV
@@ -114,12 +130,11 @@ public class Main {
                             .lastName("Nowell")
                             .email("alexandre@example.com")
                             .phone("514-999-9999")
-                            .adresse("Pole nord")
+                            .adresse("Pôle Nord")
                             .role(Role.STUDENT)
                             .password("Test123!")
                             .program("Technique de l'informatique")
-                            .build()
-            );
+                            .build());
 
             MultipartFile file = new MockMultipartFile(
                     "file",
@@ -137,13 +152,13 @@ public class Main {
             CvRepository cvRepository = context.getBean(CvRepository.class);
 
             byte[] bytes = new byte[9];
+          
             CV studentCV = CV.builder()
                     .etudiant(EtudiantDTO.toEntity(etudiantDTO))
-                    .data(bytes)
-                    .fileName("My Cv")
+                    .data("cv".getBytes())
+                    .fileName("cv_test")
                     .fileSize(1L)
                     .fileType("pdf")
-                    .reason("")
                     .uploadedAt(LocalDateTime.now())
                     .status(ApprovalStatus.ACCEPTED)
                     .build();
@@ -161,6 +176,57 @@ public class Main {
 
             // Hardcoder le statut employeur à APPROVED
             var appEntity = internshipApplicationService.approveInternshipApplication(employer.getEmail(), savedInternshipApplication.getId());
+
+            // -----------------------------
+            // 5️⃣ Candidature 1 : Acceptée par étudiant
+            // -----------------------------
+            InternshipApplicationResponseDTO app1 = internshipApplicationService.saveInternshipApplication(
+                    InternshipApplicationDTO.builder()
+                            .internshipOfferId(offer1.getId())
+                            .employerEmail(employer.getEmail())
+                            .studentEmail(etudiantDTO.getEmail())
+                            .selectedCvID(studentCV.getId())
+                            .build());
+
+            internshipApplicationService.approveInternshipApplication(employer.getEmail(), app1.getId());
+            internshipApplicationService.acceptOfferByStudent(etudiantDTO.getEmail(), app1.getId());
+
+            System.out.println("✅ Candidature 1 (Développeur Java) : ACCEPTÉE par l’étudiant");
+
+            // -----------------------------
+            // 6️⃣ Candidature 2 : Refusée par étudiant
+            // -----------------------------
+            InternshipApplicationResponseDTO app2 = internshipApplicationService.saveInternshipApplication(
+                    InternshipApplicationDTO.builder()
+                            .internshipOfferId(offer2.getId())
+                            .employerEmail(employer.getEmail())
+                            .studentEmail(etudiantDTO.getEmail())
+                            .selectedCvID(studentCV.getId())
+                            .build());
+
+            internshipApplicationService.approveInternshipApplication(employer.getEmail(), app2.getId());
+            internshipApplicationService.rejectOfferByStudent(
+                    etudiantDTO.getEmail(),
+                    app2.getId(),
+                    "Je préfère une autre offre"
+            );
+
+            System.out.println("❌ Candidature 2 (Frontend React) : REFUSÉE par l’étudiant");
+
+            // -----------------------------
+            // 7️⃣ Candidature 3 : Pending (employeur accepté, étudiant n’a rien fait)
+            // -----------------------------
+            InternshipApplicationResponseDTO app3 = internshipApplicationService.saveInternshipApplication(
+                    InternshipApplicationDTO.builder()
+                            .internshipOfferId(offer3.getId())
+                            .employerEmail(employer.getEmail())
+                            .studentEmail(etudiantDTO.getEmail())
+                            .selectedCvID(studentCV.getId())
+                            .build());
+
+            internshipApplicationService.approveInternshipApplication(employer.getEmail(), app3.getId());
+
+            System.out.println("⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n’a rien fait)");
         };
     }
 }

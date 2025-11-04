@@ -1,131 +1,79 @@
 import React from "react";
-import { cn } from "../../lib/cn.js";
-import { CheckIcon, Cross2Icon, EyeOpenIcon, DownloadIcon, TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { motion, AnimatePresence } from "framer-motion";
+import { FormTemplate } from "./form-template.jsx";
+import { Button } from "./button.jsx";
+import { Textarea } from "./textarea.jsx";
+import Label from "./label.js";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { reasonSchema } from "../../models/reason.js";
 
-const getButtonStyles = (actionKey) => {
-  const baseStyles = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors";
+export const ReasonModal = ({
+  open,
+  onClose,
+  onSubmit,
+  title = "Raison du refus",
+  description = "Explique pourquoi tu refuses ce CV.",
+  placeholder = "Ex: Le profil ne correspond pas aux exigences du poste..."
+}) => {
+  const form = useForm({
+    resolver: zodResolver(reasonSchema),
+    defaultValues: { reason: "" },
+  });
 
-  const variants = {
-    view: "bg-blue-100 text-blue-700 hover:bg-blue-200",
-    preview: "bg-indigo-100 text-indigo-700 hover:bg-indigo-200",
-    download: "bg-green-100 text-green-700 hover:bg-green-200",
-    delete: "bg-red-100 text-red-700 hover:bg-red-200",
-    reject: "bg-red-100 text-red-700 hover:bg-red-200",
-    accept: "bg-emerald-100 text-emerald-700 hover:bg-emerald-200",
-    edit: "bg-amber-100 text-amber-700 hover:bg-amber-200",
+  const handleSubmit = (data) => {
+    onSubmit(data.reason);
+    form.reset();
+    onClose();
   };
 
-  return `${baseStyles} ${variants[actionKey] || "bg-gray-100 text-gray-700 hover:bg-gray-200"}`;
-};
-
-const getActionIcon = (actionKey) => {
-  const icons = {
-    view: EyeOpenIcon,
-    preview: EyeOpenIcon,
-    download: DownloadIcon,
-    delete: TrashIcon,
-    reject: Cross2Icon,
-    accept: CheckIcon,
-    edit: Pencil1Icon,
-  };
-
-  return icons[actionKey] || null;
-};
-
-export const DataTable = ({ columns, data, onAction }) => {
   return (
-    <div className="overflow-x-auto bg-white shadow rounded">
-      <table className="w-full text-sm text-left border-collapse">
-        <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
-          <tr>
-            {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3">
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
-            <tr>
-              <td
-                colSpan={columns.length}
-                className="text-center p-6 text-gray-400"
-              >
-                Aucun résultat
-              </td>
-            </tr>
-          ) : (
-            data.map((row) => (
-              <tr
-                key={row.id}
-                className="border-t border-gray-200 text-gray-700 text-sm"
-              >
-                {columns.map((col) => {
-                  if (col.key === "status" || col.key === "etudiantStatus") {
-                    const statusKey = row.rawStatus || row[col.key]?.toLowerCase();
-                    const statusColor =
-                      {
-                        pending: "bg-yellow-100 text-yellow-800",
-                        accepted: "bg-green-100 text-green-800",
-                        rejected: "bg-red-100 text-red-800",
-                        reviewing: "bg-blue-100 text-blue-800",
-                        confirmed_by_student: "bg-green-100 text-green-800",
-                        rejected_by_student: "bg-red-100 text-red-800",
-                        waiting_student_decision: "bg-yellow-100 text-yellow-800",
-                      }[statusKey] ||
-                      "bg-gray-100 text-gray-700";
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 bg-white backdrop-blur-xl flex items-center justify-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="min-w-[1000px]">
+            <FormTemplate
+              title={title}
+              description={description}
+            >
+              <FormProvider {...form}>
+                <form
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                  className="flex flex-col gap-5"
+                >
+                  <div className="flex flex-col gap-2">
+                    <Label name="reason" label="Raison" />
+                    <Textarea
+                      name="reason"
+                      placeholder={placeholder}
+                      registration={form.register("reason")}
+                      error={form.formState.errors.reason?.message}
+                    />
+                  </div>
 
-                    const displayValue = col.format ? col.format(row[col.key], row) : row[col.key];
-
-                    return (
-                      <td key={col.key} className="px-4 py-3 align-middle">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor}`}
-                        >
-                          {displayValue}
-                        </span>
-                      </td>
-                    );
-                  }
-
-                  if (col.key === "actions") {
-                    const actions = typeof col.actions === "function" ? col.actions(row) : col.actions;
-                    return (
-                      <td key={col.key} className="px-4 py-3 align-middle">
-                        <div className="flex items-center justify-start gap-2">
-                          {actions.map((action) => {
-                            const Icon = getActionIcon(action.key);
-                            const showIcon = action.showIcon === true;
-                            const showLabel = action.showLabel !== false;
-
-                            return (
-                              <button
-                                key={action.key}
-                                onClick={() => onAction(action.key, row)}
-                                className={getButtonStyles(action.key)}
-                              >
-                                {Icon && showIcon && <Icon className="w-4 h-4" />}
-                                {showLabel && action.label}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </td>
-                    );
-                  }
-
-                  return (
-                    <td key={col.key} className="px-4 py-3 align-middle">
-                      {row[col.key]}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
+                  <div className="flex justify-end gap-3 mt-4">
+                    <Button
+                      label="Annuler"
+                      className="bg-zin-300 hover:bg-gray-500"
+                      type="button"
+                      onClick={() => {
+                        form.reset();
+                        onClose();
+                      }}
+                    />
+                    <Button label="Confirmer" className="" type="submit" />
+                  </div>
+                </form>
+              </FormProvider>
+            </FormTemplate>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
