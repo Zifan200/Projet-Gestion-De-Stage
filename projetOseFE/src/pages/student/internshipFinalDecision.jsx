@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { useStudentStore, ApprovalStatus } from "../../stores/studentStore.js";
+import { useStudentStore } from "../../stores/studentStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { toast } from "sonner";
@@ -7,25 +7,32 @@ import { useTranslation } from "react-i18next";
 
 export default function OffresAConfirmer() {
     const { t } = useTranslation("student_dashboard_decision");
+    const { token } = useAuthStore();
 
-    const { token, user } = useAuthStore();
     const {
         applications,
-        loadApplicationsByStatus,
-        acceptOffer,
-        rejectOffer,
+        loadAcceptedApplications,
         loading,
         error,
         successMessage,
         clearMessages,
+        acceptOffer,
+        rejectOffer
     } = useStudentStore();
 
+    // Charger uniquement les candidatures approuvées par l'employeur
     useEffect(() => {
-        if (user?.email && token) {
-            loadApplicationsByStatus(token, "PENDING");
+        if (token) {
+            loadAcceptedApplications(token);
         }
-    }, [loadApplicationsByStatus, user, token]);
+    }, [loadAcceptedApplications, token]);
 
+    // DEBUG : afficher les applications dans la console
+    useEffect(() => {
+        console.log("Applications chargées :", applications);
+    }, [applications]);
+
+    // Gestion des messages
     useEffect(() => {
         if (successMessage) {
             toast.success(successMessage);
@@ -38,53 +45,22 @@ export default function OffresAConfirmer() {
         }
     }, [successMessage, error, clearMessages, t]);
 
-    const handleAccept = async (applicationId) => {
-        await acceptOffer(applicationId, user.email, token);
-    };
-
-    const handleReject = async (applicationId) => {
-        const reason = prompt(t("prompt.rejectReason"));
-        if (reason) {
-            await rejectOffer(applicationId, user.email, reason, token);
-        }
-    };
-
+    // Colonnes du tableau
     const columns = useMemo(() => [
-        { key: "offerTitle", label: t("table.OfferTitle") },
-        { key: "companyName", label: t("table.company") },
-        {
-            key: "createdAt",
-            label: t("table.receivedDate"),
-            render: (row) => new Date(row.createdAt).toLocaleDateString(),
-        },
-        {
-            key: "etudiantStatus",
-            label: t("table.studentStatus"),
-            render: (row) => {
-                switch (row.etudiantStatus) {
-                    case ApprovalStatus.CONFIRMED_BY_STUDENT:
-                        return t("statuses.confirmed");
-                    case ApprovalStatus.REJECTED_BY_STUDENT:
-                        return t("statuses.rejected");
-                    default:
-                        return t("statuses.pending");
-                }
-            },
-        },
+        { key: "internshipOfferTitle", label: t("table.OfferTitle") },
+        { key: "employerEmail", label: t("table.company") },
         {
             key: "actions",
             label: t("table.action"),
             actions: [
-                { key: "accept", label: <span>{t("actions.accept")}</span> },
-                { key: "reject", label: <span>{t("actions.reject")}</span> },
-            ],
-        },
+                { key: "accept", label: t("actions.accept") },
+                { key: "reject", label: t("actions.reject") }
+            ]
+        }
     ], [t]);
 
-    const handleAction = (action, app) => {
-        if (action === "accept") handleAccept(app.id);
-        else if (action === "reject") handleReject(app.id);
-    };
+    // Filtrer uniquement les candidatures approuvées par l'employeur
+    const approvedApplications = applications.filter(app => app.status === "ACCEPTED");
 
     return (
         <div className="p-6">
@@ -96,12 +72,25 @@ export default function OffresAConfirmer() {
                 </div>
             )}
 
-            {!loading && applications.length === 0 && (
+            {!loading && approvedApplications.length === 0 && (
                 <p className="text-gray-500 text-center mt-8">{t("noApplications")}</p>
             )}
 
-            {!loading && applications.length > 0 && (
-                <DataTable columns={columns} data={applications} onAction={handleAction} />
+            {!loading && approvedApplications.length > 0 && (
+                <DataTable
+                    columns={columns}
+                    data={approvedApplications}
+                    onAction={(actionKey, row) => {
+                        if (actionKey === "accept") {
+                            acceptOffer(row.id, token);
+                        } else if (actionKey === "reject") {
+                            const raison = prompt(t("reasons.enterReason"), "");
+                            if (raison !== null) {
+                                rejectOffer(row.id, raison, token);
+                            }
+                        }
+                    }}
+                />
             )}
         </div>
     );

@@ -11,7 +11,6 @@ import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.dto.employer.EmployerDto;
 import org.example.service.dto.gestionnaire.GestionnaireDTO;
 import org.example.service.dto.internship.InternshipOfferDto;
-import org.example.service.dto.internship.InternshipOfferListDto;
 import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
@@ -64,7 +63,6 @@ public class Main {
                     .phone("5144381800")
                     .build();
             gestionnaireService.saveGestionnaire(admin);
-            System.out.println("✅ Gestionnaire créé : " + admin.getEmail());
 
             // -----------------------------
             // 2️⃣ Création de l’employeur
@@ -79,7 +77,6 @@ public class Main {
                     .phone("123-456-7890")
                     .build();
             employerService.saveEmployer(employer);
-            System.out.println("✅ Employeur créé : " + employer.getEnterpriseName());
 
             InternshipOfferService internshipOfferService = context.getBean(InternshipOfferService.class);
 
@@ -108,53 +105,6 @@ public class Main {
                     .build();
             InternshipOfferResponseDto savedOffer2 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer2);
 
-            InternshipOfferDto offer3 = InternshipOfferDto.builder()
-                    .title("Data Analyst")
-                    .description("Stage analyse de données et visualisation")
-                    .targetedProgramme("Informatique")
-                    .employerEmail(employer.getEmail())
-                    .expirationDate(LocalDate.now().plusMonths(4))
-                    .build();
-            InternshipOfferResponseDto savedOffer3 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer3);
-
-            InternshipOfferDto offer4 = InternshipOfferDto.builder()
-                    .title("Soins infirmiers")
-                    .description("Stage pratique soins infirmiers")
-                    .targetedProgramme("Soins infirmiers")
-                    .employerEmail(employer.getEmail())
-                    .expirationDate(LocalDate.now().plusMonths(2))
-                    .build();
-            InternshipOfferResponseDto savedOffer4 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer4);
-
-            InternshipOfferDto offer5 = InternshipOfferDto.builder()
-                    .title("Frontend Angular")
-                    .description("Stage développement frontend Angular")
-                    .targetedProgramme("Informatique")
-                    .employerEmail(employer.getEmail())
-                    .expirationDate(LocalDate.now().plusMonths(1))
-                    .build();
-            InternshipOfferResponseDto savedOffer5 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer5);
-
-            InternshipOfferDto offer6 = InternshipOfferDto.builder()
-                    .title("AI & Data Engineer")
-                    .description("Experience required in Python and Machine Learning algorithms")
-                    .targetedProgramme("Informatique")
-                    .employerEmail(employer.getEmail())
-                    .expirationDate(LocalDate.now().plusMonths(1))
-                    .build();
-            InternshipOfferResponseDto savedOffer6 = internshipOfferService.saveInternshipOffer(employer.getEmail(), offer6);
-
-            // -----------------------------
-            // 3️⃣1️⃣ Tester getIntershipOfferSession
-            // -----------------------------
-            for (InternshipOfferResponseDto savedOffer : List.of(savedOffer1, savedOffer2, savedOffer3, savedOffer4)) {
-                if (savedOffer.getStartDate() != null) {
-                    InternshipOffer offerEntity = internshipOfferRepository.findById(savedOffer.getId()).get();
-                    String session = internshipOfferService.getIntershipOfferSession(offerEntity.getStartDate());
-                    System.out.println("Session pour l'offre '" + savedOffer.getTitle() + "' : " + session);
-                }
-            }
-
             // -----------------------------
             // 4️⃣ Création étudiant + CV
             // -----------------------------
@@ -181,22 +131,7 @@ public class Main {
             cvService.approveCv(cvResponseDTO.getId());
 
             // -----------------------------
-            // 5️⃣ ❌ Suppression de la mise à jour des statuts
-            // -----------------------------
-            // Cette partie a été supprimée pour ne plus accepter ou refuser les offres automatiquement
-
-            // -----------------------------
-            // 6️⃣ Affichage offres
-            // -----------------------------
-            List<InternshipOfferListDto> allOffers = internshipOfferService.getAllOffersSummary();
-            allOffers.forEach(o -> System.out.println(
-                    "ID: " + o.getId() + " | " + o.getTitle() +
-                            " - " + o.getEnterpriseName() +
-                            " (Expiration: " + o.getExpirationDate() + ")"
-            ));
-
-            // -----------------------------
-            // 7️⃣ Création candidatures
+            // 5️⃣ Création candidatures avec approvalStatus hardcodé APPROVED
             // -----------------------------
             InternshipApplicationService internshipApplicationService = context.getBean(InternshipApplicationService.class);
             CvRepository cvRepository = context.getBean(CvRepository.class);
@@ -214,6 +149,7 @@ public class Main {
                     .build();
             cvRepository.save(studentCV);
 
+            // Créer candidature
             InternshipApplicationDTO internshipApplicationDTO = InternshipApplicationDTO.builder()
                     .internshipOfferId(savedOffer1.getId())
                     .employerEmail(employer.getEmail())
@@ -222,6 +158,9 @@ public class Main {
                     .build();
 
             InternshipApplicationResponseDTO savedInternshipApplication = internshipApplicationService.saveInternshipApplication(internshipApplicationDTO);
+
+            // Hardcoder le statut employeur à APPROVED
+            var appEntity = internshipApplicationService.approveInternshipApplication(employer.getEmail(), savedInternshipApplication.getId());
         };
     }
 }

@@ -48,4 +48,10 @@ export const studentService = {
     );
     return res.data;
   },
+  async getAcceptedApplications(token) {
+    const res = await api.get("/student/accepted-applications", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  }
 };

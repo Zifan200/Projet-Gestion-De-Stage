@@ -42,6 +42,7 @@ function App() {
     "employer_dashboard",
     "gs_dashboard",
     "menu",
+    "student_dashboard_decision",
   ]);
 
   const studentDashboardSidebarLinks = [

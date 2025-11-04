@@ -42,10 +42,10 @@ export const useStudentStore = create(
                 }
             },
 
-            acceptOffer: async (applicationId, studentEmail, token) => {
+            acceptOffer: async (applicationId, token) => {
                 try {
                     set({ loading: true, error: null, successMessage: null });
-                    const res = await studentService.acceptOffer(applicationId, studentEmail, token);
+                    const res = await studentService.acceptOffer(applicationId, token);
 
                     const updated = get().applications.map((app) =>
                         app.id === applicationId
@@ -66,10 +66,10 @@ export const useStudentStore = create(
                 }
             },
 
-            rejectOffer: async (applicationId, studentEmail, raison, token) => {
+            rejectOffer: async (applicationId, raison, token) => {
                 try {
                     set({ loading: true, error: null, successMessage: null });
-                    const res = await studentService.rejectOffer(applicationId, studentEmail, raison, token);
+                    const res = await studentService.rejectOffer(applicationId, raison, token);
 
                     const updated = get().applications.map((app) =>
                         app.id === applicationId
@@ -90,8 +90,22 @@ export const useStudentStore = create(
                 }
             },
 
+            loadAcceptedApplications: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await studentService.getAcceptedApplications(token);
+                    set({ applications: data, loading: false });
+                } catch (err) {
+                    set({
+                        error: err.response?.data?.message || err.message || "Erreur inconnue",
+                        loading: false,
+                    });
+                }
+            },
             clearMessages: () => set({ successMessage: null, error: null }),
+
         }),
         { name: "student-storage" }
     )
+
 );

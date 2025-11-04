@@ -126,16 +126,17 @@ public class EtudiantController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/student/accepted-applications")
-    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAcceptedApplications() {
-        List<InternshipApplication> acceptedApps = internshipApplicationService
-                .getApplicationsByApprovalStatus(ApprovalStatus.ACCEPTED);
+    @GetMapping("/accepted-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAcceptedApplicationsForStudent(
+            HttpServletRequest request
+    ) {
+        String studentEmail = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
 
-        List<InternshipApplicationResponseDTO> dtos = acceptedApps.stream()
-                .map(InternshipApplicationResponseDTO::create)
-                .toList();
+        List<InternshipApplicationResponseDTO> acceptedApplications =
+                internshipApplicationService.getAcceptedApplicationsForStudent(studentEmail);
 
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(acceptedApplications);
     }
+
 
 }
