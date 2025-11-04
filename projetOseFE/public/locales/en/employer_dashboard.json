@@ -1,0 +1,26 @@
+{
+  "stats": {
+    "myOffers": "My offers",
+    "offerConfirm": "Confirmed applications",
+    "applications": "Total applications",
+    "activeApplications": "Active applications",
+    "totalStudents": "Unique students",
+    "createOffer": "Create an offer"
+  },
+  "titles": {
+    "home": "Home",
+    "dashboard": "Employer Dashboard",
+    "applications": "Applications",
+    "createOffer": "Add Internship Offer",
+    "myOffers": "My Offers"
+  },
+  "messages": {
+    "welcome": "Welcome back, {{firstName}}!",
+    "noOffers": "No offers have been posted yet.",
+    "loadPrompt": "Start by creating your first offer."
+  },
+  "errors": {
+    "loadOffers": "Error while loading offers.",
+    "loadApplications": "Error while loading applications."
+  }
+}

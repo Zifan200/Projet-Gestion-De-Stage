@@ -1,13 +1,30 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
 import useAuthStore from "../../stores/authStore.js";
-import { toast } from "sonner";
+import { ReasonModal } from "../../components/ui/reason-modal.jsx";
+import { DataTable } from "../../components/ui/data-table.jsx";
+import { Header } from "../../components/ui/header.jsx";
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverClose,
+} from "../../components/ui/popover.jsx";
+
+import {
+    EyeOpenIcon,
+    DownloadIcon,
+    FileTextIcon,
+    Cross2Icon,
+    CheckIcon,
+} from "@radix-ui/react-icons";
 
 export const InternshipApplications = () => {
-    const { t } = useTranslation();
-    const { applications, fetchApplications } = useEmployerStore();
+    const { t } = useTranslation("internship_applications");
+    const { applications, fetchApplications, approveApplication, rejectApplication } = useEmployerStore();
     const {
         previewUrl,
         previewType,
@@ -15,167 +32,202 @@ export const InternshipApplications = () => {
         downloadCvForEmployer,
         closePreview,
     } = useCvStore();
-
+    const user = useAuthStore((s) => s.user);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [filterSession, setFilterSession] = useState("All");
-    const [filterYear, setFilterYear] = useState("All");
+    const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
+    const [filterStatus, setFilterStatus] = useState(null);
 
-    useEffect(() => {
-        fetchApplications();
-    }, [fetchApplications]);
+    const handleApproveApplication = (application) => {
+        try {
+            approveApplication(user.token, application.id);
+            toast.success(t("success.accepted"));
+        } catch {
+            toast.error(t("errors.accept"));
+        }
+    };
 
-    const handleViewApplication = (application) => {
+    const handleRejectApplication = (application) => {
         setSelectedApplication(application);
-        setIsModalOpen(true);
+        setIsReasonModalOpen(true);
     };
 
-    const handlePreviewCv = (application) => {
-        try {
-            previewCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
-        } catch (err) {
-            toast.error(err.message);
-        }
-    };
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
 
-    const handleDownloadCv = (application) => {
-        try {
-            downloadCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
-        } catch (err) {
-            toast.error(t("internshipApplications.errors.downloadCv"));
-        }
-    };
+  const handleAction = (action, app) => {
+    try {
+      switch (action) {
+        case "view":
+          setSelectedApplication(app);
+          setIsModalOpen(true);
+          break;
+        case "preview":
+          previewCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
+          break;
+        case "download":
+          downloadCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
+          break;
+        case "accept":
+          handleApproveApplication(app);
+          break;
+        case "reject":
+          handleRejectApplication(app);
+          break;
+        default:
+          break;
+      }
+    } catch (err) {
+      toast.error(err.message || t("errors.downloadCv"));
+    }
+  };
 
-    // 🔹 Filtrage par session et année
-    const filteredApplications = useMemo(() => {
-        let filtered = applications;
+  const columns = [
+    { key: "internshipOfferTitle", label: t("table.offerTitle") },
+    { key: "studentName", label: t("table.studentName") },
+    { key: "studentEmail", label: t("table.studentEmail") },
+    { key: "status", label: t("table.status") },
+    {
+      key: "actions",
+      label: t("table.action"),
+      actions: [
+        {
+          key: "view",
+          label: (
+            <>
+              <EyeOpenIcon className="w-4 h-4" />
+              <span>{t("table.actionView")}</span>
+            </>
+          ),
+        },
+        {
+          key: "preview",
+          label: (
+            <>
+              <FileTextIcon className="w-4 h-4" />
+              <span>{t("table.preview")}</span>
+            </>
+          ),
+        },
+        {
+          key: "download",
+          label: (
+            <>
+              <DownloadIcon className="w-4 h-4" />
+              <span>{t("table.download")}</span>
+            </>
+          ),
+        },
+        {
+            key: "accept",
+            label: (
+                <>
+                    <CheckIcon className="w-4 h-4" />
+                    <span>{t("table.accept")}</span>
+                </>
+            ),
+        },
+        {
+            key: "reject",
+            label: (
+                <>
+                    <Cross2Icon className="w-4 h-4" />
+                    <span>{t("table.reject")}</span>
+                </>
+            ),
+        },
+      ],
+    },
+  ];
 
-        if (filterSession !== "All") {
-            filtered = filtered.filter((a) => a.session === filterSession);
-        }
+    const sortedAndFilteredApplications = useMemo(() => {
+        const filtered = filterStatus
+            ? applications.filter((app) => app.status === filterStatus)
+            : applications;
+        return [...filtered].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
+    }, [applications, filterStatus]);
 
-        if (filterYear !== "All") {
-            filtered = filtered.filter((a) => {
-                const date = a.startDate ? new Date(a.startDate) : new Date(a.createdAt);
-                return date.getFullYear().toString() === filterYear;
-            });
-        }
-
-        return filtered;
-    }, [applications, filterSession, filterYear]);
-
-    // 🔹 Extraire dynamiquement les années disponibles
-    const availableYears = useMemo(() => {
-        const years = new Set();
-        applications.forEach((a) => {
-            const date = a.startDate ? new Date(a.startDate) : new Date(a.createdAt);
-            if (!isNaN(date)) years.add(date.getFullYear().toString());
-        });
-        return Array.from(years).sort();
-    }, [applications]);
+    const tableData = sortedAndFilteredApplications.map((app) => ({
+        ...app,
+        studentName: `${app.studentFirstName} ${app.studentLastName}`,
+        rawStatus: app.status?.toLowerCase(),
+        status: t(`status.${app.status?.toLowerCase()}`),
+    }));
 
     return (
-        <div className="p-10 space-y-6">
-            {/* 🔹 Filtres en haut à droite */}
-            <div className="flex justify-end mb-4 gap-6">
-                {/* Filtre Session */}
-                <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">{t("offer.filter.session")}:</label>
-                    <select
-                        className="rounded border border-zinc-300 p-1"
-                        value={filterSession}
-                        onChange={(e) => setFilterSession(e.target.value)}
-                    >
-                        <option value="All">{t("offer.session.all")}</option>
-                        <option value="Automne">{t("offer.session.autumn")}</option>
-                        <option value="Hiver">{t("offer.session.winter")}</option>
-                    </select>
-                </div>
+        <div className="space-y-6">
+            <Header title={t("title")} />
 
-                {/* Filtre Année */}
-                <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">Filter by year:</label>
-                    <select
-                        className="rounded border border-zinc-300 p-1"
-                        value={filterYear}
-                        onChange={(e) => setFilterYear(e.target.value)}
-                    >
-                        <option value="All">{t("offer.session.year")}</option>
-                        {availableYears.map((year) => (
-                            <option key={year} value={year}>
-                                {year}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            {/* Table des candidatures */}
-            <div className="overflow-x-auto bg-white shadow rounded">
-                <table className="w-full text-sm text-left border-collapse">
-                    <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
-                    <tr>
-                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle") || "Offre"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.statusTitle") || "Statut"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredApplications.map((app) => (
-                        <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
-                            <td className="px-4 py-2">{app.internshipOfferTitle}</td>
-                            <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
-                            <td className="px-4 py-2">{app.studentEmail}</td>
-                            <td className="px-4 py-2">
-                                {app.selectedCvFileName ? (
-                                    <>
-                                        <button
-                                            className="text-blue-600 underline hover:text-blue-800 mr-2"
-                                            onClick={() => handlePreviewCv(app)}
-                                        >
-                                            {app.selectedCvFileName}
-                                        </button>
-                                        <button
-                                            className="text-green-600 underline hover:text-green-800"
-                                            onClick={() => handleDownloadCv(app)}
-                                        >
-                                            {t("internshipApplications.table.download")}
-                                        </button>
-                                    </>
-                                ) : (
-                                    t("internshipApplications.table.noCv")
-                                )}
-                            </td>
-                            <td className="px-4 py-2">
-                                {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
-                            </td>
-                            <td className="px-4 py-2">
+            {/* Filter */}
+            <Popover>
+                {({ open, setOpen, triggerRef, contentRef }) => (
+                    <>
+                        <PopoverTrigger
+                            open={open}
+                            setOpen={setOpen}
+                            triggerRef={triggerRef}
+                        >
+              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                {t("filter.status")}:{" "}
+                  {filterStatus
+                      ? t(`status.${filterStatus.toLowerCase()}`)
+                      : t("filter.all")}
+              </span>
+                        </PopoverTrigger>
+                        <PopoverContent open={open} contentRef={contentRef}>
+                            <div className="flex flex-col gap-2 min-w-[150px]">
+                                {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
+                                    <button
+                                        key={status}
+                                        onClick={() => {
+                                            setFilterStatus(status);
+                                            setOpen(false);
+                                        }}
+                                        className={`px-3 py-1 rounded text-left ${
+                                            filterStatus === status
+                                                ? "bg-blue-100 font-semibold"
+                                                : "hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        {t(`status.${status.toLowerCase()}`)}
+                                    </button>
+                                ))}
                                 <button
-                                    className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
-                                    onClick={() => handleViewApplication(app)}
+                                    onClick={() => {
+                                        setFilterStatus(null);
+                                        setOpen(false);
+                                    }}
+                                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
                                 >
-                                    {t("internshipApplications.table.actionView")}
+                                    {t("filter.all")}
                                 </button>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
+                                <PopoverClose setOpen={setOpen}>
+                  <span className="text-sm text-gray-600">
+                    {t("menu.close")}
+                  </span>
+                                </PopoverClose>
+                            </div>
+                        </PopoverContent>
+                    </>
+                )}
+            </Popover>
 
-            {/* Preview CV */}
+            <DataTable columns={columns} data={tableData} onAction={handleAction} />
+
+            {/* CV Preview */}
             {previewUrl && (
                 <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
                     <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
+                        <h3 className="text-xl font-semibold">{t("previewCv")}</h3>
                         <button
-                            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                            className="flex items-center gap-2 px-3 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                             onClick={closePreview}
                         >
-                            {t("internshipApplications.closeCvPreview")}
+                            <Cross2Icon className="w-4 h-4" />
+                            {t("closeCvPreview")}
                         </button>
                     </div>
                     {previewType === "pdf" ? (
@@ -205,46 +257,61 @@ export const InternshipApplications = () => {
                             {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
                         </h2>
                         <p>
-                            <strong>{t("internshipApplications.modal.email") || "Email"}: </strong>
+                            <strong>{t("modal.email")}: </strong>
                             {selectedApplication.studentEmail}
                         </p>
                         <p>
-                            <strong>{t("internshipApplications.modal.cv") || "CV"}: </strong>
-                            {selectedApplication.selectedCvFileName || "Aucun CV"}
-                        </p>
-                        <p>
-                            <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}: </strong>
+                            <strong>{t("modal.offerTitle")}: </strong>
                             {selectedApplication.internshipOfferTitle}
                         </p>
                         <p>
-                            <strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}: </strong>
+                            <strong>{t("modal.appliedAt")}: </strong>
                             {new Date(selectedApplication.createdAt).toLocaleDateString()}
                         </p>
                         <p>
-                            <strong>{t("internshipApplications.modal.statusTitle") || "Statut"}: </strong>
-                            {t(`internshipApplications.modal.status.${selectedApplication.status.toLowerCase()}`)}
+                            <strong>{t("modal.status")}: </strong>
+                            {t(selectedApplication.status)}
                         </p>
-                        {selectedApplication.status === "REJECTED" &&
+                        {selectedApplication.status === t("status.rejected") &&
                             <p>
-                                <strong>{t("internshipApplications.modal.reason") || "Raison"}: </strong>
+                                <strong>{t("modal.reason")}: </strong>
                                 {selectedApplication.reason}
                             </p>
                         }
 
                         <div className="mt-6 flex justify-end">
                             <button
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                 onClick={() => {
                                     setIsModalOpen(false);
                                     setSelectedApplication(null);
                                 }}
                             >
-                                {t("internshipApplications.modal.close")}
+                                <Cross2Icon className="w-4 h-4"/>
+                                {t("modal.close")}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Modal refus de candidature */}
+            <ReasonModal
+                open={isReasonModalOpen}
+                onClose={() => setIsReasonModalOpen(false)}
+                description={t("reasonModal.description")}
+                onSubmit={async (reason) => {
+                    try {
+                        await rejectApplication(user.token, selectedApplication.id, reason);
+                        toast.error(
+                            t("success.rejected"),
+                        );
+                        setIsReasonModalOpen(false);
+                    } catch {
+                        toast.error(t("errors.reject"));
+                    }
+                }}
+            />
         </div>
-    );
+  );
 };

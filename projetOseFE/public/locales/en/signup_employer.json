@@ -1,0 +1,48 @@
+{
+  "form": {
+    "employer": {
+      "title": "Create an employer account",
+      "description": "Join OSE 2.0 and start posting your internship offers to connect your company with talented students.",
+      "enterprise": "*Enter the name of the company you represent"
+    },
+    "fields": {
+      "email": "*Enter your email",
+      "firstName": "*Enter your first name",
+      "lastName": "*Enter your last name",
+      "password": "*Enter your password",
+      "passwordConfirm": "*Confirm your password",
+      "phone": "Phone number"
+    },
+    "createBtn": "Create an account",
+    "login": {
+      "accountExist": "Already have an account?",
+      "title": "Login"
+    }
+  },
+  "success": {
+    "registerEnterpriseSuccess": "Hello {{firstName}}, your account for {{enterpriseName}} has been successfully created!"
+  },
+  "errors": {
+    "fillFields": "Please fill in the required information",
+    "genericError": "An error occurred, please try again",
+    "email": {
+      "invalid": "Invalid email address."
+    },
+    "firstName": {
+      "min": "First name must be at least 4 characters"
+    },
+    "lastName": {
+      "min": "Last name must be at least 2 characters"
+    },
+    "password": {
+      "regex": "Password must be 8–50 characters with at least one uppercase, one lowercase, one number, and one special character (@$!%*?&)",
+      "match": "Passwords do not match"
+    },
+    "enterpriseName": {
+      "min": "Company name must be at least 2 characters"
+    },
+    "phone": {
+      "invalid": "Phone number must contain exactly 10 digits (111-111-1111)"
+    }
+  }
+}

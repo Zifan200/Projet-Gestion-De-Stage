@@ -1,0 +1,53 @@
+{
+  "form": {
+    "student": {
+      "title": "Créer un compte étudiant",
+      "description": "Créez votre compte étudiant pour accéder à la plateforme OSE 2.0, gérer votre profil et trouver un stage correspondant à votre programme.",
+      "adress": "*Entrez votre adresse",
+      "programmes": "*Entrez votre programme",
+      "selectProgram": "Sélectionnez un programme parmi les suivants :"
+    },
+    "fields": {
+      "firstName": "*Entrez votre prénom",
+      "lastName": "*Entrez votre nom de famille",
+      "email": "*Entrez votre courriel",
+      "phone": "Numéro de téléphone",
+      "password": "*Entrez votre mot de passe",
+      "passwordConfirm": "*Confirmez votre mot de passe"
+    },
+    "createBtn": "Créer un compte",
+    "login": {
+      "accountExist": "Vous avez déjà un compte ?",
+      "title": "Connexion"
+    }
+  },
+  "success": {
+    "registerStudentSuccess": "Bienvenue {{firstName}} 🎉! Vous êtes inscrit sur la plateforme OSE 2.0 avec le programme : {{program}}."
+  },
+  "errors": {
+    "fillFields": "Veuillez remplir les informations requises",
+    "genericError": "Une erreur est survenue, veuillez réessayer",
+    "email": {
+      "invalid": "Adresse courriel invalide."
+    },
+    "firstName": {
+      "min": "Le prénom doit contenir au moins 2 caractères"
+    },
+    "lastName": {
+      "min": "Le nom doit contenir au moins 2 caractères"
+    },
+    "adresse": {
+      "min": "L'adresse doit contenir au moins 2 caractères."
+    },
+    "program": {
+      "required": "La sélection d'un programme est obligatoire."
+    },
+    "password": {
+      "regex": "Le mot de passe doit contenir entre 8 et 50 caractères, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)",
+      "match": "Les mots de passe ne correspondent pas"
+    },
+    "phone": {
+      "invalid": "Le numéro doit contenir exactement 10 chiffres (111-111-1111)"
+    }
+  }
+}

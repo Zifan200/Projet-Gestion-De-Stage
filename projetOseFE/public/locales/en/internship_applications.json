@@ -1,0 +1,55 @@
+{
+  "title": "Applications",
+  "table": {
+    "offerTitle": "Offer Title",
+    "studentName": "Student Name",
+    "studentEmail": "Student Email",
+    "cv": "CV",
+    "download": "Download",
+    "preview": "Preview",
+    "noCv": "No CV",
+    "status": "Status",
+    "action": "Action",
+    "actionView": "View",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "status": {
+    "pending": "Under Review",
+    "accepted": "Accepted",
+    "rejected": "Declined",
+    "reviewing": "In Review"
+  },
+  "modal": {
+    "email": "Email",
+    "cv": "CV",
+    "offerTitle": "Offer",
+    "status": "Status",
+    "appliedAt": "Applied on",
+    "close": "Close",
+    "reason": "Reason"
+  },
+  "reasonModal": {
+    "description": "Explain why you are rejecting this application."
+  },
+  "previewCv": "Preview CV",
+  "closeCvPreview": "Close Preview",
+  "errors": {
+    "downloadCv": "Error while downloading the CV."
+  },
+  "filter": {
+    "status": "Filter by Status",
+    "all": "All"
+  },
+  "menu": {
+    "close": "Close"
+  },
+  "success": {
+    "accepted": "Application accepted successfully",
+    "rejected": "Application rejected successfully"
+  },
+  "errors": {
+    "accept": "Failed to accept application",
+    "reject": "Failed to reject application"
+  }
+}

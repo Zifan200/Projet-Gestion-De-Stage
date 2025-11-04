@@ -1,49 +1,74 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
-import {
-  BackpackIcon,
-  PersonIcon,
-  CheckIcon,
-  EnvelopeClosedIcon,
-} from "@radix-ui/react-icons";
+import { CheckIcon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "react-i18next";
+import { useEmployerStore } from "../../stores/employerStore.js";
+import useAuthStore from "../../stores/authStore.js";
 
 export const EmployerDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("employer_dashboard");
+  const { applications, fetchApplications, loading, error } =
+    useEmployerStore();
+  const user = useAuthStore((s) => s.user);
+
+  useEffect(() => {
+    if (user?.role === "EMPLOYER") {
+      fetchApplications();
+    }
+  }, [fetchApplications, user]);
+
+  const stats = useMemo(() => {
+    const totalApplications = applications.length;
+    const activeApplications = applications.filter(
+      (o) => o.status === "PENDING",
+    ).length;
+    const confirmedApplications = applications.filter(
+      (o) => o.status === "ACCEPTED",
+    ).length;
+
+    const uniqueStudents = new Set(
+      applications.map((app) => app.studentEmail || app.etudiant?.email)
+    );
+    const totalStudents = uniqueStudents.size;
+
+    return {
+      totalApplications,
+      activeApplications,
+      confirmedApplications,
+      totalStudents,
+    };
+  }, [applications]);
+
+  if (loading)
+    return <p className="text-gray-600">{t("messages.loadPrompt")}</p>;
+  if (error) return <p className="text-red-500">{t("errors.loadOffers")}</p>;
+
   return (
     <div className="space-y-6">
+      <h1 className="text-2xl font-semibold mb-6">{t("titles.home")}</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         <StatCard
-          title={t("menu.myOffer")}
-          value="12"
-          change="+1% ce mois"
+          title={t("stats.applications")}
+          value={stats.totalApplications}
           icon={EnvelopeClosedIcon}
         />
-        {/* <StatCard */}
-        {/*   title={t("menu.activeOffer")} */}
-        {/*   value="8" */}
-        {/*   change="+1" */}
-        {/*   icon={BackpackIcon} */}
-        {/* /> */}
-        {/* <StatCard */}
-        {/*   title={t("menu.studentOffer")} */}
-        {/*   value="42" */}
-        {/*   change="+5%" */}
-        {/*   icon={PersonIcon} */}
-        {/* /> */}
-        {/* <StatCard */}
-        {/*   title={t("menu.offerConfirm")} */}
-        {/*   value="18" */}
-        {/*   change="+3" */}
-        {/*   icon={CheckIcon} */}
-        {/* /> */}
+        <StatCard
+          title={t("stats.activeApplications")}
+          value={stats.activeApplications}
+          icon={EnvelopeClosedIcon}
+        />
+        <StatCard
+          title={t("stats.offerConfirm")}
+          value={stats.confirmedApplications}
+          icon={CheckIcon}
+        />
+        <StatCard
+          title={t("stats.totalStudents")}
+          value={stats.totalStudents}
+          icon={CheckIcon}
+        />
       </div>
-
-      {/* <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"> */}
-      {/*   <h2 className="text-lg font-semibold text-gray-800 mb-4"> */}
-      {/*     {t("menu.lastActivity")} */}
-      {/*   </h2> */}
-      {/* </section> */}
     </div>
   );
 };

@@ -1,0 +1,25 @@
+{
+  "stats": {
+    "cvs": "Total CVs",
+    "acceptedCvs": "CVs acceptés",
+    "pendingCvs": "CVs en attente",
+    "availableOffers": "Offres disponibles",
+    "acceptedOffers": "Offres acceptées",
+    "pendingOffers": "Offres en attente"
+  },
+  "messages": {
+    "welcome": "Bon retour, {{firstName}} !",
+    "noCvs": "Tu n’as encore ajouté aucun CV.",
+    "uploadPrompt": "Ajoute ton premier CV pour postuler à des offres."
+  },
+  "errors": {
+    "loadCvs": "Erreur lors du chargement des CVs.",
+    "loadOffers": "Erreur lors du chargement des offres."
+  },
+  "titles": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord étudiant",
+    "cvs": "Gestion des CVs",
+    "offers": "Aperçu des offres"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "hello": "Salut",
+  "disconnect": "Déconnexion",
+  "dashboard": "Tableau de bord",
+  "connexion": "Connexion",
+  "signup": "Créer un compte",
+  "signupTitle": "Créer un compte",
+  "student": "Étudiant",
+  "manager": "Gestionnaire de stage",
+  "employer": "Employeur",
+  "settings": "Paramètres",
+  "applications": "Candidatures de stage",
+  "close": "Close"
+}

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 
 export default function Home() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   return (
     <div
       style={{
@@ -13,7 +13,7 @@ export default function Home() {
         minHeight: "100vh",
       }}
     >
-      <h1>{t("description")}</h1>
+      <h1>{t("common:description")}</h1>
     </div>
   );
 }
