@@ -237,9 +237,9 @@ public class InternshipOfferService {
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
         offer.setReason(reasons);
-        internshipOfferRepository.save(offer);
+        var savedInternshipOffer = internshipOfferRepository.saveAndFlush(offer);
         eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
-        return InternshipOfferResponseDto.create(offer);
+        return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
 
     public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {

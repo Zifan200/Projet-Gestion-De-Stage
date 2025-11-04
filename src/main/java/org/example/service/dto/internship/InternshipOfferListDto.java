@@ -18,7 +18,7 @@ public class InternshipOfferListDto {
     private String targetedProgramme;
     private ApprovalStatus status;
     private String reason;
-    private Integer applicationCount;
+    private int applicationCount;
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;

@@ -33,8 +33,8 @@ public class Etudiant extends UserApp {
     @OneToMany(mappedBy = "etudiant", cascade = jakarta.persistence.CascadeType.ALL)
     private List<CV> cv = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student")
-    private Set<InternshipApplication> applications = new HashSet<>();
+    @OneToMany(mappedBy = "student", cascade = jakarta.persistence.CascadeType.ALL)
+    private List<InternshipApplication> applications = new ArrayList<>();
 
     @Builder
     public Etudiant(Long id, String firstName, String lastName, String email, String password, boolean active
