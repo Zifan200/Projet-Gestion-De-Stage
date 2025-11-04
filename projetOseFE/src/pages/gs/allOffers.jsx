@@ -242,7 +242,6 @@ export const AllOffers = () => {
             >
               <EyeOpenIcon className="w-4 h-4" />
               <span>{t("actions.view")}</span>
-                <div className="relative left-3 bottom-3 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white font-bold text-md">{console.log(offer)}</div>
             </button>
             <button
               onClick={() => handleDownload(offer.id)}
@@ -290,21 +289,21 @@ export const AllOffers = () => {
 
     //List d'application de l'offre selectionné
     function componentViewOfferApplicationsList(){
-        return <div className="py-3 mt-4">
-            <div className="py-2 h-fit">
+        return <div className="flex flex-row py-3 mt-4 w-full items-center justify-center">
+            <div className="">
                 {selectedOffer.applicationCount > 0?
                     <button
                         onClick={() => {
                             setIsOfferApplicationListModalOpen(true);
                             setIsOfferModalOpen(false);
                         }}
-                        className="inline-flex items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-green-200 text-green-900 hover:bg-green-400"
+                        className="inline-flex justify-center items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-green-200 text-green-900 hover:bg-green-400"
                     >
                         {t("modalSelectedOfferApplications.btnLabels.seeApplications")}
                         <div className="relative left-3 bottom-3 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white font-bold text-md">{selectedOffer.applicationCount}</div>
                     </button>
                     :
-                    <div className="inline-flex items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-gray-300 text-black">
+                    <div className="inline-flex select-none items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-gray-300 text-black">
                         {t("modalSelectedOfferApplications.noApplications")}
                     </div>}
 
@@ -325,10 +324,10 @@ export const AllOffers = () => {
             >
                 {/*content*/}
             </div>
-            <div className="absolute bg-white p-6 rounded shadow-lg h-fit w-fit z-52">
+            <div className="absolute flex-col bg-white p-3 rounded shadow-lg h-fit w-fit z-52 ">
                 <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
                 {content}
-                <div className="flex w-auto justify-between mt-6 justify-end">
+                <div className="flex w-auto justify-between mt-3 justify-end">
                     <button
                         className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                         onClick={() => {
@@ -505,7 +504,7 @@ export const AllOffers = () => {
       {isModalOpen && selectedOffer && (
           componentCustomModal(
               selectedOffer.title,
-        <div>
+        <div className="p-4">
             <p><strong>{t("modal.companyEmail")}:</strong>{" "} {selectedOffer.employerEmail}</p>
             <p><strong>{t("modal.targetedProgramme")}:</strong>{" "}{selectedOffer.targetedProgramme}</p>
             <p><strong>{t("modal.publishedDate")}:</strong>{" "}{selectedOffer.publishedDate
@@ -522,20 +521,8 @@ export const AllOffers = () => {
 
 
             <div className="flex justify-between mt-6">
-
                 {(selectedOffer.status.toUpperCase() === "PENDING") && componentViewChoseOfferStatus()}
                 {(selectedOffer.status.toUpperCase() === "ACCEPTED") && componentViewOfferApplicationsList()}
-
-                {/*<button*/}
-                {/*    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"*/}
-                {/*    onClick={() => {*/}
-                {/*    setIsModalOpen(false);*/}
-                {/*    setSelectedOffer(null);*/}
-                {/*    setRejectReason("");*/}
-                {/*    }}*/}
-                {/*    >*/}
-                {/*    {t("modal.close")}*/}
-                {/*</button>*/}
             </div>
         </div>,
               ()=>{

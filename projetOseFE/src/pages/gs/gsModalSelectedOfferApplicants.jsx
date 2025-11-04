@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
+    Cross2Icon,
     FileIcon,
     ReaderIcon
 } from "@radix-ui/react-icons";
@@ -15,6 +16,7 @@ import {useGeStore} from "../../stores/geStore.js";
 import {useTranslation} from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import {useOfferStore} from "../../stores/offerStore.js";
+import PdfViewer from "../../components/CvViewer.jsx";
 
 export const ModalSelectedOfferApplicants = ({offerId}) => {
     const {t} = useTranslation("gs_modal_selectedOfferApplications");
@@ -25,6 +27,14 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
     const [currentStudentApplications, setCurrentStudentApplications] = useState([]);
     const [selectedOfferApplicationsList, setSelectedOfferApplicationsList] = useState([])
     const [selectedApplicationCv, setSelectedApplicationCv] = useState(null)
+
+    const [previewId, setPreviewId] = useState(null);
+
+    const handlePreview = (applicationCv) => {
+        if (applicationCv.selectedCvFileType === "application/pdf") setPreviewId(applicationCv.selectedCvID);
+        else alert("cant open cv");
+    };
+
 
     const studentNameFilterTypes = {
         ALPHABETICAL: t("filterLabels.alphabetical"),
@@ -106,7 +116,8 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                 <button
                     onClick={()=>{
                         console.log("open applicaiton cv : " + application.selectedCvID)
-                        setSelectedApplicationCv(application.selectedCvID)
+                        // setSelectedApplicationCv(application.selectedCvID)
+                        handlePreview(application)
                     }}
                     className="flex rounded-full p-2 w-8 h-8 transition-colors bg-lime-100 hover:bg-lime-200"><FileIcon className="justify-center"/></button>
             </td>
@@ -128,7 +139,20 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
         <div className="overflow-auto h-132 border-1 border-gray-400">
             {loading ? <p>{t("loading")}</p> :
                 <>
-
+                    {previewId ?
+                        <div className="mt-4 w-lvh">
+                            <div className="sticky flex justify-end mb-2">
+                                <button
+                                    onClick={() => setPreviewId(null)}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                >
+                                    <Cross2Icon className="w-4 h-4" />
+                                    <span>{t("menu.close")}</span>
+                                </button>
+                            </div>
+                            <PdfViewer cvId={previewId} role="gs" />
+                        </div>
+                     :
                     <Table
                         headers={[
                             t("tableHeaders.studentName"),
@@ -140,10 +164,11 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                         ]}
                         rows={tableRows()}
                         emptyMessage={t("noApplications")}
-                    />
+                    />}
                 </>
             }
         </div>
+
     </div>
 
 }

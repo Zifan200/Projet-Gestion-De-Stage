@@ -26,6 +26,7 @@ public class InternshipApplicationResponseDTO {
     private String selectedCvFileName;
     private Long selectedCvFileSize;
     private byte[] selectedCvFileData;
+    private String selectedCvFileType;
 
     private Long internshipOfferId;
     private String internshipOfferTitle;
@@ -53,6 +54,7 @@ public class InternshipApplicationResponseDTO {
             String selectedCvFileName,
             Long selectedCvFileSize,
             byte[] selectedCvFileData,
+            String selectedCvFileType,
             Long internshipOfferId,
             String internshipOfferTitle,
             String internshipOfferDescription,
@@ -76,6 +78,7 @@ public class InternshipApplicationResponseDTO {
         this.selectedCvFileName = selectedCvFileName;
         this.selectedCvFileSize = selectedCvFileSize;
         this.selectedCvFileData = selectedCvFileData;
+        this.selectedCvFileType = selectedCvFileType;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
         this.internshipOfferDescription = internshipOfferDescription;
@@ -104,6 +107,7 @@ public class InternshipApplicationResponseDTO {
                 .selectedCvFileName(internshipApplication.getSelectedStudentCV().getFileName())
                 .selectedCvFileSize(internshipApplication.getSelectedStudentCV().getFileSize())
                 .selectedCvFileData(internshipApplication.getSelectedStudentCV().getData())
+                .selectedCvFileType(internshipApplication.getSelectedStudentCV().getFileType())
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
