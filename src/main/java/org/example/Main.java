@@ -181,13 +181,9 @@ public class Main {
             cvService.approveCv(cvResponseDTO.getId());
 
             // -----------------------------
-            // 5️⃣ Mise à jour des statuts des offres
+            // 5️⃣ ❌ Suppression de la mise à jour des statuts
             // -----------------------------
-            internshipOfferService.updateOfferStatus(savedOffer1.getId(), ApprovalStatus.ACCEPTED, "je taimes");
-            internshipOfferService.updateOfferStatus(savedOffer2.getId(), ApprovalStatus.ACCEPTED, "t cool");
-            internshipOfferService.updateOfferStatus(savedOffer4.getId(), ApprovalStatus.REJECTED, "pas intéressant");
-            internshipOfferService.updateOfferStatus(savedOffer5.getId(), ApprovalStatus.ACCEPTED, "");
-            internshipOfferService.updateOfferStatus(savedOffer6.getId(), ApprovalStatus.ACCEPTED, "");
+            // Cette partie a été supprimée pour ne plus accepter ou refuser les offres automatiquement
 
             // -----------------------------
             // 6️⃣ Affichage offres
