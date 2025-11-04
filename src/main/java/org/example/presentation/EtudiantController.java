@@ -3,6 +3,8 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.model.InternshipApplication;
+import org.example.model.enums.ApprovalStatus;
 import org.example.service.InternshipApplicationService;
 import org.example.service.StudentService;
 import org.example.service.EmailService;
@@ -123,4 +125,17 @@ public class EtudiantController {
                         request.getEtudiantRaison());
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/student/accepted-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAcceptedApplications() {
+        List<InternshipApplication> acceptedApps = internshipApplicationService
+                .getApplicationsByApprovalStatus(ApprovalStatus.ACCEPTED);
+
+        List<InternshipApplicationResponseDTO> dtos = acceptedApps.stream()
+                .map(InternshipApplicationResponseDTO::create)
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
 }

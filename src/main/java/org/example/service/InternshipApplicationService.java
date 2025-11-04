@@ -319,4 +319,8 @@ public class InternshipApplicationService {
 
         return InternshipApplicationResponseDTO.create(application);
     }
+
+    public List<InternshipApplication> getApplicationsByApprovalStatus(ApprovalStatus status) {
+        return internshipApplicationRepository.findAllByStatus(status);
+    }
 }

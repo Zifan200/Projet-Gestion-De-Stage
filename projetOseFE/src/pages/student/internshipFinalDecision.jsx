@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { useStudentStore } from "../../stores/studentStore.js";
+import { useStudentStore, ApprovalStatus } from "../../stores/studentStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { toast } from "sonner";
@@ -20,7 +20,6 @@ export default function OffresAConfirmer() {
         clearMessages,
     } = useStudentStore();
 
-// ✅ Charger les applications uniquement si user et token sont définis
     useEffect(() => {
         if (user?.email && token) {
             loadApplicationsByStatus(token, "PENDING");
@@ -51,7 +50,7 @@ export default function OffresAConfirmer() {
     };
 
     const columns = useMemo(() => [
-        { key: "offerTitle", label: t("table.title") },
+        { key: "offerTitle", label: t("table.OfferTitle") },
         { key: "companyName", label: t("table.company") },
         {
             key: "createdAt",
@@ -59,17 +58,25 @@ export default function OffresAConfirmer() {
             render: (row) => new Date(row.createdAt).toLocaleDateString(),
         },
         {
+            key: "etudiantStatus",
+            label: t("table.studentStatus"),
+            render: (row) => {
+                switch (row.etudiantStatus) {
+                    case ApprovalStatus.CONFIRMED_BY_STUDENT:
+                        return t("statuses.confirmed");
+                    case ApprovalStatus.REJECTED_BY_STUDENT:
+                        return t("statuses.rejected");
+                    default:
+                        return t("statuses.pending");
+                }
+            },
+        },
+        {
             key: "actions",
             label: t("table.action"),
             actions: [
-                {
-                    key: "accept",
-                    label: <span>{t("actions.accept")}</span>,
-                },
-                {
-                    key: "reject",
-                    label: <span>{t("actions.reject")}</span>,
-                },
+                { key: "accept", label: <span>{t("actions.accept")}</span> },
+                { key: "reject", label: <span>{t("actions.reject")}</span> },
             ],
         },
     ], [t]);
@@ -81,7 +88,7 @@ export default function OffresAConfirmer() {
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">{t("title")}</h1>
+            <h1 className="text-2xl font-bold mb-4">{t("table.title")}</h1>
 
             {loading && (
                 <div className="flex justify-center items-center h-40">

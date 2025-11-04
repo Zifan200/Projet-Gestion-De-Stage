@@ -1,7 +1,8 @@
 {
   "table":
   {
-    "title": "Titre",
+    "title": "Offres à confirmer",
+    "OfferTitle": "Titre",
     "company": "Entreprise",
     "receivedDate": "Date de réception",
     "action": "Actions"

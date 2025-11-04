@@ -2,12 +2,22 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { studentService } from "../services/studentService.js";
 
+export const ApprovalStatus = {
+    CONFIRMED_BY_STUDENT: "CONFIRMED_BY_STUDENT",
+    REJECTED_BY_STUDENT: "REJECTED_BY_STUDENT",
+};
+
+export const statusMessages = {
+    CONFIRMED_BY_STUDENT: "Offre acceptée avec succès",
+    REJECTED_BY_STUDENT: "Offre refusée avec succès",
+};
+
 export const useStudentStore = create(
     persist(
         (set, get) => ({
             applications: [],
             error: null,
-            successMessage: null, // ← ajouté ici
+            successMessage: null,
             loading: false,
 
             loadAllApplications: async (token) => {
@@ -16,7 +26,8 @@ export const useStudentStore = create(
                     const data = await studentService.getAllApplications(token);
                     set({ applications: data, loading: false });
                 } catch (err) {
-                    set({ error: err, loading: false });
+                    const message = err.response?.data?.message || err.message || "Erreur inconnue";
+                    set({ error: message, loading: false });
                 }
             },
 
@@ -26,7 +37,8 @@ export const useStudentStore = create(
                     const data = await studentService.getApplicationsByStatus(token, appStatus);
                     set({ applications: data, loading: false });
                 } catch (err) {
-                    set({ error: err, loading: false });
+                    const message = err.response?.data?.message || err.message || "Erreur inconnue";
+                    set({ error: message, loading: false });
                 }
             },
 
@@ -36,21 +48,21 @@ export const useStudentStore = create(
                     const res = await studentService.acceptOffer(applicationId, studentEmail, token);
 
                     const updated = get().applications.map((app) =>
-                        app.id === applicationId ? { ...app, etudiantStatus: "ACCEPTED" } : app
+                        app.id === applicationId
+                            ? { ...app, etudiantStatus: ApprovalStatus.CONFIRMED_BY_STUDENT }
+                            : app
                     );
 
                     set({
                         applications: updated,
                         loading: false,
-                        successMessage: "Offre acceptée avec succès",
+                        successMessage: statusMessages.CONFIRMED_BY_STUDENT,
                     });
 
                     return res;
                 } catch (err) {
-                    set({
-                        error: err.response?.data?.message || "Erreur lors de l'acceptation",
-                        loading: false,
-                    });
+                    const message = err.response?.data?.message || err.message || "Erreur lors de l'acceptation";
+                    set({ error: message, loading: false });
                 }
             },
 
@@ -60,21 +72,21 @@ export const useStudentStore = create(
                     const res = await studentService.rejectOffer(applicationId, studentEmail, raison, token);
 
                     const updated = get().applications.map((app) =>
-                        app.id === applicationId ? { ...app, etudiantStatus: "REJECTED" } : app
+                        app.id === applicationId
+                            ? { ...app, etudiantStatus: ApprovalStatus.REJECTED_BY_STUDENT }
+                            : app
                     );
 
                     set({
                         applications: updated,
                         loading: false,
-                        successMessage: "Offre refusée avec succès",
+                        successMessage: statusMessages.REJECTED_BY_STUDENT,
                     });
 
                     return res;
                 } catch (err) {
-                    set({
-                        error: err.response?.data?.message || "Erreur lors du refus",
-                        loading: false,
-                    });
+                    const message = err.response?.data?.message || err.message || "Erreur lors du refus";
+                    set({ error: message, loading: false });
                 }
             },
 

@@ -1,9 +1,10 @@
 {
   "table":
   {
-    "title": "Title",
+    "title":"Offers to Confirm",
+    "OfferTitle": "Title",
     "company": "Company name",
-    "receivedDate": "Receive date",
+    "receivedDate": "Received date",
     "actions": "Actions"
   },
   "stats":
