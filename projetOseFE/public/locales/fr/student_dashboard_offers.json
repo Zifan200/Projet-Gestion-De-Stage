@@ -31,8 +31,8 @@
     "selectCv": "Veuillez sélectionner un CV avant de postuler."
   },
   "filter": {
-    "session": "Filter par session",
-    "year": "Filter par année"
+    "session": "Filtrer par session",
+    "year": "Filtrer par année"
   },
 
   "session": {
