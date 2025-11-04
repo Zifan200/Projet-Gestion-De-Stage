@@ -15,7 +15,6 @@ export default function OffresAConfirmer() {
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState("details");
     const [rejectReason, setRejectReason] = useState("");
-    const [filterEmployerStatus, setFilterEmployerStatus] = useState(null);
     const [filterStudentStatus, setFilterStudentStatus] = useState(null);
 
     const {
@@ -58,11 +57,6 @@ export default function OffresAConfirmer() {
         { key: "internshipOfferTitle", label: t("table.OfferTitle") },
         { key: "employerEmail", label: t("table.company") },
         {
-            key: "status",
-            label: t("table.employerStatus"),
-            format: (status) => t(`employerStatus.${status.toLowerCase()}`)
-        },
-        {
             key: "etudiantStatus",
             label: t("table.studentStatus"),
             format: (status) => status ? t(`studentStatus.${status.toLowerCase()}`) : t("studentStatus.pending")
@@ -79,10 +73,6 @@ export default function OffresAConfirmer() {
     const filteredApplications = useMemo(() => {
         let filtered = approvedApplications;
 
-        if (filterEmployerStatus) {
-            filtered = filtered.filter((app) => app.status === filterEmployerStatus);
-        }
-
         if (filterStudentStatus) {
             filtered = filtered.filter((app) => {
                 if (filterStudentStatus === "PENDING") {
@@ -93,7 +83,7 @@ export default function OffresAConfirmer() {
         }
 
         return filtered;
-    }, [approvedApplications, filterEmployerStatus, filterStudentStatus]);
+    }, [approvedApplications, filterStudentStatus]);
 
     return (
         <div className="p-6">
@@ -112,60 +102,6 @@ export default function OffresAConfirmer() {
             {!loading && approvedApplications.length > 0 && (
                 <>
                     <div className="mb-4 flex gap-3">
-                        {/* Filtre par statut employeur */}
-                        <Popover>
-                            {({ open, setOpen, triggerRef, contentRef }) => (
-                                <>
-                                    <PopoverTrigger
-                                        open={open}
-                                        setOpen={setOpen}
-                                        triggerRef={triggerRef}
-                                    >
-                                        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                            {t("filter.employerStatus")}:{" "}
-                                            {filterEmployerStatus
-                                                ? t(`status.${filterEmployerStatus.toLowerCase()}`)
-                                                : t("filter.all")}
-                                        </span>
-                                    </PopoverTrigger>
-                                    <PopoverContent open={open} contentRef={contentRef}>
-                                        <div className="flex flex-col gap-2 min-w-[150px]">
-                                            {["ACCEPTED", "PENDING", "REJECTED"].map((status) => (
-                                                <button
-                                                    key={status}
-                                                    onClick={() => {
-                                                        setFilterEmployerStatus(status);
-                                                        setOpen(false);
-                                                    }}
-                                                    className={`px-3 py-1 rounded text-left ${
-                                                        filterEmployerStatus === status
-                                                            ? "bg-blue-100 font-semibold"
-                                                            : "hover:bg-gray-100"
-                                                    }`}
-                                                >
-                                                    {t(`status.${status.toLowerCase()}`)}
-                                                </button>
-                                            ))}
-                                            <button
-                                                onClick={() => {
-                                                    setFilterEmployerStatus(null);
-                                                    setOpen(false);
-                                                }}
-                                                className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                                            >
-                                                {t("filter.all")}
-                                            </button>
-                                            <PopoverClose setOpen={setOpen}>
-                                                <span className="text-sm text-gray-600">
-                                                    {t("filter.close")}
-                                                </span>
-                                            </PopoverClose>
-                                        </div>
-                                    </PopoverContent>
-                                </>
-                            )}
-                        </Popover>
-
                         {/* Filtre par statut étudiant */}
                         <Popover>
                             {({ open, setOpen, triggerRef, contentRef }) => (
