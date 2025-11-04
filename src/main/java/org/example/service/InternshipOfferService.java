@@ -240,7 +240,7 @@ public class InternshipOfferService {
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
         offer.setReason(reasons);
-        var savedInternshipOffer = internshipOfferRepository.saveAndFlush(offer);
+        var savedInternshipOffer = internshipOfferRepository.save(offer);
         eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
