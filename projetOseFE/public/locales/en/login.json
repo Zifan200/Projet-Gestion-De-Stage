@@ -1,0 +1,32 @@
+{
+  "form": {
+    "title": "Login",
+    "description": "Sign in to your account to access the platform.",
+    "forgetPassword": "Forgot your password?",
+    "button": "Login",
+    "accountNotExist": "Don't have an account yet?",
+    "registerStudent": "Create a student account"
+  },
+  "fields": {
+    "email": "Email address",
+    "password": "Password"
+  },
+  "placeholders": {
+    "email": "Enter your email",
+    "password": "Enter your password"
+  },
+  "errors": {
+    "fillFields": "Please fill in all required fields.",
+    "invalidCredentials": "Invalid email or password.",
+    "unknown": "An unknown error occurred.",
+    "email": {
+      "invalid": "Invalid email address."
+    },
+    "password": {
+      "regex": "Password must be 8–50 characters with at least one uppercase, one lowercase, one number, and one special character (@$!%*?&)"
+    }
+  },
+  "success": {
+    "loginSuccess": "Successfully logged in!"
+  }
+}

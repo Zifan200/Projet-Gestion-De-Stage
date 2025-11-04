@@ -1,0 +1,16 @@
+{
+  "description": "Bienvenue sur la plateforme de gestion de stages Projet Ose",
+  "success": {
+    "loginSucces": "Connexion réussie!",
+    "emailSent": "Un courriel de réinitialisation de mot de passe a été envoyé",
+    "passwordChange": "Mot de passe modifié avec succès!"
+  },
+  "errors": {
+    "invalidCredentials": "Courriel ou mot de passe invalide",
+    "genericError": "Une erreur s'est produite, veuillez réessayer"
+  },
+  "languages": {
+    "en": "Anglais",
+    "fr": "Français"
+  }
+}

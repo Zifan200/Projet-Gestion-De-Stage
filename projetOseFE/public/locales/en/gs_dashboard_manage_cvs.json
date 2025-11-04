@@ -1,0 +1,40 @@
+{
+  "title": "Manage Student CVs",
+  "filter": {
+    "status": "Filter by Status",
+    "all": "All"
+  },
+  "status": {
+    "pending": "Pending Review",
+    "accepted": "Approved",
+    "rejected": "Rejected"
+  },
+  "table": {
+    "student": "Student",
+    "fileName": "File Name",
+    "status": "Status",
+    "size": "Size",
+    "date": "Date Uploaded",
+    "actions": "Actions"
+  },
+  "actions": {
+    "preview": "Preview",
+    "download": "Download",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "menu": {
+    "close": "Close"
+  },
+  "empty": "No CVs available.",
+  "unknownStudent": "Unknown student",
+  "toast": {
+    "downloadSuccess": "{{fileName}} downloaded successfully!",
+    "downloadError": "Failed to download CV.",
+    "accepted": "{{fileName}} approved successfully!",
+    "acceptError": "Failed to approve CV.",
+    "rejected": "{{fileName}} rejected successfully!",
+    "rejectError": "Failed to reject CV.",
+    "missingReason": "You must provide a reason to reject this CV."
+  }
+}

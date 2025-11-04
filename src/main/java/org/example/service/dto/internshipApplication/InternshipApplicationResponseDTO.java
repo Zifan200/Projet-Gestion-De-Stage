@@ -1,6 +1,5 @@
 package org.example.service.dto.internshipApplication;
 
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -32,18 +31,39 @@ public class InternshipApplicationResponseDTO {
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
+
     private ApprovalStatus status;
+    private ApprovalStatus etudiantStatus;
     private LocalDateTime createdAt;
+    private LocalDate startDate;
+    private String session;
     private String reason;
+    private String etudiantRaison;
 
     @Builder
     public InternshipApplicationResponseDTO(
-            Long id, String studentEmail, String  studentFirstName, String studentLastName,
-            Long selectedCvID, String selectedCvFileName, Long selectedCvFileSize, byte[] selectedCvFileData,
-            Long internshipOfferId, String internshipOfferTitle, String internshipOfferDescription,
-            LocalDate internshipOfferPublishedDate, LocalDate internshipOfferExpirationDate, String employerEmail,
-            ApprovalStatus status, LocalDateTime createdAt, String reason
-    ){
+            Long id,
+            String studentEmail,
+            String studentFirstName,
+            String studentLastName,
+            Long selectedCvID,
+            String selectedCvFileName,
+            Long selectedCvFileSize,
+            byte[] selectedCvFileData,
+            Long internshipOfferId,
+            String internshipOfferTitle,
+            String internshipOfferDescription,
+            LocalDate internshipOfferPublishedDate,
+            LocalDate internshipOfferExpirationDate,
+            String employerEmail,
+            ApprovalStatus status,
+            ApprovalStatus etudiantStatus,
+            LocalDateTime createdAt,
+            LocalDate startDate,
+            String session,
+            String reason,
+            String etudiantRaison
+    ) {
         this.id = id;
         this.studentEmail = studentEmail;
         this.studentFirstName = studentFirstName;
@@ -59,13 +79,15 @@ public class InternshipApplicationResponseDTO {
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
         this.status = status;
+        this.etudiantStatus = etudiantStatus;
         this.createdAt = createdAt;
+        this.startDate = startDate;
+        this.session = session;
         this.reason = reason;
+        this.etudiantRaison = etudiantRaison;
     }
-    //
-    //added application details for the next backend prog or front end warrior (idk if it helps)
-    //
-    public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication){
+
+    public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication) {
         return InternshipApplicationResponseDTO.builder()
                 .id(internshipApplication.getId())
                 .studentEmail(internshipApplication.getStudent().getEmail())
@@ -77,14 +99,17 @@ public class InternshipApplicationResponseDTO {
                 .selectedCvFileName(internshipApplication.getSelectedStudentCV().getFileName())
                 .selectedCvFileSize(internshipApplication.getSelectedStudentCV().getFileSize())
                 .selectedCvFileData(internshipApplication.getSelectedStudentCV().getData())
-                .internshipOfferId(internshipApplication.getOffer().getId())
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
                 .status(internshipApplication.getStatus())
+                .etudiantStatus(internshipApplication.getEtudiantStatus())
                 .createdAt(internshipApplication.getCreatedAt())
+                .startDate(internshipApplication.getStartDate())
+                .session(internshipApplication.getSession())
                 .reason(internshipApplication.getReason())
+                .etudiantRaison(internshipApplication.getEtudiantRaison())
                 .build();
     }
 }

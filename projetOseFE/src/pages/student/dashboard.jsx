@@ -1,82 +1,92 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
-import {
-  FileTextIcon,
-  DownloadIcon,
-  CheckIcon,
-  EyeOpenIcon, EnvelopeClosedIcon,
-} from "@radix-ui/react-icons";
+import { FileTextIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useCvStore } from "../../stores/cvStore.js";
+import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import {useStudentStore} from "../../stores/studentStore.js";
 
 export const StudentDashboard = () => {
   const { cvs, loadCvs } = useCvStore();
-  const { applications, loadAllApplications } = useStudentStore();
+  const {
+    offers,
+    loadOffersSummary,
+    loadAcceptedOffers,
+    loadPendingOffers,
+    loadRejectedOffers,
+  } = useOfferStore();
+
   const user = useAuthStore((s) => s.user);
+  const token = useAuthStore((s) => s.token);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const { t } = useTranslation();
+
+  const { t } = useTranslation("student_dashboard");
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated || !user) navigate("/");
-    else {
+    if (!isAuthenticated || !user) {
+      navigate("/");
+    } else if (user.role === "STUDENT") {
       loadCvs();
-      loadAllApplications();
+      if (token) {
+        loadOffersSummary(token);
+        loadAcceptedOffers(token);
+        loadPendingOffers(token);
+        loadRejectedOffers(token);
+      }
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, token]);
 
   const today = new Date();
   const month = today.getMonth();
   const year = today.getFullYear();
 
-  const thisMonthCvCount = cvs.filter((cv) => {
+  const thisMonthCount = cvs.filter((cv) => {
     const date = new Date(cv.uploadedAt);
     return date.getMonth() === month && date.getFullYear() === year;
   }).length;
 
-  const thisMonthApplicationCount = applications.filter((app) => {
-    const date = new Date(app.createdAt);
-    return date.getMonth() === month && date.getFullYear() === year;
-  }).length;
+  const stats = useMemo(() => {
+    const totalCvs = cvs.length;
+    const availableOffers = offers.length;
 
-  const stats = [
-    {
-      title: t("menu.cvs"),
-      value: cvs.length,
-      change: `+${thisMonthCvCount} ce mois`,
-      icon: FileTextIcon,
-    },
-    {
-      title: t("menu.applications"),
-      value: applications.length,
-      change: `+${thisMonthApplicationCount} ce mois`,
-      icon: EnvelopeClosedIcon,
-    },
-  ];
+    const acceptedCvs = cvs.filter((cv) => cv.status === "ACCEPTED").length;
+    const pendingCvs = cvs.filter((cv) => cv.status === "PENDING").length;
+
+    return [
+      {
+        title: t("stats.cvs"),
+        value: totalCvs,
+        icon: FileTextIcon,
+      },
+      {
+        title: t("stats.acceptedCvs"),
+        value: acceptedCvs,
+        icon: FileTextIcon,
+      },
+      {
+        title: t("stats.pendingCvs"),
+        value: pendingCvs,
+        icon: FileTextIcon,
+      },
+      {
+        title: t("stats.availableOffers"),
+        value: availableOffers,
+        icon: EyeOpenIcon,
+      },
+    ];
+  }, [cvs, offers, t]);
 
   return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          {stats.map((s, i) => (
-              <StatCard
-                  key={i}
-                  title={s.title}
-                  value={s.value}
-                  change={s.change}
-                  icon={s.icon}
-              />
-          ))}
-        </div>
-
-        {/* <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"> */}
-        {/*   <h2 className="text-lg font-semibold text-gray-800 mb-4"> */}
-        {/*     {t("menu.lastActivity")} */}
-        {/*   </h2> */}
-        {/* </section> */}
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">{t("titles.dashboard")}</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        {stats.map((s, i) => (
+          <StatCard key={i} title={s.title} value={s.value} icon={s.icon} />
+        ))}
       </div>
+    </div>
   );
 };

@@ -1,0 +1,46 @@
+{
+  "title": "Mes offres",
+  "table": {
+    "title": "Mes offres",
+    "offerTitle": "Titre",
+    "enterprise": "Entreprise",
+    "program": "Programme",
+    "deadline": "Date limite",
+    "status": "Statut",
+    "applications": "Candidatures",
+    "actions": "Actions",
+    "noOffers": "Aucune offre disponible.",
+    "reason": "Raison du rejet",
+    "offerDetails": "Détails de l'offre"
+  },
+  "actions": {
+    "create_another": "Créer une nouvelle offre",
+    "view": "Voir",
+    "download": "Télécharger"
+  },
+  "filter": {
+    "status": "Filtrer par statut",
+    "all": "Toutes"
+  },
+  "sort": {
+    "by": "Trier par",
+    "date": "Date limite",
+    "applications": "Nombre de candidatures"
+  },
+  "status": {
+    "pending": "En attente d'approbation",
+    "accepted": "Publiée",
+    "rejected": "Refusée"
+  },
+  "success": {
+    "download": "Offre téléchargée avec succès !"
+  },
+  "error": {
+    "load": "Échec du chargement des offres.",
+    "download": "Échec du téléchargement de l'offre."
+  },
+  "noDescription": "Aucune description fournie pour cette offre.",
+  "menu": {
+    "close": "Fermer"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "title": "My Offers",
+  "table": {
+    "title": "My Offers",
+    "offerTitle": "Title",
+    "enterprise": "Company",
+    "program": "Program",
+    "deadline": "Deadline",
+    "status": "Status",
+    "applications": "Applications",
+    "actions": "Actions",
+    "noOffers": "No offers available.",
+    "reason": "Rejection Reason",
+    "offerDetails": "Offer Details"
+  },
+  "actions": {
+    "create_another": "Create a new offer",
+    "view": "View",
+    "download": "Download"
+  },
+  "filter": {
+    "status": "Filter by Status",
+    "all": "All"
+  },
+  "sort": {
+    "by": "Sort by",
+    "date": "Deadline Date",
+    "applications": "Number of Applications"
+  },
+  "status": {
+    "pending": "Pending Approval",
+    "accepted": "Published",
+    "rejected": "Rejected"
+  },
+  "success": {
+    "download": "Offer downloaded successfully!"
+  },
+  "error": {
+    "load": "Failed to load offers.",
+    "download": "Failed to download the offer."
+  },
+  "noDescription": "No description provided for this offer.",
+  "menu": {
+    "close": "Close"
+  }
+}

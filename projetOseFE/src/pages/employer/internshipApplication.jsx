@@ -1,310 +1,257 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { useEmployerStore } from "../../stores/employerStore.js";
 import { useCvStore } from "../../stores/cvStore.js";
-import { toast } from "sonner";
-import {FormProvider, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {authService} from "../../services/authService.js";
-import Label from "../../components/ui/label.js";
-import Input from "../../components/ui/Input.jsx";
-import {convocationSchema} from "../../models/convocation.js";
+import { DataTable } from "../../components/ui/data-table.jsx";
+import { Header } from "../../components/ui/header.jsx";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "../../components/ui/popover.jsx";
+
+import {
+  EyeOpenIcon,
+  DownloadIcon,
+  FileTextIcon,
+  Cross2Icon,
+} from "@radix-ui/react-icons";
 
 export const InternshipApplications = () => {
-    const { t } = useTranslation();
-    const { applications, fetchApplications } = useEmployerStore();
-    const {
-        previewUrl,
-        previewType,
-        previewCvForEmployer,
-        downloadCvForEmployer,
-        closePreview,
-    } = useCvStore();
-    const [selectedApplication, setSelectedApplication] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isConvocationClicked, setIsConvocationClicked] = useState(false);
-    const [employer, setEmployer] = useState(null);
+  const { t } = useTranslation("internship_applications");
+  const { applications, fetchApplications } = useEmployerStore();
+  const {
+    previewUrl,
+    previewType,
+    previewCvForEmployer,
+    downloadCvForEmployer,
+    closePreview,
+  } = useCvStore();
 
-    useEffect(() => {
-        const fetchEmployer = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) return;
-            const data = await authService.getMe(token);
-            setEmployer(data);
-        };
-        fetchEmployer();
-    }, []);
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(null);
 
-    const form = useForm({
-        resolver: zodResolver(convocationSchema),
-        defaultValues: {
-            etudiant: selectedApplication?.studentEmail | "",
-            employer: employer?.email | "",
-            dateConvocation: "",
-            location: "",
-            link:""
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
+
+  const handleAction = (action, app) => {
+    try {
+      switch (action) {
+        case "view":
+          setSelectedApplication(app);
+          setIsModalOpen(true);
+          break;
+        case "preview":
+          previewCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
+          break;
+        case "download":
+          downloadCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
+          break;
+        default:
+          break;
+      }
+    } catch (err) {
+      toast.error(err.message || t("errors.downloadCv"));
+    }
+  };
+
+  const columns = [
+    { key: "internshipOfferTitle", label: t("table.offerTitle") },
+    { key: "studentName", label: t("table.studentName") },
+    { key: "studentEmail", label: t("table.studentEmail") },
+    { key: "selectedCvFileName", label: t("table.cv") },
+    { key: "status", label: t("table.status") },
+    {
+      key: "actions",
+      label: t("table.action"),
+      actions: [
+        {
+          key: "view",
+          label: (
+            <>
+              <EyeOpenIcon className="w-4 h-4" />
+              <span>{t("table.actionView")}</span>
+            </>
+          ),
         },
-    });
+        {
+          key: "preview",
+          label: (
+            <>
+              <FileTextIcon className="w-4 h-4" />
+              <span>{t("table.preview")}</span>
+            </>
+          ),
+        },
+        {
+          key: "download",
+          label: (
+            <>
+              <DownloadIcon className="w-4 h-4" />
+              <span>{t("table.download")}</span>
+            </>
+          ),
+        },
+      ],
+    },
+  ];
 
-    useEffect(() => {
-        fetchApplications();
-    }, []);
-
-    const handleViewApplication = (application) => {
-        setSelectedApplication(application);
-        setIsModalOpen(true);
-    };
-
-    const handleConvocation = (application) => {
-        setSelectedApplication(application);
-        setIsModalOpen(true);
-        setIsConvocationClicked(true);
-    }
-
-    const handlePreviewCv = (application) => {
-        try {
-            previewCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
-        } catch (err) {
-            toast.error(err.message);
-        }
-    };
-
-    const handleDownloadCv = (application) => {
-        try {
-            downloadCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
-        } catch (err) {
-            toast.error(t("internshipApplications.errors.downloadCv"));
-        }
-    };
-
-    const onSubmit = async (data) => {
-        toast("test");
-    }
-
-    const onError = (err) => {
-        toast(t("errors.fillFields"));
-    };
-
-    return (
-        <div className="p-10">
-            {/* Table des candidatures */}
-            <div className="overflow-x-auto bg-white shadow rounded">
-                <table className="w-full text-sm text-left border-collapse">
-                    <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs">
-                    <tr>
-                        <th className="px-4 py-3">{t("internshipApplications.table.offerTitle") || "Offre"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentName") || "Nom et Prénom"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.studentEmail") || "Email"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.cv") || "CV"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.statusTitle") || "Statut"}</th>
-                        <th className="px-4 py-3">{t("internshipApplications.table.action") || "Action"}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {applications.map((app) => (
-                        <tr key={app.id} className="border-t border-zinc-300 text-zinc-700 text-base">
-                            <td className="px-4 py-2">{app.internshipOfferTitle}</td>
-                            <td className="px-4 py-2">{app.studentFirstName} {app.studentLastName}</td>
-                            <td className="px-4 py-2">{app.studentEmail}</td>
-                            <td className="px-4 py-2">
-                                {app.selectedCvFileName ? (
-                                    <>
-                                        <button
-                                            className="text-blue-600 underline hover:text-blue-800 mr-2"
-                                            onClick={() => handlePreviewCv(app)}
-                                        >
-                                            {app.selectedCvFileName}
-                                        </button>
-                                        <button
-                                            className="text-green-600 underline hover:text-green-800"
-                                            onClick={() => handleDownloadCv(app)}
-                                        >
-                                            {t("internshipApplications.table.download")}
-                                        </button>
-                                    </>
-                                ) : (
-                                    t("internshipApplications.table.noCv")
-                                )}
-                            </td>
-                            <td className="px-4 py-2">
-                                {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
-                            </td>
-                            <td className="px-4 py-2">
-                                <button
-                                    className="px-14 py-0.5 bg-[#B3FE3B] rounded-full font-bold text-lg hover:bg-green-400 transition-all duration-200"
-                                    onClick={() => handleViewApplication(app)}
-                                >
-                                    {t("internshipApplications.table.actionView") || "Voir"}
-                                </button>
-
-                            </td>
-                            <td className="px-4 py-2">
-                                <button
-                                    disabled={app.status !== "ACCEPTED"}
-                                    className={`px-10 py-0.5 rounded-full font-bold text-lg transition-all duration-200
-                                        ${app.status === "ACCEPTED"
-                                        ? "bg-amber-200 hover:bg-amber-50 cursor-pointer"
-                                        : "bg-gray-300 cursor-not-allowed opacity-60"}`}
-                                    onClick={() => handleConvocation(app)}
-                                >
-                                    Convoquer
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Preview CV */}
-            {previewUrl && (
-                <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
-                    <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xl font-semibold">{t("internshipApplications.previewCv")}</h3>
-                        <button
-                            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-                            onClick={closePreview}
-                        >
-                            {t("internshipApplications.closeCvPreview")}
-                        </button>
-                    </div>
-                    {previewType === "pdf" ? (
-                        <iframe
-                            src={previewUrl}
-                            className="w-full h-[600px] border"
-                            title="Preview CV"
-                        />
-                    ) : (
-                        <a
-                            href={previewUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 underline"
-                        >
-                            Ouvrir le CV
-                        </a>
-                    )}
-                </div>
-            )}
-
-            {/* Modal détails candidature */}
-            {isModalOpen && selectedApplication && (
-                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                        <h2 className="text-xl font-semibold mb-4">
-                            {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
-                        </h2>
-                        <p>
-                            <strong>{t("internshipApplications.modal.email") || "Email"}: </strong>
-                            {selectedApplication.studentEmail}
-                        </p>
-                        <p>
-                            <strong>{t("internshipApplications.modal.cv") || "CV"}: </strong>
-                            {selectedApplication.selectedCvFileName || "Aucun CV"}
-                        </p>
-                        <p>
-                            <strong>{t("internshipApplications.modal.offerTitle") || "Offre"}: </strong>
-                            {selectedApplication.internshipOfferTitle}
-                        </p>
-                        <p>
-                            <strong>{t("internshipApplications.modal.appliedAt") || "Postulé le"}: </strong>
-                            {new Date(selectedApplication.createdAt).toLocaleDateString()}
-                        </p>
-                        <p>
-                            <strong>{t("internshipApplications.modal.statusTitle") || "Statut"}: </strong>
-                            {t(`internshipApplications.modal.status.${selectedApplication.status.toLowerCase()}`)}
-                        </p>
-                        {selectedApplication.status === "REJECTED" &&
-                            <p>
-                                <strong>{t("internshipApplications.modal.reason") || "Raison"}: </strong>
-                                {selectedApplication.reason}
-                            </p>
-                        }
-
-                        <div className="mt-6 flex justify-end">
-                            <button
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                onClick={() => {
-                                    setIsModalOpen(false);
-                                    setSelectedApplication(null);
-                                }}
-                            >
-                                {t("internshipApplications.modal.close") || "Fermer"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isModalOpen && selectedApplication && isConvocationClicked && (
-                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                        <h2 className="text-xl font-semibold mb-4">
-                            Convocation pour {selectedApplication.studentFirstName}{" "}
-                            {selectedApplication.studentLastName}
-                        </h2>
-
-                        <FormProvider {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit, onError)}>
-                                <div className="flex flex-col mb-7">
-                                    <Label name="dateConvocation" label="Date de convocation" />
-                                    <Input type="date" name="dateConvocation" />
-                                </div>
-
-                                <div className="flex flex-col mb-4">
-                                    <Label name="typeConvocation" label="Type de convocation" />
-                                    <select
-                                        {...form.register("typeConvocation")}
-                                        className="border px-2 py-1 rounded"
-                                        defaultValue="placeholder"
-                                    >
-                                        <option value="placeholder" disabled hidden placeholder>Veuillez sélectionner un type de convocation</option>
-                                        <option value="inPerson">En personne</option>
-                                        <option value="online">En ligne</option>
-                                    </select>
-                                </div>
-
-                                {form.watch("typeConvocation") === "inPerson" ? (
-                                    <div className="flex flex-col mb-4">
-                                        <Label name="location" label="Adresse" />
-                                        <Input type="text" name="location" />
-                                    </div>
-                                ) : form.watch("typeConvocation") === "online" ?
-
-                                (
-                                    <div className="flex flex-col mb-4">
-                                        <Label name="link" label="Lien de vidéoconférence" />
-                                        <Input type="text" name="link" />
-                                    </div>
-                                )
-                                :
-                                    <div className="flex flex-col mb-24"></div>
-                                }
-
-                                <div className="flex justify-end space-x-3 mt-6">
-                                    <button
-                                        type="button"
-                                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                        onClick={() => {
-                                            setIsModalOpen(false);
-                                            setSelectedApplication(null);
-                                        }}
-                                    >
-                                        {t("internshipApplications.modal.close") || "Fermer"}
-                                    </button>
-
-                                    <button
-                                        type="submit"
-                                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                    >
-                                        {t("internshipApplications.modal.submit") || "Fermer"}
-                                    </button>
-                                </div>
-                            </form>
-                        </FormProvider>
-                    </div>
-                </div>
-            )}
-        </div>
+  const sortedAndFilteredApplications = useMemo(() => {
+    const filtered = filterStatus
+      ? applications.filter((app) => app.status === filterStatus)
+      : applications;
+    return [...filtered].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
     );
+  }, [applications, filterStatus]);
+
+  const tableData = sortedAndFilteredApplications.map((app) => ({
+    ...app,
+    studentName: `${app.studentFirstName} ${app.studentLastName}`,
+    rawStatus: app.status?.toLowerCase(),
+    status: t(`status.${app.status?.toLowerCase()}`),
+  }));
+
+  return (
+    <div className="space-y-6">
+      <Header title={t("title")} />
+
+      {/* Filter */}
+      <Popover>
+        {({ open, setOpen, triggerRef, contentRef }) => (
+          <>
+            <PopoverTrigger
+              open={open}
+              setOpen={setOpen}
+              triggerRef={triggerRef}
+            >
+              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                {t("filter.status")}:{" "}
+                {filterStatus
+                  ? t(`status.${filterStatus.toLowerCase()}`)
+                  : t("filter.all")}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent open={open} contentRef={contentRef}>
+              <div className="flex flex-col gap-2 min-w-[150px]">
+                {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setFilterStatus(status);
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      filterStatus === status
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t(`status.${status.toLowerCase()}`)}
+                  </button>
+                ))}
+                <button
+                  onClick={() => {
+                    setFilterStatus(null);
+                    setOpen(false);
+                  }}
+                  className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                >
+                  {t("filter.all")}
+                </button>
+                <PopoverClose setOpen={setOpen}>
+                  <span className="text-sm text-gray-600">
+                    {t("menu.close")}
+                  </span>
+                </PopoverClose>
+              </div>
+            </PopoverContent>
+          </>
+        )}
+      </Popover>
+
+      <DataTable columns={columns} data={tableData} onAction={handleAction} />
+
+      {/* CV Preview */}
+      {previewUrl && (
+        <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-xl font-semibold">{t("previewCv")}</h3>
+            <button
+              className="flex items-center gap-2 px-3 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+              onClick={closePreview}
+            >
+              <Cross2Icon className="w-4 h-4" />
+              {t("closeCvPreview")}
+            </button>
+          </div>
+          {previewType === "pdf" ? (
+            <iframe
+              src={previewUrl}
+              className="w-full h-[600px] border"
+              title="Preview CV"
+            />
+          ) : (
+            <a
+              href={previewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              Ouvrir le CV
+            </a>
+          )}
+        </div>
+      )}
+
+      {isModalOpen && selectedApplication && (
+        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <EyeOpenIcon className="w-5 h-5 text-blue-500" />
+              {selectedApplication.studentFirstName}{" "}
+              {selectedApplication.studentLastName}
+            </h2>
+            <p>
+              <strong>{t("modal.email")}:</strong>{" "}
+              {selectedApplication.studentEmail}
+            </p>
+            <p>
+              <strong>{t("modal.cv")}:</strong>{" "}
+              {selectedApplication.selectedCvFileName || t("table.noCv")}
+            </p>
+            <p>
+              <strong>{t("modal.offerTitle")}:</strong>{" "}
+              {selectedApplication.internshipOfferTitle}
+            </p>
+            <p>
+              <strong>{t("modal.status")}:</strong>{" "}
+              {t(`status.${selectedApplication.status?.toLowerCase()}`)}
+            </p>
+            <p>
+              <strong>{t("modal.appliedAt")}:</strong>{" "}
+              {new Date(selectedApplication.createdAt).toLocaleDateString()}
+            </p>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSelectedApplication(null);
+                }}
+              >
+                <Cross2Icon className="w-4 h-4" />
+                {t("modal.close")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

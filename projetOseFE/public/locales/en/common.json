@@ -1,0 +1,16 @@
+{
+  "description": "Welcome to the Projet Ose internship management platform",
+  "success": {
+    "loginSucces": "Login successful!",
+    "emailSent": "A password reset email has been sent",
+    "passwordChange": "Password changed successfully!"
+  },
+  "errors": {
+    "invalidCredentials": "Invalid email or password",
+    "genericError": "An error occurred, please try again"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "French"
+  }
+}

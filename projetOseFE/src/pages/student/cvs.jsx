@@ -1,20 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
 import { Table } from "../../components/ui/table.jsx";
-import { Button } from "../../components/ui/button.jsx";
 import { useCvStore } from "../../stores/cvStore.js";
 import { toast } from "sonner";
 import PdfViewer from "../../components/CvViewer.jsx";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "../../components/ui/popover.jsx";
+import { EyeOpenIcon, DownloadIcon, TrashIcon } from "@radix-ui/react-icons";
+import useAuthStore from "../../stores/authStore.js";
 
 export const StudentCVs = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("student_dashboard_cvs");
+
   const { cvs, loadCvs, uploadCv, downloadCv, deleteCv } = useCvStore();
+  const user = useAuthStore((s) => s.user);
   const [previewId, setPreviewId] = useState(null);
+  const [filterStatus, setFilterStatus] = useState(null);
 
   useEffect(() => {
-    loadCvs();
-  }, []);
+    if (user?.role === "STUDENT") {
+      loadCvs();
+    }
+  }, [user]);
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];
@@ -26,29 +38,24 @@ export const StudentCVs = () => {
     );
 
     if (alreadyExists) {
-      toast.error(
-        t("studentDashboard.errors.fileExists", {
-          fileName: file.name,
-        }),
-      );
+      toast.error(t("errors.fileExists", { fileName: file.name }));
       e.target.value = "";
       return;
     }
 
     try {
       await uploadCv(file);
-      toast.success(
-        t("studentDashboard.success.uploadCv", { fileName: file.name }),
-      );
+      toast.success(t("success.uploadCv", { fileName: file.name }));
     } catch {
-      toast.error(t("studentDashboard.errors.uploadCv"));
+      toast.error(t("errors.uploadCv"));
     }
   };
+
   const handlePreview = (cv) => {
     if (cv.fileType === "application/pdf") {
       setPreviewId(cv.id);
     } else {
-      toast.error(t("studentDashboard.errors.prewviewNotSupported"));
+      toast.error(t("errors.previewNotSupported"));
     }
   };
 
@@ -65,30 +72,61 @@ export const StudentCVs = () => {
     }
   };
 
-  const rows = cvs.map((cv) => (
-    <tr key={cv.id} className="border-t border-gray-300">
-      <td className="px-4 py-2">{cv.fileName}</td>
-      <td className="px-4 py-2">{getFriendlyType(cv.fileType)}</td>
-      <td className="px-4 py-2">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
-      <td className="px-4 py-2">
+  const getStatusColor = (status) => {
+    const statusColors = {
+      pending: "bg-yellow-100 text-yellow-800",
+      accepted: "bg-green-100 text-green-800",
+      rejected: "bg-red-100 text-red-800",
+    };
+    return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
+  };
+
+  const sortedAndFilteredCvs = useMemo(() => {
+    const filtered = filterStatus
+      ? cvs.filter((cv) => cv.status === filterStatus)
+      : cvs;
+    return [...filtered].sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+  }, [cvs, filterStatus]);
+
+  const rows = sortedAndFilteredCvs.map((cv) => (
+    <tr key={cv.id} className="border-t border-gray-200 text-gray-700 text-sm">
+      <td className="px-4 py-3">{cv.fileName}</td>
+      <td className="px-4 py-3">{getFriendlyType(cv.fileType)}</td>
+      <td className="px-4 py-3">{Math.round((cv.fileSize || 0) / 1024)} KB</td>
+      <td className="px-4 py-3">
+        <span
+          className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(cv.status)}`}
+        >
+          {t(`status.${cv.status?.toLowerCase()}`)}
+        </span>
+      </td>
+      <td className="px-4 py-3">
         {new Date(cv.uploadedAt).toLocaleDateString()}
       </td>
-      <td className="px-4 py-2 flex space-x-2">
-        <Button
-          onClick={() => handlePreview(cv)}
-          label={t("studentDashboard.actions.preview")}
-          className={"bg-indigo-300 hover:bg-indigo-100 p-1 rounded-lg"}
-        />
-        <Button
-          onClick={() => downloadCv(cv.id, cv.fileName)}
-          label={t("studentDashboard.actions.download")}
-          className={"bg-blue-300 hover:bg-blue-100 rounded-lg"}
-        />
-        <Button
-          onClick={() => deleteCv(cv.id)}
-          label={t("studentDashboard.actions.delete")}
-          className="bg-red-300 hover:bg-red-100 rounded-lg"
-        />
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => handlePreview(cv)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+          >
+            <EyeOpenIcon className="w-4 h-4" />
+            <span>{t("actions.preview")}</span>
+          </button>
+          <button
+            onClick={() => downloadCv(cv.id, cv.fileName)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+          >
+            <DownloadIcon className="w-4 h-4" />
+            <span>{t("actions.download")}</span>
+          </button>
+          <button
+            onClick={() => deleteCv(cv.id)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+          >
+            <TrashIcon className="w-4 h-4" />
+            <span>{t("actions.delete")}</span>
+          </button>
+        </div>
       </td>
     </tr>
   ));
@@ -96,8 +134,8 @@ export const StudentCVs = () => {
   return (
     <div className="space-y-6">
       <Header
-        title={t("studentDashboard.myCvs")}
-        actionLabel={t("studentDashboard.addCv")}
+        title={t("myCvs")}
+        actionLabel={t("addCv")}
         onAction={() => document.getElementById("cv-upload").click()}
       />
       <input
@@ -106,29 +144,87 @@ export const StudentCVs = () => {
         className="hidden"
         onChange={handleUpload}
       />
+
+      {/* Filter */}
+      <Popover>
+        {({ open, setOpen, triggerRef, contentRef }) => (
+          <>
+            <PopoverTrigger
+              open={open}
+              setOpen={setOpen}
+              triggerRef={triggerRef}
+            >
+              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                {t("filter.status")}:{" "}
+                {filterStatus
+                  ? t(`status.${filterStatus.toLowerCase()}`)
+                  : t("filter.all")}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent open={open} contentRef={contentRef}>
+              <div className="flex flex-col gap-2 min-w-[150px]">
+                {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setFilterStatus(status);
+                      setOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded text-left ${
+                      filterStatus === status
+                        ? "bg-blue-100 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {t(`status.${status.toLowerCase()}`)}
+                  </button>
+                ))}
+                <button
+                  onClick={() => {
+                    setFilterStatus(null);
+                    setOpen(false);
+                  }}
+                  className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                >
+                  {t("filter.all")}
+                </button>
+                <PopoverClose setOpen={setOpen}>
+                  <span className="text-sm text-gray-600">
+                    {t("menu.close")}
+                  </span>
+                </PopoverClose>
+              </div>
+            </PopoverContent>
+          </>
+        )}
+      </Popover>
+
       <Table
         headers={[
-          t("studentDashboard.table.fileName"),
-          t("studentDashboard.table.type"),
-          t("studentDashboard.table.size"),
-          t("studentDashboard.table.date"),
-          t("studentDashboard.table.actions"),
+          t("table.fileName"),
+          t("table.type"),
+          t("table.size"),
+          t("table.status"),
+          t("table.date"),
+          t("table.actions"),
         ]}
         rows={rows}
-        emptyMessage={t("studentDashboard.noCvs")}
+        emptyMessage={t("noCvs")}
       />
+
       {previewId && (
         <div className="mt-4">
           <div className="flex justify-end mb-2">
-            <Button
+            <button
               onClick={() => setPreviewId(null)}
-              label={t("menu.close")}
-              className="bg-zinc-200 hover:bg-zinc-100 p-1 rounded-lg"
-            />
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              <span>{t("actions.close")}</span>
+            </button>
           </div>
           <PdfViewer cvId={previewId} role="student" />
         </div>
-      )}{" "}
+      )}
     </div>
   );
 };
