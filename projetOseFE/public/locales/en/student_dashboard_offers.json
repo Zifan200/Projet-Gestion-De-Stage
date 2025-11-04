@@ -31,13 +31,18 @@
     "selectCv": "Please select a CV before applying."
   },
   "filter": {
-    "session": "Session",
-    "year": "Year"
+    "session": "Filter by Session",
+    "year": "Filter by Year"
   },
   "session": {
-    "all": "All",
-    "autumn": "Fall",
+    "all": "All sessions",
+    "fall": "Fall",
     "winter": "Winter",
-    "year": "All"
+    "year" : "All years"
+  },
+  "menu": {
+    "close": "Close",
+    "session": "Session",
+    "year": "Year"
   }
 }

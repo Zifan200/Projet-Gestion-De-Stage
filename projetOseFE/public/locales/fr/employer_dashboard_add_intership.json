@@ -1,11 +1,13 @@
 {
-  "title": "Créer une nouvelle offre de stage",
-  "description": "Remplissez le formulaire ci-dessous pour publier votre offre de stage aux étudiants.",
+  "title": "Créer une nouvelle offre",
+  "description": "Remplissez le formulaire ci-dessous pour publier votre offre de stage.",
   "form": {
     "title": "Titre",
     "description": "Description",
     "program": "Programme visé",
     "deadline": "Date limite",
+    "startDate": "Date de début du stage",
+    "endDate": "Date de fin du stage",
     "placeholders": {
       "title": "Veuillez saisir le titre de votre offre de stage",
       "description": "Veuillez saisir la description complète du stage proposé",

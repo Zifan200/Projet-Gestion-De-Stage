@@ -31,13 +31,19 @@
     "selectCv": "Veuillez sélectionner un CV avant de postuler."
   },
   "filter": {
+    "session": "Filtrer par session",
+    "year": "Filtrer par année"
+  },
+
+  "session": {
+    "all": "Toutes les sessions",
+    "fall": "Automne",
+    "winter": "Hiver",
+    "year" : "Toutes les années"
+  },
+  "menu": {
+    "close": "Fermer",
     "session": "Session",
     "year": "Année"
-  },
-  "session": {
-    "all": "Toutes",
-    "autumn": "Automne",
-    "winter": "Hiver",
-    "year": "Toutes"
   }
 }

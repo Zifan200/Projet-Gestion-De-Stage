@@ -6,6 +6,8 @@
     "description": "Description",
     "program": "Targeted Program",
     "deadline": "Deadline",
+    "startDate": "Internship Start Date",
+    "endDate": "Internship End Date",
     "placeholders": {
       "title": "Please enter the title of your internship offer",
       "description": "Please enter the full description of the offered internship",

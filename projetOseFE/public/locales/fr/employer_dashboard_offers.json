@@ -19,6 +19,16 @@
     "download": "Télécharger"
   },
   "filter": {
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "AllYears": "Toutes les Années",
     "status": "Filtrer par statut",
     "session": "Session",
     "year": "Année",
@@ -44,11 +54,5 @@
   "noDescription": "Aucune description fournie pour cette offre.",
   "menu": {
     "close": "Fermer"
-  },
-  "session": {
-    "all": "Toutes",
-    "autumn": "Automne",
-    "winter": "Hiver",
-    "year": "Toutes"
   }
 }

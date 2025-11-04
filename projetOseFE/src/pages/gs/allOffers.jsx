@@ -339,43 +339,97 @@ export const AllOffers = () => {
           )}
         </Popover>
 
-        {/* Session and Year Filters */}
-        <div className="ml-auto flex items-center gap-4">
-          {/* Session Filter */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">
-              {t("filter.session")}:
-            </label>
-            <select
-              className="rounded border border-zinc-300 p-1"
-              value={currentSession}
-              onChange={(e) => setCurrentSession(e.target.value)}
-            >
-              <option value="All">{t("session.all")}</option>
-              <option value="Automne">{t("session.autumn")}</option>
-              <option value="Hiver">{t("session.winter")}</option>
-            </select>
-          </div>
+        {/* Session Filter */}
+        <Popover>
+          {({ open, setOpen, triggerRef, contentRef }) => (
+              <>
+                <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+          {t("gs_dashboard_offers:filter.session")}:{" "}
+          {currentSession !== "All" ? currentSession : t("gs_dashboard_offers:session.all")}
+        </span>
+                </PopoverTrigger>
+                <PopoverContent open={open} contentRef={contentRef}>
+                  <div className="flex flex-col gap-2 min-w-[150px]">
+                    {["Automne", "Hiver"].map((session) => (
+                        <button
+                            key={session}
+                            onClick={() => {
+                              setCurrentSession(session);
+                              setOpen(false);
+                            }}
+                            className={`px-3 py-1 rounded text-left ${
+                                currentSession === session
+                                    ? "bg-blue-100 font-semibold"
+                                    : "hover:bg-gray-100"
+                            }`}
+                        >
+                          {session}
+                        </button>
+                    ))}
+                    <button
+                        onClick={() => {
+                          setCurrentSession("All");
+                          setOpen(false);
+                        }}
+                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                    >
+                      {t("gs_dashboard_offers:session.all")}
+                    </button>
+                    <PopoverClose setOpen={setOpen}>
+                      <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                    </PopoverClose>
+                  </div>
+                </PopoverContent>
+              </>
+          )}
+        </Popover>
 
-          {/* Year Filter */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">
-              {t("filter.year")}:
-            </label>
-            <select
-              className="rounded border border-zinc-300 p-1"
-              value={currentYear}
-              onChange={(e) => setCurrentYear(e.target.value)}
-            >
-              <option value="All">{t("session.year")}</option>
-              {availableYears.map((year) => (
-                <option key={year} value={year.toString()}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        {/* Year Filter */}
+        <Popover>
+          {({ open, setOpen, triggerRef, contentRef }) => (
+              <>
+                <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+          {t("gs_dashboard_offers:filter.year")}:{" "}
+          {currentYear !== "All" ? currentYear : t("gs_dashboard_offers:session.year")}
+        </span>
+                </PopoverTrigger>
+                <PopoverContent open={open} contentRef={contentRef}>
+                  <div className="flex flex-col gap-2 min-w-[150px]">
+                    {availableYears.map((year) => (
+                        <button
+                            key={year}
+                            onClick={() => {
+                              setCurrentYear(year.toString());
+                              setOpen(false);
+                            }}
+                            className={`px-3 py-1 rounded text-left ${
+                                currentYear === year.toString()
+                                    ? "bg-blue-100 font-semibold"
+                                    : "hover:bg-gray-100"
+                            }`}
+                        >
+                          {year}
+                        </button>
+                    ))}
+                    <button
+                        onClick={() => {
+                          setCurrentYear("All");
+                          setOpen(false);
+                        }}
+                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                    >
+                      {t("gs_dashboard_offers:session.year")}
+                    </button>
+                    <PopoverClose setOpen={setOpen}>
+                      <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                    </PopoverClose>
+                  </div>
+                </PopoverContent>
+              </>
+          )}
+        </Popover>
       </div>
 
       {loading ? (

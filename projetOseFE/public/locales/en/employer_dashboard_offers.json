@@ -20,9 +20,17 @@
   },
   "filter": {
     "status": "Filter by Status",
+    "all": "All Statuses",
+    "session": "Filter by Session",
+    "year": "Filter by Year"
+  },
+  "session": {
+    "all": "All Sessions",
+    "automne": "Fall",
+    "hiver": "Winter",
+    "AllYears": "All Years",
     "session": "Session",
-    "year": "Year",
-    "all": "All"
+    "year": "Year"
   },
   "sort": {
     "by": "Sort by",
@@ -44,11 +52,5 @@
   "noDescription": "No description provided for this offer.",
   "menu": {
     "close": "Close"
-  },
-  "session": {
-    "all": "All",
-    "autumn": "Fall",
-    "winter": "Winter",
-    "year": "All"
   }
 }
