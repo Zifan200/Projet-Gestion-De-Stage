@@ -1,0 +1,23 @@
+{
+  "title": "Applicants",
+  "loading": "loading...",
+  "noApplications": "no applications",
+  "numberOfApplications": "number of applicants",
+  "tableHeaders": {
+    "studentName": "student Name",
+    "studentProgramme": "student programme",
+    "applicationStatus": "application status",
+    "applicationDate": "application date"
+  },
+  "btnLabels": {
+    "seeApplications": "see applicants",
+    "back": "back"
+  },
+  "filterType": {
+    "applicantName": "filter by name"
+  },
+  "filterLabels": {
+    "alphabetical": "alphabetical",
+    "reverseAlphabetical" : "reverse alphabetical"
+  }
+}

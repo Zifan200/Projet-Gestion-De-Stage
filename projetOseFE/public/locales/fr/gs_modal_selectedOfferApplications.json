@@ -1,0 +1,23 @@
+{
+  "title": "Candidats",
+  "loading": "chargement...",
+  "noApplications": "aucune candidature",
+  "numberOfApplications": "nombre de candidats",
+  "tableHeaders": {
+    "studentName": "nom de l'étudiant",
+    "studentProgramme": "programme d'études",
+    "applicationStatus": "statut de la candidature",
+    "applicationDate": "date de candidature"
+  },
+  "btnLabels": {
+    "seeApplications": "voir les candidatures",
+    "back": "retour"
+  },
+  "filterType": {
+    "applicantName": "filtrer par nom"
+  },
+  "filterLabels": {
+    "alphabetical": "alphabétique",
+    "reverseAlphabetical": "alphabétique inversé"
+  }
+}

@@ -28,6 +28,7 @@ i18n
       "gs_dashboard",
       "gs_dashboard_all_internships",
       "gs_dashboard_manage_cvs",
+      "gs_modal_selectedOfferApplications",
       "dashboard_settings",
       "internship_applications",
     ],
