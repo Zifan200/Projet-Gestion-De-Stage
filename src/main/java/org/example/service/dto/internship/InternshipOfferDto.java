@@ -36,7 +36,7 @@ public class InternshipOfferDto {
     @NotBlank(message = "required: employer email")
     @Email
     private String employerEmail;
-
+    private int applicationCount;
     private LocalDate publishedDate;
     private LocalDate expirationDate;
 
@@ -50,51 +50,18 @@ public class InternshipOfferDto {
 
     @Builder
     public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
+                              String employerEmail, int applicationCount, LocalDate publishedDate, LocalDate expirationDate,
                               ApprovalStatus status, String reason, LocalDate startDate, LocalDate EndDate, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.targetedProgramme = targetedProgramme;
         this.employerEmail = employerEmail;
+        this.applicationCount = applicationCount;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
         this.reason = reason;
-        this.startDate = startDate;
-        this.EndDate = EndDate;
-        this.session = session;
-    }
-
-    @Builder(builderClassName = "FromEmployerObjBuilder", builderMethodName = "fromEmployerObjBuilder")
-    public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, LocalDate startDate, LocalDate EndDate, String session) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.targetedProgramme = targetedProgramme;
-        this.employerEmail = employer.getEmail();
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
-        this.status = status;
-        this.startDate = startDate;
-        this.EndDate = EndDate;
-        this.session = session;
-    }
-
-    @Builder(builderClassName = "FromEmployerResponseDtoBuilder", builderMethodName = "fromEmployerResponseDtoBuilder")
-    public InternshipOfferDto(Long id, String title, String description, String targetedProgramme,
-                              EmployerResponseDto employer, LocalDate publishedDate, LocalDate expirationDate,
-                              ApprovalStatus status, LocalDate startDate, LocalDate EndDate, String session) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.targetedProgramme = targetedProgramme;
-        this.employerEmail = employer.getEmail();
-        this.publishedDate = publishedDate;
-        this.expirationDate = expirationDate;
-        this.status = status;
         this.startDate = startDate;
         this.EndDate = EndDate;
         this.session = session;
@@ -109,6 +76,7 @@ public class InternshipOfferDto {
                 .description(internshipOffer.getDescription())
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .employerEmail(internshipOffer.getEmployer().getEmail())
+                .applicationCount(internshipOffer.getApplications().size())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())
