@@ -1,0 +1,18 @@
+{
+  "table":
+  {
+    "title": "Titre",
+    "company": "Entreprise",
+    "receivedDate": "Date de réception",
+    "action": "Actions"
+  },
+  "stats":
+  {
+    "decisionStatus" : "Offres à confirmer"
+  },
+  "actions":
+  {
+    "accept": "Accepter",
+    "reject": "Refuser"
+  }
+}

@@ -11,6 +11,7 @@ import org.example.service.dto.student.EtudiantDTO;
 import org.example.model.EmailMessage;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDecisionDTO;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -100,5 +101,26 @@ public class EtudiantController {
         return ResponseEntity.ok(
                 internshipApplicationService.getAllApplicationsFromStudentByStatus(email, status)
         );
+    }
+
+    @PostMapping("/student/{applicationId}/accept")
+    public ResponseEntity<InternshipApplicationResponseDTO> acceptOfferByStudent(
+            @PathVariable Long applicationId,
+            @RequestBody EtudiantDecisionDTO request
+    ) {
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.acceptOfferByStudent(request.getStudentEmail(), applicationId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/student/{applicationId}/reject")
+    public ResponseEntity<InternshipApplicationResponseDTO> rejectOfferByStudent(
+            @PathVariable Long applicationId,
+            @RequestBody EtudiantDecisionDTO request
+    ) {
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId,
+                        request.getEtudiantRaison());
+        return ResponseEntity.ok(response);
     }
 }
