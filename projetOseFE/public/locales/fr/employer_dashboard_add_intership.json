@@ -7,9 +7,9 @@
     "program": "Programme visé",
     "deadline": "Date limite",
     "placeholders": {
-      "title": "Ex : Stage en intelligence artificielle à l’Institut Health Research",
-      "description": "Décrivez les tâches, attentes et environnement du stage.",
-      "program": "Sélectionnez un programme"
+      "title": "Veuillez saisir le titre de votre offre de stage",
+      "description": "Veuillez saisir la description complète du stage proposé",
+      "program": "Veuillez sélectionner le programme visé"
     }
   },
   "submit": "Publier l’offre",

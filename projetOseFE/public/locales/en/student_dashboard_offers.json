@@ -29,5 +29,15 @@
     "viewOffer": "Error viewing the offer.",
     "applyOffer": "Failed to apply to the offer.",
     "selectCv": "Please select a CV before applying."
+  },
+  "filter": {
+    "session": "Session",
+    "year": "Year"
+  },
+  "session": {
+    "all": "All",
+    "autumn": "Fall",
+    "winter": "Winter",
+    "year": "All"
   }
 }

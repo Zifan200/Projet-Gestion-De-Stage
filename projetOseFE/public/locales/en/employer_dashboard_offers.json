@@ -20,6 +20,8 @@
   },
   "filter": {
     "status": "Filter by Status",
+    "session": "Session",
+    "year": "Year",
     "all": "All"
   },
   "sort": {
@@ -42,5 +44,11 @@
   "noDescription": "No description provided for this offer.",
   "menu": {
     "close": "Close"
+  },
+  "session": {
+    "all": "All",
+    "autumn": "Fall",
+    "winter": "Winter",
+    "year": "All"
   }
 }
