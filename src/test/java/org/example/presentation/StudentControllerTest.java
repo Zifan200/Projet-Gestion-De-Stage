@@ -12,6 +12,7 @@ import org.example.service.UserAppService;
 import org.example.service.dto.student.EtudiantDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDecisionDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Optional;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -390,5 +392,66 @@ class StudentControllerTest {
         Exception resolved = result.getResolvedException();
         assertNotNull(resolved);
         assertTrue(resolved instanceof InvalidInternshipApplicationException);
+    }
+    @Test
+    void acceptOfferByStudent_Success() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Java Developer")
+                .etudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT)
+                .build();
+
+        EtudiantDecisionDTO request = new EtudiantDecisionDTO();
+        request.setStudentEmail("student@mail.com");
+
+        when(internshipApplicationService.acceptOfferByStudent("student@mail.com", 1L))
+                .thenReturn(responseDto);
+
+        mockMvc.perform(post("/api/v1/student/1/accept")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("$.etudiantStatus").value("CONFIRMED_BY_STUDENT"));
+
+    }
+
+    @Test
+    void rejectOfferByStudent_Success() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(etudiantController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
+
+        InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
+                .id(1L)
+                .studentEmail("student@mail.com")
+                .internshipOfferId(10L)
+                .internshipOfferTitle("Java Developer")
+                .etudiantStatus(ApprovalStatus.REJECTED_BY_STUDENT)
+                .etudiantRaison("Je préfère une autre offre.")
+                .build();
+
+        EtudiantDecisionDTO request = new EtudiantDecisionDTO();
+        request.setStudentEmail("student@mail.com");
+        request.setEtudiantRaison("Je préfère une autre offre.");
+
+        when(internshipApplicationService.rejectOfferByStudent("student@mail.com", 1L, "Je préfère une autre offre."))
+                .thenReturn(responseDto);
+
+        mockMvc.perform(post("/api/v1/student/1/reject")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.studentEmail").value("student@mail.com"))
+                .andExpect(jsonPath("$.etudiantStatus").value("REJECTED_BY_STUDENT"))
+                .andExpect(jsonPath("$.etudiantRaison").value("Je préfère une autre offre."));
     }
 }
