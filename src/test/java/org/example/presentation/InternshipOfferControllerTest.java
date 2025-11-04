@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -212,6 +213,7 @@ public class InternshipOfferControllerTest {
                 .description("N/A")
                 .employer(employer)
                 .targetedProgramme("Computer Science")
+                .applications(new ArrayList<>())
                 .build();
 
         InternshipOfferResponseDto offerResponse = InternshipOfferResponseDto.create(offer);

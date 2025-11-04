@@ -139,6 +139,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .applicationCount(offer.getApplications().size())
                         .build())
                 .collect(Collectors.toList());
     }
