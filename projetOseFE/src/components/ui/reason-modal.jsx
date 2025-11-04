@@ -7,10 +7,15 @@ import Label from "./label.js";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reasonSchema } from "../../models/reason.js";
-import {useTranslation} from "react-i18next";
 
-export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
-  const { t } = useTranslation("reason_modal");
+export const ReasonModal = ({
+  open,
+  onClose,
+  onSubmit,
+  title = "Raison du refus",
+  description = "Explique pourquoi tu refuses ce CV.",
+  placeholder = "Ex: Le profil ne correspond pas aux exigences du poste..."
+}) => {
   const form = useForm({
     resolver: zodResolver(reasonSchema),
     defaultValues: { reason: "" },
@@ -33,7 +38,7 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
         >
           <div className="min-w-[1000px]">
             <FormTemplate
-              title={t("title")}
+              title={title}
               description={description}
             >
               <FormProvider {...form}>
@@ -42,10 +47,10 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
                   className="flex flex-col gap-5"
                 >
                   <div className="flex flex-col gap-2">
-                    <Label name="reason" label={t("reason")} />
+                    <Label name="reason" label="Raison" />
                     <Textarea
                       name="reason"
-                      placeholder={t("placeholder")}
+                      placeholder={placeholder}
                       registration={form.register("reason")}
                       error={form.formState.errors.reason?.message}
                     />
@@ -53,7 +58,7 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
 
                   <div className="flex justify-end gap-3 mt-4">
                     <Button
-                      label={t("cancel")}
+                      label="Annuler"
                       className="bg-zin-300 hover:bg-gray-500"
                       type="button"
                       onClick={() => {
@@ -61,7 +66,7 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
                         onClose();
                       }}
                     />
-                    <Button label={t("confirm")} className="" type="submit" />
+                    <Button label="Confirmer" className="" type="submit" />
                   </div>
                 </form>
               </FormProvider>

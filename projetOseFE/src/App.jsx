@@ -15,6 +15,7 @@ import { StudentOffers } from "./pages/student/studentOffers.jsx";
 import Home from "./pages/home.jsx";
 import { EmployerDashboard } from "./pages/employer/dashboard.jsx";
 import { DashboardLayout } from "./components/layouts/dashboard.jsx";
+import OffresAConfirmer from "./pages/student/internshipFinalDecision.jsx";
 import {
   BackpackIcon,
   PersonIcon,
@@ -42,6 +43,7 @@ function App() {
     "employer_dashboard",
     "gs_dashboard",
     "menu",
+    "student_dashboard_decision",
   ]);
 
   const studentDashboardSidebarLinks = [
@@ -62,6 +64,12 @@ function App() {
       label: t("student_dashboard:stats.availableOffers"),
       href: "/dashboard/student/offers",
       icon: EnvelopeOpenIcon,
+    },
+    {
+      key: "decision",
+      label: t("student_dashboard_decision:stats.decisionStatus"),
+      href: "/dashboard/student/internshipFinalDecision",
+      icon: CheckIcon,
     },
     {
       key: "settings",
@@ -190,6 +198,10 @@ function App() {
             <Route
               path="/dashboard/student/settings"
               element={<DashboardSettings />}
+            />
+            <Route
+                path="/dashboard/student/internshipFinalDecision"
+                element={<OffresAConfirmer />}
             />
           </Route>
 
