@@ -32,7 +32,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
     const handlePreview = (applicationCv) => {
         if (applicationCv.selectedCvFileType === "application/pdf") setPreviewId(applicationCv.selectedCvID);
-        else alert("cant open cv");
+        else toast.error(t("errors.openCv"));
     };
 
 
