@@ -28,7 +28,9 @@
     "all": "All Sessions",
     "automne": "Fall",
     "hiver": "Winter",
-    "AllYears": "All Years"
+    "AllYears": "All Years",
+    "session": "Session",
+    "year": "Year"
   },
   "sort": {
     "by": "Sort by",

@@ -29,9 +29,35 @@ export const useEmployerStore = create()(
                 set({ loading: true, error: null });
                 try {
                     const applications = await employerService.getAllApplications();
-                    set({ applications, loading: false });
+                    set({ applications: applications, loading: false });
                 } catch (e) {
                     set({ error: e.message, loading: false });
+                }
+            },
+
+            approveApplication: async(token, id) => {
+                const res = employerService.approveApplication(token, id);
+                try {
+                    set((state) => ({
+                        applications: state.applications.map((app) =>
+                            app.id === id ? { ...app, status: "ACCEPTED" } : app
+                        ),
+                    }));
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            rejectApplication: async(token, id, reason) => {
+                const res = employerService.rejectApplication(token, id, reason);
+                try {
+                    set((state) => ({
+                        applications: state.applications.map((app) =>
+                            app.id === id ? { ...app, status: "REJECTED", reason } : app
+                        ),
+                    }));
+                } catch (err) {
+                    set({ error: err, loading: false });
                 }
             },
         }),

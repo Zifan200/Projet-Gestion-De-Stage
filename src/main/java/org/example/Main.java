@@ -115,6 +115,10 @@ public class Main {
                             internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
                             internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
 
+            internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
+
             // -----------------------------
             // 4️⃣ Création étudiant + CV
             // -----------------------------

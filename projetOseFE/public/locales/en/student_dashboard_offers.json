@@ -41,6 +41,8 @@
     "year" : "All years"
   },
   "menu": {
-    "close": "Close"
+    "close": "Close",
+    "session": "Session",
+    "year": "Year"
   }
 }

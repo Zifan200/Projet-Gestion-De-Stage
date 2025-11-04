@@ -28,7 +28,11 @@
     "all": "Toutes les Sessions",
     "automne": "Automne",
     "hiver": "Hiver",
-    "AllYears": "Toutes les Années"
+    "AllYears": "Toutes les Années",
+    "status": "Filtrer par statut",
+    "session": "Session",
+    "year": "Année",
+    "all": "Toutes"
   },
   "sort": {
     "by": "Trier par",
