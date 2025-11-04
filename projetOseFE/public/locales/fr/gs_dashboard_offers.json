@@ -1,7 +1,7 @@
 {
   "filter": {
-  "session": "Filter par session",
-  "year": "Filter par année"
+  "session": "Filtrer par session",
+  "year": "Filtrer par année"
 },
 
   "session": {
