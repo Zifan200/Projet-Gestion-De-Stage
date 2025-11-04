@@ -42,10 +42,10 @@ export const useStudentStore = create(
                 }
             },
 
-            acceptOffer: async (applicationId, token) => {
+            acceptOffer: async (applicationId, studentEmail, token) => {
                 try {
                     set({ loading: true, error: null, successMessage: null });
-                    const res = await studentService.acceptOffer(applicationId, token);
+                    const res = await studentService.acceptOffer(applicationId, studentEmail, token);
 
                     const updated = get().applications.map((app) =>
                         app.id === applicationId
@@ -66,10 +66,10 @@ export const useStudentStore = create(
                 }
             },
 
-            rejectOffer: async (applicationId, raison, token) => {
+            rejectOffer: async (applicationId, studentEmail, raison, token) => {
                 try {
                     set({ loading: true, error: null, successMessage: null });
-                    const res = await studentService.rejectOffer(applicationId, raison, token);
+                    const res = await studentService.rejectOffer(applicationId, studentEmail, raison, token);
 
                     const updated = get().applications.map((app) =>
                         app.id === applicationId

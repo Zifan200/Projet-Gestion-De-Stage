@@ -105,7 +105,7 @@ public class EtudiantController {
         );
     }
 
-    @PostMapping("/student/{applicationId}/accept")
+    @PostMapping("/{applicationId}/accept")
     public ResponseEntity<InternshipApplicationResponseDTO> acceptOfferByStudent(
             @PathVariable Long applicationId,
             @RequestBody EtudiantDecisionDTO request
@@ -115,7 +115,7 @@ public class EtudiantController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/student/{applicationId}/reject")
+    @PostMapping("/{applicationId}/reject")
     public ResponseEntity<InternshipApplicationResponseDTO> rejectOfferByStudent(
             @PathVariable Long applicationId,
             @RequestBody EtudiantDecisionDTO request

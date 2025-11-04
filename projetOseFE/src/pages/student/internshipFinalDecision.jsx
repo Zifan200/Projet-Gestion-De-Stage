@@ -82,11 +82,11 @@ export default function OffresAConfirmer() {
                     data={approvedApplications}
                     onAction={(actionKey, row) => {
                         if (actionKey === "accept") {
-                            acceptOffer(row.id, token);
+                            acceptOffer(row.id, row.studentEmail, token); // <-- email ajouté
                         } else if (actionKey === "reject") {
                             const raison = prompt(t("reasons.enterReason"), "");
                             if (raison !== null) {
-                                rejectOffer(row.id, raison, token);
+                                rejectOffer(row.id, row.studentEmail, raison, token); // <-- email ajouté
                             }
                         }
                     }}
