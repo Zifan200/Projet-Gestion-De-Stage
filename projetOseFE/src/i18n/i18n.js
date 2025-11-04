@@ -31,6 +31,7 @@ i18n
       "gs_modal_selectedOfferApplications",
       "dashboard_settings",
       "internship_applications",
+      "reason_modal"
     ],
     defaultNS: "common",
     interpolation: {
