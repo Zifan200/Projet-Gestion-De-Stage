@@ -297,7 +297,7 @@ export const OfferList = () => {
             </div>
             <div className="flex gap-2">
               <span className="font-semibold">{t("table.status")}:</span>
-              <span>{t(`status.${selectedOffer?.status?.toLowerCase()}`)}</span>
+              <span>{t(`${selectedOffer?.status?.toLowerCase()}`)}</span>
             </div>
             {selectedOffer?.reason?.trim() && (
                 <div className="flex gap-2">
