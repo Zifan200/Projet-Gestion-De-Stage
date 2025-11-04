@@ -5,7 +5,7 @@
   "numberOfApplications": "number of applicants",
   "tableHeaders": {
     "studentName": "student Name",
-    "studentProgramme": "student programme",
+    "studentProgramme": "student program",
     "applicationStatus": "application status",
     "applicationDate": "application date"
   },
