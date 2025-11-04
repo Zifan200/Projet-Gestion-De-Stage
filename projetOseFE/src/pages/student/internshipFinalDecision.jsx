@@ -70,7 +70,7 @@ export default function OffresAConfirmer() {
         {
             key: "actions",
             label: t("table.action"),
-            actions: (row) => [{ key: "view", label: t("actions.view"), showIcon: true }]
+            actions: [{ key: "view", label: t("actions.view"), showIcon: true }]
         }
     ], [t]);
 

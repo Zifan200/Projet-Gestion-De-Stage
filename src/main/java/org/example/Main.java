@@ -76,11 +76,8 @@ public class Main {
                     .build();
             employerService.saveEmployer(employer);
 
-            InternshipOfferService internshipOfferService = context.getBean(InternshipOfferService.class);
-
-
             // -----------------------------
-            // 3️⃣ Création d’offres de stage
+            // 3️⃣ Création d'offres de stage
             // -----------------------------
 
 
@@ -148,9 +145,6 @@ public class Main {
             // -----------------------------
             // 5️⃣ Création candidatures avec approvalStatus hardcodé APPROVED
             // -----------------------------
-            InternshipApplicationService internshipApplicationService = context.getBean(InternshipApplicationService.class);
-            CvRepository cvRepository = context.getBean(CvRepository.class);
-
             byte[] bytes = new byte[9];
           
             CV studentCV = CV.builder()
@@ -166,7 +160,7 @@ public class Main {
 
             // Créer candidature
             InternshipApplicationDTO internshipApplicationDTO = InternshipApplicationDTO.builder()
-                    .internshipOfferId(savedOffer1.getId())
+                    .internshipOfferId(offer1.getId())
                     .employerEmail(employer.getEmail())
                     .studentEmail(etudiantDTO.getEmail())
                     .selectedCvID(studentCV.getId())

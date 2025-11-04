@@ -1,79 +1,142 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FormTemplate } from "./form-template.jsx";
-import { Button } from "./button.jsx";
-import { Textarea } from "./textarea.jsx";
-import Label from "./label.js";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { reasonSchema } from "../../models/reason.js";
+import { cn } from "../../lib/cn.js";
+import { EyeOpenIcon } from "@radix-ui/react-icons";
 
-export const ReasonModal = ({
-  open,
-  onClose,
-  onSubmit,
-  title = "Raison du refus",
-  description = "Explique pourquoi tu refuses ce CV.",
-  placeholder = "Ex: Le profil ne correspond pas aux exigences du poste..."
-}) => {
-  const form = useForm({
-    resolver: zodResolver(reasonSchema),
-    defaultValues: { reason: "" },
-  });
+// Standardized button style variants for consistency across all tables
+const getButtonStyles = (actionKey) => {
+  const baseStyles =
+    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors";
 
-  const handleSubmit = (data) => {
-    onSubmit(data.reason);
-    form.reset();
-    onClose();
+  const variants = {
+    view: "bg-blue-100 text-blue-700 hover:bg-blue-200",
+    preview: "bg-indigo-100 text-indigo-700 hover:bg-indigo-200",
+    download: "bg-green-100 text-green-700 hover:bg-green-200",
+    delete: "bg-red-100 text-red-700 hover:bg-red-200",
+    reject: "bg-red-100 text-red-700 hover:bg-red-200",
+    accept: "bg-emerald-100 text-emerald-700 hover:bg-emerald-200",
+    edit: "bg-amber-100 text-amber-700 hover:bg-amber-200",
   };
 
-  return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          className="fixed inset-0 bg-white backdrop-blur-xl flex items-center justify-center z-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="min-w-[1000px]">
-            <FormTemplate
-              title={title}
-              description={description}
-            >
-              <FormProvider {...form}>
-                <form
-                  onSubmit={form.handleSubmit(handleSubmit)}
-                  className="flex flex-col gap-5"
-                >
-                  <div className="flex flex-col gap-2">
-                    <Label name="reason" label="Raison" />
-                    <Textarea
-                      name="reason"
-                      placeholder={placeholder}
-                      registration={form.register("reason")}
-                      error={form.formState.errors.reason?.message}
-                    />
-                  </div>
+  return `${baseStyles} ${variants[actionKey] || "bg-gray-100 text-gray-700 hover:bg-gray-200"}`;
+};
 
-                  <div className="flex justify-end gap-3 mt-4">
-                    <Button
-                      label="Annuler"
-                      className="bg-zin-300 hover:bg-gray-500"
-                      type="button"
-                      onClick={() => {
-                        form.reset();
-                        onClose();
-                      }}
-                    />
-                    <Button label="Confirmer" className="" type="submit" />
-                  </div>
-                </form>
-              </FormProvider>
-            </FormTemplate>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+export const DataTable = ({ columns, data, onAction }) => {
+  return (
+    <div className="overflow-x-auto bg-white shadow rounded">
+      <table className="w-full text-sm text-left border-collapse">
+        <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
+          <tr>
+            {columns.map((col) => (
+              <th key={col.key} className="px-4 py-3">
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.length === 0 ? (
+            <tr>
+              <td
+                colSpan={columns.length}
+                className="text-center p-6 text-gray-400"
+              >
+                Aucun résultat
+              </td>
+            </tr>
+          ) : (
+            data.map((row) => (
+              <tr
+                key={row.id}
+                className="border-t border-gray-200 text-gray-700 text-sm"
+              >
+                {columns.map((col) => {
+                  if (col.key === "status") {
+                    // Use rawStatus for color mapping if available, otherwise use status
+                    const statusKey =
+                      row.rawStatus || row[col.key]?.toLowerCase();
+                    const statusColor =
+                      {
+                        pending: "bg-yellow-100 text-yellow-800",
+                        accepted: "bg-green-100 text-green-800",
+                        rejected: "bg-red-100 text-red-800",
+                        reviewing: "bg-blue-100 text-blue-800",
+                      }[statusKey] || "bg-gray-100 text-gray-700";
+
+                    const displayValue = col.format ? col.format(row[col.key]) : row[col.key];
+
+                    return (
+                      <td key={col.key} className="px-4 py-3 align-middle">
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor}`}
+                        >
+                          {displayValue}
+                        </span>
+                      </td>
+                    );
+                  }
+
+                  if (col.key === "etudiantStatus") {
+                    const statusKey = row[col.key]?.toLowerCase();
+                    const statusColor =
+                      {
+                        pending: "bg-yellow-100 text-yellow-800",
+                        confirmed_by_student: "bg-green-100 text-green-800",
+                        rejected_by_student: "bg-red-100 text-red-800",
+                      }[statusKey] || "bg-yellow-100 text-yellow-800";
+
+                    const displayValue = col.format ? col.format(row[col.key]) : row[col.key];
+
+                    return (
+                      <td key={col.key} className="px-4 py-3 align-middle">
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor}`}
+                        >
+                          {displayValue}
+                        </span>
+                      </td>
+                    );
+                  }
+
+                  if (col.key === "actions") {
+                    return (
+                      <td key={col.key} className="px-4 py-3 align-middle">
+                        <div className="flex items-center justify-start gap-2">
+                          {col.actions.map(
+                            (action) =>
+                              (row.rawStatus === "pending" ||
+                                (action.key !== "accept" &&
+                                  action.key !== "reject")) && (
+                                <button
+                                  key={action.key}
+                                  onClick={() => onAction(action.key, row)}
+                                  className={getButtonStyles(action.key)}
+                                >
+                                  {action.showIcon && action.key === "view" && (
+                                    <EyeOpenIcon className="w-4 h-4" />
+                                  )}
+                                  {action.label}
+                                </button>
+                              ),
+                          )}
+                        </div>
+                      </td>
+                    );
+                  }
+
+                  const displayValue = col.format ? col.format(row[col.key]) : row[col.key];
+
+                  return (
+                    <td key={col.key} className="px-4 py-3 align-middle">
+                      {displayValue}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
+
