@@ -20,6 +20,8 @@
   },
   "filter": {
     "status": "Filtrer par statut",
+    "session": "Session",
+    "year": "Année",
     "all": "Toutes"
   },
   "sort": {
@@ -42,5 +44,11 @@
   "noDescription": "Aucune description fournie pour cette offre.",
   "menu": {
     "close": "Fermer"
+  },
+  "session": {
+    "all": "Toutes",
+    "autumn": "Automne",
+    "winter": "Hiver",
+    "year": "Toutes"
   }
 }
