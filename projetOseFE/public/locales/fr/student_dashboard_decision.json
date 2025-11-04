@@ -5,6 +5,8 @@
     "OfferTitle": "Titre",
     "company": "Entreprise",
     "receivedDate": "Date de réception",
+    "employerStatus": "Statut employeur",
+    "studentStatus": "Ma décision",
     "action": "Actions"
   },
   "stats":
@@ -13,7 +15,64 @@
   },
   "actions":
   {
+    "view": "Voir détails",
     "accept": "Accepter",
     "reject": "Refuser"
+  },
+  "modal":
+  {
+    "title": "Détails de l'offre",
+    "offerTitle": "Titre du stage",
+    "employer": "Employeur",
+    "description": "Description",
+    "startDate": "Date de début",
+    "session": "Session",
+    "employerStatus": "Décision de l'employeur",
+    "studentStatus": "Ma décision",
+    "selectedCv": "CV sélectionné",
+    "applicationDate": "Date de candidature",
+    "close": "Fermer"
+  },
+  "filter":
+  {
+    "employerStatus": "Statut employeur",
+    "studentStatus": "Ma décision",
+    "all": "Tous",
+    "close": "Fermer"
+  },
+  "status":
+  {
+    "pending": "En attente",
+    "accepted": "Acceptée",
+    "rejected": "Refusée"
+  },
+  "employerStatus":
+  {
+    "pending": "En attente",
+    "accepted": "Acceptée",
+    "rejected": "Refusée"
+  },
+  "studentStatus":
+  {
+    "pending": "En attente de ma décision",
+    "confirmed_by_student": "Confirmé",
+    "rejected_by_student": "Refusé"
+  },
+  "loading": "Chargement...",
+  "noApplications": "Aucune offre à confirmer",
+  "errors":
+  {
+    "generic": "Une erreur est survenue"
+  },
+  "reasons":
+  {
+    "enterReason": "Entrez la raison du refus"
+  },
+  "reasonModal":
+  {
+    "title": "Raison du refus",
+    "description": "Explique pourquoi tu refuses cette offre de stage.",
+    "placeholder": "Ex: Je ne peux pas accepter cette offre car j'ai trouvé un autre stage...",
+    "errorEmpty": "Veuillez entrer une raison pour le refus"
   }
 }
