@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,7 @@ public class InternshipApplicationService {
     private final InternshipOfferRepository internshipOfferRepository;
     private final InternshipApplicationRepository internshipApplicationRepository;
     private final EtudiantRepository etudiantRepository;
+
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -58,12 +61,19 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
         }
 
+        // Récupérer session et dates depuis l'offre
+        String session = saveOffer.getSession();
+        LocalDate startDate = saveOffer.getStartDate();
+
         InternshipApplication application = InternshipApplication.builder()
                 .student(student.get())
                 .selectedStudentCV(selectedCV.get())
-                .offer(offer.get())
+                .offer(saveOffer)
                 .status(ApprovalStatus.PENDING)
+                .startDate(startDate)
+                .session(session)
                 .build();
+
 
         var savedInternshipApplication = internshipApplicationRepository.save(application);
         eventPublisher.publishEvent(new StudentCreatedInternshipApplicationCreatedEvent());
@@ -136,6 +146,7 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Invalid internship offer : employer does not exist");
         }
         List<InternshipApplication> applicationList = internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(email);
+        System.out.println(applicationList);
         return applicationList.stream().map(InternshipApplicationResponseDTO::create).collect(Collectors.toList());
     }
 
@@ -245,6 +256,67 @@ public class InternshipApplicationService {
         internshipApplicationRepository.save(application);
 
         eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+        return InternshipApplicationResponseDTO.create(application);
+    }
+
+    public InternshipApplicationResponseDTO acceptOfferByStudent(String studentEmail, Long applicationId) {
+        Optional<Etudiant> student = etudiantRepository.findByCredentialsEmail(studentEmail);
+
+        if (student.isEmpty()) {
+            throw new InvalidInternshipApplicationException("Student not found : " + studentEmail);
+        }
+
+        InternshipApplication application = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new InvalidInternshipApplicationException(
+                        "Application not found with ID : " + applicationId
+                ));
+
+        if (!application.getStudent().getCredentials().getEmail().equals(studentEmail)) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to modify this application");
+        }
+
+        if (application.getStatus() != ApprovalStatus.ACCEPTED) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to approve this application");
+        }
+
+        application.setEtudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT);
+        internshipApplicationRepository.save(application);
+
+        eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+
+        logger.info("L'étudiant {} a accepté l'offre {}", studentEmail, application.getOffer().getTitle());
+
+        return InternshipApplicationResponseDTO.create(application);
+    }
+
+    public InternshipApplicationResponseDTO rejectOfferByStudent(String studentEmail, Long applicationId, String reason) {
+        Optional<Etudiant> student = etudiantRepository.findByCredentialsEmail(studentEmail);
+
+        if (student.isEmpty()) {
+            throw new InvalidInternshipApplicationException("Student not found : " + studentEmail);
+        }
+
+        InternshipApplication application = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new InvalidInternshipApplicationException(
+                        "Application introuvable avec l'id : " + applicationId
+                ));
+
+        if (!application.getStudent().getCredentials().getEmail().equals(studentEmail)) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to modify this application");
+        }
+
+        if (application.getStatus() != ApprovalStatus.ACCEPTED) {
+            throw new InvalidInternshipApplicationException("Student is not allowed to reject this application at this time.");
+        }
+
+        application.setEtudiantStatus(ApprovalStatus.REJECTED_BY_STUDENT);
+        application.setEtudiantRaison(reason);
+        internshipApplicationRepository.save(application);
+
+        eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
+
+        logger.info("L'étudiant {} a refusé l'offre {}", studentEmail, application.getOffer().getTitle());
+
         return InternshipApplicationResponseDTO.create(application);
     }
 }

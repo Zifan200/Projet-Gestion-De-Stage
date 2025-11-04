@@ -16,7 +16,8 @@ import { useTranslation, Trans } from "react-i18next";
 
 export const EmployerSignUpPage = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+
+  const { t } = useTranslation("signup_employer");
 
   const form = useForm({
     resolver: zodResolver(employerSchema),
@@ -42,92 +43,95 @@ export const EmployerSignUpPage = () => {
         }),
         { duration: 3000 },
       );
-      setTimeout(() => {
-        navigate("/login");
-      }, 4500);
-    } catch (err) {
+      setTimeout(() => navigate("/login"), 4500);
+    } catch {
       toast.error(t("errors.genericError"));
     }
   };
 
-  const onError = (err) => {
-    toast.error(t("errors.fillFields"));
-  };
+  const onError = () => toast.error(t("errors.fillFields"));
 
   return (
     <>
-      <FormTemplate
-        title={t("form.employer.title")}
-        description={t("form.employer.description")}
-      >
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit, onError)} className="">
-            <div className={"flex flex-col mb-7"}>
-              <Label name="email" label={t("form.fields.email")} />
-              <Input name="email" placeholder="Email" />
-            </div>
+      <div className="flex">
+        <div className="lg:w-full w-7/10 m-auto">
+          <FormTemplate
+            title={t("form.employer.title")}
+            description={t("form.employer.description")}
+          >
+            <FormProvider {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+                <div className="flex flex-col mb-7">
+                  <Label name="email" label={t("form.fields.email")} />
+                  <Input name="email" placeholder={t("form.fields.email")} />
+                </div>
 
-            <div className={"flex flex-col mb-7"}>
-              <Label name="firstName" label={t("form.fields.firstName")} />
-              <Input name="firstName" placeholder="Prénom" />
-            </div>
-            <div className={"flex flex-col mb-7"}>
-              <Label name="lastName" label={t("form.fields.lastName")} />
-              <Input name="lastName" placeholder="Nom de famille" />
-            </div>
-            <div className={"flex flex-col mb-7"}>
-              <Label name="password" label={t("form.fields.password")} />
-              <Input
-                name="password"
-                type="password"
-                label="Password"
-                placeholder={"Password"}
-              />
-            </div>
-            <div className={"flex flex-col mb-7"}>
-              <Label
-                name="confirmPassword"
-                label={t("form.fields.passwordConfirm")}
-              />
-              <Input
-                name="confirmPassword"
-                type="password"
-                label="Password"
-                placeholder={"Password"}
-              />
-            </div>
-            <div className={"flex flex-col mb-7"}>
-              <Label
-                name="enterpriseName"
-                label={t("form.employer.enterprise")}
-              />
-              <Input
-                name="enterpriseName"
-                type="text"
-                label="Password de confirmation"
-                placeholder={"Nom de l'entreprise"}
-              />
-            </div>
-            <div className={"flex flex-col mb-7"}>
-              <Label name="phone" label={t("form.fields.phone")} />
-              <Input
-                name="phone"
-                type="text"
-                label="Téléphone de l'entreprise"
-                placeholder={"438-999-9999"}
-              />
-            </div>
+                <div className="flex flex-col mb-7">
+                  <Label name="firstName" label={t("form.fields.firstName")} />
+                  <Input
+                    name="firstName"
+                    placeholder={t("form.fields.firstName")}
+                  />
+                </div>
 
-            <Button className={"p-2"} label={t("form.createBtn")} />
-            <div className={"text-center mt-2 text-zinc-600"}>
-              {t("form.login.accountExist")}{" "}
-              <span className={"text-blue-400"}>
-                <Link to={"/login"}>{t("form.login.title")}</Link>
-              </span>
-            </div>
-          </form>
-        </FormProvider>
-      </FormTemplate>
+                <div className="flex flex-col mb-7">
+                  <Label name="lastName" label={t("form.fields.lastName")} />
+                  <Input
+                    name="lastName"
+                    placeholder={t("form.fields.lastName")}
+                  />
+                </div>
+
+                <div className="flex flex-col mb-7">
+                  <Label name="password" label={t("form.fields.password")} />
+                  <Input
+                    name="password"
+                    type="password"
+                    placeholder={t("form.fields.password")}
+                  />
+                </div>
+
+                <div className="flex flex-col mb-7">
+                  <Label
+                    name="confirmPassword"
+                    label={t("form.fields.passwordConfirm")}
+                  />
+                  <Input
+                    name="confirmPassword"
+                    type="password"
+                    placeholder={t("form.fields.passwordConfirm")}
+                  />
+                </div>
+
+                <div className="flex flex-col mb-7">
+                  <Label
+                    name="enterpriseName"
+                    label={t("form.employer.enterprise")}
+                  />
+                  <Input
+                    name="enterpriseName"
+                    placeholder={t("form.employer.enterprise")}
+                  />
+                </div>
+
+                <div className="flex flex-col mb-7">
+                  <Label name="phone" label={t("form.fields.phone")} />
+                  <Input name="phone" placeholder={t("form.fields.phone")} />
+                </div>
+
+                <Button className="p-2" label={t("form.createBtn")} />
+
+                <div className="text-center mt-2 text-zinc-600">
+                  {t("form.login.accountExist")}{" "}
+                  <span className="text-blue-400">
+                    <Link to="/login">{t("form.login.title")}</Link>
+                  </span>
+                </div>
+              </form>
+            </FormProvider>
+          </FormTemplate>
+        </div>
+      </div>
     </>
   );
 };

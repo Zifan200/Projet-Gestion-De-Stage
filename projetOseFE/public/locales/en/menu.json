@@ -1,0 +1,14 @@
+{
+  "hello": "Hello",
+  "disconnect": "Logout",
+  "dashboard": "Dashboard",
+  "connexion": "Login",
+  "signup": "Sign up",
+  "signupTitle": "Create an account",
+  "student": "Student",
+  "manager": "Internship Manager",
+  "employer": "Employer",
+  "settings": "Settings",
+  "applications": "Internship Applications",
+  "close": "Fermer"
+}

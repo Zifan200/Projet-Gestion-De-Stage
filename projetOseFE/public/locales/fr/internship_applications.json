@@ -1,0 +1,55 @@
+{
+  "title": "Candidatures",
+  "table": {
+    "offerTitle": "Titre de l'offre",
+    "studentName": "Nom de l'étudiant",
+    "studentEmail": "Courriel de l'étudiant",
+    "cv": "CV",
+    "download": "Télécharger",
+    "preview": "Aperçu",
+    "noCv": "Aucun CV",
+    "status": "Statut",
+    "action": "Action",
+    "actionView": "Voir",
+    "accept": "Accepter",
+    "reject": "Rejeter"
+  },
+  "status": {
+    "pending": "En cours d'examen",
+    "accepted": "Acceptée",
+    "rejected": "Refusée",
+    "reviewing": "En révision"
+  },
+  "modal": {
+    "email": "Courriel",
+    "cv": "CV",
+    "offerTitle": "Offre",
+    "status": "Statut",
+    "appliedAt": "Postulé le",
+    "close": "Fermer",
+    "reason": "Raison"
+  },
+  "reasonModal": {
+    "description": "Expliquez pourquoi vous rejetez cette candidature."
+  },
+  "previewCv": "Aperçu du CV",
+  "closeCvPreview": "Fermer l'aperçu",
+  "errors": {
+    "downloadCv": "Erreur lors du téléchargement du CV."
+  },
+  "filter": {
+    "status": "Filtrer par statut",
+    "all": "Toutes"
+  },
+  "menu": {
+    "close": "Fermer"
+  },
+  "success": {
+    "accepted": "Candidature acceptée avec succès",
+    "rejected": "Candidature rejetée avec succès"
+  },
+  "errors": {
+    "reject": "Échec de l'approbation de la candidature",
+    "reject": "Échec du rejet de la candidature"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "form": {
+    "employer": {
+      "title": "Créer un compte employeur",
+      "description": "Rejoignez OSE 2.0 et commencez à publier vos offres de stage pour connecter votre entreprise avec des étudiants talentueux.",
+      "enterprise": "*Entrez le nom de l'entreprise que vous représentez"
+    },
+    "fields": {
+      "email": "*Entrez votre courriel",
+      "firstName": "*Entrez votre prénom",
+      "lastName": "*Entrez votre nom de famille",
+      "password": "*Entrez votre mot de passe",
+      "passwordConfirm": "*Confirmez votre mot de passe",
+      "phone": "Numéro de téléphone"
+    },
+    "createBtn": "Créer un compte",
+    "login": {
+      "accountExist": "Vous avez déjà un compte ?",
+      "title": "Connexion"
+    }
+  },
+  "success": {
+    "registerEnterpriseSuccess": "Bonjour {{firstName}}, votre compte pour {{enterpriseName}} a été créé avec succès !"
+  },
+  "errors": {
+    "fillFields": "Veuillez remplir les informations requises",
+    "genericError": "Une erreur est survenue, veuillez réessayer",
+    "email": {
+      "invalid": "Adresse courriel invalide."
+    },
+    "firstName": {
+      "min": "Le prénom doit contenir au moins 4 caractères"
+    },
+    "lastName": {
+      "min": "Le nom de famille doit contenir au moins 2 caractères"
+    },
+    "password": {
+      "regex": "Le mot de passe doit contenir entre 8 et 50 caractères, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)",
+      "match": "Les mots de passe ne correspondent pas"
+    },
+    "enterpriseName": {
+      "min": "Le nom de l'entreprise doit contenir au moins 2 caractères"
+    },
+    "phone": {
+      "invalid": "Le numéro doit contenir exactement 10 chiffres (111-111-1111)"
+    }
+  }
+}

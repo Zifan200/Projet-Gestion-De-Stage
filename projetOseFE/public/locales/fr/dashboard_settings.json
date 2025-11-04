@@ -1,0 +1,15 @@
+{
+  "title": "Paramètres",
+  "lang": {
+    "title": "Langue",
+    "language_description": "Choisissez la langue utilisée pour l’interface"
+  },
+  "languages": {
+    "en": "Anglais",
+    "fr": "Français"
+  },
+  "toast": {
+    "success": "Langue mise à jour avec succès !",
+    "error": "Une erreur est survenue lors de la mise à jour de la langue."
+  }
+}

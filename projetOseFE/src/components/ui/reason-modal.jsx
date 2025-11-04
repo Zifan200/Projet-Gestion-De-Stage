@@ -10,7 +10,7 @@ import { reasonSchema } from "../../models/reason.js";
 import {useTranslation} from "react-i18next";
 
 export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("reason_modal");
   const form = useForm({
     resolver: zodResolver(reasonSchema),
     defaultValues: { reason: "" },
@@ -33,7 +33,7 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
         >
           <div className="min-w-[1000px]">
             <FormTemplate
-              title={t("rejectModal.title")}
+              title={t("title")}
               description={description}
             >
               <FormProvider {...form}>
@@ -42,10 +42,10 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
                   className="flex flex-col gap-5"
                 >
                   <div className="flex flex-col gap-2">
-                    <Label name="reason" label={t("rejectModal.reason")} />
+                    <Label name="reason" label={t("reason")} />
                     <Textarea
                       name="reason"
-                      placeholder={t("rejectModal.placeholder")}
+                      placeholder={t("placeholder")}
                       registration={form.register("reason")}
                       error={form.formState.errors.reason?.message}
                     />
@@ -53,7 +53,7 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
 
                   <div className="flex justify-end gap-3 mt-4">
                     <Button
-                      label={t("rejectModal.cancel")}
+                      label={t("cancel")}
                       className="bg-zin-300 hover:bg-gray-500"
                       type="button"
                       onClick={() => {
@@ -61,7 +61,7 @@ export const ReasonModal = ({ open, onClose, onSubmit, description }) => {
                         onClose();
                       }}
                     />
-                    <Button label={t("rejectModal.confirm")} className="" type="submit" />
+                    <Button label={t("confirm")} className="" type="submit" />
                   </div>
                 </form>
               </FormProvider>

@@ -23,7 +23,7 @@ const Navbar = () => {
   const openTimer = useRef(null);
   const closeTimer = useRef(null);
   const wrapperRef = useRef(null);
-  const { t } = useTranslation();
+  const { t } = useTranslation("menu");
   const navigate = useNavigate();
 
   const user = useAuthStore((state) => state.user);
@@ -151,7 +151,7 @@ const Navbar = () => {
                     <PopoverContent open={open} contentRef={contentRef}>
                       <div className="w-50 p-2">
                         <p className="mb-2 bold">
-                          {t("menu.hello")} {user?.firstName} 👋
+                          {t("hello")} {user?.firstName} 👋
                         </p>
                         <div
                           className={
@@ -162,19 +162,19 @@ const Navbar = () => {
                           className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded"
                           onClick={gotoDashboard}
                         >
-                          {t("menu.dashboard")}
+                          {t("dashboard")}
                         </button>
                         <button
                           className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded"
                           onClick={disconnect}
                         >
-                          {t("menu.disconnect")}
+                          {t("disconnect")}
                         </button>
                         <button
                           className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded"
                           onClick={settings}
                         >
-                          {t("menu.settings")}
+                          {t("settings")}
                         </button>
 
                         <div

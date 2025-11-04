@@ -27,21 +27,26 @@ public class InternshipApplicationDTO {
     private Long  internshipOfferId;
 
     private ApprovalStatus status =  ApprovalStatus.PENDING;
+    private ApprovalStatus etudiantStatus =  ApprovalStatus.PENDING;
     private LocalDateTime createdAt;
     private String reason;
+    private String etudiantRaison;
 
     @Builder
     public InternshipApplicationDTO(
             Long id, String studentEmail, Long selectedCvID, Long internshipOfferId,
-            String employerEmail, ApprovalStatus status, LocalDateTime createdAt, String reason
+            String employerEmail, ApprovalStatus status, ApprovalStatus etudiantStatus,
+            LocalDateTime createdAt, String reason, String etudiantRaison
     ){
         this.id = id;
         this.studentEmail = studentEmail;
         this.selectedCvID = selectedCvID;
         this.internshipOfferId = internshipOfferId;
         this.status = status;
+        this.etudiantStatus =  etudiantStatus;
         this.createdAt = createdAt;
         this.reason = reason;
+        this.etudiantRaison = etudiantRaison;
     }
 
     public static InternshipApplicationDTO create(InternshipApplication internshipApplication) {
@@ -51,7 +56,9 @@ public class InternshipApplicationDTO {
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .status(internshipApplication.getStatus())
+                .etudiantStatus(internshipApplication.getEtudiantStatus())
                 .reason(internshipApplication.getReason())
+                .etudiantRaison(internshipApplication.getEtudiantRaison())
                 .build();
     }
 
