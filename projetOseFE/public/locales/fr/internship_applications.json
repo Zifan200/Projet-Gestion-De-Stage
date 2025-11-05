@@ -11,13 +11,19 @@
     "status": "Statut",
     "action": "Action",
     "actionView": "Voir",
-    "convocation": "Convoquer"
+    "convocation": "Convoquer",
+    "actionView": "Voir",
+    "studentChoice": "Choix des étudiants",
+    "accept": "Accepter",
+    "reject": "Rejeter"
   },
   "status": {
     "pending": "En cours d'examen",
     "accepted": "Acceptée",
     "rejected": "Refusée",
-    "reviewing": "En révision"
+    "reviewing": "En révision",
+    "confirmed_by_student": "Acceptée par l'étudiant",
+    "rejected_by_student": "Refusée par l'étudiant"
   },
   "modal": {
     "email": "Courriel",
@@ -25,18 +31,35 @@
     "offerTitle": "Offre",
     "status": "Statut",
     "appliedAt": "Postulé le",
-    "close": "Fermer"
+    "close": "Fermer",
+    "reason": "Raison"
+  },
+  "reasonModal": {
+    "description": "Expliquez pourquoi vous rejetez cette candidature."
   },
   "previewCv": "Aperçu du CV",
   "closeCvPreview": "Fermer l'aperçu",
-  "errors": {
-    "downloadCv": "Erreur lors du téléchargement du CV."
-  },
   "filter": {
-    "status": "Filtrer par statut",
-    "all": "Toutes"
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "AllYears": "Toutes les Années"
   },
   "menu": {
     "close": "Fermer"
+  },
+  "success": {
+    "accepted": "Candidature acceptée avec succès",
+    "rejected": "Candidature rejetée avec succès"
+  },
+  "errors": {
+    "reject": "Échec de l'approbation de la candidature",
+    "downloadCv": "Erreur lors du téléchargement du CV."
   }
 }

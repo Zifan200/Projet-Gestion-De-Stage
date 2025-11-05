@@ -11,7 +11,8 @@
     "actions": "Actions",
     "noOffers": "Aucune offre disponible.",
     "reason": "Raison du rejet",
-    "offerDetails": "Détails de l'offre"
+    "offerDetails": "Détails de l'offre",
+    "description": "Description"
   },
   "actions": {
     "create_another": "Créer une nouvelle offre",
@@ -19,7 +20,19 @@
     "download": "Télécharger"
   },
   "filter": {
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "AllYears": "Toutes les Années",
     "status": "Filtrer par statut",
+    "session": "Session",
+    "year": "Année",
     "all": "Toutes"
   },
   "sort": {

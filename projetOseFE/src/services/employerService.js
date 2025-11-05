@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import useAuthStore from "../stores/authStore.js";
+import {api} from "../lib/api.js";
 
 export const employerService = {
   register: async (employer) => {
@@ -56,6 +57,33 @@ export const employerService = {
       throw err;
     }
   },
+
+  approveApplication: async(token, id) => {
+    const res = api.put(
+        `/employer/get-internship-application/${id}/approve`,
+        null,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+    );
+    return res;
+  },
+
+  rejectApplication: async(token, id, reason) => {
+    const res = api.put(
+        `/employer/get-internship-application/${id}/reject`,
+        { reason },
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+    );
+    return res;
+  },
+
   createConvocation : async (formData) => {
     try {
       const token = localStorage.getItem("token");

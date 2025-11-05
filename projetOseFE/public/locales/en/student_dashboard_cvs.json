@@ -1,8 +1,8 @@
 {
-  "title": "My CVs",
-  "addCv": "Add a CV",
-  "noCvs": "You haven't uploaded any CV yet.",
-  "myCvs": "My CVs",
+  "title": "My Resumes",
+  "addCv": "Add a Resume",
+  "noCvs": "You haven't uploaded any resume yet.",
+  "myCvs": "My Resumes",
   "table": {
     "fileName": "File name",
     "type": "File type",
@@ -30,10 +30,10 @@
     "close": "Close"
   },
   "success": {
-    "uploadCv": "The CV '{{fileName}}' has been successfully uploaded!"
+    "uploadCv": "The resume '{{fileName}}' has been successfully uploaded!"
   },
   "errors": {
-    "uploadCv": "An error occurred while uploading the CV.",
+    "uploadCv": "An error occurred while uploading the resume.",
     "fileExists": "The file '{{fileName}}' already exists.",
     "previewNotSupported": "Preview is only available for PDF files."
   }

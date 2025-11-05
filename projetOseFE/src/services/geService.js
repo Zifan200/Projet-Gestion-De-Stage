@@ -54,4 +54,13 @@ export const geService = {
     });
     return res.data;
   },
+
+  async getAllInternshipApplications(token) {
+    const res = await api.get("/gs/get-all-internship-offers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  },
 };

@@ -11,13 +11,19 @@
     "status": "Status",
     "action": "Action",
     "actionView": "View",
-    "convocation": "Convocation"
+    "convocation": "Convocation",
+    "actionView": "View",
+    "studentChoice": "Student's Choice",
+    "accept": "Accept",
+    "reject": "Reject"
   },
   "status": {
     "pending": "Under Review",
     "accepted": "Accepted",
     "rejected": "Declined",
-    "reviewing": "In Review"
+    "reviewing": "In Review",
+    "confirmed_by_student": "Accepted by Student",
+    "rejected_by_student": "Declined by Student"
   },
   "modal": {
     "email": "Email",
@@ -25,18 +31,37 @@
     "offerTitle": "Offer",
     "status": "Status",
     "appliedAt": "Applied on",
-    "close": "Close"
+    "close": "Close",
+    "reason": "Reason"
+  },
+  "reasonModal": {
+    "description": "Explain why you are rejecting this application."
   },
   "previewCv": "Preview CV",
   "closeCvPreview": "Close Preview",
-  "errors": {
-    "downloadCv": "Error while downloading the CV."
-  },
   "filter": {
     "status": "Filter by Status",
-    "all": "All"
+    "all": "All Statuses",
+    "session": "Filter by Session",
+    "year": "Filter by Year"
   },
+  "session": {
+    "all": "All Sessions",
+    "automne": "Fall",
+    "hiver": "Winter",
+    "AllYears": "All Years"
+  },
+
   "menu": {
     "close": "Close"
+  },
+  "success": {
+    "accepted": "Application accepted successfully",
+    "rejected": "Application rejected successfully"
+  },
+  "errors": {
+    "accept": "Failed to accept application",
+    "reject": "Failed to reject application",
+    "downloadCv": "Error while downloading the CV."
   }
 }

@@ -3,6 +3,8 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.model.InternshipApplication;
+import org.example.model.enums.ApprovalStatus;
 import org.example.service.InternshipApplicationService;
 import org.example.service.StudentService;
 import org.example.service.EmailService;
@@ -11,6 +13,7 @@ import org.example.service.dto.student.EtudiantDTO;
 import org.example.model.EmailMessage;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.student.EtudiantDecisionDTO;
 import org.example.utils.JwtTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -101,4 +104,39 @@ public class EtudiantController {
                 internshipApplicationService.getAllApplicationsFromStudentByStatus(email, status)
         );
     }
+
+    @PostMapping("/{applicationId}/accept")
+    public ResponseEntity<InternshipApplicationResponseDTO> acceptOfferByStudent(
+            @PathVariable Long applicationId,
+            @RequestBody EtudiantDecisionDTO request
+    ) {
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.acceptOfferByStudent(request.getStudentEmail(), applicationId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{applicationId}/reject")
+    public ResponseEntity<InternshipApplicationResponseDTO> rejectOfferByStudent(
+            @PathVariable Long applicationId,
+            @RequestBody EtudiantDecisionDTO request
+    ) {
+        InternshipApplicationResponseDTO response =
+                internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId,
+                        request.getEtudiantRaison());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/accepted-applications")
+    public ResponseEntity<List<InternshipApplicationResponseDTO>> getAcceptedApplicationsForStudent(
+            HttpServletRequest request
+    ) {
+        String studentEmail = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+
+        List<InternshipApplicationResponseDTO> acceptedApplications =
+                internshipApplicationService.getAcceptedApplicationsForStudent(studentEmail);
+
+        return ResponseEntity.ok(acceptedApplications);
+    }
+
+
 }
