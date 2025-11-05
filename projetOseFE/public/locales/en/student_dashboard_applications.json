@@ -1,5 +1,5 @@
 {
-  "title": "Applications",
+  "title": "My applications",
   "table": {
     "offerTitle": "Offer Title",
     "studentName": "Student Name",
@@ -44,7 +44,10 @@
     "status": "Filter by Status",
     "all": "All Statuses",
     "session": "Filter by Session",
-    "year": "Filter by Year"
+    "year": "Filter by Year",
+    "employerDecision": "Employer's decision",
+    "myDecision": "My decision",
+    "allDecisions": "All"
   },
   "session": {
     "all": "All Sessions",

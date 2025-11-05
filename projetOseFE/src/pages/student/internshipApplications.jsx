@@ -21,7 +21,8 @@ export const StudentApplications = () => {
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [filterStatus, setFilterStatus] = useState(null);
+    const [filterEmployerDecision, setFilterEmployerDecision] = useState(null);
+    const [filterMyDecision, setFilterMyDecision] = useState(null);
     const [filterSession, setFilterSession] = useState("All");
     const [filterYear, setFilterYear] = useState("All");
     const [modalMode, setModalMode] = useState("details");
@@ -95,7 +96,10 @@ export const StudentApplications = () => {
     const filteredApplications = useMemo(() => {
         return applications
             .filter((app) =>
-                filterStatus ? app.status === filterStatus : true
+                filterEmployerDecision ? app.status === filterEmployerDecision : true
+            )
+            .filter((app) =>
+                filterMyDecision ? app.etudiantStatus === filterMyDecision : true
             )
             .filter((app) =>
                 (app.status.toLowerCase() === "accepted" && app.etudiantStatus !== null) ||
@@ -111,14 +115,14 @@ export const StudentApplications = () => {
                     new Date(app.createdAt).getFullYear().toString() === filterYear
             )
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }, [applications, filterStatus, filterSession, filterYear]);
+    }, [applications, filterEmployerDecision, filterMyDecision, filterSession, filterYear]);
 
     const tableData = filteredApplications.map((app) => ({
         ...app,
         appliedAt: new Date(app.createdAt).toLocaleDateString(),
         rawStatus: app.status?.toLowerCase(),
         status: t(`status.${app.status?.toLowerCase()}`),
-        etudiantStatus: t(`status.${app.etudiantStatus?.toLowerCase()}`),
+        etudiantStatus: app.etudiantStatus ? t(`status.${app.etudiantStatus?.toLowerCase()}`) : "N/A" ,
     }));
 
     const handleDownloadApplication = async (offerId) => {
@@ -139,7 +143,7 @@ export const StudentApplications = () => {
 
                     {/* Filtres */}
                     <div className="flex items-center gap-4">
-                        {/* Statut */}
+                        {/* Décision de l'employeur */}
                         <Popover>
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
@@ -148,7 +152,11 @@ export const StudentApplications = () => {
                                             className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
                                             shadow-sm cursor-pointer hover:bg-zinc-200 transition"
                                         >
-                                          {t("filter.status")}: {filterStatus || t("filter.all")}
+                                          {t("filter.employerDecision")}: {" "}
+                                            { filterEmployerDecision === "All" || filterEmployerDecision === null ?
+                                                t("filter.allDecisions") :
+                                                t(`status.${filterEmployerDecision.toLowerCase()}`)
+                                            }
                                         </span>
                                     </PopoverTrigger>
                                     <PopoverContent open={open} contentRef={contentRef}>
@@ -157,11 +165,11 @@ export const StudentApplications = () => {
                                                 <button
                                                     key={status}
                                                     onClick={() => {
-                                                        setFilterStatus(status);
+                                                        setFilterEmployerDecision(status);
                                                         setOpen(false);
                                                     }}
                                                     className={`px-3 py-1 rounded text-left ${
-                                                        filterStatus === status
+                                                        filterEmployerDecision === status
                                                             ? "bg-blue-100 font-semibold"
                                                             : "hover:bg-gray-100"
                                                     }`}
@@ -171,12 +179,64 @@ export const StudentApplications = () => {
                                             ))}
                                             <button
                                                 onClick={() => {
-                                                    setFilterStatus(null);
+                                                    setFilterEmployerDecision(null);
                                                     setOpen(false);
                                                 }}
                                                 className="px-3 py-1 rounded text-left hover:bg-gray-100"
                                             >
-                                                {t("filter.all")}
+                                                {t("filter.allDecisions")}
+                                            </button>
+                                            <PopoverClose setOpen={setOpen}>
+                                                <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                            </PopoverClose>
+                                        </div>
+                                    </PopoverContent>
+                                </>
+                            )}
+                        </Popover>
+
+                        {/* Ma décision */}
+                        <Popover>
+                            {({ open, setOpen, triggerRef, contentRef }) => (
+                                <>
+                                    <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+                                        <span
+                                            className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                            shadow-sm cursor-pointer hover:bg-zinc-200 transition"
+                                        >
+                                          {t("filter.myDecision")}: {" "}
+                                            { filterMyDecision === "All" || filterMyDecision === null ?
+                                                t("filter.allDecisions") :
+                                                t(`status.${filterMyDecision.toLowerCase()}`)
+                                            }
+                                        </span>
+                                    </PopoverTrigger>
+                                    <PopoverContent open={open} contentRef={contentRef}>
+                                        <div className="flex flex-col gap-2 min-w-[150px]">
+                                            {["CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"].map((status) => (
+                                                <button
+                                                    key={status}
+                                                    onClick={() => {
+                                                        setFilterMyDecision(status);
+                                                        setOpen(false);
+                                                    }}
+                                                    className={`px-3 py-1 rounded text-left ${
+                                                        filterEmployerDecision === status
+                                                            ? "bg-blue-100 font-semibold"
+                                                            : "hover:bg-gray-100"
+                                                    }`}
+                                                >
+                                                    {t(`status.${status.toLowerCase()}`)}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => {
+                                                    setFilterMyDecision(null);
+                                                    setOpen(false);
+                                                }}
+                                                className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                                            >
+                                                {t("filter.allDecisions")}
                                             </button>
                                             <PopoverClose setOpen={setOpen}>
                                                 <span className="text-sm text-gray-600">{t("menu.close")}</span>
@@ -192,12 +252,16 @@ export const StudentApplications = () => {
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
                                     <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-            <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-              {t("filter.session")}:{" "}
-                {filterSession === "All"
-                    ? t("session.all")
-                    : t(`session.${filterSession.toLowerCase()}`)}
-            </span>
+                                        <span
+                                            className="px-4 py-1 border border-zinc-400 bg-zinc-100
+                                            rounded-md shadow-sm cursor-pointer
+                                            hover:bg-zinc-200 transition"
+                                        >
+                                          {t("filter.session")}:{" "}
+                                            {filterSession === "All"
+                                                ? t("session.all")
+                                                : t(`session.${filterSession.toLowerCase()}`)}
+                                        </span>
                                     </PopoverTrigger>
                                     <PopoverContent open={open} contentRef={contentRef}>
                                         <div className="flex flex-col gap-2 min-w-[150px]">
@@ -240,7 +304,10 @@ export const StudentApplications = () => {
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
                                     <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-            <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+            <span
+                className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer
+                hover:bg-zinc-200 transition"
+            >
               {t("filter.year")}:{" "}
                 {filterYear === "All" ? t("session.AllYears") : filterYear}
             </span>

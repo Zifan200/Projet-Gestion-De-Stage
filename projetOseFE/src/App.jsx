@@ -67,16 +67,16 @@ function App() {
       icon: EnvelopeOpenIcon,
     },
     {
-      key: "applications",
-      label: t("student_dashboard:stats.activeApplications"),
-      href: "/dashboard/student/applications",
-      icon: EnvelopeClosedIcon,
-    },
-    {
       key: "decision",
       label: t("student_dashboard_decision:stats.decisionStatus"),
       href: "/dashboard/student/internshipFinalDecision",
       icon: CheckIcon,
+    },
+    {
+      key: "applications",
+      label: t("student_dashboard:stats.myApplications"),
+      href: "/dashboard/student/applications",
+      icon: EnvelopeClosedIcon,
     },
     {
       key: "settings",
@@ -206,11 +206,11 @@ function App() {
                   path="/dashboard/student/settings"
                   element={<DashboardSettings />}
               />
+              <Route path="/dashboard/student/applications" element={<StudentApplications />} />
               <Route
                   path="/dashboard/student/internshipFinalDecision"
                   element={<OffresAConfirmer />}
               />
-              <Route path="/dashboard/student/applications" element={<StudentApplications />} />
             </Route>
 
             <Route

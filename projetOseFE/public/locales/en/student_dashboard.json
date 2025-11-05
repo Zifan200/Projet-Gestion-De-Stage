@@ -6,7 +6,7 @@
     "availableOffers": "Available Offers",
     "acceptedOffers": "Accepted Offers",
     "pendingOffers": "Pending Offers",
-    "activeApplications": "Active applications"
+    "myApplications": "My applications"
   },
   "messages": {
     "welcome": "Welcome back, {{firstName}}!",

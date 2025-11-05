@@ -1,5 +1,5 @@
 {
-  "title": "Candidatures",
+  "title": "Mes candidatures",
   "table": {
     "offerTitle": "Titre de l'offre",
     "studentName": "Nom de l'étudiant",
@@ -44,7 +44,10 @@
     "status": "Filtrer par Statut",
     "all": "Tous les Statuts",
     "session": "Filtrer par Session",
-    "year": "Filtrer par Année"
+    "year": "Filtrer par Année",
+    "employerDecision": "Décision de l'employeur",
+    "myDecision": "Ma décision",
+    "allDecisions": "Toutes"
   },
   "session": {
     "all": "Toutes les Sessions",
