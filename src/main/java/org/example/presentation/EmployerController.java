@@ -29,6 +29,7 @@ public class EmployerController {
     private final EmployerService employerService;
     private final InternshipOfferService internshipOfferService;
     private final InternshipApplicationService internshipApplicationService;
+    private final ConvocationService convocationService;
     private final CVService cvService;
 
     @PostMapping("/register")
@@ -107,5 +108,10 @@ public class EmployerController {
             @PathVariable Long id){
         String email = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
         return ResponseEntity.ok( internshipApplicationService.getAllApplicationsFromOfferFromEmployer(id, email));
+    }
+
+    @PostMapping("/create-convocation")
+    public ResponseEntity<ConvocationDTO> createConvocation(@RequestBody ConvocationDTO convocationDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(convocationService.createConvocation(convocationDto));
     }
 }

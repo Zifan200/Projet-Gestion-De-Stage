@@ -10,7 +10,8 @@
     "noCv": "Aucun CV",
     "status": "Statut",
     "action": "Action",
-    "actionView": "Voir"
+    "actionView": "Voir",
+    "convocation": "Convoquer"
   },
   "status": {
     "pending": "En cours d'examen",

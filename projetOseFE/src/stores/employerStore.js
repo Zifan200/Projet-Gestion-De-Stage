@@ -34,6 +34,16 @@ export const useEmployerStore = create()(
                     set({ error: e.message, loading: false });
                 }
             },
+
+            createConvocation: async (formData) => {
+                set({ loading: true, error: null });
+                try {
+                    await employerService.createConvocation(formData);
+                    set({ loading: false });
+                } catch (e) {
+                    set({ error: e.message, loading: false });
+                }
+            },
         }),
         { name: "employer-store" },
     ),

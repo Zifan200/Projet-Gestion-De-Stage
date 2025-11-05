@@ -19,6 +19,10 @@ import {
   Cross2Icon,
 } from "@radix-ui/react-icons";
 
+import {PhoneCallIcon} from "lucide-react";
+import {convocationSchema} from "../../models/convocation.js";
+import {authService} from "../../services/authService.js";
+
 export const InternshipApplications = () => {
   const { t } = useTranslation("internship_applications");
   const { applications, fetchApplications } = useEmployerStore();
@@ -30,9 +34,17 @@ export const InternshipApplications = () => {
     closePreview,
   } = useCvStore();
 
+  const { createConvocation: sendConvocation } = useEmployerStore();
+
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState(null);
+  const [modalType, setModalType] = useState(null);
+  const [dateConvocation, setDateConvocation] = useState("");
+  const [modeConvocation, setModeConvocation] = useState("");
+  const [location, setLocation] = useState("");
+  const [link, setLink] = useState("");
+  const [timeConvocation, setTimeConvocation] = useState("09:00");
 
   useEffect(() => {
     fetchApplications();
@@ -44,9 +56,15 @@ export const InternshipApplications = () => {
         case "view":
           setSelectedApplication(app);
           setIsModalOpen(true);
+          setModalType("view");
           break;
         case "preview":
           previewCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
+          break;
+        case "convocation" :
+          setSelectedApplication(app);
+          setIsModalOpen(true);
+          setModalType("convocation");
           break;
         case "download":
           downloadCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
@@ -96,6 +114,15 @@ export const InternshipApplications = () => {
             </>
           ),
         },
+        {
+          key: "convocation",
+          label: (
+              <>
+                <PhoneCallIcon className="w-4 h-4" />
+                <span>{t("table.convocation")}</span>
+              </>
+          )
+        }
       ],
     },
   ];
@@ -208,7 +235,7 @@ export const InternshipApplications = () => {
         </div>
       )}
 
-      {isModalOpen && selectedApplication && (
+      {modalType === "view" && isModalOpen && selectedApplication && (
         <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -251,6 +278,164 @@ export const InternshipApplications = () => {
             </div>
           </div>
         </div>
+      )}
+      {modalType === "convocation" && isModalOpen && selectedApplication && (
+          <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <PhoneCallIcon className="w-5 h-5 text-blue-500" />
+                {"Formulaire de convocation pour "}
+                {selectedApplication.studentFirstName}{" "}
+                {selectedApplication.studentLastName}
+              </h2>
+
+              <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+
+                    try {
+                      const token = localStorage.getItem("token");
+                      if (!token) {
+                        toast.error("Aucun token trouvé, veuillez vous reconnecter.");
+                        return;
+                      }
+
+                      const employerData = await authService.getMe(token);
+                      if (!employerData?.email) {
+                        toast.error("Impossible de récupérer l'email de l'employeur.");
+                        return;
+                      }
+
+                      const dateTimeConvocation = new Date(`${dateConvocation}T${timeConvocation}`).toISOString();
+
+                      const formData = {
+                        studentEmail: selectedApplication.studentEmail,
+                        employerEmail: employerData.email,
+                        convocationDate: dateTimeConvocation,
+                        location,
+                        link,
+                        internshipApplicationId: selectedApplication.id
+                      };
+
+                      console.log("FormData envoyé à Zod :", formData);
+                      const result = convocationSchema.safeParse(formData);
+                      console.log("Résultat du safeParse :", result);
+
+                      if (!result.success) {
+                        toast.error(result.error.errors[0]?.message || "Erreur dans le formulaire.");
+                        return;
+                      }
+
+                      await sendConvocation(formData)
+                      toast.success("Convocation envoyée avec succès !");
+                      setIsModalOpen(false);
+                      setSelectedApplication(null);
+
+                    } catch (error) {
+                      console.error("Erreur lors de l'envoi de la convocation :", error);
+                      toast.error(error.message || "Erreur inconnue");
+                    }
+                  }}
+
+                  className="flex flex-col gap-4"
+              >
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium mb-1">
+                    Date de convocation
+                  </label>
+                  <input
+                      type="date"
+                      min={new Date().toISOString().split("T")[0]}
+                      value={dateConvocation}
+                      onChange={(e) => setDateConvocation(e.target.value)}
+                      className="border border-gray-300 rounded p-2"
+                      required
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium mb-1">Heure de convocation</label>
+                  <input
+                      type="time"
+                      value={timeConvocation}
+                      onChange={(e) => setTimeConvocation(e.target.value)}
+                      className="border border-gray-300 rounded p-2"
+                      required
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium mb-1">
+                    Type de convocation
+                  </label>
+                  <select
+                      value={modeConvocation}
+                      onChange={(e) => {
+                        setModeConvocation(e.target.value);
+                        setLocation("");
+                        setLink("");
+                      }}
+                      className="border border-gray-300 rounded p-2"
+                      required
+                  >
+                    <option value="placeholder" >-- Sélectionner --</option>
+                    <option value="online">En ligne</option>
+                    <option value="in-person">En présentiel</option>
+                  </select>
+                </div>
+
+                {modeConvocation === "online" && (
+                    <div className="flex flex-col">
+                      <label className="text-sm font-medium mb-1">Lien de réunion</label>
+                      <input
+                          type="url"
+                          placeholder="https://meet.google.com/..."
+                          value={link}
+                          onChange={(e) => setLink(e.target.value)}
+                          className="border border-gray-300 rounded p-2"
+                          required
+                      />
+                    </div>
+                )}
+
+                {modeConvocation === "in-person" && (
+                    <div className="flex flex-col">
+                      <label className="text-sm font-medium mb-1">Lieu</label>
+                      <input
+                          type="text"
+                          placeholder="Ex : 1111 Rue Lapierre"
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                          className="border border-gray-300 rounded p-2"
+                          required
+                      />
+                    </div>
+                )}
+
+
+                <div className="flex mt-6 justify-end gap-3">
+                  <button
+                      type="submit"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    <PhoneCallIcon className="w-4 h-4" />
+                    Envoyer la convocation
+                  </button>
+
+                  <button
+                      className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        setSelectedApplication(null);
+                      }}
+                  >
+                    <Cross2Icon className="w-4 h-4" />
+                    {t("modal.close")}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
       )}
     </div>
   );

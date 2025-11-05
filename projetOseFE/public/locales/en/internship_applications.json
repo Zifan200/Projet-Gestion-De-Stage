@@ -10,7 +10,8 @@
     "noCv": "No CV",
     "status": "Status",
     "action": "Action",
-    "actionView": "View"
+    "actionView": "View",
+    "convocation": "Convocation"
   },
   "status": {
     "pending": "Under Review",
