@@ -13,7 +13,7 @@ export const menuConfig = [
         title: "signupTitle",
         links: [
           { label: "student", href: "/signup/student" },
-          { label: "manager", href: "/signup/gs" },
+          // { label: "manager", href: "/signup/gs" },
           { label: "employer", href: "/signup/employer" },
         ],
       },

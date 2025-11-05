@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "../../components/ui/header.jsx";
 import { DataTable } from "../../components/ui/data-table.jsx";
+import { Modal } from "../../components/ui/modal.jsx";
 import { useOfferStore } from "../../stores/offerStore.js";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
@@ -13,26 +14,6 @@ import {
 } from "../../components/ui/popover.jsx";
 import useAuthStore from "../../stores/authStore.js";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
-
-const Modal = ({ open, onClose, title, children }) => {
-  if (!open) return null;
-  return (
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">{title}</h2>
-            <button
-                onClick={onClose}
-                className="text-gray-500 hover:text-gray-800 text-lg"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="text-gray-800">{children}</div>
-        </div>
-      </div>
-  );
-};
 
 export const OfferList = () => {
   const { t } = useTranslation("employer_dashboard_offers");
@@ -99,7 +80,11 @@ export const OfferList = () => {
     { key: "enterpriseName", label: t("table.enterprise") },
     { key: "targetedProgramme", label: t("table.program") },
     { key: "expirationDate", label: t("table.deadline") },
-    { key: "status", label: t("table.status") },
+    {
+      key: "status",
+      label: t("table.status"),
+      format: (status) => t(`status.${status?.toLowerCase()}`)
+    },
     { key: "applicationCount", label: t("table.applications") },
     {
       key: "actions",
@@ -130,8 +115,6 @@ export const OfferList = () => {
   const tableData = sortedAndFilteredOffers.map((offer) => ({
     ...offer,
     expirationDate: new Date(offer.expirationDate).toLocaleDateString(),
-    rawStatus: offer.status?.toLowerCase(),
-    status: t(`status.${offer.status?.toLowerCase()}`),
   }));
 
   return (
@@ -281,35 +264,63 @@ export const OfferList = () => {
             open={!!selectedOffer}
             onClose={() => setSelectedOffer(null)}
             title={selectedOffer?.title}
+            size="default"
+            footer={
+              <button
+                onClick={() => setSelectedOffer(null)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                <span>{t("actions.close")}</span>
+              </button>
+            }
         >
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="font-semibold">{t("table.enterprise")}:</span>
-              <span>{selectedOffer?.enterpriseName}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="font-semibold">{t("table.program")}:</span>
-              <span>{selectedOffer?.targetedProgramme}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="font-semibold">{t("table.deadline")}:</span>
-              <span>{new Date(selectedOffer?.expirationDate).toLocaleDateString()}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="font-semibold">{t("table.status")}:</span>
-              <span>{t(`status.${selectedOffer?.status?.toLowerCase()}`)}</span>
-            </div>
-            {selectedOffer?.reason?.trim() && (
-                <div className="flex gap-2">
-                  <span className="font-semibold">{t("table.reason")}:</span>
-                  <span>{selectedOffer.reason}</span>
+          {selectedOffer && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.enterprise")}</h3>
+                  <p className="text-gray-600">{selectedOffer.enterpriseName}</p>
                 </div>
-            )}
-            <div className="flex flex-col gap-1">
-              <span className="font-semibold">{t("table.description")}:</span>
-              <p className="text-gray-800 whitespace-pre-line">{selectedOffer?.description || t("noDescription")}</p>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.program")}</h3>
+                  <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.deadline")}</h3>
+                  <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.status")}</h3>
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    selectedOffer.status === "ACCEPTED" ? "bg-green-100 text-green-800" :
+                    selectedOffer.status === "REJECTED" ? "bg-red-100 text-red-800" :
+                    "bg-yellow-100 text-yellow-800"
+                  }`}>
+                    {t(`status.${selectedOffer.status?.toLowerCase()}`)}
+                  </span>
+                </div>
+              </div>
+
+              {selectedOffer.reason?.trim() && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.reason")}</h3>
+                  <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.reason}</p>
+                </div>
+              )}
+
+              {selectedOffer.description && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.description")}</h3>
+                  <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </Modal>
       </div>
   );
