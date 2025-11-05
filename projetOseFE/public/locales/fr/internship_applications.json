@@ -33,7 +33,13 @@
     "reason": "Raison"
   },
   "reasonModal": {
-    "description": "Expliquez pourquoi vous rejetez cette candidature."
+    "title": "Raison du refus",
+    "description": "Expliquez pourquoi vous rejetez cette candidature.",
+    "label": "Raison",
+    "placeholder": "Entrez la raison du refus...",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "errorEmpty": "Veuillez fournir une raison pour le refus"
   },
   "previewCv": "Aperçu du CV",
   "closeCvPreview": "Fermer l'aperçu",
@@ -57,7 +63,8 @@
     "rejected": "Candidature rejetée avec succès"
   },
   "errors": {
-    "reject": "Échec de l'approbation de la candidature",
+    "accept": "Échec de l'approbation de la candidature",
+    "reject": "Échec du rejet de la candidature",
     "downloadCv": "Erreur lors du téléchargement du CV."
   }
 }
