@@ -114,13 +114,26 @@ public class Main {
                             .EndDate(LocalDate.of(2025, 7, 1))
                             .employerEmail(employer.getEmail())
                             .build());
+
+            InternshipOfferResponseDto offer4 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
+                    InternshipOfferDto.builder()
+                            .title("Junior Frontend Dev")
+                            .description("Stage: ReactJS avec API REST")
+                            .targetedProgramme("Informatique")
+                            .expirationDate(LocalDate.now().plusMonths(2))
+                            .startDate(LocalDate.of(2025, 3, 1))
+                            .EndDate(LocalDate.of(2025, 6, 1))
+                            .employerEmail(employer.getEmail())
+                            .build());
                             internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
                             internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
                             internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
+                            internshipOfferService.updateOfferStatus(offer4.getId(), ApprovalStatus.ACCEPTED, "");
 
             internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
             internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
             internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(offer4.getId(), ApprovalStatus.ACCEPTED, "");
 
             // -----------------------------
             // 4️⃣ Création étudiant + CV
