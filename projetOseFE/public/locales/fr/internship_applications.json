@@ -66,13 +66,10 @@
     "rejected": "Candidature rejetée avec succès",
     "downloadOffer": "Offre de stage téléchargée avec succès"
   },
-  //fix this later
   "errors": {
     "reject": "Échec de l'approbation de la candidature",
     "downloadCv": "Erreur lors du téléchargement du CV.",
-    "downloadOffer": "Échec du téléchargement de l'offre de stage"
-    "accept": "Échec de l'approbation de la candidature",
-    "reject": "Échec du rejet de la candidature",
-    "downloadCv": "Erreur lors du téléchargement du CV."
+    "downloadOffer": "Échec du téléchargement de l'offre de stage",
+    "accept": "Échec de l'approbation de la candidature"
   }
 }
