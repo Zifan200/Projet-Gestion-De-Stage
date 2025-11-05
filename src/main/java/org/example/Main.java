@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootApplication
 public class Main {
@@ -224,6 +225,16 @@ public class Main {
             internshipApplicationService.approveInternshipApplication(employer.getEmail(), app3.getId());
 
             System.out.println("⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n’a rien fait)");
+
+            PreLoadedActors loader = PreLoadedActors.getInstance(context);
+            List<EtudiantDTO> generatedStudents = loader.genStudents(4);
+            List<EmployerDto> generatedEmployers = loader.genEmployers(4);
+            List<InternshipOfferDto> generatedOffers = loader.genInternshipOffers(6);
+
+            for(EtudiantDTO generatedStudentDTO : generatedStudents){
+                System.out.println(generatedStudentDTO);
+                loader.associateEmptyCvToStudent(generatedStudentDTO);
+            }
         };
     }
 }
