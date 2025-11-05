@@ -5,7 +5,8 @@
     "pendingCvs": "CVs en attente",
     "availableOffers": "Offres disponibles",
     "acceptedOffers": "Offres acceptées",
-    "pendingOffers": "Offres en attente"
+    "pendingOffers": "Offres en attente",
+    "myApplications": "Mes candidatures"
   },
   "messages": {
     "welcome": "Bon retour, {{firstName}} !",

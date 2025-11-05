@@ -1,5 +1,5 @@
 {
-  "title": "Candidatures",
+  "title": "Mes candidatures",
   "table": {
     "offerTitle": "Titre de l'offre",
     "studentName": "Nom de l'étudiant",
@@ -23,10 +23,21 @@
     "accepted": "Acceptée",
     "rejected": "Refusée",
     "reviewing": "En révision",
-    "confirmed_by_student": "Acceptée par l'étudiant",
-    "rejected_by_student": "Refusée par l'étudiant"
+    "confirmed_by_student": "Acceptée",
+    "rejected_by_student": "Refusée",
+    "declined": "Déclinée"
   },
   "modal": {
+    "title": "Détails de l'offre",
+    "description": "Description",
+    "session": "Session",
+    "hiver": "Hiver",
+    "automne": "Automne",
+    "employerDecision": "Décision de l'employeur",
+    "employer": "Employeur",
+    "startDate": "Date de début",
+    "applicationDate": "Date de candidature",
+    "noSemester": "Aucune session (date non définie)",
     "email": "Courriel",
     "cv": "CV",
     "offerTitle": "Offre",
@@ -36,13 +47,7 @@
     "reason": "Raison"
   },
   "reasonModal": {
-    "title": "Raison du refus",
-    "description": "Expliquez pourquoi vous rejetez cette candidature.",
-    "label": "Raison",
-    "placeholder": "Entrez la raison du refus...",
-    "cancel": "Annuler",
-    "confirm": "Confirmer",
-    "errorEmpty": "Veuillez fournir une raison pour le refus"
+    "description": "Expliquez pourquoi vous rejetez cette candidature."
   },
   "previewCv": "Aperçu du CV",
   "closeCvPreview": "Fermer l'aperçu",
@@ -50,7 +55,10 @@
     "status": "Filtrer par Statut",
     "all": "Tous les Statuts",
     "session": "Filtrer par Session",
-    "year": "Filtrer par Année"
+    "year": "Filtrer par Année",
+    "employerDecision": "Décision de l'employeur",
+    "myDecision": "Ma décision",
+    "allDecisions": "Toutes"
   },
   "session": {
     "all": "Toutes les Sessions",
@@ -69,7 +77,6 @@
   "errors": {
     "reject": "Échec de l'approbation de la candidature",
     "downloadCv": "Erreur lors du téléchargement du CV.",
-    "downloadOffer": "Échec du téléchargement de l'offre de stage",
-    "accept": "Échec de l'approbation de la candidature"
+    "downloadOffer": "Échec du téléchargement de l'offre de stage"
   }
 }

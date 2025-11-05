@@ -1,5 +1,5 @@
 {
-  "title": "Applications",
+  "title": "My applications",
   "table": {
     "offerTitle": "Offer Title",
     "studentName": "Student Name",
@@ -23,10 +23,21 @@
     "accepted": "Accepted",
     "rejected": "Declined",
     "reviewing": "In Review",
-    "confirmed_by_student": "Accepted by Student",
-    "rejected_by_student": "Declined by Student"
+    "confirmed_by_student": "Accepted",
+    "rejected_by_student": "Declined",
+    "declined": "Declined"
   },
   "modal": {
+    "title": "Offer Details",
+    "description": "Description",
+    "session": "Semester",
+    "hiver": "Winter",
+    "automne": "Fall",
+    "employerDecision": "Employer's decision",
+    "employer": "Employer",
+    "startDate": "Start date",
+    "applicationDate": "Application date",
+    "noSemester": "No semester (date undefined)",
     "email": "Email",
     "cv": "CV",
     "offerTitle": "Offer",
@@ -36,24 +47,21 @@
     "reason": "Reason"
   },
   "reasonModal": {
-    "title": "Rejection Reason",
-    "description": "Explain why you are rejecting this application.",
-    "label": "Reason",
-    "placeholder": "Enter the reason for rejection...",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "errorEmpty": "Please provide a reason for rejection"
+    "description": "Explain why you are rejecting this application."
   },
   "previewCv": "Preview CV",
   "closeCvPreview": "Close Preview",
   "filter": {
     "status": "Filter by Status",
     "all": "All Statuses",
-    "session": "Filter by Session",
-    "year": "Filter by Year"
+    "session": "Filter by Semester",
+    "year": "Filter by Year",
+    "employerDecision": "Employer's decision",
+    "myDecision": "My decision",
+    "allDecisions": "All"
   },
   "session": {
-    "all": "All Sessions",
+    "all": "All Semesters",
     "automne": "Fall",
     "hiver": "Winter",
     "AllYears": "All Years"
