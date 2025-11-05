@@ -114,4 +114,12 @@ public class EmployerController {
     public ResponseEntity<ConvocationDTO> createConvocation(@RequestBody ConvocationDTO convocationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(convocationService.createConvocation(convocationDto));
     }
+
+    @GetMapping("/liste-convocations-employer")
+    public ResponseEntity<List<ConvocationDTO>> getConvocationsForStudent(
+            HttpServletRequest request
+    ) {
+        String employerEmail = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(convocationService.getAllConvocationsForEmployer(employerEmail));
+    }
 }

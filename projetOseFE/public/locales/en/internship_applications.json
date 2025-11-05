@@ -32,7 +32,8 @@
     "status": "Status",
     "appliedAt": "Applied on",
     "close": "Close",
-    "reason": "Reason"
+    "reason": "Reason",
+    "submit": "Submit convocation"
   },
   "reasonModal": {
     "description": "Explain why you are rejecting this application."

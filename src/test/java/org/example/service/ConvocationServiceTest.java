@@ -128,7 +128,7 @@ class ConvocationServiceTest {
         when(convocationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         ConvocationDTO updated = convocationService.updateConvocationStatus(1L,
-                "student@test.com", ApprovalStatus.ACCEPTED);
+                "student@test.com", ApprovalStatus.CONFIRMED_BY_STUDENT);
 
         assertEquals(ApprovalStatus.ACCEPTED, updated.getStatus());
         verify(convocationRepository, times(1)).save(convocation);

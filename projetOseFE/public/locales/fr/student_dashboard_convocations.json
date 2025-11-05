@@ -1,0 +1,40 @@
+{
+  "table": {
+    "title": "Convocations",
+    "offerTitle": "Intitulé du stage",
+    "company": "Entreprise",
+    "convocationDate": "Date de convocation",
+    "status": "Statut",
+    "action": "Actions"
+  },
+  "filter": {
+    "status": "Statut de la convocation",
+    "all": "Tous",
+    "close": "Fermer"
+  },
+  "actions": {
+    "view": "Voir les détails",
+    "confirm": "Confirmer",
+    "reject": "Refuser"
+  },
+  "modal": {
+    "title": "Détails de la convocation",
+    "offerTitle": "Intitulé du stage",
+    "employer": "Employeur",
+    "convocationDate": "Date de convocation",
+    "status": "Statut",
+    "createdAt": "Créé le",
+    "close": "Fermer",
+    "unknownOffer": "???"
+  },
+  "convocationStatus": {
+    "pending": "En attente",
+    "confirmed_by_student": "Confirmé",
+    "rejected_by_student": "Refusé"
+  },
+  "loading": "Chargement...",
+  "noConvocations": "Aucune convocation trouvée",
+  "errors": {
+    "generic": "Une erreur est survenue"
+  }
+}

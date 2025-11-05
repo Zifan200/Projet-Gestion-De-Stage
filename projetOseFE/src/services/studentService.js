@@ -53,5 +53,23 @@ export const studentService = {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
-  }
+  },
+  async updateConvocationStatus(convocationId, studentEmail, convocationStatus, token) {
+    const res = await api.put("/student/modify-convocation-status",
+        {
+          id: convocationId,
+          studentEmail: studentEmail,
+          status: convocationStatus,
+        },
+        {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
+  async getConvocationsForStudent(token) {
+    const res = await api.get("/student/liste-convocations-etudiant", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
 };

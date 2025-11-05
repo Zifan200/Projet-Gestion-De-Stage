@@ -102,6 +102,54 @@ export const useStudentStore = create(
                     });
                 }
             },
+
+            loadConvocations: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await studentService.getConvocationsForStudent(token);
+
+                    // Ajouter rawStatus
+                    const applicationsWithRawStatus = data.map(conv => ({
+                        ...conv,
+                        rawStatus: conv.status.toLowerCase() // normalise en minuscules pour DataTable
+                    }));
+
+                    set({ applications: applicationsWithRawStatus, loading: false });
+                } catch (err) {
+                    set({
+                        error: err.response?.data?.message || err.message || "Erreur inconnue",
+                        loading: false,
+                    });
+                }
+            },
+
+            updateConvocationStatus: async (convocationId, studentEmail, status, token) => {
+                try {
+                    set({ loading: true, error: null, successMessage: null });
+                    const res = await studentService.updateConvocationStatus(convocationId, studentEmail, status, token);
+
+                    // Mettre à jour localement l'application
+                    const updated = get().applications.map((conv) =>
+                        conv.id === convocationId ? { ...conv, status } : conv
+                    );
+
+                    set({
+                        applications: updated,
+                        loading: false,
+                        successMessage:
+                            status === ApprovalStatus.CONFIRMED_BY_STUDENT
+                                ? statusMessages.CONFIRMED_BY_STUDENT
+                                : statusMessages.REJECTED_BY_STUDENT,
+                    });
+
+                    return res;
+                }
+                catch (err) {
+                    const message = err.response?.data?.message || err.message ||
+                        "Erreur lors de la mise à jour de la convocation";
+                    set({ error: message, loading: false });
+                }
+            },
             clearMessages: () => set({ successMessage: null, error: null }),
 
         }),

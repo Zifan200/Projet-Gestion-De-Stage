@@ -5,10 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.model.InternshipApplication;
 import org.example.model.enums.ApprovalStatus;
-import org.example.service.InternshipApplicationService;
-import org.example.service.StudentService;
-import org.example.service.EmailService;
-import org.example.service.UserAppService;
+import org.example.service.*;
+import org.example.service.dto.internshipApplication.ConvocationDTO;
 import org.example.service.dto.student.EtudiantDTO;
 import org.example.model.EmailMessage;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
@@ -31,6 +29,7 @@ public class EtudiantController {
     private final StudentService studentService;
     private final EmailService emailService;
     private final InternshipApplicationService internshipApplicationService;
+    private final ConvocationService convocationService;
 
     @PostMapping("/register")
     public ResponseEntity<EtudiantDTO> inscription(@Valid @RequestBody EtudiantDTO etudiantDTO) {
@@ -138,5 +137,19 @@ public class EtudiantController {
         return ResponseEntity.ok(acceptedApplications);
     }
 
+    @PutMapping("/modify-convocation-status")
+    public ResponseEntity<ConvocationDTO> updateConvocationStatus(@RequestBody ConvocationDTO convocationDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(convocationService.updateConvocationStatus(
+                convocationDto.getId(),
+                convocationDto.getStudentEmail(),
+                convocationDto.getStatus()));
+    }
 
+    @GetMapping("/liste-convocations-etudiant")
+    public ResponseEntity<List<ConvocationDTO>> getConvocationsForStudent(
+            HttpServletRequest request
+    ) {
+        String studentEmail = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
+        return ResponseEntity.ok(convocationService.getAllConvocationsForStudent(studentEmail));
+    }
 }

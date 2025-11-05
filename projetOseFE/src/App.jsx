@@ -36,6 +36,8 @@ import { InternshipApplications } from "./pages/employer/internshipApplication.j
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 import { DevMode } from "./components/tools/dev-mode.jsx";
 import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
+import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
+import {PhoneCallIcon} from "lucide-react";
 
 function App() {
   const { t } = useTranslation([
@@ -70,6 +72,12 @@ function App() {
       label: t("student_dashboard_decision:stats.decisionStatus"),
       href: "/dashboard/student/internshipFinalDecision",
       icon: CheckIcon,
+    },
+    {
+      key: "convocation",
+      label: t("student_dashboard:titles.convocation"),
+      href: "/dashboard/student/convocations",
+      icon: PhoneCallIcon
     },
     {
       key: "settings",
@@ -202,6 +210,10 @@ function App() {
             <Route
                 path="/dashboard/student/internshipFinalDecision"
                 element={<OffresAConfirmer />}
+            />
+            <Route
+                path="/dashboard/student/convocations"
+                element={<StudentConvocations />}
             />
           </Route>
 

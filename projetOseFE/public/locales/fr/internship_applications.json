@@ -32,7 +32,8 @@
     "status": "Statut",
     "appliedAt": "Postulé le",
     "close": "Fermer",
-    "reason": "Raison"
+    "reason": "Raison",
+    "submit": "Envoyer la convocation"
   },
   "reasonModal": {
     "description": "Expliquez pourquoi vous rejetez cette candidature."
