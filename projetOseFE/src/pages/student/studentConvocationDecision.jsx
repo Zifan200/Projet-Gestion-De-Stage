@@ -51,12 +51,12 @@ export default function StudentConvocations() {
 
     const columns = useMemo(() => [
         { key: "internshipOfferTitle", label: t("table.offerTitle") },
-        { key: "employerEmail", label: t("table.company") },
+        { key: "employerEnterpriseName", label: t("table.company") },
         { key: "convocationDate", label: t("table.convocationDate"), format: (date) => date ? new Date(date).toLocaleString() : "" },
         {
             key: "status",
             label: t("table.status"),
-            format: (status) => status ? t(`convocationStatus.${status.toLowerCase()}`) : t("convocationStatus.pending")
+
         },
         {
             key: "actions",
@@ -68,10 +68,18 @@ export default function StudentConvocations() {
     ], [t]);
 
     const filteredConvocations = useMemo(() => {
-        return filterStatus
+        const filtered = filterStatus
             ? convocations.filter((conv) => conv.status === filterStatus)
             : convocations;
-    }, [convocations, filterStatus]);
+
+        return filtered.map(conv => ({
+            ...conv,
+            rawStatus: conv.status === "CONFIRMED_BY_STUDENT" ? "accepted"
+                : conv.status === "REJECTED_BY_STUDENT" ? "rejected"
+                    : "pending",
+            status: t(`convocationStatus.${conv.status.toLowerCase()}`)
+        }));
+    }, [convocations, filterStatus, t]);
 
     const handleAction = async (actionKey, convocation) => {
         setSelectedConvocation(convocation);
@@ -172,7 +180,7 @@ export default function StudentConvocations() {
 
                         <div>
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employer")}</h3>
-                            <p className="text-gray-600">{selectedConvocation.employerEmail}</p>
+                            <p className="text-gray-600">{selectedConvocation.employerEnterpriseName}</p>
                         </div>
 
                         <div>

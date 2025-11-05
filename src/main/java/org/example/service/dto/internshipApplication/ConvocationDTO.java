@@ -26,6 +26,7 @@ public class ConvocationDTO {
     @NotEmpty
     private String employerEmail;
     private String internshipOfferTitle;
+    private String employerEnterpriseName;
 
     private ApprovalStatus status =  ApprovalStatus.PENDING;
 
@@ -43,7 +44,8 @@ public class ConvocationDTO {
 
     @Builder
     public ConvocationDTO (Long id, String studentEmail, String employerEmail, ApprovalStatus status,
-                           LocalDateTime convocationDate, String location, String link, Long internshipApplicationId, Long internshipOfferId, String internshipOfferTitle) {
+                           LocalDateTime convocationDate, String location, String link, Long internshipApplicationId,
+                           Long internshipOfferId, String internshipOfferTitle, String employerEnterpriseName) {
         this.id = id;
         this.studentEmail = studentEmail;
         this.employerEmail = employerEmail;
@@ -54,6 +56,7 @@ public class ConvocationDTO {
         this.internshipApplicationId = internshipApplicationId;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
+        this.employerEnterpriseName = employerEnterpriseName;
     }
 
     public static ConvocationDTO convertToDTO (Convocation convocation) {
@@ -67,6 +70,7 @@ public class ConvocationDTO {
                 .link(convocation.getLink())
                 .internshipApplicationId(convocation.getInternshipApplication().getId())
                 .internshipOfferTitle(convocation.getInternshipApplication().getOffer().getTitle())
+                .employerEnterpriseName(convocation.getEmployer().getEnterpriseName())
                 .build();
     }
 
