@@ -12,7 +12,7 @@ import { DownloadIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Modal } from "../../components/ui/modal.jsx";
 
 export const StudentApplications = () => {
-    const { t } = useTranslation("internship_applications");
+    const { t } = useTranslation("student_dashboard_applications");
     const navigate = useNavigate();
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -68,7 +68,8 @@ export const StudentApplications = () => {
     const columns = [
         { key: "internshipOfferTitle", label: t("table.offerTitle") },
         { key: "appliedAt", label: t("table.appliedAt") },
-        { key: "status", label: t("table.status") },
+        { key: "status", label: t("table.employerDecision") },
+        { key: "etudiantStatus", label: t("table.myDecision") },
         {
             key: "actions",
             label: t("table.action"),
@@ -117,6 +118,7 @@ export const StudentApplications = () => {
         appliedAt: new Date(app.createdAt).toLocaleDateString(),
         rawStatus: app.status?.toLowerCase(),
         status: t(`status.${app.status?.toLowerCase()}`),
+        etudiantStatus: t(`status.${app.etudiantStatus?.toLowerCase()}`),
     }));
 
     const handleDownloadApplication = async (offerId) => {
