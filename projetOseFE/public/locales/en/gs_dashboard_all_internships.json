@@ -46,13 +46,25 @@
     "description": "Description",
     "status": "Status",
     "rejectReason": "Rejection Reason",
+    "reasonDescription": "Please provide a reason for rejecting this offer.",
     "reasonPlaceholder": "Enter a reason for rejection...",
     "reasonRequired": "A reason is required to reject an offer.",
     "accept": "Accept",
     "reject": "Reject",
     "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "accepted": "Offer accepted successfully!",
     "rejectSuccess": "Offer rejected successfully!"
+  },
+  "modalSelectedOfferApplications": {
+    "title": "Applicants",
+    "noApplications": "no applications",
+    "numberOfApplications": "number of applicants",
+    "btnLabels": {
+      "seeApplications": "see applicants",
+      "back": "back"
+    }
   },
   "menu": {
     "close": "Close"

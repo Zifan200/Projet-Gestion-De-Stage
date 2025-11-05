@@ -1,0 +1,35 @@
+{
+  "title": "Candidats",
+  "loading": "chargement...",
+  "noApplications": "aucune candidature",
+  "numberOfApplications": "nombre de candidats",
+  "tableHeaders": {
+    "studentName": "nom de l'étudiant",
+    "studentProgramme": "programme d'études",
+    "applicationStatus": "statut de la candidature",
+    "applicationDate": "date de candidature"
+  },
+  "applicationStatus": {
+    "pending": " en attente d'approbation",
+    "rejected": "refusé",
+    "accepted": "accepté"
+  },
+  "btnLabels": {
+    "seeApplications": "voir les candidatures",
+    "back": "retour"
+  },
+  "filterType": {
+    "applicantName": "filtrer par nom"
+  },
+  "filterLabels": {
+    "alphabetical": "alphabétique",
+    "reverseAlphabetical": "alphabétique inversé"
+  },
+  "menu": {
+    "close": "fermer"
+  },
+  "errors": {
+    "openCv": "Impossible d'afficher le CV"
+  },
+  "cantOpenCv": "Impossible d'ouvrir le CV"
+}

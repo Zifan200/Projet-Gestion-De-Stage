@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootApplication
 public class Main {
@@ -113,13 +114,26 @@ public class Main {
                             .EndDate(LocalDate.of(2025, 7, 1))
                             .employerEmail(employer.getEmail())
                             .build());
+
+            InternshipOfferResponseDto offer4 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
+                    InternshipOfferDto.builder()
+                            .title("Junior Frontend Dev")
+                            .description("Stage: ReactJS avec API REST")
+                            .targetedProgramme("Informatique")
+                            .expirationDate(LocalDate.now().plusMonths(2))
+                            .startDate(LocalDate.of(2025, 3, 1))
+                            .EndDate(LocalDate.of(2025, 6, 1))
+                            .employerEmail(employer.getEmail())
+                            .build());
                             internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
                             internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
                             internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
+                            internshipOfferService.updateOfferStatus(offer4.getId(), ApprovalStatus.ACCEPTED, "");
 
             internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
             internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");
             internshipOfferService.updateOfferStatus(offer3.getId(), ApprovalStatus.ACCEPTED, "");
+            internshipOfferService.updateOfferStatus(offer4.getId(), ApprovalStatus.ACCEPTED, "");
 
             // -----------------------------
             // 4️⃣ Création étudiant + CV
@@ -224,6 +238,16 @@ public class Main {
             internshipApplicationService.approveInternshipApplication(employer.getEmail(), app3.getId());
 
             System.out.println("⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n’a rien fait)");
+
+            PreLoadedActors loader = PreLoadedActors.getInstance(context);
+            List<EtudiantDTO> generatedStudents = loader.genStudents(4);
+            List<EmployerDto> generatedEmployers = loader.genEmployers(4);
+            List<InternshipOfferDto> generatedOffers = loader.genInternshipOffers(6);
+
+            for(EtudiantDTO generatedStudentDTO : generatedStudents){
+                System.out.println(generatedStudentDTO);
+                loader.associateEmptyCvToStudent(generatedStudentDTO);
+            }
         };
     }
 }

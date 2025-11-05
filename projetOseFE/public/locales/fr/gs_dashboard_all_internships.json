@@ -46,13 +46,25 @@
     "description": "Description",
     "status": "Statut",
     "rejectReason": "Raison du rejet",
+    "reasonDescription": "Veuillez fournir une raison pour le rejet de cette offre.",
     "reasonPlaceholder": "Entrez la raison du rejet...",
     "reasonRequired": "Une raison est requise pour rejeter une offre.",
     "accept": "Accepter",
     "reject": "Rejeter",
     "close": "Fermer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
     "accepted": "Offre acceptée avec succès !",
     "rejectSuccess": "Offre rejetée avec succès !"
+  },
+  "modalSelectedOfferApplications": {
+    "title": "Candidats",
+    "noApplications": "aucune candidature",
+    "numberOfApplications": "nombre de candidats",
+    "btnLabels": {
+      "seeApplications": "voir les candidatures",
+      "back": "retour"
+    }
   },
   "menu": {
     "close": "Fermer"

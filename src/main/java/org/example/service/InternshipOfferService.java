@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,6 +73,7 @@ public class InternshipOfferService {
                 .startDate(internshipOfferDto.getStartDate())
                 .endDate(internshipOfferDto.getEndDate())
                 .session(session)
+                .applications(new ArrayList<>())
                 .build();
 
         var savedInternshipOffer = internshipOfferRepository.save(internshipOffer);
@@ -139,6 +141,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .applicationCount(offer.getApplications().size())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -237,9 +240,9 @@ public class InternshipOfferService {
                 .orElseThrow(() -> new InvalidInternShipOffer("Offer not found with id: " + offerId));
         offer.setStatus(status);
         offer.setReason(reasons);
-        internshipOfferRepository.save(offer);
+        var savedInternshipOffer = internshipOfferRepository.save(offer);
         eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
-        return InternshipOfferResponseDto.create(offer);
+        return InternshipOfferResponseDto.create(savedInternshipOffer);
     }
 
     public List<InternshipOfferListDto> getAcceptedOffersByProgramme(String programme) {

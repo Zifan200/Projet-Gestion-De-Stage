@@ -8,6 +8,7 @@ import { useStudentStore } from "../../stores/studentStore.js";
 import { toast } from "sonner";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { Header } from "../../components/ui/header.jsx";
+import { Modal } from "../../components/ui/modal.jsx";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "../../components/ui/popover.jsx";
 
@@ -242,44 +243,89 @@ export const StudentOffers = () => {
       <DataTable columns={columns} data={tableData} onAction={handleAction} />
 
       {/* Modal */}
-      {isModalOpen && selectedOffer && (
-        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              {selectedOffer.title}
-            </h2>
-            <p>
-              <strong>{t("modal.companyEmail")}:</strong>{" "}
-              {selectedOffer.employerEmail}
-            </p>
-            <p>
-              <strong>{t("modal.targetedProgramme")}:</strong>{" "}
-              {selectedOffer.targetedProgramme}
-            </p>
-            <p>
-              <strong>{t("modal.publishedDate")}:</strong>{" "}
-              {selectedOffer.publishedDate
-                ? new Date(selectedOffer.publishedDate).toLocaleDateString()
-                : "-"}
-            </p>
-            <p>
-              <strong>{t("modal.deadline")}:</strong>{" "}
-              {selectedOffer.expirationDate
-                ? new Date(selectedOffer.expirationDate).toLocaleDateString()
-                : "-"}
-            </p>
-            <p>
-              <strong>{t("modal.description")}:</strong>{" "}
-              {selectedOffer.description}
-            </p>
+      <Modal
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedOffer(null);
+          setSelectedCv(null);
+        }}
+        title={selectedOffer?.title}
+        size="default"
+        footer={
+          <>
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                setSelectedOffer(null);
+                setSelectedCv(null);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              <span>{t("modal.close")}</span>
+            </button>
+            <button
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                selectedCv
+                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+              onClick={handleApply}
+              disabled={!selectedCv}
+            >
+              <span>{t("modal.apply")}</span>
+            </button>
+          </>
+        }
+      >
+        {selectedOffer && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
+                <p className="text-gray-600">{selectedOffer.employerEmail}</p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.targetedProgramme")}</h3>
+                <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.publishedDate")}</h3>
+                <p className="text-gray-600">
+                  {selectedOffer.publishedDate
+                    ? new Date(selectedOffer.publishedDate).toLocaleDateString()
+                    : "-"}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.deadline")}</h3>
+                <p className="text-gray-600">
+                  {selectedOffer.expirationDate
+                    ? new Date(selectedOffer.expirationDate).toLocaleDateString()
+                    : "-"}
+                </p>
+              </div>
+            </div>
+
+            {selectedOffer.description && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+              </div>
+            )}
 
             {/* CV Select */}
-            <div className="mt-4">
-              <label className="block mb-1 font-semibold">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t("modal.selectCv")}
               </label>
               <select
-                className="w-full border rounded px-2 py-1"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                 value={selectedCv?.id || ""}
                 onChange={(e) =>
                   setSelectedCv(
@@ -297,34 +343,9 @@ export const StudentOffers = () => {
                   ))}
               </select>
             </div>
-
-            <div className="mt-6 flex justify-between">
-              <button
-                className={`px-4 py-2 rounded text-white ${
-                  selectedCv
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
-                onClick={handleApply}
-                disabled={!selectedCv}
-              >
-                {t("modal.apply")}
-              </button>
-
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setSelectedOffer(null);
-                  setSelectedCv(null);
-                }}
-              >
-                {t("modal.close")}
-              </button>
-            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   );
 };

@@ -36,7 +36,13 @@
     "submit": "Submit convocation"
   },
   "reasonModal": {
-    "description": "Explain why you are rejecting this application."
+    "title": "Rejection Reason",
+    "description": "Explain why you are rejecting this application.",
+    "label": "Reason",
+    "placeholder": "Enter the reason for rejection...",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "errorEmpty": "Please provide a reason for rejection"
   },
   "previewCv": "Preview CV",
   "closeCvPreview": "Close Preview",

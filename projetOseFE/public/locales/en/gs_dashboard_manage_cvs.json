@@ -28,6 +28,11 @@
   },
   "empty": "No resumes available.",
   "unknownStudent": "Unknown student",
+  "gsManageCvs": {
+    "rejectModal": {
+      "description": "Please explain why you are rejecting this resume."
+    }
+  },
   "toast": {
     "downloadSuccess": "{{fileName}} downloaded successfully!",
     "downloadError": "Failed to download resume.",

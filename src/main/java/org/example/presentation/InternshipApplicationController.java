@@ -3,7 +3,6 @@ package org.example.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.InternshipApplicationService;
-import org.example.service.UserAppService;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.dto.student.EtudiantDecisionDTO;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class InternshipApplicationController {
     public ResponseEntity<List<InternshipApplicationResponseDTO>> getAllInternshipApplicationsFromOffer(
             @PathVariable Long id
     ){
-        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOffer(id));
+        return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOfferId(id));
     }
 
     @GetMapping("/get-all/{status}/internship-offer/{id}")

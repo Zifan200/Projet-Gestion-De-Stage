@@ -10,7 +10,7 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 
 export default function OffresAConfirmer() {
     const { t } = useTranslation("student_dashboard_decision");
-    const { token } = useAuthStore();
+    const { token, user } = useAuthStore();
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState("details");
@@ -30,10 +30,10 @@ export default function OffresAConfirmer() {
 
     // Charger uniquement les candidatures approuvées par l'employeur
     useEffect(() => {
-        if (token) {
+        if (token && user?.role === "STUDENT") {
             loadAcceptedApplications(token);
         }
-    }, [loadAcceptedApplications, token]);
+    }, [loadAcceptedApplications, token, user?.role]);
 
     // DEBUG : afficher les applications dans la console
     useEffect(() => {
