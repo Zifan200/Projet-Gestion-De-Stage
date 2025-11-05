@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 import { StatCard } from "../../components/ui/stat-card.jsx";
-import { FileTextIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import {FileTextIcon, EyeOpenIcon, CheckIcon, EnvelopeClosedIcon} from "@radix-ui/react-icons";
 import { useCvStore } from "../../stores/cvStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import {useStudentStore} from "../../stores/studentStore.js";
 
 export const StudentDashboard = () => {
   const { cvs, loadCvs } = useCvStore();
@@ -16,6 +17,8 @@ export const StudentDashboard = () => {
     loadPendingOffers,
     loadRejectedOffers,
   } = useOfferStore();
+
+  const { applications, loadAllApplications, loadApplicationsByStatus, loading} = useStudentStore();
 
   const user = useAuthStore((s) => s.user);
   const token = useAuthStore((s) => s.token);
@@ -35,6 +38,7 @@ export const StudentDashboard = () => {
         loadAcceptedOffers(token);
         loadPendingOffers(token);
         loadRejectedOffers(token);
+        loadAllApplications(token);
       }
     }
   }, [isAuthenticated, user, token]);
@@ -54,6 +58,12 @@ export const StudentDashboard = () => {
 
     const acceptedCvs = cvs.filter((cv) => cv.status === "ACCEPTED").length;
     const pendingCvs = cvs.filter((cv) => cv.status === "PENDING").length;
+
+    const offersToConfirm = applications.filter(
+        (app) => app.status === "ACCEPTED" && app.etudiantStatus === null
+    ).length;
+
+    const totalApps = applications.length;
 
     return [
       {
@@ -75,6 +85,16 @@ export const StudentDashboard = () => {
         title: t("stats.availableOffers"),
         value: availableOffers,
         icon: EyeOpenIcon,
+      },
+      {
+        title: t("stats.offersToConfirm"),
+        value: offersToConfirm,
+        icon: CheckIcon,
+      },
+      {
+        title: t("stats.totalApplications"),
+        value: totalApps,
+        icon: EnvelopeClosedIcon,
       },
     ];
   }, [cvs, offers, t]);

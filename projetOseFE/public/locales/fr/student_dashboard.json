@@ -6,7 +6,9 @@
     "availableOffers": "Offres disponibles",
     "acceptedOffers": "Offres acceptées",
     "pendingOffers": "Offres en attente",
-    "myApplications": "Mes candidatures"
+    "myApplications": "Mes candidatures",
+    "offersToConfirm": "Offres à confirmer",
+    "totalApplications": "Candidatures totales"
   },
   "messages": {
     "welcome": "Bon retour, {{firstName}} !",
