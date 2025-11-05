@@ -11,7 +11,8 @@
     "actions": "Actions",
     "noOffers": "Aucune offre disponible.",
     "reason": "Raison du rejet",
-    "offerDetails": "Détails de l'offre"
+    "offerDetails": "Détails de l'offre",
+    "description": "Description"
   },
   "actions": {
     "create_another": "Créer une nouvelle offre",
