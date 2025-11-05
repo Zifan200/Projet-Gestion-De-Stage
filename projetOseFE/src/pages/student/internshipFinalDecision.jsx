@@ -68,7 +68,9 @@ export default function OffresAConfirmer() {
         }
     ], [t]);
 
-    const approvedApplications = applications.filter(app => app.status === "ACCEPTED");
+    const approvedApplications = applications.filter(
+        app => app.status === "ACCEPTED" && app.etudiantStatus === null
+    );
 
     const filteredApplications = useMemo(() => {
         let filtered = approvedApplications;

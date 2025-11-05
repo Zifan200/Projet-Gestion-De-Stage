@@ -38,6 +38,8 @@ import { DevMode } from "./components/tools/dev-mode.jsx";
 import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
 import {PhoneCallIcon} from "lucide-react";
+import { InternshipApplicationsGE } from "./pages/gs/internshipApplication.jsx";
+import { StudentApplications } from "./pages/student/internshipApplications.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -72,6 +74,12 @@ function App() {
       label: t("student_dashboard_decision:stats.decisionStatus"),
       href: "/dashboard/student/internshipFinalDecision",
       icon: CheckIcon,
+    },
+    {
+      key: "applications",
+      label: t("student_dashboard:stats.myApplications"),
+      href: "/dashboard/student/applications",
+      icon: EnvelopeClosedIcon,
     },
     {
       key: "convocation",
@@ -154,40 +162,40 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen">
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          {/* Pages principales */}
-          <Route path="/" element={<Home />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/request-password" element={<RequestPassword />} />
+      <div className="min-h-screen">
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            {/* Pages principales */}
+            <Route path="/" element={<Home />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/request-password" element={<RequestPassword />} />
 
-          {/* Routes Ge */}
-          <Route
-            path="/dashboard/gs/"
-            element={
-              <DashboardLayout
-                sidebarLinks={gsDashboardSidebarLinks}
-                title={t("gs_dashboard:titles.dashboard")}
+            {/* Routes Ge */}
+            <Route
+                path="/dashboard/gs/"
+                element={
+                  <DashboardLayout
+                      sidebarLinks={gsDashboardSidebarLinks}
+                      title={t("gs_dashboard:titles.dashboard")}
+                  />
+                }
+            >
+              <Route index element={<GsDashboard />} />
+              <Route
+                  path="/dashboard/gs/manage-students-cvs"
+                  element={<GsManageCvs />}
               />
-            }
-          >
-            <Route index element={<GsDashboard />} />
-            <Route
-              path="/dashboard/gs/manage-students-cvs"
-              element={<GsManageCvs />}
-            />
-            <Route path="/dashboard/gs/internships" element={<AllOffers />} />
-            <Route
-                path="/dashboard/gs/applications"
-                element={<InternshipApplicationsGE />}
-            />
-            <Route
-              path="/dashboard/gs/settings"
-              element={<DashboardSettings />}
-            />
-          </Route>
+              <Route path="/dashboard/gs/internships" element={<AllOffers />} />
+              <Route
+                  path="/dashboard/gs/applications"
+                  element={<InternshipApplicationsGE />}
+              />
+              <Route
+                  path="/dashboard/gs/settings"
+                  element={<DashboardSettings />}
+              />
+            </Route>
 
           {/* Routes Étudiant */}
           <Route path="/signup/student" element={<StudentSignUpPage />} />
@@ -207,7 +215,8 @@ function App() {
               path="/dashboard/student/settings"
               element={<DashboardSettings />}
             />
-            <Route
+              <Route path="/dashboard/student/applications" element={<StudentApplications />} />
+              <Route
                 path="/dashboard/student/internshipFinalDecision"
                 element={<OffresAConfirmer />}
             />
@@ -217,41 +226,41 @@ function App() {
             />
           </Route>
 
-          <Route
-            path="/dashboard/employer/"
-            element={
-              <DashboardLayout
-                sidebarLinks={employerDashboardSidebarLinks}
-                title={t("employer_dashboard:titles.dashboard")}
+            <Route
+                path="/dashboard/employer/"
+                element={
+                  <DashboardLayout
+                      sidebarLinks={employerDashboardSidebarLinks}
+                      title={t("employer_dashboard:titles.dashboard")}
+                  />
+                }
+            >
+              <Route index element={<EmployerDashboard />} />
+              <Route
+                  path="/dashboard/employer/add-intership"
+                  element={<AddIntership />}
               />
-            }
-          >
-            <Route index element={<EmployerDashboard />} />
-            <Route
-              path="/dashboard/employer/add-intership"
-              element={<AddIntership />}
-            />
-            <Route
-              path="/dashboard/employer/my-offers"
-              element={<OfferList />}
-            />
-            <Route
-              path="/dashboard/employer/applications"
-              element={<InternshipApplications />}
-            />
-            <Route
-              path="/dashboard/employer/settings"
-              element={<DashboardSettings />}
-            />
-          </Route>
-          {/* Routes Employeur */}
-          <Route path="/signup/employer" element={<EmployerSignUpPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/employer/ajout_stages" element={<AjoutStage />} />
-        </Routes>
-        <DevMode />
-      </BrowserRouter>
-    </div>
+              <Route
+                  path="/dashboard/employer/my-offers"
+                  element={<OfferList />}
+              />
+              <Route
+                  path="/dashboard/employer/applications"
+                  element={<InternshipApplications />}
+              />
+              <Route
+                  path="/dashboard/employer/settings"
+                  element={<DashboardSettings />}
+              />
+            </Route>
+            {/* Routes Employeur */}
+            <Route path="/signup/employer" element={<EmployerSignUpPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/employer/ajout_stages" element={<AjoutStage />} />
+          </Routes>
+          <DevMode />
+        </BrowserRouter>
+      </div>
   );
 }
 

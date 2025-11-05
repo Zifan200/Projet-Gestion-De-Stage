@@ -23,6 +23,7 @@ i18n
       "student_dashboard_cvs",
       "student_dashboard_offers",
         "student_dashboard_descision",
+      "student_dashboard_applications",
       "employer_dashboard",
       "employer_dashboard_offers",
       "employer_dashboard_add_intership",
