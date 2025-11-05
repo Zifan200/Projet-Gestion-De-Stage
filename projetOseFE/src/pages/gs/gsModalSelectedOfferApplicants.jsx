@@ -160,7 +160,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
     ));
 
 
-    return <div className="w-fit h-fit">
+    return <div className="w-full h-full">
         <div className="pb-3">
             <span>{t("filterType.applicantName")} : </span>
             <select className="px-2" value={currentStudentNameFilter}
@@ -168,7 +168,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                 {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}
             </select>
         </div>
-        <div className="overflow-auto h-132 border-1 border-gray-400">
+        <div className="overflow-auto max-h-96 border border-gray-300 rounded-lg">
             {loading ? <p>{t("loading")}</p> :
                 <>
                     {previewId ?
