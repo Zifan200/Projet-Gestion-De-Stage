@@ -69,6 +69,7 @@
   "errors": {
     "accept": "Failed to accept application",
     "reject": "Failed to reject application",
-    "downloadCv": "Error while downloading the CV."
+    "downloadCv": "Error while downloading the CV.",
+    "convocations": "Error : Convocation not allowed without obtaining the student's confirmation first."
   }
 }

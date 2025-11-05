@@ -68,6 +68,7 @@
   "errors": {
     "accept": "Échec de l'approbation de la candidature",
     "reject": "Échec du rejet de la candidature",
-    "downloadCv": "Erreur lors du téléchargement du CV."
+    "downloadCv": "Erreur lors du téléchargement du CV.",
+    "convocations": "Erreur : Convocation impossible sans d'abord obtenir la confirmation de l'étudiant."
   }
 }

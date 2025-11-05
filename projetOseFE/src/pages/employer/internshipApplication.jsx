@@ -98,6 +98,11 @@ export const InternshipApplications = () => {
 
 // Gestion actions (vue, téléchargement, etc.)
     const handleAction = (action, app) => {
+
+        if (action === "convocation" && app.status !== "ACCEPTED") {
+            return toast.error(t("errors.convocations"))
+        }
+
         try {
             switch (action) {
                 case "view":
