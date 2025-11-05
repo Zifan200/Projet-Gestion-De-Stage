@@ -15,6 +15,7 @@ import { StudentOffers } from "./pages/student/studentOffers.jsx";
 import Home from "./pages/home.jsx";
 import { EmployerDashboard } from "./pages/employer/dashboard.jsx";
 import { DashboardLayout } from "./components/layouts/dashboard.jsx";
+import OffresAConfirmer from "./pages/student/internshipFinalDecision.jsx";
 import {
   BackpackIcon,
   PersonIcon,
@@ -34,6 +35,7 @@ import { GsManageCvs } from "./pages/gs/cvs.jsx";
 import { InternshipApplications } from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 import { DevMode } from "./components/tools/dev-mode.jsx";
+import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -41,6 +43,7 @@ function App() {
     "employer_dashboard",
     "gs_dashboard",
     "menu",
+    "student_dashboard_decision",
   ]);
 
   const studentDashboardSidebarLinks = [
@@ -61,6 +64,12 @@ function App() {
       label: t("student_dashboard:stats.availableOffers"),
       href: "/dashboard/student/offers",
       icon: EnvelopeOpenIcon,
+    },
+    {
+      key: "decision",
+      label: t("student_dashboard_decision:stats.decisionStatus"),
+      href: "/dashboard/student/internshipFinalDecision",
+      icon: CheckIcon,
     },
     {
       key: "settings",
@@ -123,6 +132,12 @@ function App() {
       icon: EnvelopeClosedIcon,
     },
     {
+      key: "applications",
+      label: t("gs_dashboard:stats.application"),
+      href: "/dashboard/gs/applications",
+      icon: PersonIcon,
+    },
+    {
       key: "settings",
       label: t("menu:settings"),
       href: "/dashboard/gs/settings",
@@ -157,6 +172,10 @@ function App() {
             />
             <Route path="/dashboard/gs/internships" element={<AllOffers />} />
             <Route
+                path="/dashboard/gs/applications"
+                element={<InternshipApplicationsGE />}
+            />
+            <Route
               path="/dashboard/gs/settings"
               element={<DashboardSettings />}
             />
@@ -179,6 +198,10 @@ function App() {
             <Route
               path="/dashboard/student/settings"
               element={<DashboardSettings />}
+            />
+            <Route
+                path="/dashboard/student/internshipFinalDecision"
+                element={<OffresAConfirmer />}
             />
           </Route>
 

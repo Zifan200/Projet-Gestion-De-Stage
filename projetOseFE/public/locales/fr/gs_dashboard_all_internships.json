@@ -12,6 +12,8 @@
   "filter": {
     "status": "Filtrer par statut",
     "program": "Filtrer par programme",
+    "session": "Session",
+    "year": "Année",
     "all": "Toutes"
   },
   "status": {
@@ -64,5 +66,11 @@
   "menu": {
     "close": "Fermer"
   },
-  "programAll": "Tous les programmes"
+  "programAll": "Tous les programmes",
+  "session": {
+    "all": "Toutes",
+    "autumn": "Automne",
+    "winter": "Hiver",
+    "year": "Toutes"
+  }
 }

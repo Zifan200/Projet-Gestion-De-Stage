@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useOfferStore } from "../../stores/offerStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { toast } from "sonner";
-import { offerSchema } from "../../models/offer.js";
+import { getOfferSchema } from "../../models/offer.js";
 import Label from "../../components/ui/label.js";
 import Input from "../../components/ui/Input.jsx";
 import { Textarea } from "../../components/ui/textarea.jsx";
@@ -18,17 +18,19 @@ export default function AddIntership() {
   const { t } = useTranslation("employer_dashboard_add_intership");
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const token = useAuthStore((s) => s.token);
 
   const form = useForm({
-    resolver: zodResolver(offerSchema),
+    resolver: zodResolver(getOfferSchema()),
     defaultValues: {
       title: "",
       description: "",
       targetedProgramme: "",
       employerEmail: user?.email || "",
+      startDate: "",
+      endDate: "",
       expirationDate: "",
+      session: "",
     },
   });
 
@@ -36,6 +38,7 @@ export default function AddIntership() {
 
   const onSubmit = async (data) => {
     try {
+      console.log("Données envoyées:", data);
       await createOffer(token, data);
       toast.success(t("success.create"));
       form.reset();
@@ -49,56 +52,81 @@ export default function AddIntership() {
   };
 
   return (
-    <div>
-      <FormTemplate title={t("title")} description={t("description")}>
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="w-full max-w-xl flex flex-col gap-6"
-          >
-            {/* Title */}
-            <div>
-              <Label name="title" label={t("form.title")} />
-              <Input name="title" placeholder={t("form.placeholders.title")} />
-            </div>
+      <div className="max-h-[80vh] overflow-y-auto p-4 flex justify-center">
+        <FormTemplate title={t("title")} description={t("description")}>
+          <FormProvider {...form}>
+            <form
+                onSubmit={form.handleSubmit(onSubmit, onError)}
+                className="w-full max-w-xl flex flex-col gap-6 items-center"
+            >
+              {/* Title */}
+              <div className="w-full">
+                <Label name="title" label={t("form.title")} />
+                <Input name="title" placeholder={t("form.placeholders.title")} />
+              </div>
 
-            {/* Description */}
-            <div>
-              <Label name="description" label={t("form.description")} />
-              <Textarea
-                name="description"
-                placeholder={t("form.placeholders.description")}
-              />
-            </div>
+              {/* Description */}
+              <div className="w-full">
+                <Label name="description" label={t("form.description")} />
+                <Textarea
+                    name="description"
+                    placeholder={t("form.placeholders.description")}
+                />
+              </div>
 
-            {/* Program */}
-            <div className="flex flex-col">
-              <Label name="targetedProgramme" label={t("form.program")} />
-              <select
-                name="targetedProgramme"
-                {...form.register("targetedProgramme")}
-                className="rounded-xl border border-zinc-300 p-3"
-              >
-                <option value="">{t("form.placeholders.program")}</option>
-                {programmes.map((prog, i) => (
-                  <option key={i} value={prog}>
-                    {prog}
-                  </option>
-                ))}
-              </select>
-            </div>
+              {/* Program */}
+              <div className="flex flex-col w-full">
+                <Label name="targetedProgramme" label={t("form.program")} />
+                <select
+                    name="targetedProgramme"
+                    {...form.register("targetedProgramme")}
+                    className="rounded-xl border border-zinc-300 p-3"
+                >
+                  <option value="">{t("form.placeholders.program")}</option>
+                  {programmes.map((prog, i) => (
+                      <option key={i} value={prog}>
+                        {prog}
+                      </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Deadline */}
-            <div>
-              <Label name="expirationDate" label={t("form.deadline")} />
-              <Input name="expirationDate" type="date" />
-            </div>
+              {/* Start Date */}
+              <div className="w-full">
+                <Label name="startDate" label={t("form.startDate")} />
+                <Input
+                    name="startDate"
+                    type="date"
+                    {...form.register("startDate")}
+                />
+              </div>
 
-            {/* Submit */}
-            <Button className="mt-6 p-2" label={t("submit")} />
-          </form>
-        </FormProvider>
-      </FormTemplate>
-    </div>
+              {/* End Date */}
+              <div className="w-full">
+                <Label name="endDate" label={t("form.endDate")} />
+                <Input
+                    name="endDate"
+                    type="date"
+                    {...form.register("endDate")}
+                />
+              </div>
+
+              {/* Deadline */}
+              <div className="w-full">
+                <Label name="expirationDate" label={t("form.deadline")} />
+                <Input
+                    name="expirationDate"
+                    type="date"
+                    {...form.register("expirationDate")}
+                />
+              </div>
+
+              {/* Submit */}
+              <Button className="mt-6 p-2" label={t("submit")} />
+            </form>
+          </FormProvider>
+        </FormTemplate>
+      </div>
   );
+
 }

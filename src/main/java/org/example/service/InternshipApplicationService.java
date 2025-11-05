@@ -318,4 +318,13 @@ public class InternshipApplicationService {
 
         return InternshipApplicationResponseDTO.create(application);
     }
+    public List<InternshipApplicationResponseDTO> getAcceptedApplicationsForStudent(String studentEmail) {
+        List<InternshipApplication> applications = internshipApplicationRepository
+                .findAllByStudentCredentialsEmailAndStatus(studentEmail, ApprovalStatus.ACCEPTED);
+
+        return applications.stream()
+                .map(InternshipApplicationResponseDTO::create)
+                .collect(Collectors.toList());
+    }
+
 }

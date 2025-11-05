@@ -23,4 +23,35 @@ export const studentService = {
     });
     return res.data;
   },
+  async acceptOffer(applicationId, studentEmail, token) {
+    const res = await api.post(
+        `/student/${applicationId}/accept`,
+        { studentEmail },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+    );
+    return res.data;
+  },
+
+  async rejectOffer(applicationId, studentEmail, etudiantRaison, token) {
+    const res = await api.post(
+        `/student/${applicationId}/reject`,
+        { studentEmail, etudiantRaison },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+    );
+    return res.data;
+  },
+  async getAcceptedApplications(token) {
+    const res = await api.get("/student/accepted-applications", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  }
 };

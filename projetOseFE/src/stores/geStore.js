@@ -2,11 +2,12 @@ import {create} from "zustand";
 import {persist} from "zustand/middleware";
 import {geService} from "../services/geService.js";
 import {internshipApplicationService} from "../services/internshipApplicationService.js"
+
 export const useGeStore = create(
     persist(
         (set, get) => ({
-            applicationsList:[],
-            selectedOfferApplicationsList:[],
+            applicationsList: [],
+            selectedOfferApplicationsList: [],
             cvs: [],
             downloadingId: null,
             loading: false,
@@ -20,6 +21,15 @@ export const useGeStore = create(
                     set({error: err.message});
                 }
             },
+            loadAllInternshipApplications: async () => {
+                try {
+                    const data = await geService.getAllInternshipApplications();
+                    set({applications: data, error: null});
+                } catch (err) {
+                    set({error: err.message});
+                }
+            },
+
 
             approveCv: async (cvId) => {
                 const res = await geService.approveCv(cvId);

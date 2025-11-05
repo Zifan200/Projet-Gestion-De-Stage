@@ -11,6 +11,7 @@
     "status": "Statut",
     "action": "Action",
     "actionView": "Voir",
+    "studentChoice": "Choix des étudiants",
     "accept": "Accepter",
     "reject": "Rejeter"
   },
@@ -18,7 +19,9 @@
     "pending": "En cours d'examen",
     "accepted": "Acceptée",
     "rejected": "Refusée",
-    "reviewing": "En révision"
+    "reviewing": "En révision",
+    "confirmed_by_student": "Acceptée par l'étudiant",
+    "rejected_by_student": "Refusée par l'étudiant"
   },
   "modal": {
     "email": "Courriel",
@@ -34,12 +37,17 @@
   },
   "previewCv": "Aperçu du CV",
   "closeCvPreview": "Fermer l'aperçu",
-  "errors": {
-    "downloadCv": "Erreur lors du téléchargement du CV."
-  },
   "filter": {
-    "status": "Filtrer par statut",
-    "all": "Toutes"
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "AllYears": "Toutes les Années"
   },
   "menu": {
     "close": "Fermer"
@@ -50,6 +58,6 @@
   },
   "errors": {
     "reject": "Échec de l'approbation de la candidature",
-    "reject": "Échec du rejet de la candidature"
+    "downloadCv": "Erreur lors du téléchargement du CV."
   }
 }

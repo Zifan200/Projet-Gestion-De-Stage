@@ -1,0 +1,78 @@
+{
+  "table":
+  {
+    "title":"Offers to Confirm",
+    "OfferTitle": "Title",
+    "company": "Company name",
+    "receivedDate": "Received date",
+    "employerStatus": "Employer status",
+    "studentStatus": "My decision",
+    "action": "Actions"
+  },
+  "stats":
+  {
+    "decisionStatus" : "Offers to Confirm"
+  },
+  "actions":
+  {
+    "view": "View details",
+    "accept": "Accept",
+    "reject": "Refuse"
+  },
+  "modal":
+  {
+    "title": "Offer Details",
+    "offerTitle": "Internship Title",
+    "employer": "Employer",
+    "description": "Description",
+    "startDate": "Start Date",
+    "session": "Session",
+    "employerStatus": "Employer's decision",
+    "studentStatus": "My decision",
+    "selectedCv": "Selected CV",
+    "applicationDate": "Application date",
+    "close": "Close"
+  },
+  "filter":
+  {
+    "employerStatus": "Employer Status",
+    "studentStatus": "My Decision",
+    "all": "All",
+    "close": "Close"
+  },
+  "status":
+  {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
+  },
+  "employerStatus":
+  {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
+  },
+  "studentStatus":
+  {
+    "pending": "Awaiting my decision",
+    "confirmed_by_student": "Confirmed",
+    "rejected_by_student": "Rejected"
+  },
+  "loading": "Loading...",
+  "noApplications": "No offers to confirm",
+  "errors":
+  {
+    "generic": "An error occurred"
+  },
+  "reasons":
+  {
+    "enterReason": "Enter the reason for rejection"
+  },
+  "reasonModal":
+  {
+    "title": "Reason for Rejection",
+    "description": "Explain why you are rejecting this internship offer.",
+    "placeholder": "Ex: I cannot accept this offer because I found another internship...",
+    "errorEmpty": "Please enter a reason for rejection"
+  }
+}

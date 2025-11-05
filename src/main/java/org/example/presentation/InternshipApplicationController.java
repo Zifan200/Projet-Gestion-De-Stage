@@ -41,25 +41,4 @@ public class InternshipApplicationController {
     ){
         return ResponseEntity.ok(internshipApplicationService.getAllApplicationsFromOfferWithStatus(id, status));
     }
-
-    @PostMapping("/student/{applicationId}/accept")
-    public ResponseEntity<InternshipApplicationResponseDTO> acceptOfferByStudent(
-            @PathVariable Long applicationId,
-            @RequestBody EtudiantDecisionDTO request
-    ) {
-        InternshipApplicationResponseDTO response =
-                internshipApplicationService.acceptOfferByStudent(request.getStudentEmail(), applicationId);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/student/{applicationId}/reject")
-    public ResponseEntity<InternshipApplicationResponseDTO> rejectOfferByStudent(
-            @PathVariable Long applicationId,
-            @RequestBody EtudiantDecisionDTO request
-    ) {
-        InternshipApplicationResponseDTO response =
-                internshipApplicationService.rejectOfferByStudent(request.getStudentEmail(), applicationId,
-                        request.getEtudiantRaison());
-        return ResponseEntity.ok(response);
-    }
 }

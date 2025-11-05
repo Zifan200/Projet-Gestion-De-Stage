@@ -1,0 +1,12 @@
+{
+  "filter": {
+    "session": "Filter by Session",
+    "year": "Filter by Year"
+  },
+  "session": {
+    "all": "All sessions",
+    "fall": "Fall",
+    "winter": "Winter",
+    "year" : "All years"
+  }
+}

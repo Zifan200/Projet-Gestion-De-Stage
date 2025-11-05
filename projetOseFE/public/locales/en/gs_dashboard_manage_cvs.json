@@ -1,5 +1,5 @@
 {
-  "title": "Manage Student CVs",
+  "title": "Manage Student Resumes",
   "filter": {
     "status": "Filter by Status",
     "all": "All"
@@ -26,15 +26,15 @@
   "menu": {
     "close": "Close"
   },
-  "empty": "No CVs available.",
+  "empty": "No resumes available.",
   "unknownStudent": "Unknown student",
   "toast": {
     "downloadSuccess": "{{fileName}} downloaded successfully!",
-    "downloadError": "Failed to download CV.",
+    "downloadError": "Failed to download resume.",
     "accepted": "{{fileName}} approved successfully!",
-    "acceptError": "Failed to approve CV.",
+    "acceptError": "Failed to approve resume.",
     "rejected": "{{fileName}} rejected successfully!",
-    "rejectError": "Failed to reject CV.",
-    "missingReason": "You must provide a reason to reject this CV."
+    "rejectError": "Failed to reject resume.",
+    "missingReason": "You must provide a reason to reject this resume."
   }
 }

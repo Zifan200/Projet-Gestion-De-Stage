@@ -11,7 +11,8 @@
     "actions": "Actions",
     "noOffers": "No offers available.",
     "reason": "Rejection Reason",
-    "offerDetails": "Offer Details"
+    "offerDetails": "Offer Details",
+    "description": "Description"
   },
   "actions": {
     "create_another": "Create a new offer",
@@ -20,7 +21,17 @@
   },
   "filter": {
     "status": "Filter by Status",
-    "all": "All"
+    "all": "All Statuses",
+    "session": "Filter by Session",
+    "year": "Filter by Year"
+  },
+  "session": {
+    "all": "All Sessions",
+    "automne": "Fall",
+    "hiver": "Winter",
+    "AllYears": "All Years",
+    "session": "Session",
+    "year": "Year"
   },
   "sort": {
     "by": "Sort by",
