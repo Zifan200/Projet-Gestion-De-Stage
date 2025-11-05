@@ -577,7 +577,7 @@ export const InternshipApplications = () => {
                 <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
                     <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                         <PhoneCallIcon className="w-5 h-5 text-blue-500"/>
-                        {"Formulaire de convocation pour "}
+                        {t("convocations.title")}
                         {selectedApplication.studentFirstName}{" "}
                         {selectedApplication.studentLastName}
                     </h2>
@@ -589,13 +589,13 @@ export const InternshipApplications = () => {
                             try {
                                 const token = localStorage.getItem("token");
                                 if (!token) {
-                                    toast.error("Aucun token trouvé, veuillez vous reconnecter.");
+                                    toast.error(t(errors.noToken));
                                     return;
                                 }
 
                                 const employerData = await authService.getMe(token);
                                 if (!employerData?.email) {
-                                    toast.error("Impossible de récupérer l'email de l'employeur.");
+                                    toast.error(t("errors.noAccessibleEmployerData"));
                                     return;
                                 }
 
@@ -610,30 +610,27 @@ export const InternshipApplications = () => {
                                     internshipApplicationId: selectedApplication.id
                                 };
 
-                                console.log("FormData envoyé à Zod :", formData);
                                 const result = convocationSchema.safeParse(formData);
-                                console.log("Résultat du safeParse :", result);
 
                                 if (!result.success) {
-                                    toast.error(result.error.errors[0]?.message || "Erreur dans le formulaire.");
+                                    toast.error(result.error.errors[0]?.message || t("errors.form"));
                                     return;
                                 }
-                                toast.success("Convocation envoyée avec succès !");
+                                toast.success(t("convocations.success"));
                                 await sendConvocation(formData)
                                 setIsModalOpen(false);
                                 setSelectedApplication(null);
                                 setModalType(null);
 
                             } catch (error) {
-                                console.error("Erreur lors de l'envoi de la convocation :", error);
-                                toast.error(error.message || "Erreur inconnue");
+                                toast.error(error.message || t("convocation.unknown"));
                             }
                         }}
                         className="flex flex-col gap-4"
                     >
                         <div className="flex flex-col">
                             <label className="text-sm font-medium mb-1">
-                                Date de convocation
+                                {t("convocations.date")}
                             </label>
                             <input
                                 type="date"
@@ -646,7 +643,7 @@ export const InternshipApplications = () => {
                         </div>
 
                         <div className="flex flex-col">
-                            <label className="text-sm font-medium mb-1">Heure de convocation</label>
+                            <label className="text-sm font-medium mb-1">{t("convocations.time")}</label>
                             <input
                                 type="time"
                                 value={timeConvocation}
@@ -658,7 +655,7 @@ export const InternshipApplications = () => {
 
                         <div className="flex flex-col">
                             <label className="text-sm font-medium mb-1">
-                                Type de convocation
+                                {t("convocations.type")}
                             </label>
                             <select
                                 value={modeConvocation}
@@ -670,15 +667,15 @@ export const InternshipApplications = () => {
                                 className="border border-gray-300 rounded p-2"
                                 required
                             >
-                                <option value="placeholder" >-- Sélectionner --</option>
-                                <option value="online">En ligne</option>
-                                <option value="in-person">En présentiel</option>
+                                <option value="placeholder" >{t("convocations.select")}</option>
+                                <option value="online">{t("convocations.online")}</option>
+                                <option value="in-person">{t("convocations.inPerson")}</option>
                             </select>
                         </div>
 
                         {modeConvocation === "online" && (
                             <div className="flex flex-col">
-                                <label className="text-sm font-medium mb-1">Lien de réunion</label>
+                                <label className="text-sm font-medium mb-1">{t("convocations.online")}</label>
                                 <input
                                     type="url"
                                     placeholder="https://meet.google.com/..."
@@ -692,7 +689,7 @@ export const InternshipApplications = () => {
 
                         {modeConvocation === "in-person" && (
                             <div className="flex flex-col">
-                                <label className="text-sm font-medium mb-1">Lieu</label>
+                                <label className="text-sm font-medium mb-1">{t("convocations.address")}</label>
                                 <input
                                     type="text"
                                     placeholder="Ex : 1111 Rue Lapierre"

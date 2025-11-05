@@ -70,6 +70,22 @@
     "accept": "Failed to accept application",
     "reject": "Failed to reject application",
     "downloadCv": "Error while downloading the CV.",
-    "convocations": "Error : Convocation not allowed without obtaining the student's confirmation first."
+    "convocations": "Error : Convocation not allowed without obtaining the student's confirmation first.",
+    "noTokens": "No tokens found, please log in again.",
+    "noAccessibleEmployerData": "Employer email not found.",
+    "form" : "Error in the form.",
+    "unknown": "Unknown error."
+  },
+  "convocations": {
+    "title": "Convocation form for ",
+    "date": "Convocation date",
+    "time": "Convocation time",
+    "type": "Type of convocation",
+    "select": "-- Select --",
+    "online": "Online",
+    "inPerson": "In person",
+    "MeetingLink": "Meeting Link",
+    "address": "Adress",
+    "success": "Convocation sent with success !"
   }
 }
