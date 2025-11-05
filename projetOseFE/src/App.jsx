@@ -38,7 +38,6 @@ import { DevMode } from "./components/tools/dev-mode.jsx";
 import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
 import {PhoneCallIcon} from "lucide-react";
-import { InternshipApplicationsGE } from "./pages/gs/internshipApplication.jsx";
 import { StudentApplications } from "./pages/student/internshipApplications.jsx";
 
 function App() {
