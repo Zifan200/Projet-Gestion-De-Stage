@@ -23,8 +23,8 @@
     "accepted": "Acceptée",
     "rejected": "Refusée",
     "reviewing": "En révision",
-    "confirmed_by_student": "Acceptée par l'étudiant",
-    "rejected_by_student": "Refusée par l'étudiant"
+    "confirmed_by_student": "Acceptée",
+    "rejected_by_student": "Refusée"
   },
   "modal": {
     "email": "Courriel",
