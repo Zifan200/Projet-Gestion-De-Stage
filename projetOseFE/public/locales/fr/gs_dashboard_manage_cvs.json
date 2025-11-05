@@ -28,6 +28,11 @@
   },
   "empty": "Aucun CV disponible.",
   "unknownStudent": "Étudiant inconnu",
+  "gsManageCvs": {
+    "rejectModal": {
+      "description": "Veuillez expliquer pourquoi vous refusez ce CV."
+    }
+  },
   "toast": {
     "downloadSuccess": "{{fileName}} téléchargé avec succès !",
     "downloadError": "Échec du téléchargement du CV.",

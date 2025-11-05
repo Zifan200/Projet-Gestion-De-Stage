@@ -40,7 +40,11 @@ export const InternshipApplicationsGE = () => {
         { key: "studentName", label: t("table.studentName") },
         { key: "studentEmail", label: t("table.studentEmail") },
         { key: "selectedCvFileName", label: t("table.cv") },
-        { key: "etudiantStatus", label: t("table.studentChoice") } // <-- colonne de statut
+        {
+            key: "etudiantStatus",
+            label: t("table.studentChoice"),
+            format: (status) => t(`status.${status?.toLowerCase()}`)
+        }
     ];
 
     const sortedAndFilteredApplications = useMemo(() => {
@@ -71,22 +75,7 @@ export const InternshipApplicationsGE = () => {
     const tableData = sortedAndFilteredApplications.map((app) => ({
         ...app,
         studentName: `${app.studentFirstName} ${app.studentLastName}`,
-        rawEtudiantStatus: app.etudiantStatus?.toLowerCase(),
-        etudiantStatus: app.etudiantStatus
-            ? (
-                <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(app.etudiantStatus)}`}
-                >
-                    {t(`status.${app.etudiantStatus.toLowerCase()}`)}
-                </span>
-            )
-            : (
-                <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor("pending")}`}
-                >
-                    {t("status.pending")}
-                </span>
-            ),
+        rawStatus: app.etudiantStatus?.toLowerCase(),
     }));
 
     const availableYears = Array.from(

@@ -1,4 +1,3 @@
-
 import { useTranslation } from "react-i18next";
 import { Table } from "../../components/ui/table.jsx";
 import { Header } from "../../components/ui/header.jsx";
@@ -13,9 +12,11 @@ import {
   PopoverClose,
 } from "../../components/ui/popover.jsx";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
-import {Button} from "../../components/ui/button.jsx";
-import {useGeStore} from "../../stores/geStore.js";
-import {ModalSelectedOfferApplicants} from "./gsModalSelectedOfferApplicants.jsx";
+import { Button } from "../../components/ui/button.jsx";
+import { useGeStore } from "../../stores/geStore.js";
+import { ModalSelectedOfferApplicants } from "./gsModalSelectedOfferApplicants.jsx";
+import { Modal } from "../../components/ui/modal.jsx";
+import { ReasonModal } from "../../components/ui/reason-modal.jsx";
 
 export const AllOffers = () => {
   const { t } = useTranslation("gs_dashboard_all_internships");
@@ -24,19 +25,22 @@ export const AllOffers = () => {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentOffers, setCurrentOffers] = useState([]);
-  const [rejectReason, setRejectReason] = useState("");
-    //student application
-    const [selectedApplication, setSelectedApplication] = useState(null);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  //student application
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [isOfferApplicationListModalOpen, setIsOfferApplicationListModalOpen] = useState(false);
 
-    const studentNameFilterTypes = {
-        ALPHABETICAL: t("gs_modal_selectedOfferApplications.filters.studentNameFilters.alphabetical"),
-        REVERSE_ALPHABETICAL: t("gs_modal_selectedOfferApplications.filters.studentNameFilters.reverseAlphabetical"),
-    };
-    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(studentNameFilterTypes.ALPHABETICAL)
-    //
-    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-    const [isOfferApplicationListModalOpen, setIsOfferApplicationListModalOpen] = useState(false);
-
+  const studentNameFilterTypes = {
+    ALPHABETICAL: t(
+      "gs_modal_selectedOfferApplications.filters.studentNameFilters.alphabetical",
+    ),
+    REVERSE_ALPHABETICAL: t(
+      "gs_modal_selectedOfferApplications.filters.studentNameFilters.reverseAlphabetical",
+    ),
+  };
+  const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(
+    studentNameFilterTypes.ALPHABETICAL,
+  );
 
   const offerStatuses = {
     ALL: t("filter.all"),
@@ -69,10 +73,7 @@ export const AllOffers = () => {
     downloadOfferPdf,
   } = useOfferStore();
 
-    const {
-        selectedOfferApplications,
-        error,
-    } = useGeStore();
+  const { selectedOfferApplications, error } = useGeStore();
 
   useEffect(() => {
     const loadAllData = async () => {
@@ -144,8 +145,8 @@ export const AllOffers = () => {
     new Set(
       offers
         .filter((o) => o.startDate)
-        .map((o) => new Date(o.startDate).getFullYear())
-    )
+        .map((o) => new Date(o.startDate).getFullYear()),
+    ),
   ).sort((a, b) => b - a);
 
   const openOffer = async (offerId) => {
@@ -176,20 +177,18 @@ export const AllOffers = () => {
     }
   };
 
-  const handleReject = async () => {
-    if (!rejectReason.trim()) return toast.error(t("modal.reasonRequired"));
-
+  const handleReject = async (reason) => {
     try {
       await updateOfferStatus(
         user.token,
         selectedOffer.id,
         "REJECTED",
-        rejectReason,
+        reason,
       );
       toast.success(t("modal.rejectSuccess"));
       setIsModalOpen(false);
+      setShowRejectModal(false);
       setSelectedOffer(null);
-      setRejectReason("");
       await loadAllOffersSummary();
       await loadPendingOffers();
       await loadAcceptedOffers();
@@ -220,7 +219,10 @@ export const AllOffers = () => {
 
   const tableRows = () =>
     currentOffers.map((offer) => (
-      <tr key={offer.id} className="border-t border-gray-200 text-gray-700 text-sm">
+      <tr
+        key={offer.id}
+        className="border-t border-gray-200 text-gray-700 text-sm"
+      >
         <td className="px-4 py-3">{offer.title}</td>
         <td className="px-4 py-3">{offer.enterpriseName}</td>
         <td className="px-4 py-3">{offer.targetedProgramme}</td>
@@ -255,96 +257,9 @@ export const AllOffers = () => {
       </tr>
     ));
 
-    function componentViewChoseOfferStatus() {
-        return <div className="w-full h-auto">
-            {/* Rejet */}
-            <div className="mt-4">
-                <label className="block font-medium mb-1">{t("modal.rejectReason")}</label>
-                <textarea
-                    value={rejectReason}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                    placeholder={t("modal.reasonPlaceholder")}
-                    className="w-full border rounded p-2"
-                    rows={3}
-                />
-            </div>
-            <div className="flex space-x-2">
-                <button
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                    onClick={handleAccept}
-                >
-                    {t("modal.accept")}
-                </button>
-
-                <button
-                    className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
-                    disabled={!rejectReason.trim()}
-                    onClick={handleReject}
-                >
-                    {t("offer.actions.reject")}
-                </button>
-            </div>
-        </div>;
-    }
-
-    //List d'application de l'offre selectionné
-    function componentViewOfferApplicationsList(){
-        return <div className="flex flex-row py-3 mt-4 w-full items-center justify-center">
-            <div className="">
-                {selectedOffer.applicationCount > 0?
-                    <button
-                        onClick={() => {
-                            setIsOfferApplicationListModalOpen(true);
-                            setIsOfferModalOpen(false);
-                        }}
-                        className="inline-flex justify-center items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-green-200 text-green-900 hover:bg-green-400"
-                    >
-                        {t("modalSelectedOfferApplications.btnLabels.seeApplications")}
-                        <div className="animate-bounce relative left-3 bottom-3 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-sm">
-                        {selectedOffer.applicationCount}
-                        </div>
-                    </button>
-                    :
-                    <div className="inline-flex select-none items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-gray-300 text-black">
-                        {t("modalSelectedOfferApplications.noApplications")}
-                    </div>}
-
-            </div>
-        </div>
-    }
-
-    //affich les modals
-    function componentCustomModal(modalTitle, content, onBtnClose, customCloseBtnLabel=""){
-        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
-
-        >
-            {/*close when click off*/}
-            <div className="absolute z-51 w-full h-full "
-                 onClick={() => {
-                     onBtnClose()
-                 }}
-            >
-                {/*content*/}
-            </div>
-            <div className="absolute flex-col bg-white p-3 rounded shadow-lg h-fit w-fit z-52 ">
-                <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
-                {content}
-                <div className="flex w-auto justify-between mt-3 justify-end">
-                    <button
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        onClick={() => {
-                            onBtnClose()
-                        }}
-                    >
-                        {!(customCloseBtnLabel.length === 0) ? customCloseBtnLabel : t("modalSelectedOfferApplications.btnLabels.seeApplications")}
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen">
       <Header title={t("title")} />
 
       {/* Filters */}
@@ -401,8 +316,7 @@ export const AllOffers = () => {
                 triggerRef={triggerRef}
               >
                 <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.program")}:{" "}
-                  {currentProgram || t("programAll")}
+                  {t("filter.program")}: {currentProgram || t("programAll")}
                 </span>
               </PopoverTrigger>
               <PopoverContent open={open} contentRef={contentRef}>
@@ -450,92 +364,108 @@ export const AllOffers = () => {
         {/* Session Filter */}
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
-              <>
-                <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-          {t("gs_dashboard_offers:filter.session")}:{" "}
-          {currentSession !== "All" ? currentSession : t("gs_dashboard_offers:session.all")}
-        </span>
-                </PopoverTrigger>
-                <PopoverContent open={open} contentRef={contentRef}>
-                  <div className="flex flex-col gap-2 min-w-[150px]">
-                    {["Automne", "Hiver"].map((session) => (
-                        <button
-                            key={session}
-                            onClick={() => {
-                              setCurrentSession(session);
-                              setOpen(false);
-                            }}
-                            className={`px-3 py-1 rounded text-left ${
-                                currentSession === session
-                                    ? "bg-blue-100 font-semibold"
-                                    : "hover:bg-gray-100"
-                            }`}
-                        >
-                          {session}
-                        </button>
-                    ))}
+            <>
+              <PopoverTrigger
+                open={open}
+                setOpen={setOpen}
+                triggerRef={triggerRef}
+              >
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                  {t("gs_dashboard_offers:filter.session")}:{" "}
+                  {currentSession !== "All"
+                    ? currentSession
+                    : t("gs_dashboard_offers:session.all")}
+                </span>
+              </PopoverTrigger>
+              <PopoverContent open={open} contentRef={contentRef}>
+                <div className="flex flex-col gap-2 min-w-[150px]">
+                  {["Automne", "Hiver"].map((session) => (
                     <button
-                        onClick={() => {
-                          setCurrentSession("All");
-                          setOpen(false);
-                        }}
-                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                      key={session}
+                      onClick={() => {
+                        setCurrentSession(session);
+                        setOpen(false);
+                      }}
+                      className={`px-3 py-1 rounded text-left ${
+                        currentSession === session
+                          ? "bg-blue-100 font-semibold"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
-                      {t("gs_dashboard_offers:session.all")}
+                      {session}
                     </button>
-                    <PopoverClose setOpen={setOpen}>
-                      <span className="text-sm text-gray-600">{t("menu.close")}</span>
-                    </PopoverClose>
-                  </div>
-                </PopoverContent>
-              </>
+                  ))}
+                  <button
+                    onClick={() => {
+                      setCurrentSession("All");
+                      setOpen(false);
+                    }}
+                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                  >
+                    {t("gs_dashboard_offers:session.all")}
+                  </button>
+                  <PopoverClose setOpen={setOpen}>
+                    <span className="text-sm text-gray-600">
+                      {t("menu.close")}
+                    </span>
+                  </PopoverClose>
+                </div>
+              </PopoverContent>
+            </>
           )}
         </Popover>
 
         {/* Year Filter */}
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
-              <>
-                <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-          {t("gs_dashboard_offers:filter.year")}:{" "}
-          {currentYear !== "All" ? currentYear : t("gs_dashboard_offers:session.year")}
-        </span>
-                </PopoverTrigger>
-                <PopoverContent open={open} contentRef={contentRef}>
-                  <div className="flex flex-col gap-2 min-w-[150px]">
-                    {availableYears.map((year) => (
-                        <button
-                            key={year}
-                            onClick={() => {
-                              setCurrentYear(year.toString());
-                              setOpen(false);
-                            }}
-                            className={`px-3 py-1 rounded text-left ${
-                                currentYear === year.toString()
-                                    ? "bg-blue-100 font-semibold"
-                                    : "hover:bg-gray-100"
-                            }`}
-                        >
-                          {year}
-                        </button>
-                    ))}
+            <>
+              <PopoverTrigger
+                open={open}
+                setOpen={setOpen}
+                triggerRef={triggerRef}
+              >
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                  {t("gs_dashboard_offers:filter.year")}:{" "}
+                  {currentYear !== "All"
+                    ? currentYear
+                    : t("gs_dashboard_offers:session.year")}
+                </span>
+              </PopoverTrigger>
+              <PopoverContent open={open} contentRef={contentRef}>
+                <div className="flex flex-col gap-2 min-w-[150px]">
+                  {availableYears.map((year) => (
                     <button
-                        onClick={() => {
-                          setCurrentYear("All");
-                          setOpen(false);
-                        }}
-                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                      key={year}
+                      onClick={() => {
+                        setCurrentYear(year.toString());
+                        setOpen(false);
+                      }}
+                      className={`px-3 py-1 rounded text-left ${
+                        currentYear === year.toString()
+                          ? "bg-blue-100 font-semibold"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
-                      {t("gs_dashboard_offers:session.year")}
+                      {year}
                     </button>
-                    <PopoverClose setOpen={setOpen}>
-                      <span className="text-sm text-gray-600">{t("menu.close")}</span>
-                    </PopoverClose>
-                  </div>
-                </PopoverContent>
-              </>
+                  ))}
+                  <button
+                    onClick={() => {
+                      setCurrentYear("All");
+                      setOpen(false);
+                    }}
+                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
+                  >
+                    {t("gs_dashboard_offers:session.year")}
+                  </button>
+                  <PopoverClose setOpen={setOpen}>
+                    <span className="text-sm text-gray-600">
+                      {t("menu.close")}
+                    </span>
+                  </PopoverClose>
+                </div>
+              </PopoverContent>
+            </>
           )}
         </Popover>
       </div>
@@ -557,47 +487,166 @@ export const AllOffers = () => {
         />
       )}
 
-      {isModalOpen && selectedOffer && (
-          componentCustomModal(
-              selectedOffer.title,
-        <div className="p-4">
-            <p><strong>{t("modal.companyEmail")}:</strong>{" "} {selectedOffer.employerEmail}</p>
-            <p><strong>{t("modal.targetedProgramme")}:</strong>{" "}{selectedOffer.targetedProgramme}</p>
-            <p><strong>{t("modal.publishedDate")}:</strong>{" "}{selectedOffer.publishedDate
-            ? new Date(selectedOffer.publishedDate).toLocaleDateString()
-            : "-"}</p>
-            <p><strong>{t("modal.deadline")}:</strong>{" "}{selectedOffer.expirationDate
-            ? new Date(selectedOffer.expirationDate).toLocaleDateString()
-            : "-"}</p>
-            <p><strong>{t("modal.description")}:</strong>{" "}
-            {selectedOffer.description}</p>
-            <p><strong>{t("modal.status")}:</strong>{" "}
-            {t(`status.${selectedOffer.status?.toLowerCase()}`)}</p>
-
-
-
-            <div className="flex justify-between mt-6">
-                {(selectedOffer.status.toUpperCase() === "PENDING") && componentViewChoseOfferStatus()}
-                {(selectedOffer.status.toUpperCase() === "ACCEPTED") && componentViewOfferApplicationsList()}
-            </div>
-        </div>,
-              ()=>{
+      {/* Modal détails de l'offre */}
+      <Modal
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedOffer(null);
+        }}
+        title={selectedOffer?.title}
+        size="default"
+        footer={
+          selectedOffer?.status.toUpperCase() === "PENDING" ? (
+            <>
+              <button
+                onClick={() => {
                   setIsModalOpen(false);
                   setSelectedOffer(null);
-                  setRejectReason("");
-              },
-              `${t("modal.close")}`
-            )
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                <span>{t("modal.close")}</span>
+              </button>
+              <button
+                onClick={() => {
+                  setShowRejectModal(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+              >
+                <span>{t("actions.reject")}</span>
+              </button>
+              <button
+                onClick={handleAccept}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+              >
+                <span>{t("modal.accept")}</span>
+              </button>
+            </>
+          ) : selectedOffer?.status.toUpperCase() === "ACCEPTED" ? (
+            <>
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSelectedOffer(null);
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                <span>{t("modal.close")}</span>
+              </button>
+              {selectedOffer.applicationCount > 0 && (
+                <button
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setTimeout(() => setIsOfferApplicationListModalOpen(true), 150);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+                >
+                  <span>{t("modalSelectedOfferApplications.btnLabels.seeApplications")}</span>
+                  <span className="ml-1 flex items-center justify-center w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold">
+                    {selectedOffer.applicationCount}
+                  </span>
+                </button>
+              )}
+            </>
+          ) : (
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                setSelectedOffer(null);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              <span>{t("modal.close")}</span>
+            </button>
+          )
+        }
+      >
+        {selectedOffer && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
+                <p className="text-gray-600">{selectedOffer.employerEmail}</p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.targetedProgramme")}</h3>
+                <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+              </div>
+            </div>
+
+            {selectedOffer.description && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+              </div>
             )}
 
-        {isOfferApplicationListModalOpen && selectedOffer && (
-            componentCustomModal(`${t("modalSelectedOfferApplications.title")}`+" : "+
-            (selectedOffer.title) ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
-                ()=>{
-                    setIsOfferApplicationListModalOpen(false);
-                    setIsOfferModalOpen(true);
-                }, `${t("modalSelectedOfferApplications.btnLabels.back")}`)
+            <div className="grid grid-cols-2 gap-4">
+              {selectedOffer.publishedDate && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.publishedDate")}</h3>
+                  <p className="text-gray-600">{new Date(selectedOffer.publishedDate).toLocaleDateString()}</p>
+                </div>
+              )}
+
+              {selectedOffer.expirationDate && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.deadline")}</h3>
+                  <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.status")}</h3>
+              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(selectedOffer.status)}`}>
+                {t(`status.${selectedOffer.status?.toLowerCase()}`)}
+              </span>
+            </div>
+          </div>
         )}
-        </div>
-    );
+      </Modal>
+
+      {/* Modal de rejet */}
+      <ReasonModal
+        open={showRejectModal}
+        onClose={() => setShowRejectModal(false)}
+        onSubmit={handleReject}
+        title={t("modal.rejectReason")}
+        description={t("modal.reasonDescription")}
+        placeholder={t("modal.reasonPlaceholder")}
+        cancelLabel={t("modal.cancel")}
+        confirmLabel={t("modal.confirm")}
+        reasonLabel={t("modal.rejectReason")}
+      />
+
+      {/* Modal liste des candidatures */}
+      <Modal
+        open={isOfferApplicationListModalOpen}
+        onClose={() => {
+          setIsOfferApplicationListModalOpen(false);
+          setTimeout(() => setIsModalOpen(true), 150);
+        }}
+        title={`${t("modalSelectedOfferApplications.title")} : ${selectedOffer?.title || ""}`}
+        size="large"
+        footer={
+          <button
+            onClick={() => {
+              setIsOfferApplicationListModalOpen(false);
+              setTimeout(() => setIsModalOpen(true), 150);
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            <span>{t("modalSelectedOfferApplications.btnLabels.back")}</span>
+          </button>
+        }
+      >
+        {selectedOffer && (
+          <ModalSelectedOfferApplicants offerId={selectedOffer.id} />
+        )}
+      </Modal>
+    </div>
+  );
 };
