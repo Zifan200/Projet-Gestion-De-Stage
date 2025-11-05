@@ -18,14 +18,17 @@ export default function StudentConvocations() {
     const [offerTitle, setOfferTitle] = useState("");
 
 
-    const { applications, loadConvocations, loading, error, clearMessages, updateConvocationStatus } = useStudentStore();
+    const { convocations, applications, loadConvocations, loading, error, clearMessages, updateConvocationStatus } = useStudentStore();
 
     // Charger les convocations
     useEffect(() => {
-        if (token) {
-            loadConvocations(token);
+        const loadAllData = async () => {
+            await loadConvocations(token);
         }
-    }, [loadConvocations, token]);
+        loadAllData().then(r => {
+
+        })
+    }, [token]);
 
     // Gestion des messages d'erreur
     useEffect(() => {
@@ -66,9 +69,9 @@ export default function StudentConvocations() {
 
     const filteredConvocations = useMemo(() => {
         return filterStatus
-            ? applications.filter((conv) => conv.status === filterStatus)
-            : applications;
-    }, [applications, filterStatus]);
+            ? convocations.filter((conv) => conv.status === filterStatus)
+            : convocations;
+    }, [convocations, filterStatus]);
 
     const handleAction = async (actionKey, convocation) => {
         setSelectedConvocation(convocation);
@@ -95,11 +98,11 @@ export default function StudentConvocations() {
                 </div>
             )}
 
-            {!loading && applications.length === 0 && (
+            {!loading && convocations.length === 0 && (
                 <p className="text-gray-500 text-center mt-8">{t("noConvocations")}</p>
             )}
 
-            {!loading && applications.length > 0 && (
+            {!loading && convocations.length > 0 && (
                 <>
                     {/* Filtre par statut */}
                     <div className="mb-4 flex gap-3">
@@ -164,7 +167,7 @@ export default function StudentConvocations() {
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.offerTitle")}</h3>
-                            <p className="text-gray-600">{selectedConvocation.internshipApplicationTitle}</p>
+                            <p className="text-gray-600">{selectedConvocation.internshipOfferTitle}</p>
                         </div>
 
                         <div>

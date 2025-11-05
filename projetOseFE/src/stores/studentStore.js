@@ -16,6 +16,7 @@ export const useStudentStore = create(
     persist(
         (set, get) => ({
             applications: [],
+            convocations: [],
             error: null,
             successMessage: null,
             loading: false,
@@ -109,12 +110,12 @@ export const useStudentStore = create(
                     const data = await studentService.getConvocationsForStudent(token);
 
                     // Ajouter rawStatus
-                    const applicationsWithRawStatus = data.map(conv => ({
+                    const convocationsWithRawStatus = data.map(conv => ({
                         ...conv,
                         rawStatus: conv.status.toLowerCase() // normalise en minuscules pour DataTable
                     }));
 
-                    set({ applications: applicationsWithRawStatus, loading: false });
+                    set({ convocations: convocationsWithRawStatus, loading: false });
                 } catch (err) {
                     set({
                         error: err.response?.data?.message || err.message || "Erreur inconnue",
@@ -128,13 +129,13 @@ export const useStudentStore = create(
                     set({ loading: true, error: null, successMessage: null });
                     const res = await studentService.updateConvocationStatus(convocationId, studentEmail, status, token);
 
-                    // Mettre à jour localement l'application
-                    const updated = get().applications.map((conv) =>
+                    // Mettre à jour localement l'convocations
+                    const updated = get().convocations.map((conv) =>
                         conv.id === convocationId ? { ...conv, status } : conv
                     );
 
                     set({
-                        applications: updated,
+                        convocations: updated,
                         loading: false,
                         successMessage:
                             status === ApprovalStatus.CONFIRMED_BY_STUDENT
