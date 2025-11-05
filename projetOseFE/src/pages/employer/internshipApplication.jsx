@@ -223,7 +223,7 @@ export const InternshipApplications = () => {
                 triggerRef={triggerRef}
               >
                 <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.status")}: {filterStatus || t("filter.all")}
+                  {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}`
                 </span>
               </PopoverTrigger>
               <PopoverContent open={open} contentRef={contentRef}>
@@ -406,324 +406,325 @@ export const InternshipApplications = () => {
         </div>
       )}
 
-      {/* Modal de détails */}
-      <Modal
-        open={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setModalMode("details");
-          setRejectReason("");
-          setSelectedApplication(null);
-        }}
-        title={
-          modalMode === "details"
-            ? selectedApplication
-              ? `${selectedApplication.studentFirstName} ${selectedApplication.studentLastName}`
-              : ""
-            : t("reasonModal.title")
-        }
-        size="default"
-        footer={
-          modalMode === "details" ? (
-            <>
-              <button
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setModalMode("details");
-                  setSelectedApplication(null);
+        {selectedApplication && isModalOpen && modalType !== "convocation" && (
+            <Modal
+                open={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setModalMode("details");
+                    setRejectReason("");
+                    setSelectedApplication(null);
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-              >
-                <span>{t("modal.close")}</span>
-              </button>
-              {selectedApplication?.status === "PENDING" && (
-                <>
-                  <button
-                    onClick={() => setModalMode("reject")}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
-                  >
-                    <Cross2Icon className="w-4 h-4" />
-                    <span>{t("table.reject")}</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleApproveApplication(selectedApplication);
-                      setIsModalOpen(false);
-                      setModalMode("details");
-                      setSelectedApplication(null);
-                    }}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                  >
-                    <CheckIcon className="w-4 h-4" />
-                    <span>{t("table.accept")}</span>
-                  </button>
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => {
-                  setModalMode("details");
-                  setRejectReason("");
-                }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-              >
-                <span>{t("reasonModal.cancel")}</span>
-              </button>
-              <button
-                onClick={() => {
-                  if (!rejectReason.trim()) {
-                    toast.error(t("reasonModal.errorEmpty"));
-                    return;
-                  }
-                  handleRejectApplication(rejectReason);
-                }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
-              >
-                <span>{t("reasonModal.confirm")}</span>
-              </button>
-            </>
-          )
-        }
-      >
-        {selectedApplication && modalMode === "details" && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                  {t("modal.email")}
-                </h3>
-                <p className="text-gray-600">
-                  {selectedApplication.studentEmail}
-                </p>
-              </div>
+                title={
+                    modalMode === "details"
+                        ? selectedApplication
+                            ? `${selectedApplication.studentFirstName} ${selectedApplication.studentLastName}`
+                            : ""
+                        : t("reasonModal.title")
+                }
+                size="default"
+                footer={
+                    modalMode === "details" ? (
+                        <>
+                            <button
+                                onClick={() => {
+                                    setIsModalOpen(false);
+                                    setModalMode("details");
+                                    setSelectedApplication(null);
+                                }}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            >
+                                <span>{t("modal.close")}</span>
+                            </button>
+                            {selectedApplication?.status === "PENDING" && (
+                                <>
+                                    <button
+                                        onClick={() => setModalMode("reject")}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                    >
+                                        <Cross2Icon className="w-4 h-4" />
+                                        <span>{t("table.reject")}</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            handleApproveApplication(selectedApplication);
+                                            setIsModalOpen(false);
+                                            setModalMode("details");
+                                            setSelectedApplication(null);
+                                        }}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                    >
+                                        <CheckIcon className="w-4 h-4" />
+                                        <span>{t("table.accept")}</span>
+                                    </button>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                onClick={() => {
+                                    setModalMode("details");
+                                    setRejectReason("");
+                                }}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            >
+                                <span>{t("reasonModal.cancel")}</span>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (!rejectReason.trim()) {
+                                        toast.error(t("reasonModal.errorEmpty"));
+                                        return;
+                                    }
+                                    handleRejectApplication(rejectReason);
+                                }}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                            >
+                                <span>{t("reasonModal.confirm")}</span>
+                            </button>
+                        </>
+                    )
+                }
+            >
+                {modalMode === "details" && (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.email")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.studentEmail}
+                                </p>
+                            </div>
 
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                  {t("modal.cv")}
-                </h3>
-                <p className="text-gray-600">
-                  {selectedApplication.selectedCvFileName || t("table.noCv")}
-                </p>
-              </div>
-            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.cv")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.selectedCvFileName || t("table.noCv")}
+                                </p>
+                            </div>
+                        </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                  {t("modal.offerTitle")}
-                </h3>
-                <p className="text-gray-600">
-                  {selectedApplication.internshipOfferTitle}
-                </p>
-              </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.offerTitle")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.internshipOfferTitle}
+                                </p>
+                            </div>
 
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                  {t("modal.status")}
-                </h3>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    selectedApplication.status === "ACCEPTED"
-                      ? "bg-green-100 text-green-800"
-                      : selectedApplication.status === "REJECTED"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {t(`status.${selectedApplication.status?.toLowerCase()}`)}
-                </span>
-              </div>
-            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.status")}
+                                </h3>
+                                <span
+                                    className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                        selectedApplication.status === "ACCEPTED"
+                                            ? "bg-green-100 text-green-800"
+                                            : selectedApplication.status === "REJECTED"
+                                                ? "bg-red-100 text-red-800"
+                                                : "bg-yellow-100 text-yellow-800"
+                                    }`}
+                                >
+                            {t(`status.${selectedApplication.status?.toLowerCase()}`)}
+                        </span>
+                            </div>
+                        </div>
 
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                {t("modal.appliedAt")}
-              </h3>
-              <p className="text-gray-600">
-                {new Date(selectedApplication.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                {t("modal.appliedAt")}
+                            </h3>
+                            <p className="text-gray-600">
+                                {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
+                {modalMode === "reject" && (
+                    <div className="space-y-4">
+                        <p className="text-gray-600">{t("reasonModal.description")}</p>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                {t("reasonModal.label")}
+                            </label>
+                            <textarea
+                                value={rejectReason}
+                                onChange={(e) => setRejectReason(e.target.value)}
+                                placeholder={t("reasonModal.placeholder")}
+                                className="w-full min-h-[150px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            />
+                        </div>
+                    </div>
+                )}
+            </Modal>
         )}
 
-        {selectedApplication && modalMode === "reject" && (
-          <div className="space-y-4">
-            <p className="text-gray-600">{t("reasonModal.description")}</p>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("reasonModal.label")}
-              </label>
-              <textarea
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                placeholder={t("reasonModal.placeholder")}
-                className="w-full min-h-[150px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-          </div>
-        )}
+        {modalType === "convocation" && isModalOpen && selectedApplication && (
+            <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <PhoneCallIcon className="w-5 h-5 text-blue-500"/>
+                        {"Formulaire de convocation pour "}
+                        {selectedApplication.studentFirstName}{" "}
+                        {selectedApplication.studentLastName}
+                    </h2>
 
+                    <form
+                        onSubmit={async (e) => {
+                            e.preventDefault();
 
-            {modalType === "convocation" && isModalOpen && selectedApplication && (
-                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-                        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                            <PhoneCallIcon className="w-5 h-5 text-blue-500"/>
-                            {"Formulaire de convocation pour "}
-                            {selectedApplication.studentFirstName}{" "}
-                            {selectedApplication.studentLastName}
-                        </h2>
+                            try {
+                                const token = localStorage.getItem("token");
+                                if (!token) {
+                                    toast.error("Aucun token trouvé, veuillez vous reconnecter.");
+                                    return;
+                                }
 
-                        <form
-                            onSubmit={async (e) => {
-                                e.preventDefault();
+                                const employerData = await authService.getMe(token);
+                                if (!employerData?.email) {
+                                    toast.error("Impossible de récupérer l'email de l'employeur.");
+                                    return;
+                                }
 
-                                try {
-                                    const token = localStorage.getItem("token");
-                                    if (!token) {
-                                        toast.error("Aucun token trouvé, veuillez vous reconnecter.");
-                                        return;
-                                    }
+                                const dateTimeConvocation = `${dateConvocation}T${timeConvocation}`;
 
-                                    const employerData = await authService.getMe(token);
-                                    if (!employerData?.email) {
-                                        toast.error("Impossible de récupérer l'email de l'employeur.");
-                                        return;
-                                    }
+                                const formData = {
+                                    studentEmail: selectedApplication.studentEmail,
+                                    employerEmail: employerData.email,
+                                    convocationDate: dateTimeConvocation,
+                                    location,
+                                    link,
+                                    internshipApplicationId: selectedApplication.id
+                                };
 
-                                    const dateTimeConvocation = `${dateConvocation}T${timeConvocation}`;
+                                console.log("FormData envoyé à Zod :", formData);
+                                const result = convocationSchema.safeParse(formData);
+                                console.log("Résultat du safeParse :", result);
 
-                                    const formData = {
-                                        studentEmail: selectedApplication.studentEmail,
-                                        employerEmail: employerData.email,
-                                        convocationDate: dateTimeConvocation,
-                                        location,
-                                        link,
-                                        internshipApplicationId: selectedApplication.id
-                                    };
+                                if (!result.success) {
+                                    toast.error(result.error.errors[0]?.message || "Erreur dans le formulaire.");
+                                    return;
+                                }
+                                toast.success("Convocation envoyée avec succès !");
+                                await sendConvocation(formData)
+                                setIsModalOpen(false);
+                                setSelectedApplication(null);
+                                setModalType(null);
 
-                                    console.log("FormData envoyé à Zod :", formData);
-                                    const result = convocationSchema.safeParse(formData);
-                                    console.log("Résultat du safeParse :", result);
+                            } catch (error) {
+                                console.error("Erreur lors de l'envoi de la convocation :", error);
+                                toast.error(error.message || "Erreur inconnue");
+                            }
+                        }}
+                        className="flex flex-col gap-4"
+                    >
+                        <div className="flex flex-col">
+                            <label className="text-sm font-medium mb-1">
+                                Date de convocation
+                            </label>
+                            <input
+                                type="date"
+                                min={new Date().toString().split("T")[0]}
+                                value={dateConvocation}
+                                onChange={(e) => setDateConvocation(e.target.value)}
+                                className="border border-gray-300 rounded p-2"
+                                required
+                            />
+                        </div>
 
-                                    if (!result.success) {
-                                        toast.error(result.error.errors[0]?.message || "Erreur dans le formulaire.");
-                                        return;
-                                    }
-                                    toast.success("Convocation envoyée avec succès !");
-                                    await sendConvocation(formData)
+                        <div className="flex flex-col">
+                            <label className="text-sm font-medium mb-1">Heure de convocation</label>
+                            <input
+                                type="time"
+                                value={timeConvocation}
+                                onChange={(e) => setTimeConvocation(e.target.value)}
+                                className="border border-gray-300 rounded p-2"
+                                required
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="text-sm font-medium mb-1">
+                                Type de convocation
+                            </label>
+                            <select
+                                value={modeConvocation}
+                                onChange={(e) => {
+                                    setModeConvocation(e.target.value);
+                                    setLocation("");
+                                    setLink("");
+                                }}
+                                className="border border-gray-300 rounded p-2"
+                                required
+                            >
+                                <option value="placeholder" >-- Sélectionner --</option>
+                                <option value="online">En ligne</option>
+                                <option value="in-person">En présentiel</option>
+                            </select>
+                        </div>
+
+                        {modeConvocation === "online" && (
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium mb-1">Lien de réunion</label>
+                                <input
+                                    type="url"
+                                    placeholder="https://meet.google.com/..."
+                                    value={link}
+                                    onChange={(e) => setLink(e.target.value)}
+                                    className="border border-gray-300 rounded p-2"
+                                    required
+                                />
+                            </div>
+                        )}
+
+                        {modeConvocation === "in-person" && (
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium mb-1">Lieu</label>
+                                <input
+                                    type="text"
+                                    placeholder="Ex : 1111 Rue Lapierre"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    className="border border-gray-300 rounded p-2"
+                                    required
+                                />
+                            </div>
+                        )}
+
+                        <div className="flex mt-6 justify-end gap-3">
+                            <button
+                                type="submit"
+                                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            >
+                                <PhoneCallIcon className="w-4 h-4" />
+                                {t("modal.submit")}
+                            </button>
+
+                            <button
+                                type="button"
+                                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                onClick={() => {
                                     setIsModalOpen(false);
                                     setSelectedApplication(null);
-
-                                } catch (error) {
-                                    console.error("Erreur lors de l'envoi de la convocation :", error);
-                                    toast.error(error.message || "Erreur inconnue");
-                                }
-                            }}
-
-                            className="flex flex-col gap-4"
-                        >
-                            <div className="flex flex-col">
-                                <label className="text-sm font-medium mb-1">
-                                    Date de convocation
-                                </label>
-                                <input
-                                    type="date"
-                                    min={new Date().toString().split("T")[0]}
-                                    value={dateConvocation}
-                                    onChange={(e) => setDateConvocation(e.target.value)}
-                                    className="border border-gray-300 rounded p-2"
-                                    required
-                                />
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label className="text-sm font-medium mb-1">Heure de convocation</label>
-                                <input
-                                    type="time"
-                                    value={timeConvocation}
-                                    onChange={(e) => setTimeConvocation(e.target.value)}
-                                    className="border border-gray-300 rounded p-2"
-                                    required
-                                />
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label className="text-sm font-medium mb-1">
-                                    Type de convocation
-                                </label>
-                                <select
-                                    value={modeConvocation}
-                                    onChange={(e) => {
-                                        setModeConvocation(e.target.value);
-                                        setLocation("");
-                                        setLink("");
-                                    }}
-                                    className="border border-gray-300 rounded p-2"
-                                    required
-                                >
-                                    <option value="placeholder" >-- Sélectionner --</option>
-                                    <option value="online">En ligne</option>
-                                    <option value="in-person">En présentiel</option>
-                                </select>
-                            </div>
-
-                            {modeConvocation === "online" && (
-                                <div className="flex flex-col">
-                                    <label className="text-sm font-medium mb-1">Lien de réunion</label>
-                                    <input
-                                        type="url"
-                                        placeholder="https://meet.google.com/..."
-                                        value={link}
-                                        onChange={(e) => setLink(e.target.value)}
-                                        className="border border-gray-300 rounded p-2"
-                                        required
-                                    />
-                                </div>
-                            )}
-
-                            {modeConvocation === "in-person" && (
-                                <div className="flex flex-col">
-                                    <label className="text-sm font-medium mb-1">Lieu</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Ex : 1111 Rue Lapierre"
-                                        value={location}
-                                        onChange={(e) => setLocation(e.target.value)}
-                                        className="border border-gray-300 rounded p-2"
-                                        required
-                                    />
-                                </div>
-                            )}
-
-
-                            <div className="flex mt-6 justify-end gap-3">
-                                <button
-                                    type="submit"
-                                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                >
-                                    <PhoneCallIcon className="w-4 h-4" />
-                                    {t("modal.submit")}
-                                </button>
-
-                                <button
-                                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                    onClick={() => {
-                                        setIsModalOpen(false);
-                                        setSelectedApplication(null);
-                                    }}
-                                >
-                                    <Cross2Icon className="w-4 h-4" />
-                                    {t("modal.close")}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                                    setModalType(null);
+                                }}
+                            >
+                                <Cross2Icon className="w-4 h-4" />
+                                {t("modal.close")}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            )}
-            </Modal>
-        </div>
-    );
-};
+            </div>
+        )}
+    </div>
+  )
+}
