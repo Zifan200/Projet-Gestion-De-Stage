@@ -76,7 +76,7 @@ export const DataTable = ({ columns, data, onAction }) => {
                   }
 
                   if (col.key === "etudiantStatus") {
-                    const statusKey = row[col.key]?.toLowerCase();
+                    const statusKey = (row[col.key]+"").toLowerCase();
                     const statusColor =
                       {
                         pending: "bg-yellow-100 text-yellow-800",

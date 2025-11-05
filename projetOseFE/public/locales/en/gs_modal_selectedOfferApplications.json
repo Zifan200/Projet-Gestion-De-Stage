@@ -9,6 +9,11 @@
     "applicationStatus": "application status",
     "applicationDate": "application date"
   },
+  "applicationStatus": {
+    "pending": "pending approval",
+    "rejected": "denied",
+    "accepted": "accepted"
+  },
   "btnLabels": {
     "seeApplications": "see applicants",
     "back": "back"
@@ -25,5 +30,6 @@
   },
   "errors": {
     "openCv": "Unable to show the resume"
-  }
+  },
+  "cantOpenCv": "can't open cv"
 }

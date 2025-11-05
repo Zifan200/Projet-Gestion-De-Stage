@@ -31,6 +31,12 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
     const [previewId, setPreviewId] = useState(null);
 
+    const applicationStatuses = {
+        PENDING: "PENDING",
+        ACCEPTED: "ACCEPTED",
+        REJECTED: "REJECTED",
+    };
+
     const handlePreview = (applicationCv) => {
         if (applicationCv.selectedCvFileType === "application/pdf") setPreviewId(applicationCv.selectedCvID);
         else toast.error(t("errors.openCv"));
@@ -96,9 +102,30 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
         setSelectedOfferApplicationsList(filtered);
     };
 
+    function statusTranslation(applicationStatus){
+        switch(applicationStatus){
+            case applicationStatuses.PENDING:
+                return t("applicationStatus.pending");
+            case applicationStatuses.ACCEPTED:
+                return t("applicationStatus.accepted");
+            case applicationStatuses.REJECTED:
+                return t("applicationStatus.rejected");
+        }
+    }
+
+    const getStatusColor = (status) => {
+        const statusColors = {
+            pending: "bg-yellow-100 text-yellow-800",
+            accepted: "bg-green-100 text-green-800",
+            rejected: "bg-red-100 text-red-800",
+        };
+        return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
+    };
+
+
     const tableRows = () => selectedOfferApplicationsList.map((application) => (
         <tr key={application.id}
-            className="select-none w-fit border-0.5"
+            className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm"
             onClick={()=>{
 
             }}
@@ -122,7 +149,11 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                     }}
                     className="flex rounded-full p-2 w-8 h-8 transition-colors bg-lime-100 hover:bg-lime-200"><FileIcon className="justify-center"/></button>
             </td>
-            <td className="px-4 py-1 w-auto">{application.status}</td>
+            <td className="px-4 py-3">
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(application.status)}`}>
+                    {statusTranslation(application.status)}
+                </span>
+            </td>
             <td className="px-4 py-1 w-auto">{application.internshipOfferPublishedDate}</td>
 
         </tr>
