@@ -83,4 +83,31 @@ export const employerService = {
     );
     return res;
   },
+
+  createConvocation : async (formData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:8080/api/v1/employer/create-convocation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erreur lors de l'envoi de la convocation");
+      }
+
+      const data = await response.json();
+      console.log("Convocation créée :", data);
+      toast.success("Convocation envoyée avec succès !");
+    }
+    catch (error) {
+      console.error("Erreur lors de la création :", error);
+      toast.error(error.message);
+    }
+  }
 };

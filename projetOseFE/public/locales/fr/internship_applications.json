@@ -11,6 +11,7 @@
     "status": "Statut",
     "action": "Action",
     "actionView": "Voir",
+    "convocation": "Convoquer",
     "studentChoice": "Choix des étudiants",
     "accept": "Accepter",
     "reject": "Rejeter",
@@ -33,7 +34,8 @@
     "status": "Statut",
     "appliedAt": "Postulé le",
     "close": "Fermer",
-    "reason": "Raison"
+    "reason": "Raison",
+    "submit": "Envoyer la convocation"
   },
   "reasonModal": {
     "title": "Raison du refus",
@@ -70,6 +72,23 @@
     "reject": "Échec de l'approbation de la candidature",
     "downloadCv": "Erreur lors du téléchargement du CV.",
     "downloadOffer": "Échec du téléchargement de l'offre de stage",
-    "accept": "Échec de l'approbation de la candidature"
+    "convocations": "Erreur : Convocation impossible sans d'abord obtenir la confirmation de l'étudiant.",
+    "noTokens": "Aucun token trouvé, veuillez vous reconnecter.",
+    "noAccessibleEmployerData": "Impossible de récupérer l'email de l'employeur.",
+    "form" : "Erreur dans le formulaire.",
+    "unknown": "Erreur inconnue"
+
+  },
+  "convocations" : {
+    "title": "Formulaire de convocation pour ",
+    "date" : "Date de convocation",
+    "time" : "Heure de convocation",
+    "type" : "Type de convocation",
+    "select" : "-- Sélectionner --",
+    "online": "En ligne",
+    "inPerson": "En présentiel",
+    "MeetingLink": "Lien de réunion",
+    "address": "Adresse",
+    "success": "Convocation envoyée avec succès !"
   }
 }

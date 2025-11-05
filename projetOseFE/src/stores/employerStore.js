@@ -60,6 +60,43 @@ export const useEmployerStore = create()(
                     set({ error: err, loading: false });
                 }
             },
+
+            createConvocation: async (formData) => {
+                set({ loading: true, error: null });
+
+                try {
+                    await employerService.createConvocation(formData);
+                    set({ loading: false });
+                }
+                catch (e) {
+                    set({ error: e.message, loading: false });
+                }
+            },
+            updateConvocationStatus: async (convocationId, studentEmail, convocationStatus, token) => {
+                set({ loading: true, error: null });
+
+                try {
+                    const updatedConvocation = await employerService.updateConvocationStatus(
+                        convocationId,
+                        studentEmail,
+                        convocationStatus,
+                        token
+                    );
+
+                    set((state) => ({
+                        applications: state.applications.map((app) =>
+                            app.id === convocationId ? { ...app, status: convocationStatus } : app
+                        ),
+                        loading: false,
+                    }));
+
+                    return updatedConvocation;
+                }
+                catch (err) {
+                    set({ error: err.message, loading: false });
+                    throw err;
+                }
+            },
         }),
         { name: "employer-store" },
     ),

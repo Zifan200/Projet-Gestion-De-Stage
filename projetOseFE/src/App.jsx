@@ -35,7 +35,9 @@ import { GsManageCvs } from "./pages/gs/cvs.jsx";
 import { InternshipApplications } from "./pages/employer/internshipApplication.jsx";
 import { DashboardSettings } from "./pages/dashboard/settings.jsx";
 import { DevMode } from "./components/tools/dev-mode.jsx";
-import { InternshipApplicationsGE } from "./pages/gs/internshipApplication.jsx";
+import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
+import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
+import {PhoneCallIcon} from "lucide-react";
 import { StudentApplications } from "./pages/student/internshipApplications.jsx";
 
 function App() {
@@ -77,6 +79,12 @@ function App() {
       label: t("student_dashboard:stats.myApplications"),
       href: "/dashboard/student/applications",
       icon: EnvelopeClosedIcon,
+    },
+    {
+      key: "convocation",
+      label: t("student_dashboard:titles.convocation"),
+      href: "/dashboard/student/convocations",
+      icon: PhoneCallIcon
     },
     {
       key: "settings",
@@ -188,30 +196,34 @@ function App() {
               />
             </Route>
 
-            {/* Routes Étudiant */}
-            <Route path="/signup/student" element={<StudentSignUpPage />} />
-            <Route
-                path="/dashboard/student/"
-                element={
-                  <DashboardLayout
-                      sidebarLinks={studentDashboardSidebarLinks}
-                      title={t("student_dashboard:titles.dashboard")}
-                  />
-                }
-            >
-              <Route index element={<StudentDashboard />} />
-              <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-              <Route path="/dashboard/student/offers" element={<StudentOffers />} />
-              <Route
-                  path="/dashboard/student/settings"
-                  element={<DashboardSettings />}
+          {/* Routes Étudiant */}
+          <Route path="/signup/student" element={<StudentSignUpPage />} />
+          <Route
+            path="/dashboard/student/"
+            element={
+              <DashboardLayout
+                sidebarLinks={studentDashboardSidebarLinks}
+                title={t("student_dashboard:titles.dashboard")}
               />
+            }
+          >
+            <Route index element={<StudentDashboard />} />
+            <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
+            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
+            <Route
+              path="/dashboard/student/settings"
+              element={<DashboardSettings />}
+            />
               <Route path="/dashboard/student/applications" element={<StudentApplications />} />
               <Route
-                  path="/dashboard/student/internshipFinalDecision"
-                  element={<OffresAConfirmer />}
-              />
-            </Route>
+                path="/dashboard/student/internshipFinalDecision"
+                element={<OffresAConfirmer />}
+            />
+            <Route
+                path="/dashboard/student/convocations"
+                element={<StudentConvocations />}
+            />
+          </Route>
 
             <Route
                 path="/dashboard/employer/"

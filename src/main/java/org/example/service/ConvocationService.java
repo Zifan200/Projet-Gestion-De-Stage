@@ -12,12 +12,15 @@ import org.example.repository.ConvocationRepository;
 import org.example.repository.EmployerRepository;
 import org.example.repository.EtudiantRepository;
 import org.example.repository.InternshipApplicationRepository;
+import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.internshipApplication.ConvocationDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -103,5 +106,25 @@ public class ConvocationService {
         eventPublisher.publishEvent(new ConvocationStatusChangedEvent(savedConvocation, notificationService));
         logger.info("Convocation {} updated by student {} to status {}", convocationId, studentEmail, newStatus);
         return ConvocationDTO.convertToDTO(savedConvocation);
+    }
+
+    public List<ConvocationDTO> getAllConvocationsForStudent(String studentEmail) {
+        Etudiant etudiant = studentRepository.findByCredentialsEmail(studentEmail)
+                .orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + studentEmail));
+
+        return convocationRepository.findAllByEtudiant_Id(etudiant.getId())
+                .stream()
+                .map(ConvocationDTO::convertToDTO)
+                .toList();
+    }
+
+    public List<ConvocationDTO> getAllConvocationsForEmployer(String employerEmail) {
+        Employer employer = employerRepository.findByCredentialsEmail(employerEmail)
+                .orElseThrow(() -> new UserNotFoundException("Étudiant introuvable avec email " + employerEmail));
+
+        return convocationRepository.findAllByEmployer_Id(employer.getId())
+                .stream()
+                .map(ConvocationDTO::convertToDTO)
+                .toList();
     }
 }

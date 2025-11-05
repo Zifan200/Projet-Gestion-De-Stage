@@ -16,6 +16,7 @@ export const useStudentStore = create(
     persist(
         (set, get) => ({
             applications: [],
+            convocations: [],
             error: null,
             successMessage: null,
             loading: false,
@@ -100,6 +101,54 @@ export const useStudentStore = create(
                         error: err.response?.data?.message || err.message || "Erreur inconnue",
                         loading: false,
                     });
+                }
+            },
+
+            loadConvocations: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const data = await studentService.getConvocationsForStudent(token);
+
+                    // Ajouter rawStatus
+                    const convocationsWithRawStatus = data.map(conv => ({
+                        ...conv,
+                        rawStatus: conv.status.toLowerCase() // normalise en minuscules pour DataTable
+                    }));
+
+                    set({ convocations: convocationsWithRawStatus, loading: false });
+                } catch (err) {
+                    set({
+                        error: err.response?.data?.message || err.message || "Erreur inconnue",
+                        loading: false,
+                    });
+                }
+            },
+
+            updateConvocationStatus: async (convocationId, studentEmail, status, token) => {
+                try {
+                    set({ loading: true, error: null, successMessage: null });
+                    const res = await studentService.updateConvocationStatus(convocationId, studentEmail, status, token);
+
+                    // Mettre à jour localement l'convocations
+                    const updated = get().convocations.map((conv) =>
+                        conv.id === convocationId ? { ...conv, status } : conv
+                    );
+
+                    set({
+                        convocations: updated,
+                        loading: false,
+                        successMessage:
+                            status === ApprovalStatus.CONFIRMED_BY_STUDENT
+                                ? statusMessages.CONFIRMED_BY_STUDENT
+                                : statusMessages.REJECTED_BY_STUDENT,
+                    });
+
+                    return res;
+                }
+                catch (err) {
+                    const message = err.response?.data?.message || err.message ||
+                        "Erreur lors de la mise à jour de la convocation";
+                    set({ error: message, loading: false });
                 }
             },
             clearMessages: () => set({ successMessage: null, error: null }),

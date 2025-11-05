@@ -11,6 +11,8 @@
     "status": "Status",
     "action": "Action",
     "actionView": "View",
+    "convocation": "Convocation",
+    "actionView": "View",
     "studentChoice": "Student's Choice",
     "accept": "Accept",
     "reject": "Reject",
@@ -33,7 +35,8 @@
     "status": "Status",
     "appliedAt": "Applied on",
     "close": "Close",
-    "reason": "Reason"
+    "reason": "Reason",
+    "submit": "Submit convocation"
   },
   "reasonModal": {
     "title": "Rejection Reason",
@@ -72,5 +75,22 @@
     "reject": "Failed to reject application",
     "downloadCv": "Error while downloading the CV.",
     "downloadOffers": "Failed to download internship offer"
+    "convocations": "Error : Convocation not allowed without obtaining the student's confirmation first.",
+    "noTokens": "No tokens found, please log in again.",
+    "noAccessibleEmployerData": "Employer email not found.",
+    "form" : "Error in the form.",
+    "unknown": "Unknown error."
+  },
+  "convocations": {
+    "title": "Convocation form for ",
+    "date": "Convocation date",
+    "time": "Convocation time",
+    "type": "Type of convocation",
+    "select": "-- Select --",
+    "online": "Online",
+    "inPerson": "In person",
+    "MeetingLink": "Meeting Link",
+    "address": "Adress",
+    "success": "Convocation sent with success !"
   }
 }

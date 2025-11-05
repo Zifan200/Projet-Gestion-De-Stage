@@ -1,0 +1,40 @@
+{
+  "table": {
+    "title": "Convocations",
+    "offerTitle": "Internship Title",
+    "company": "Company name",
+    "convocationDate": "Convocation Date",
+    "status": "Status",
+    "action": "Actions"
+  },
+  "filter": {
+    "status": "Convocation Status",
+    "all": "All",
+    "close": "Close"
+  },
+  "actions": {
+    "view": "View Details",
+    "confirm": "Confirm",
+    "reject": "Reject"
+  },
+  "modal": {
+    "title": "Convocation Details",
+    "offerTitle": "Internship Title",
+    "employer": "Employer",
+    "convocationDate": "Convocation Date",
+    "status": "Status",
+    "createdAt": "Created At",
+    "close": "Close",
+    "unknownOffer": "???"
+  },
+  "convocationStatus": {
+    "pending": "Pending",
+    "confirmed_by_student": "Confirmed",
+    "rejected_by_student": "Rejected"
+  },
+  "loading": "Loading...",
+  "noConvocations": "No convocations found",
+  "errors": {
+    "generic": "An error occurred"
+  }
+}
