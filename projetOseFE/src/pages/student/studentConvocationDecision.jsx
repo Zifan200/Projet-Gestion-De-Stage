@@ -60,7 +60,6 @@ export default function StudentConvocations() {
             label: t("table.action"),
             actions: [
                 { key: "view", label: t("actions.view"), showIcon: true },
-                { key: "reject", label: t("actions.reject"), showIcon: true }
             ]
         }
     ], [t]);
