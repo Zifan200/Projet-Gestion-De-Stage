@@ -54,7 +54,7 @@ export default function StudentConvocations() {
         { key: "employerEnterpriseName", label: t("table.company") },
         { key: "convocationDate", label: t("table.convocationDate"), format: (date) => date ? new Date(date).toLocaleString() : "" },
         {
-            key: "status",
+            key: "displayStatus",
             label: t("table.status"),
 
         },
@@ -72,13 +72,23 @@ export default function StudentConvocations() {
             ? convocations.filter((conv) => conv.status === filterStatus)
             : convocations;
 
-        return filtered.map(conv => ({
-            ...conv,
-            rawStatus: conv.status === "CONFIRMED_BY_STUDENT" ? "accepted"
-                : conv.status === "REJECTED_BY_STUDENT" ? "rejected"
-                    : "pending",
-            status: t(`convocationStatus.${conv.status.toLowerCase()}`)
-        }));
+        return filtered.map(conv => {
+            const colorClasses =
+                conv.status === "CONFIRMED_BY_STUDENT"
+                    ? "bg-green-100 text-green-800"
+                    : conv.status === "REJECTED_BY_STUDENT"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-yellow-100 text-yellow-800";
+
+            return {
+                ...conv,
+                displayStatus: (
+                    <span className={`px-2 py-1 rounded-full text-sm font-semibold ${colorClasses}`}>
+          {t(`convocationStatus.${conv.status.toLowerCase()}`)}
+        </span>
+                ),
+            };
+        });
     }, [convocations, filterStatus, t]);
 
     const handleAction = async (actionKey, convocation) => {
