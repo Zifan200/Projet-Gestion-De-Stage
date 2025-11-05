@@ -426,7 +426,7 @@ export const InternshipApplications = () => {
                                         return;
                                     }
 
-                                    const dateTimeConvocation = new Date(`${dateConvocation}T${timeConvocation}`).toISOString();
+                                    const dateTimeConvocation = `${dateConvocation}T${timeConvocation}`;
 
                                     const formData = {
                                         studentEmail: selectedApplication.studentEmail,
@@ -445,9 +445,8 @@ export const InternshipApplications = () => {
                                         toast.error(result.error.errors[0]?.message || "Erreur dans le formulaire.");
                                         return;
                                     }
-
-                                    await sendConvocation(formData)
                                     toast.success("Convocation envoyée avec succès !");
+                                    await sendConvocation(formData)
                                     setIsModalOpen(false);
                                     setSelectedApplication(null);
 
@@ -465,7 +464,7 @@ export const InternshipApplications = () => {
                                 </label>
                                 <input
                                     type="date"
-                                    min={new Date().toISOString().split("T")[0]}
+                                    min={new Date().toString().split("T")[0]}
                                     value={dateConvocation}
                                     onChange={(e) => setDateConvocation(e.target.value)}
                                     className="border border-gray-300 rounded p-2"
