@@ -16,7 +16,8 @@
   "actions": {
     "create_another": "Create a new offer",
     "view": "View",
-    "download": "Download"
+    "download": "Download",
+    "close": "Close"
   },
   "filter": {
     "status": "Filter by Status",

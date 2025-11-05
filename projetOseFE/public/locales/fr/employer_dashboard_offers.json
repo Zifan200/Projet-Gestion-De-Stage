@@ -16,7 +16,8 @@
   "actions": {
     "create_another": "Créer une nouvelle offre",
     "view": "Voir",
-    "download": "Télécharger"
+    "download": "Télécharger",
+    "close": "Fermer"
   },
   "filter": {
     "status": "Filtrer par Statut",
