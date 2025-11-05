@@ -24,9 +24,20 @@
     "rejected": "Declined",
     "reviewing": "In Review",
     "confirmed_by_student": "Accepted",
-    "rejected_by_student": "Declined"
+    "rejected_by_student": "Declined",
+    "declined": "Declined"
   },
   "modal": {
+    "title": "Offer Details",
+    "description": "Description",
+    "session": "Semester",
+    "hiver": "Winter",
+    "automne": "Fall",
+    "employerDecision": "Employer's decision",
+    "employer": "Employer",
+    "startDate": "Start date",
+    "applicationDate": "Application date",
+    "noSemester": "No semester (date undefined)",
     "email": "Email",
     "cv": "CV",
     "offerTitle": "Offer",
@@ -43,14 +54,14 @@
   "filter": {
     "status": "Filter by Status",
     "all": "All Statuses",
-    "session": "Filter by Session",
+    "session": "Filter by Semester",
     "year": "Filter by Year",
     "employerDecision": "Employer's decision",
     "myDecision": "My decision",
     "allDecisions": "All"
   },
   "session": {
-    "all": "All Sessions",
+    "all": "All Semesters",
     "automne": "Fall",
     "hiver": "Winter",
     "AllYears": "All Years"

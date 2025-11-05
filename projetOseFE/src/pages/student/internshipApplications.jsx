@@ -426,16 +426,33 @@ export const StudentApplications = () => {
                                     <h3 className="text-lg font-semibold text-gray-700 mb-2">
                                         {t("modal.session")}
                                     </h3>
-                                    <p className="text-gray-600">{selectedApplication.session}</p>
+                                    <p className="text-gray-600">
+                                        {
+                                            (selectedApplication.session.toUpperCase() !== "AUTOMNE" &&
+                                            selectedApplication.session.toUpperCase() !== "HIVER") ?
+                                            t("modal.noSemester") :
+                                            t(`modal.${selectedApplication.session.toLowerCase()}`)
+                                        }
+                                    </p>
                                 </div>
                             )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.status")}</h3>
-                                <span className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                                    {t(`status.${selectedApplication.status.toLowerCase()}`)}
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.employerDecision")}
+                                </h3>
+                                <span
+                                    className="px-3 py-1 rounded-full text-sm font-semibold
+                                    bg-green-100 text-green-800"
+                                >
+                                    {
+                                        (selectedApplication.status.toUpperCase() !== "ACCEPTED" &&
+                                        selectedApplication.status.toUpperCase() !== "DECLINED") ?
+                                        t("status.pending")    :
+                                        t(`status.${selectedApplication.status.toLowerCase()}`)
+                                    }
                                 </span>
                             </div>
                         </div>

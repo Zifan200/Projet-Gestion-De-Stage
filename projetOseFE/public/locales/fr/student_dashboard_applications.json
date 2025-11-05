@@ -24,9 +24,20 @@
     "rejected": "Refusée",
     "reviewing": "En révision",
     "confirmed_by_student": "Acceptée",
-    "rejected_by_student": "Refusée"
+    "rejected_by_student": "Refusée",
+    "declined": "Déclinée"
   },
   "modal": {
+    "title": "Détails de l'offre",
+    "description": "Description",
+    "session": "Session",
+    "hiver": "Hiver",
+    "automne": "Automne",
+    "employerDecision": "Décision de l'employeur",
+    "employer": "Employeur",
+    "startDate": "Date de début",
+    "applicationDate": "Date de candidature",
+    "noSemester": "Aucune session (date non définie)",
     "email": "Courriel",
     "cv": "CV",
     "offerTitle": "Offre",
