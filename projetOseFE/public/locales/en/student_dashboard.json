@@ -5,7 +5,8 @@
     "pendingCvs": "Pending Resumes",
     "availableOffers": "Available Offers",
     "acceptedOffers": "Accepted Offers",
-    "pendingOffers": "Pending Offers"
+    "pendingOffers": "Pending Offers",
+    "activeApplications": "Active applications"
   },
   "messages": {
     "welcome": "Welcome back, {{firstName}}!",

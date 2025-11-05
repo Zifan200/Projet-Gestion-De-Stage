@@ -10,7 +10,7 @@ import {useOfferStore} from "../../stores/offerStore.js";
 import {toast} from "sonner";
 
 export const StudentApplications = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("internship_applications");
     const navigate = useNavigate();
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -20,10 +20,10 @@ export const StudentApplications = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const statuses = {
-        ALL: t("internshipApplications.filter.all"),
-        PENDING: t("internshipApplications.status.pending"),
-        ACCEPTED: t("internshipApplications.status.accepted"),
-        REJECTED: t("internshipApplications.status.rejected"),
+        ALL: t("filter.all"),
+        PENDING: t("status.pending"),
+        ACCEPTED: t("status.accepted"),
+        REJECTED: t("status.rejected"),
     };
     const [currentStatus, setCurrentStatus] = useState(Object.entries(statuses)[0][0]);
     const ALL_INDEX = 0;
@@ -56,7 +56,7 @@ export const StudentApplications = () => {
     const handleDownloadApplication = async (offerId) => {
         try {
             await downloadOfferPdf(user.token, offerId);
-            toast.success(t("offer.success.download"));
+            toast.success(t("success.download"));
         } catch (err) {
             toast.error(t("offer.error.download"));
             console.error(err);
@@ -69,15 +69,15 @@ export const StudentApplications = () => {
                 <td className="px-4 py-2">{app.internshipOfferTitle}</td>
                 <td className="px-4 py-2">{new Date(app.createdAt).toLocaleDateString()}</td>
                 <td className="px-4 py-2">
-                    {t(`internshipApplications.table.status.${app.status.toLowerCase()}`)}
+                    {t(`status.${app.status.toLowerCase()}`)}
                 </td>
                 <td className="px-4 py-2 flex space-x-2">
                     <Button
-                        label={t("internshipApplications.table.actionView")}
+                        label={t("table.actionView")}
                         onClick={() => handleViewApplication(app)}
                     />
                     <Button
-                        label={t("internshipApplications.table.download")}
+                        label={t("table.download")}
                         className={"bg-amber-200 hover:bg-amber-50"}
                         onClick={() => handleDownloadApplication(app.internshipOfferId)}
                     />
@@ -90,6 +90,8 @@ export const StudentApplications = () => {
         <div className="space-y-6">
             { loading ? <p>Chargement...</p> :
                 <>
+                    <Header title={t("title")}/>
+
                     {/* Filtre pour les statuts */}
                     <select
                         value={currentStatus}
@@ -99,26 +101,25 @@ export const StudentApplications = () => {
                             <option key={status[0]} value={status[0]}>
                                 {
                                     status[0] === "ALL" ?
-                                        t(`internshipApplications.filter.${status[0].toLowerCase()}`) :
-                                        t(`internshipApplications.status.${status[0].toLowerCase()}`)
+                                        t(`filter.${status[0].toLowerCase()}`) :
+                                        t(`status.${status[0].toLowerCase()}`)
                                 }
                             </option>
                         )}
                     </select>
 
                     {/* Table des postulations */}
-                    <Header title={t("internshipApplications.title")}/>
                     <Table
                         headers={
                             [
-                                t("internshipApplications.table.offerTitle"),
-                                t("internshipApplications.table.applicationDate"),
-                                t("internshipApplications.table.statusTitle"),
+                                t("table.offerTitle"),
+                                t("table.appliedAt"),
+                                t("table.status"),
                                 ""
                             ]
                         }
                         rows={rows()}
-                        emptyMessage={t("internshipApplications.table.noApplications")}
+                        emptyMessage={t("table.noApplications")}
                     />
                 </>
             }
@@ -135,11 +136,11 @@ export const StudentApplications = () => {
                             {selectedApplication.employerEmail}
                         </p>
                         <p>
-                            <strong>{t("internshipApplications.modal.deadline")}: </strong>
+                            <strong>{t("modal.deadline")}: </strong>
                             {new Date(selectedApplication.internshipOfferExpirationDate).toLocaleDateString()}
                         </p>
                         <p>
-                            <strong>{t("internshipApplications.modal.appliedAt")}: </strong>
+                            <strong>{t("modal.appliedAt")}: </strong>
                             {new Date(selectedApplication.createdAt).toLocaleDateString()}
                         </p>
                         <p>
@@ -147,12 +148,12 @@ export const StudentApplications = () => {
                             {selectedApplication.internshipOfferDescription}
                         </p>
                         <p>
-                            <strong>{t("internshipApplications.modal.statusTitle")}: </strong>
-                            {t(`internshipApplications.modal.status.${selectedApplication.status.toLowerCase()}`)}
+                            <strong>{t("modal.statusTitle")}: </strong>
+                            {t(`modal.status.${selectedApplication.status.toLowerCase()}`)}
                         </p>
                         {selectedApplication.status === Object.entries(statuses)[REJECTED_INDEX][0] &&
                             <p>
-                                <strong>{t("internshipApplications.modal.reason")}: </strong>
+                                <strong>{t("modal.reason")}: </strong>
                                 {selectedApplication.reason}
                             </p>
                         }
@@ -165,7 +166,7 @@ export const StudentApplications = () => {
                                     setSelectedApplication(null);
                                 }}
                             >
-                                {t("internshipApplications.modal.close") || "Fermer"}
+                                {t("modal.close")}
                             </button>
                         </div>
                     </div>

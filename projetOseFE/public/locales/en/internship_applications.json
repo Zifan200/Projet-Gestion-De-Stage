@@ -13,7 +13,8 @@
     "actionView": "View",
     "studentChoice": "Student's Choice",
     "accept": "Accept",
-    "reject": "Reject"
+    "reject": "Reject",
+    "appliedAt": "Applied at"
   },
   "status": {
     "pending": "Under Review",
@@ -55,7 +56,8 @@
   },
   "success": {
     "accepted": "Application accepted successfully",
-    "rejected": "Application rejected successfully"
+    "rejected": "Application rejected successfully",
+    "downloadOffer": "Internship offer downloaded successfully"
   },
   "errors": {
     "accept": "Failed to accept application",
