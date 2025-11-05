@@ -6,7 +6,8 @@ import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,8 +31,8 @@ public class InternshipOffer {
     private LocalDate publishedDate;
     private LocalDate expirationDate;
 
-    @OneToMany(mappedBy = "offer")
-    private Set<InternshipApplication> applications = new HashSet<>();
+    @OneToMany(mappedBy = "offer", cascade = jakarta.persistence.CascadeType.ALL)
+    private List<InternshipApplication> applications  = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -44,15 +45,14 @@ public class InternshipOffer {
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason, Set<InternshipApplication> applications, LocalDate startDate, LocalDate endDate, String session
+            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate,
+            ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session, List<InternshipApplication> applications
     ){
         this.id = id;
         this.title = title;
         this.description = description;
         this.employer = employer;
         this.targetedProgramme = targetedProgramme;
-        this.applications = applications;
-
         this.publishedDate = publishedDate; // date when posted
         this.expirationDate = expirationDate; // optional expiration date for application to the offer
         this.status = status != null ? status : ApprovalStatus.PENDING;
@@ -60,5 +60,6 @@ public class InternshipOffer {
         this.startDate = startDate;
         this.endDate = endDate;
         this.session = session;
+        this.applications = applications;
     }
 }

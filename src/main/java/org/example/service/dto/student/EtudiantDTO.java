@@ -28,6 +28,7 @@ public class EtudiantDTO extends UserDTO {
     private String program;
 
     private List<Long> ListCvId;
+    private Integer numberOfApplications;
 
     public EtudiantDTO() {
 
@@ -35,11 +36,13 @@ public class EtudiantDTO extends UserDTO {
 
     @Builder
     public EtudiantDTO(Long id, String firstName, String lastName, String email, Role role,
-                       LocalDate since, String phone, String adresse, String program, String password) {
+                       LocalDate since, String phone, String adresse, String program, String password, Integer numberOfApplications) {
         super(id, firstName, lastName, email, password, role);
+        this.since = since;
         this.phone = phone;
         this.adresse = adresse;
         this.program = program;
+        this.numberOfApplications = numberOfApplications;
     }
 
     public static Etudiant toEntity(EtudiantDTO dto) {
@@ -68,6 +71,7 @@ public class EtudiantDTO extends UserDTO {
                 .phone(etudiant.getPhone())
                 .program(etudiant.getProgram())
                 .adresse(etudiant.getAdresse())
+                .numberOfApplications(etudiant.getApplications().size())
                 .build();
     }
 

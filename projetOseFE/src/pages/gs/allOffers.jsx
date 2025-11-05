@@ -13,6 +13,9 @@ import {
   PopoverClose,
 } from "../../components/ui/popover.jsx";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
+import {Button} from "../../components/ui/button.jsx";
+import {useGeStore} from "../../stores/geStore.js";
+import {ModalSelectedOfferApplicants} from "./gsModalSelectedOfferApplicants.jsx";
 
 export const AllOffers = () => {
   const { t } = useTranslation("gs_dashboard_all_internships");
@@ -22,6 +25,18 @@ export const AllOffers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentOffers, setCurrentOffers] = useState([]);
   const [rejectReason, setRejectReason] = useState("");
+    //student application
+    const [selectedApplication, setSelectedApplication] = useState(null);
+
+    const studentNameFilterTypes = {
+        ALPHABETICAL: t("gs_modal_selectedOfferApplications.filters.studentNameFilters.alphabetical"),
+        REVERSE_ALPHABETICAL: t("gs_modal_selectedOfferApplications.filters.studentNameFilters.reverseAlphabetical"),
+    };
+    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(studentNameFilterTypes.ALPHABETICAL)
+    //
+    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+    const [isOfferApplicationListModalOpen, setIsOfferApplicationListModalOpen] = useState(false);
+
 
   const offerStatuses = {
     ALL: t("filter.all"),
@@ -53,6 +68,11 @@ export const AllOffers = () => {
     updateOfferStatus,
     downloadOfferPdf,
   } = useOfferStore();
+
+    const {
+        selectedOfferApplications,
+        error,
+    } = useGeStore();
 
   useEffect(() => {
     const loadAllData = async () => {
@@ -234,6 +254,94 @@ export const AllOffers = () => {
         </td>
       </tr>
     ));
+
+    function componentViewChoseOfferStatus() {
+        return <div className="w-full h-auto">
+            {/* Rejet */}
+            <div className="mt-4">
+                <label className="block font-medium mb-1">{t("modal.rejectReason")}</label>
+                <textarea
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    placeholder={t("modal.reasonPlaceholder")}
+                    className="w-full border rounded p-2"
+                    rows={3}
+                />
+            </div>
+            <div className="flex space-x-2">
+                <button
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                    onClick={handleAccept}
+                >
+                    {t("modal.accept")}
+                </button>
+
+                <button
+                    className={`px-4 py-2 rounded text-white ${rejectReason.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"}`}
+                    disabled={!rejectReason.trim()}
+                    onClick={handleReject}
+                >
+                    {t("offer.actions.reject")}
+                </button>
+            </div>
+        </div>;
+    }
+
+    //List d'application de l'offre selectionné
+    function componentViewOfferApplicationsList(){
+        return <div className="flex flex-row py-3 mt-4 w-full items-center justify-center">
+            <div className="">
+                {selectedOffer.applicationCount > 0?
+                    <button
+                        onClick={() => {
+                            setIsOfferApplicationListModalOpen(true);
+                            setIsOfferModalOpen(false);
+                        }}
+                        className="inline-flex justify-center items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-green-200 text-green-900 hover:bg-green-400"
+                    >
+                        {t("modalSelectedOfferApplications.btnLabels.seeApplications")}
+                        <div className="animate-bounce relative left-3 bottom-3 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-sm">
+                        {selectedOffer.applicationCount}
+                        </div>
+                    </button>
+                    :
+                    <div className="inline-flex select-none items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-gray-300 text-black">
+                        {t("modalSelectedOfferApplications.noApplications")}
+                    </div>}
+
+            </div>
+        </div>
+    }
+
+    //affich les modals
+    function componentCustomModal(modalTitle, content, onBtnClose, customCloseBtnLabel=""){
+        return <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+
+        >
+            {/*close when click off*/}
+            <div className="absolute z-51 w-full h-full "
+                 onClick={() => {
+                     onBtnClose()
+                 }}
+            >
+                {/*content*/}
+            </div>
+            <div className="absolute flex-col bg-white p-3 rounded shadow-lg h-fit w-fit z-52 ">
+                <h2 className="text-xl font-semibold mb-4">{modalTitle}</h2>
+                {content}
+                <div className="flex w-auto justify-between mt-3 justify-end">
+                    <button
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        onClick={() => {
+                            onBtnClose()
+                        }}
+                    >
+                        {!(customCloseBtnLabel.length === 0) ? customCloseBtnLabel : t("modalSelectedOfferApplications.btnLabels.seeApplications")}
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 
   return (
     <div className="space-y-6">
@@ -450,89 +558,46 @@ export const AllOffers = () => {
       )}
 
       {isModalOpen && selectedOffer && (
-        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              {selectedOffer.title}
-            </h2>
-            <p>
-              <strong>{t("modal.companyEmail")}:</strong>{" "}
-              {selectedOffer.employerEmail}
-            </p>
-            <p>
-              <strong>{t("modal.targetedProgramme")}:</strong>{" "}
-              {selectedOffer.targetedProgramme}
-            </p>
-            <p>
-              <strong>{t("modal.publishedDate")}:</strong>{" "}
-              {selectedOffer.publishedDate
-                ? new Date(selectedOffer.publishedDate).toLocaleDateString()
-                : "-"}
-            </p>
-            <p>
-              <strong>{t("modal.deadline")}:</strong>{" "}
-              {selectedOffer.expirationDate
-                ? new Date(selectedOffer.expirationDate).toLocaleDateString()
-                : "-"}
-            </p>
-            <p>
-              <strong>{t("modal.description")}:</strong>{" "}
-              {selectedOffer.description}
-            </p>
-            <p>
-              <strong>{t("modal.status")}:</strong>{" "}
-              {t(`status.${selectedOffer.status?.toLowerCase()}`)}
-            </p>
+          componentCustomModal(
+              selectedOffer.title,
+        <div className="p-4">
+            <p><strong>{t("modal.companyEmail")}:</strong>{" "} {selectedOffer.employerEmail}</p>
+            <p><strong>{t("modal.targetedProgramme")}:</strong>{" "}{selectedOffer.targetedProgramme}</p>
+            <p><strong>{t("modal.publishedDate")}:</strong>{" "}{selectedOffer.publishedDate
+            ? new Date(selectedOffer.publishedDate).toLocaleDateString()
+            : "-"}</p>
+            <p><strong>{t("modal.deadline")}:</strong>{" "}{selectedOffer.expirationDate
+            ? new Date(selectedOffer.expirationDate).toLocaleDateString()
+            : "-"}</p>
+            <p><strong>{t("modal.description")}:</strong>{" "}
+            {selectedOffer.description}</p>
+            <p><strong>{t("modal.status")}:</strong>{" "}
+            {t(`status.${selectedOffer.status?.toLowerCase()}`)}</p>
 
-            <div className="mt-4">
-              <label className="block font-medium mb-1">
-                {t("modal.rejectReason")}
-              </label>
-              <textarea
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                placeholder={t("modal.reasonPlaceholder")}
-                className="w-full border rounded p-2"
-                rows={3}
-              />
-            </div>
+
 
             <div className="flex justify-between mt-6">
-              <div className="flex space-x-2">
-                <button
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                  onClick={handleAccept}
-                >
-                  {t("modal.accept")}
-                </button>
-
-                <button
-                  className={`px-4 py-2 rounded text-white ${
-                    rejectReason.trim()
-                      ? "bg-yellow-500 hover:bg-yellow-600"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                  disabled={!rejectReason.trim()}
-                  onClick={handleReject}
-                >
-                  {t("actions.reject")}
-                </button>
-              </div>
-
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => {
+                {(selectedOffer.status.toUpperCase() === "PENDING") && componentViewChoseOfferStatus()}
+                {(selectedOffer.status.toUpperCase() === "ACCEPTED") && componentViewOfferApplicationsList()}
+            </div>
+        </div>,
+              ()=>{
                   setIsModalOpen(false);
                   setSelectedOffer(null);
                   setRejectReason("");
-                }}
-              >
-                {t("modal.close")}
-              </button>
-            </div>
-          </div>
+              },
+              `${t("modal.close")}`
+            )
+            )}
+
+        {isOfferApplicationListModalOpen && selectedOffer && (
+            componentCustomModal(`${t("modalSelectedOfferApplications.title")}`+" : "+
+            (selectedOffer.title) ,<ModalSelectedOfferApplicants offerId={selectedOffer.id} />,
+                ()=>{
+                    setIsOfferApplicationListModalOpen(false);
+                    setIsOfferModalOpen(true);
+                }, `${t("modalSelectedOfferApplications.btnLabels.back")}`)
+        )}
         </div>
-      )}
-    </div>
-  );
+    );
 };

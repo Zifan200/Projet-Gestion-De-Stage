@@ -19,6 +19,7 @@ public class InternshipOfferResponseDto {
     private String description;
     private String targetedProgramme;
     private String employerEmail;
+    private Integer applicationCount;
     private LocalDate publishedDate;
     private LocalDate expirationDate;
     private ApprovalStatus status;
@@ -29,13 +30,14 @@ public class InternshipOfferResponseDto {
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
-                                      String employerEmail, LocalDate publishedDate, LocalDate expirationDate,
+                                      String employerEmail, Integer applicationCount, LocalDate publishedDate, LocalDate expirationDate,
                                       ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.targetedProgramme = targetedProgramme;
         this.employerEmail = employerEmail;
+        this.applicationCount = applicationCount;
         this.publishedDate = publishedDate;
         this.expirationDate = expirationDate;
         this.status = status;
@@ -52,6 +54,7 @@ public class InternshipOfferResponseDto {
                 .description(internshipOffer.getDescription())
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .employerEmail(internshipOffer.getEmployer().getEmail())
+                .applicationCount(internshipOffer.getApplications().size())
                 .publishedDate(internshipOffer.getPublishedDate())
                 .expirationDate(internshipOffer.getExpirationDate())
                 .status(internshipOffer.getStatus())

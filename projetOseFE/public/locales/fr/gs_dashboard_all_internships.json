@@ -54,6 +54,15 @@
     "accepted": "Offre acceptée avec succès !",
     "rejectSuccess": "Offre rejetée avec succès !"
   },
+  "modalSelectedOfferApplications": {
+    "title": "Candidats",
+    "noApplications": "aucune candidature",
+    "numberOfApplications": "nombre de candidats",
+    "btnLabels": {
+      "seeApplications": "voir les candidatures",
+      "back": "retour"
+    }
+  },
   "menu": {
     "close": "Fermer"
   },

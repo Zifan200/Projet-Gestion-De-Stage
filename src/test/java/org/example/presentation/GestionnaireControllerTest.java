@@ -2,9 +2,7 @@ package org.example.presentation;
 
 import org.example.presentation.exception.EmployerControllerException;
 import org.example.presentation.exception.InternshipApplicationControllerException;
-import org.example.service.CVService;
 import org.example.service.InternshipApplicationService;
-import org.example.service.StudentService;
 import org.example.service.dto.student.EtudiantDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -60,7 +57,7 @@ class GestionnaireControllerTest {
                 .email("john.doe@mail.com")
                 .build();
 
-        when(internshipApplicationService.getAllStudentsAppliedToAInternshipOffer())
+        when(internshipApplicationService.getAllStudentsWithApplication())
                 .thenReturn(List.of(student));
 
         // Act + Assert
@@ -80,7 +77,7 @@ class GestionnaireControllerTest {
                 .setControllerAdvice(new InternshipApplicationControllerException())
                 .build();
 
-        when(internshipApplicationService.getAllStudentsAppliedToAInternshipOffer())
+        when(internshipApplicationService.getAllStudentsWithApplication())
                 .thenThrow(new InvalidInternshipApplicationException("No students found"));
 
         // Act
