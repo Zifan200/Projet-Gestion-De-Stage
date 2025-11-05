@@ -74,7 +74,7 @@
     "accept": "Failed to accept application",
     "reject": "Failed to reject application",
     "downloadCv": "Error while downloading the CV.",
-    "downloadOffers": "Failed to download internship offer"
+    "downloadOffers": "Failed to download internship offer",
     "convocations": "Error : Convocation not allowed without obtaining the student's confirmation first.",
     "noTokens": "No tokens found, please log in again.",
     "noAccessibleEmployerData": "Employer email not found.",

@@ -20,7 +20,7 @@
     "myDecision": "Ma décision"
   },
   "status": {
-    "pending": "En cours d'examen",
+    "pending": "En cours d'examination",
     "accepted": "Acceptée",
     "rejected": "Refusée",
     "reviewing": "En révision",

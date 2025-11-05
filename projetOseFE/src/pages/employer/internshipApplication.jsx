@@ -228,7 +228,7 @@ export const InternshipApplications = () => {
                 triggerRef={triggerRef}
               >
                 <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}`
+                  {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
                 </span>
               </PopoverTrigger>
               <PopoverContent open={open} contentRef={contentRef}>
