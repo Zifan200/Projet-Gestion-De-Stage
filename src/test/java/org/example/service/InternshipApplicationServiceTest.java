@@ -274,7 +274,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOffer_shouldReturnApplicationsForGivenOffer() {
+    void getAllApplicationsFromOffer_shouldReturnApplicationsForGivenOfferId() {
         // Arrange
         Long offerId = 1L;
         Employer employer = Employer.builder().id(1L).email(EMPLOYER_EMAIL).build();
@@ -310,10 +310,10 @@ public class InternshipApplicationServiceTest {
                 .build();
 
         when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(offer));
-        when(internshipApplicationRepository.findAllByOffer(offer)).thenReturn(List.of(app1, app2));
+        when(internshipApplicationRepository.findAllByOfferId(offerId)).thenReturn(List.of(app1, app2));
 
         // Act
-        List<InternshipApplicationResponseDTO> result = internshipApplicationService.getAllApplicationsFromOffer(offerId);
+        List<InternshipApplicationResponseDTO> result = internshipApplicationService.getAllApplicationsFromOfferId(offerId);
 
         // Assert
         assertNotNull(result, "Result should not be null");
@@ -324,18 +324,18 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOffer_whenOfferDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromOffer_whenOfferIdDoesNotExist_shouldThrowException() {
         // Arrange
         Long offerId = 999L;
         when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(InvalidInternshipApplicationException.class,
-                () -> internshipApplicationService.getAllApplicationsFromOffer(offerId));
+                () -> internshipApplicationService.getAllApplicationsFromOfferId(offerId));
     }
 
     @Test
-    void getAllApplicationsFromOfferWithStatus_shouldReturnApplicationsForOfferWithGivenStatus() {
+    void getAllApplicationsFromOfferWithStatus_shouldReturnApplicationsForOfferIdWithGivenStatus() {
         // Arrange
         Long offerId = 1L;
         String status = "PENDING";
@@ -372,7 +372,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOfferWithStatus_whenInvalidStatus_shouldThrowInvalidApprovalStatus() {
+    void getAllApplicationsFromOfferIdWithStatus_whenInvalidStatus_shouldThrowInvalidApprovalStatus() {
         // Arrange
         Long offerId = 1L;
         String invalidStatus = "INVALID_STATUS";
@@ -383,7 +383,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOfferWithStatus_whenOfferDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromOfferWithStatus_whenOfferIdDoesNotExist_shouldThrowException() {
         // Arrange
         Long offerId = 999L;
         String status = "PENDING";
@@ -439,7 +439,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOfferFromEmployer_shouldReturnApplicationsForOfferAndEmployer() {
+    void getAllApplicationsFromOfferFromEmployer_shouldReturnApplicationsForOfferIdAndEmployer() {
         // Arrange
         String employerEmail = "employer@test.com";
         Long offerId = 1L;
@@ -473,7 +473,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOfferFromEmployer_whenEmployerDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromOfferFromEmployer_whenEmployerDoesNotExist_shouldThrowExceptionId() {
         // Arrange
         String invalidEmail = "nonexistent@company.com";
         Long offerId = 1L;
@@ -490,7 +490,7 @@ public class InternshipApplicationServiceTest {
     }
 
     @Test
-    void getAllApplicationsFromOfferFromEmployer_whenOfferDoesNotExist_shouldThrowException() {
+    void getAllApplicationsFromOfferFromEmployer_whenOfferIdDoesNotExist_shouldThrowException() {
         // Arrange
         String email = "employer@example.com";
         Long invalidOfferId = 999L;
@@ -664,7 +664,7 @@ public class InternshipApplicationServiceTest {
                 .thenReturn(List.of(student));
 
         // Act
-        List<EtudiantDTO> students = internshipApplicationService.getAllStudentsAppliedToAInternshipOffer();
+        List<EtudiantDTO> students = internshipApplicationService.getAllStudentsWithApplication();
 
         // Assert
         assertThat(students)
@@ -684,7 +684,7 @@ public class InternshipApplicationServiceTest {
                 .thenReturn(Collections.emptyList());
 
         // Act
-        List<EtudiantDTO> result = internshipApplicationService.getAllStudentsAppliedToAInternshipOffer();
+        List<EtudiantDTO> result = internshipApplicationService.getAllStudentsWithApplication();
 
         // Assert
         assertThat(result).isEmpty();

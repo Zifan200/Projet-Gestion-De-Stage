@@ -37,6 +37,7 @@ public class InternshipOfferListDto {
                 .targetedProgramme(internshipOffer.getTargetedProgramme())
                 .status(internshipOffer.getStatus())
                 .reason(internshipOffer.getReason())
+                .applicationCount(internshipOffer.getApplications().size())
                 .startDate(internshipOffer.getStartDate())
                 .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())

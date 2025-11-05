@@ -24,10 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 //import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -96,6 +93,7 @@ public class InternshipOfferServiceTest {
                 .description("loremipsum")
                 .employer(employer)
                 .publishedDate(offerPublishDateTime)
+                .applications(new ArrayList<>())
                 .build();
     }
 
@@ -482,7 +480,7 @@ public class InternshipOfferServiceTest {
                 .expirationDate(LocalDate.now().plusDays(30))
                 .targetedProgramme("Informatique")
                 .reason("Bon profil")
-                .applications(new HashSet<>(Set.of(app1)))
+                .applications(new ArrayList<>(List.of(app1)))
                 .status(ApprovalStatus.ACCEPTED)
                 .build();
 
@@ -493,7 +491,7 @@ public class InternshipOfferServiceTest {
                 .expirationDate(LocalDate.now().plusDays(60))
                 .targetedProgramme("Design")
                 .reason("Bon candidat")
-                .applications(new HashSet<>(Set.of(app1)))
+                .applications(new ArrayList<>(List.of(app1)))
                 .status(ApprovalStatus.PENDING)
                 .build();
 

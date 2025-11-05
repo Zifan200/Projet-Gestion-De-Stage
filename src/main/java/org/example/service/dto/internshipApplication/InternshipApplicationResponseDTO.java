@@ -1,5 +1,6 @@
 package org.example.service.dto.internshipApplication;
 
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -19,11 +20,13 @@ public class InternshipApplicationResponseDTO {
     private String studentEmail;
     private String studentFirstName;
     private String studentLastName;
+    private String studentProgrammeName;
 
     private Long selectedCvID;
     private String selectedCvFileName;
     private Long selectedCvFileSize;
     private byte[] selectedCvFileData;
+    private String selectedCvFileType;
 
     private Long internshipOfferId;
     private String internshipOfferTitle;
@@ -46,10 +49,12 @@ public class InternshipApplicationResponseDTO {
             String studentEmail,
             String studentFirstName,
             String studentLastName,
+            String studentProgrammeName,
             Long selectedCvID,
             String selectedCvFileName,
             Long selectedCvFileSize,
             byte[] selectedCvFileData,
+            String selectedCvFileType,
             Long internshipOfferId,
             String internshipOfferTitle,
             String internshipOfferDescription,
@@ -68,10 +73,12 @@ public class InternshipApplicationResponseDTO {
         this.studentEmail = studentEmail;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
+        this.studentProgrammeName = studentProgrammeName;
         this.selectedCvID = selectedCvID;
         this.selectedCvFileName = selectedCvFileName;
         this.selectedCvFileSize = selectedCvFileSize;
         this.selectedCvFileData = selectedCvFileData;
+        this.selectedCvFileType = selectedCvFileType;
         this.internshipOfferId = internshipOfferId;
         this.internshipOfferTitle = internshipOfferTitle;
         this.internshipOfferDescription = internshipOfferDescription;
@@ -93,12 +100,14 @@ public class InternshipApplicationResponseDTO {
                 .studentEmail(internshipApplication.getStudent().getEmail())
                 .studentFirstName(internshipApplication.getStudent().getFirstName())
                 .studentLastName(internshipApplication.getStudent().getLastName())
+                .studentProgrammeName(internshipApplication.getStudent().getProgram())
                 .employerEmail(internshipApplication.getOffer().getEmployer().getEmail())
                 .internshipOfferId(internshipApplication.getOffer().getId())
                 .selectedCvID(internshipApplication.getSelectedStudentCV().getId())
                 .selectedCvFileName(internshipApplication.getSelectedStudentCV().getFileName())
                 .selectedCvFileSize(internshipApplication.getSelectedStudentCV().getFileSize())
                 .selectedCvFileData(internshipApplication.getSelectedStudentCV().getData())
+                .selectedCvFileType(internshipApplication.getSelectedStudentCV().getFileType())
                 .internshipOfferTitle(internshipApplication.getOffer().getTitle())
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
