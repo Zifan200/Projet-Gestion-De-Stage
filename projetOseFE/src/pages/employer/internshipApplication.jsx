@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useEmployerStore } from "../../stores/employerStore.js";
@@ -32,6 +32,7 @@ export const InternshipApplications = () => {
     fetchApplications,
     approveApplication,
     rejectApplication,
+    loading
   } = useEmployerStore();
   const {
     previewUrl,
@@ -58,19 +59,25 @@ export const InternshipApplications = () => {
   const [timeConvocation, setTimeConvocation] = useState("09:00");
 
   useEffect(() => {
-    fetchApplications();
-  }, [fetchApplications]);
+      //load all applications
+      const loadAllData = async () => {
+          await fetchApplications();
+      }
+      loadAllData();
+      console.log(applications)
+
+  }, []);
 
   // Extraire les années disponibles à partir des candidatures
-  const availableYears = useMemo(() => {
-    return Array.from(
-      new Set(
-        applications
-          .filter((app) => app.createdAt)
-          .map((app) => new Date(app.createdAt).getFullYear()),
-      ),
-    ).sort((a, b) => b - a);
-  }, [applications]);
+  // const availableYears = useMemo(() => {
+  //   return Array.from(
+  //     new Set(
+  //       applications
+  //         .filter((app) => app.createdAt)
+  //         .map((app) => new Date(app.createdAt).getFullYear()),
+  //     ),
+  //   ).sort((a, b) => b - a);
+  // }, [applications]);
 
   // Gestion acceptation
   const handleApproveApplication = async (application) => {
@@ -140,9 +147,9 @@ export const InternshipApplications = () => {
     { key: "studentName", label: t("table.studentName") },
     { key: "studentEmail", label: t("table.studentEmail") },
     {
-      key: "status",
-      label: t("table.status"),
-      format: (status) => t(`status.${status?.toLowerCase()}`),
+      key: "publish date",
+      label: t("table.publicationDate"),
+      // format: (date) => t(`${date}`),
     },
     {
       key: "actions",
@@ -194,23 +201,23 @@ export const InternshipApplications = () => {
   // Filtrage + tri
   const filteredApplications = useMemo(() => {
     return applications
-      .filter((app) => (filterStatus ? app.status === filterStatus : true))
-      .filter((app) =>
-        filterSession === "All" ? true : app.session === filterSession,
-      )
-      .filter((app) =>
-        filterYear === "All"
-          ? true
-          : app.createdAt &&
-            new Date(app.createdAt).getFullYear().toString() === filterYear,
-      )
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      // .filter((app) => (filterStatus ? app.status === filterStatus : true))
+      // .filter((app) =>
+      //   filterSession === "All" ? true : app.session === filterSession,
+      // )
+      // .filter((app) =>
+      //   filterYear === "All"
+      //     ? true
+      //     : app.createdAt &&
+      //       new Date(app.createdAt).getFullYear().toString() === filterYear,
+      // )
+      // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }, [applications, filterStatus, filterSession, filterYear]);
 
-  const tableData = filteredApplications.map((app) => ({
-    ...app,
-    studentName: `${app.studentFirstName} ${app.studentLastName}`,
-    rawStatus: app.status?.toLowerCase(),
+  const tableData = filteredApplications.map((applicaiton) => ({
+    ...applicaiton,
+    studentName: `${applicaiton.studentFirstName} ${applicaiton.studentLastName}`,
+    rawStatus: applicaiton.internshipOfferPublishedDate,
   }));
 
   return (
@@ -337,47 +344,48 @@ export const InternshipApplications = () => {
                   {filterYear === "All" ? t("session.AllYears") : filterYear}
                 </span>
               </PopoverTrigger>
-              <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">
-                  {availableYears.map((year) => (
-                    <button
-                      key={year}
-                      onClick={() => {
-                        setFilterYear(year.toString());
-                        setOpen(false);
-                      }}
-                      className={`px-3 py-1 rounded text-left ${
-                        filterYear === year.toString()
-                          ? "bg-blue-100 font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {year}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => {
-                      setFilterYear("All");
-                      setOpen(false);
-                    }}
-                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                  >
-                    {t("session.AllYears")}
-                  </button>
-                  <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
-                  </PopoverClose>
-                </div>
-              </PopoverContent>
+              {/*<PopoverContent open={open} contentRef={contentRef}>*/}
+              {/*  <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">*/}
+              {/*    {availableYears.map((year) => (*/}
+              {/*      <button*/}
+              {/*        key={year}*/}
+              {/*        onClick={() => {*/}
+              {/*          setFilterYear(year.toString());*/}
+              {/*          setOpen(false);*/}
+              {/*        }}*/}
+              {/*        className={`px-3 py-1 rounded text-left ${*/}
+              {/*          filterYear === year.toString()*/}
+              {/*            ? "bg-blue-100 font-semibold"*/}
+              {/*            : "hover:bg-gray-100"*/}
+              {/*        }`}*/}
+              {/*      >*/}
+              {/*        {year}*/}
+              {/*      </button>*/}
+              {/*    ))}*/}
+              {/*    <button*/}
+              {/*      onClick={() => {*/}
+              {/*        setFilterYear("All");*/}
+              {/*        setOpen(false);*/}
+              {/*      }}*/}
+              {/*      className="px-3 py-1 rounded text-left hover:bg-gray-100"*/}
+              {/*    >*/}
+              {/*      {t("session.AllYears")}*/}
+              {/*    </button>*/}
+              {/*    <PopoverClose setOpen={setOpen}>*/}
+              {/*      <span className="text-sm text-gray-600">*/}
+              {/*        {t("menu.close")}*/}
+              {/*      </span>*/}
+              {/*    </PopoverClose>*/}
+              {/*  </div>*/}
+              {/*</PopoverContent>*/}
             </>
           )}
         </Popover>
       </div>
 
       {/* Tableau */}
-      <DataTable columns={columns} data={tableData} onAction={handleAction} />
+        {loading ? <p>{t("table.loading")}</p> :
+      <DataTable columns={columns} data={tableData} onAction={handleAction} />}
 
       {/* Aperçu du CV */}
       {previewUrl && (

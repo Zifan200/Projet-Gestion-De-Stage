@@ -1,6 +1,7 @@
 {
   "title": "Applications",
   "table": {
+    "loading": "loading",
     "offerTitle": "Offer Title",
     "studentName": "Student Name",
     "studentEmail": "Student Email",
@@ -12,11 +13,11 @@
     "action": "Action",
     "actionView": "View",
     "convocation": "Convocation",
-    "actionView": "View",
     "studentChoice": "Student's Choice",
     "accept": "Accept",
     "reject": "Reject",
     "appliedAt": "Applied at",
+    "publicationDate": "Application date",
     "employerDecision": "Employer's decision",
     "myDecision": "My decision"
   },
