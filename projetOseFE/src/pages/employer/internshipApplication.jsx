@@ -27,8 +27,10 @@ import {authService} from "../../services/authService.js";
 
 export const InternshipApplications = () => {
   const { t } = useTranslation("internship_applications");
+  const user = useAuthStore((s) => s.user);
+
   const {
-    applications,
+      applications,
     fetchApplications,
     approveApplication,
     rejectApplication,
@@ -41,22 +43,26 @@ export const InternshipApplications = () => {
     downloadCvForEmployer,
     closePreview,
   } = useCvStore();
-  const user = useAuthStore((s) => s.user);
+  const {createConvocation: sendConvocation} = useEmployerStore();
 
+  const [currentApplicationsList, setCurrentApplicationsList] = useState([]);
   const [selectedApplication, setSelectedApplication] = useState(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("details");
-  const [rejectReason, setRejectReason] = useState("");
+  const [modalType, setModalType] = useState(null);
+
   const [filterStatus, setFilterStatus] = useState(null);
   const [filterSession, setFilterSession] = useState("All");
   const [filterYear, setFilterYear] = useState("All");
-  const {createConvocation: sendConvocation} = useEmployerStore();
-  const [modalType, setModalType] = useState(null);
-  const [dateConvocation, setDateConvocation] = useState("");
+
   const [modeConvocation, setModeConvocation] = useState("");
-  const [location, setLocation] = useState("");
-  const [link, setLink] = useState("");
+  const [dateConvocation, setDateConvocation] = useState("");
   const [timeConvocation, setTimeConvocation] = useState("09:00");
+
+  const [link, setLink] = useState("");
+  const [location, setLocation] = useState("");
+  const [rejectReason, setRejectReason] = useState("");
 
   useEffect(() => {
       //load all applications
@@ -64,8 +70,10 @@ export const InternshipApplications = () => {
           await fetchApplications();
       }
       loadAllData();
-      console.log(applications)
+      //set starting filters after loading
+        console.log(applications);
 
+      //
   }, []);
 
   // Extraire les années disponibles à partir des candidatures
@@ -147,9 +155,8 @@ export const InternshipApplications = () => {
     { key: "studentName", label: t("table.studentName") },
     { key: "studentEmail", label: t("table.studentEmail") },
     {
-      key: "publish date",
-      label: t("table.publicationDate"),
-      // format: (date) => t(`${date}`),
+      key: "publishDate",
+      label: t("table.publicationDate")
     },
     {
       key: "actions",
@@ -214,10 +221,10 @@ export const InternshipApplications = () => {
       // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }, [applications, filterStatus, filterSession, filterYear]);
 
-  const tableData = filteredApplications.map((applicaiton) => ({
-    ...applicaiton,
-    studentName: `${applicaiton.studentFirstName} ${applicaiton.studentLastName}`,
-    rawStatus: applicaiton.internshipOfferPublishedDate,
+  const tableData = applications.map((application) => ({
+    ...application,
+    studentName: `${application.studentFirstName} ${application.studentLastName}`,
+    publishDate: application.internshipOfferPublishedDate,
   }));
 
   return (

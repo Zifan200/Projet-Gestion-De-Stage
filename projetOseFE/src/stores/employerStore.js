@@ -27,7 +27,6 @@ export const useEmployerStore = create((set, get) => ({
         try {
             set({loading: true, error: null });
             const data = await employerService.getAllApplications();
-            console.log(data)
             set({applications: data, loading: false});
         } catch (e) {
             set({error: e.message, loading: false});
