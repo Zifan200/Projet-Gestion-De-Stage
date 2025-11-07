@@ -59,7 +59,7 @@ export const StudentDashboard = () => {
     const acceptedCvs = cvs.filter((cv) => cv.status === "ACCEPTED").length;
     const pendingCvs = cvs.filter((cv) => cv.status === "PENDING").length;
 
-    const offersToConfirm = applications.filter(
+    const internshipsToConfirm = applications.filter(
         (app) => app.status === "ACCEPTED" && app.etudiantStatus === null
     ).length;
 
@@ -87,8 +87,8 @@ export const StudentDashboard = () => {
         icon: EyeOpenIcon,
       },
       {
-        title: t("stats.offersToConfirm"),
-        value: offersToConfirm,
+        title: t("stats.internshipsToConfirm"),
+        value: internshipsToConfirm,
         icon: CheckIcon,
       },
       {
