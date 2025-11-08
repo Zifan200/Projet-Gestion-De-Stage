@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { employerService } from "../services/employerService.js";
+import {studentService} from "../services/studentService.js";
 
 export const useEmployerStore = create()(
     devtools(
         (set, get) => ({
             employers: [],
             applications: [],
+            convocations: [],
             loading: false,
             error: null,
 
@@ -56,6 +58,21 @@ export const useEmployerStore = create()(
                             app.id === id ? { ...app, status: "REJECTED", reason } : app
                         ),
                     }));
+                } catch (err) {
+                    set({ error: err, loading: false });
+                }
+            },
+
+            loadConvocations: async (token) => {
+                try {
+                    set({ loading: true, error: null });
+                    const res = await employerService.getConvocationsForEmployer(token);
+
+                    const convocationsWithRawStatus = res.map(c => ({
+                        ...c, rawStatus: c.status.toLowerCase()
+                    }));
+
+                    set({ convocations: convocationsWithRawStatus, loading: false });
                 } catch (err) {
                     set({ error: err, loading: false });
                 }
