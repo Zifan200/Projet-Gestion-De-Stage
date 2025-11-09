@@ -159,7 +159,7 @@ export const InternshipApplications = () => {
 
         return convocations.some((convocation, i) => {
             if (!convocation) {
-                console.warn(`⚠️ Convocation at index ${i} is undefined:`, convocations);
+                console.warn(`Convocation at index ${i} is undefined:`, convocations);
                 return false;
             }
 
@@ -167,17 +167,19 @@ export const InternshipApplications = () => {
         });
     }
 
-    function wasConvocationConfirmedyStudent(application){
-        if (!Array.isArray(convocations)) return false;
-        return convocations.some((convocation, i) => {
-            if (!convocation) {
-                console.warn(`⚠️ Convocation at index ${i} is undefined:`, convocations);
-                return false;
-            }
+    function getConvocationDate(application) {
+        if (!Array.isArray(convocations) || convocations.length === 0) return "";
 
-            return convocation.status === "ACCEPTED";
-        });
+        const convocation = convocations.find(
+            (c) => c && c.internshipApplicationId === application.id
+        );
+
+        return convocation
+            ? new Date(convocation.convocationDate).toLocaleString()
+            : "";
     }
+
+
 
 
 
@@ -220,7 +222,7 @@ export const InternshipApplications = () => {
                                    }}
                 />
 
-                        <TableActionButton icon={ContactIcon} label={t("table.convocation")}
+                        <TableActionButton icon={ContactIcon} label={!isOfferedInterview(application)?t("table.convocation"):getConvocationDate(application)}
                                            bg_color={"amber-100"} text_color={"amber-700"}
                                            onClick={() => {
                                                setSelectedApplication(application);
@@ -229,6 +231,7 @@ export const InternshipApplications = () => {
                                                console.log(convocations)
                                            }}
                                            interactive={!isOfferedInterview(application)}
+                                           inactive_text_color={"blue-500"}
                         />
 
             </td>
