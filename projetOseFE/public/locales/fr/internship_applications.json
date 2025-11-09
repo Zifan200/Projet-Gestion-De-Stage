@@ -19,7 +19,8 @@
     "appliedAt": "Postulé le",
     "publicationDate": "Date de cadidature",
     "employerDecision": "Décision de l'employeur",
-    "myDecision": "Ma décision"
+    "myDecision": "Ma décision",
+    "noApplications": "aucune candidature"
   },
   "status": {
     "pending": "En cours d'examination",

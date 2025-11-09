@@ -19,7 +19,8 @@
     "appliedAt": "Applied at",
     "publicationDate": "Application date",
     "employerDecision": "Employer's decision",
-    "myDecision": "My decision"
+    "myDecision": "My decision",
+    "noApplications": "no applications"
   },
   "status": {
     "pending": "Under Review",

@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
-import { useEmployerStore } from "../../stores/employerStore.js";
-import { useCvStore } from "../../stores/cvStore.js";
+import React, {useEffect, useState, useMemo} from "react";
+import {useTranslation} from "react-i18next";
+import {toast} from "sonner";
+import {useEmployerStore} from "../../stores/employerStore.js";
+import {useCvStore} from "../../stores/cvStore.js";
 import useAuthStore from "../../stores/authStore.js";
-import { Modal } from "../../components/ui/modal.jsx";
-import { DataTable } from "../../components/ui/data-table.jsx";
-import { Header } from "../../components/ui/header.jsx";
+import {Table} from "../../components/ui/table.jsx";
+import {TableActionButton} from "../../components/ui/tableActionButton.jsx";
+
+import {Modal} from "../../components/ui/modal.jsx";
+import {DataTable} from "../../components/ui/data-table.jsx";
+import {Header} from "../../components/ui/header.jsx";
 import {
   Popover,
   PopoverTrigger,
@@ -21,7 +24,7 @@ import {
   CheckIcon,
 } from "@radix-ui/react-icons";
 
-import {PhoneCallIcon} from "lucide-react";
+import {PhoneCallIcon, PhoneIcon} from "lucide-react";
 import {convocationSchema} from "../../models/convocation.js";
 import {authService} from "../../services/authService.js";
 
@@ -64,14 +67,14 @@ export const InternshipApplications = () => {
   const [location, setLocation] = useState("");
   const [rejectReason, setRejectReason] = useState("");
 
-  useEffect(() => {
-      //load all applications
-      const loadAllData = async () => {
-          await fetchApplications();
-      }
-      loadAllData();
-      //set starting filters after loading
-        console.log(applications);
+    useEffect(() => {
+        //load all applications
+        const loadAllData = async () => {
+            await fetchApplications();
+            const {applications} = useEmployerStore.getState();
+            setCurrentApplicationsList(applications);
+        }
+        loadAllData();
 
       //
   }, []);
@@ -121,8 +124,8 @@ export const InternshipApplications = () => {
         try {
             switch (action) {
                 case "view":
-                    setSelectedApplication(app);
-                    setIsModalOpen(true);
+                    // setSelectedApplication(app);
+                    // setIsModalOpen(true);
                     break;
                 case "preview":
                     previewCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
@@ -149,150 +152,226 @@ export const InternshipApplications = () => {
         }
     };
 
-  // Colonnes du tableau
-  const columns = [
-    { key: "internshipOfferTitle", label: t("table.offerTitle") },
-    { key: "studentName", label: t("table.studentName") },
-    { key: "studentEmail", label: t("table.studentEmail") },
-    {
-      key: "publishDate",
-      label: t("table.publicationDate")
-    },
-    {
-      key: "actions",
-      label: t("table.action"),
-      actions: [
+    // Colonnes du tableau
+    const columns = [
+        {key: "internshipOfferTitle", label: t("table.offerTitle")},
+        {key: "studentName", label: t("table.studentName")},
+        {key: "studentEmail", label: t("table.studentEmail")},
         {
-          key: "view",
-          label: (
-            <>
-              {" "}
-              <EyeOpenIcon className="w-4 h-4" />{" "}
-              <span>{t("table.actionView")}</span>
-            </>
-          ),
+            key: "publishDate",
+            label: t("table.publicationDate")
+        },
+
+        {
+            key: "actions",
+            label: t("table.action"),
+            actions: [
+                // {
+                //   key: "view",
+                //   label: (
+                //     <>
+                //       {" "}
+                //       <EyeOpenIcon className="w-4 h-4" />{" "}
+                //       <span>{t("table.actionView")}</span>
+                //     </>
+                //   ),
+                // },
+                {
+                    key: "preview",
+                    label: (
+                        <>
+                            {" "}
+                            <FileTextIcon className="w-4 h-4"/>{" "}
+                            <span>{t("table.preview")}</span>
+                        </>
+                    ),
+                },
+                {
+                    key: "download",
+                    label: (
+                        <>
+                            {" "}
+                            <DownloadIcon className="w-4 h-4"/>{" "}
+                            <span>{t("table.download")}</span>
+                        </>
+                    ),
+                },
+                {
+                    key: "convocation",
+                    label: (
+                        <>
+                            <PhoneCallIcon className="w-4 h-4 "/>
+                            <span>{t("table.convocation")}</span>
+                        </>
+                    )
+                },
+
+
+                `${({key: "statusd"} === "ACCEPTEDD" ?
+                        {
+                            key: "status",
+                            label: (
+                                <>
+                                    <PhoneCallIcon className="w-4 h-4 "/>
+                                    <span>{("SOMTHING")}</span>
+                                </>
+                            )
+                        }
+                        :
+                        {
+                            key: "convocation",
+                            label: (
+                                <>
+                                    <PhoneCallIcon className="w-4 h-4 "/>
+                                    <span>{t("table.convocation")}</span>
+                                </>
+                            )
+                        }
+                )}`,
+
+            ],
+
         },
         {
-          key: "preview",
-          label: (
-            <>
-              {" "}
-              <FileTextIcon className="w-4 h-4" />{" "}
-              <span>{t("table.preview")}</span>
-            </>
-          ),
-        },
-        {
-          key: "download",
-          label: (
-            <>
-              {" "}
-              <DownloadIcon className="w-4 h-4" />{" "}
-              <span>{t("table.download")}</span>
-            </>
-          ),
-        },
-        {
-            key: "convocation",
+            key: "status",
             label: (
                 <>
-                    <PhoneCallIcon className="w-4 h-4"/>
-                    <span>{t("table.convocation")}</span>
+                    {/*<PhoneCallIcon className="w-4 h-4 "/>*/}
+                    <span>{t("")}</span>
                 </>
             )
-          }
-      ],
-    },
-  ];
+        }
 
-  // Filtrage + tri
-  const filteredApplications = useMemo(() => {
-    return applications
-      // .filter((app) => (filterStatus ? app.status === filterStatus : true))
-      // .filter((app) =>
-      //   filterSession === "All" ? true : app.session === filterSession,
-      // )
-      // .filter((app) =>
-      //   filterYear === "All"
-      //     ? true
-      //     : app.createdAt &&
-      //       new Date(app.createdAt).getFullYear().toString() === filterYear,
-      // )
-      // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  }, [applications, filterStatus, filterSession, filterYear]);
+    ];
 
-  const tableData = applications.map((application) => ({
-    ...application,
-    studentName: `${application.studentFirstName} ${application.studentLastName}`,
-    publishDate: application.internshipOfferPublishedDate,
-  }));
+    // Filtrage + tri
+    const filteredApplications = useMemo(() => {
+        return applications
+        // .filter((app) => (filterStatus ? app.status === filterStatus : true))
+        // .filter((app) =>
+        //   filterSession === "All" ? true : app.session === filterSession,
+        // )
+        // .filter((app) =>
+        //   filterYear === "All"
+        //     ? true
+        //     : app.createdAt &&
+        //       new Date(app.createdAt).getFullYear().toString() === filterYear,
+        // )
+        // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [applications, filterStatus, filterSession, filterYear]);
 
-  return (
-    <div className="space-y-6">
-      <Header title={t("title")} />
-      {/* Filtres */}
-      <div className="flex items-center gap-4">
-        {/* Statut */}
-        <Popover>
-          {({ open, setOpen, triggerRef, contentRef }) => (
-            <>
-              <PopoverTrigger
-                open={open}
-                setOpen={setOpen}
-                triggerRef={triggerRef}
-              >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
-                </span>
-              </PopoverTrigger>
-              <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px]">
-                  {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (
-                    <button
-                      key={status}
-                      onClick={() => {
-                        setFilterStatus(status);
-                        setOpen(false);
-                      }}
-                      className={`px-3 py-1 rounded text-left ${
-                        filterStatus === status
-                          ? "bg-blue-100 font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {t(`status.${status.toLowerCase()}`)}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => {
-                      setFilterStatus(null);
-                      setOpen(false);
-                    }}
-                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                  >
-                    {t("filter.all")}
-                  </button>
-                  <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
-                  </PopoverClose>
+    const tableData = currentApplicationsList.map((application) => ({
+        ...application,
+        studentName: `${application.studentFirstName} ${application.studentLastName}`,
+        publishDate: application.internshipOfferPublishedDate,
+        status: application.status
+    }));
+
+    const tableRows = () => currentApplicationsList.map((application) => (
+        <tr key={application.id}
+            className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm"
+        >
+            {/*offer title*/}
+            <td className="px-4 py-3 align-middle">
+                <div
+                    className="items-center px-3 py-1.5 text-md whitespace-nowrap">
+                    {application.internshipOfferTitle}
                 </div>
-              </PopoverContent>
-            </>
-          )}
-        </Popover>
+            </td>
+            {/*student name*/}
+            <td className="px-4 py-3 align-middle whitespace-nowrap ">
+                <div
+                    className="inline-flex items-center px-3 py-1.5 text-md transition-colors ">
+                    {application.studentFirstName} {application.studentLastName}
+                </div>
+            </td>
+            {/*student email*/}
+            <td className="px-4 py-3 align-middle">{application.studentEmail}</td>
+            {/*applicaiton date*/}
+            <td className="px-4 py-3 align-middle whitespace-nowrap ">{application.internshipOfferPublishedDate}</td>
+            {/*actions*/}
+            <td className="px-4 py-3 align-middle flex  whitespace-nowrap gap-2">
+                <TableActionButton icon={FileTextIcon} label={t("table.preview")}
+                                   bg_color={"indigo-100"} text_color={"indigo-700"}/>
 
-        {/* Session */}
-        <Popover>
-          {({ open, setOpen, triggerRef, contentRef }) => (
-            <>
-              <PopoverTrigger
-                open={open}
-                setOpen={setOpen}
-                triggerRef={triggerRef}
-              >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                <TableActionButton icon={DownloadIcon} label={t("table.download")}
+                                   bg_color={"green-100"} text_color={"green-700"}/>
+
+                <TableActionButton icon={PhoneCallIcon} label={t("table.convocation")}/>
+            </td>
+
+
+        </tr>
+    ));
+
+    return (
+        <div className="space-y-6">
+            <Header title={t("title")}/>
+            {/* Filtres */}
+            <div className="flex items-center gap-4">
+                {/* Statut */}
+                {/*<Popover>*/}
+                {/*    {({open, setOpen, triggerRef, contentRef}) => (*/}
+                {/*        <>*/}
+                {/*            <PopoverTrigger*/}
+                {/*                open={open}*/}
+                {/*                setOpen={setOpen}*/}
+                {/*                triggerRef={triggerRef}*/}
+                {/*            >*/}
+                {/*<span*/}
+                {/*    className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">*/}
+                {/*  {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}*/}
+                {/*</span>*/}
+                {/*            </PopoverTrigger>*/}
+                {/*            <PopoverContent open={open} contentRef={contentRef}>*/}
+                {/*                <div className="flex flex-col gap-2 min-w-[150px]">*/}
+                {/*                    {["PENDING", "ACCEPTED", "REJECTED"].map((status) => (*/}
+                {/*                        <button*/}
+                {/*                            key={status}*/}
+                {/*                            onClick={() => {*/}
+                {/*                                setFilterStatus(status);*/}
+                {/*                                setOpen(false);*/}
+                {/*                            }}*/}
+                {/*                            className={`px-3 py-1 rounded text-left ${*/}
+                {/*                                filterStatus === status*/}
+                {/*                                    ? "bg-blue-100 font-semibold"*/}
+                {/*                                    : "hover:bg-gray-100"*/}
+                {/*                            }`}*/}
+                {/*                        >*/}
+                {/*                            {t(`status.${status.toLowerCase()}`)}*/}
+                {/*                        </button>*/}
+                {/*                    ))}*/}
+                {/*                    <button*/}
+                {/*                        onClick={() => {*/}
+                {/*                            setFilterStatus(null);*/}
+                {/*                            setOpen(false);*/}
+                {/*                        }}*/}
+                {/*                        className="px-3 py-1 rounded text-left hover:bg-gray-100"*/}
+                {/*                    >*/}
+                {/*                        {t("filter.all")}*/}
+                {/*                    </button>*/}
+                {/*                    <PopoverClose setOpen={setOpen}>*/}
+                {/*    <span className="text-sm text-gray-600">*/}
+                {/*      {t("menu.close")}*/}
+                {/*    </span>*/}
+                {/*                    </PopoverClose>*/}
+                {/*                </div>*/}
+                {/*            </PopoverContent>*/}
+                {/*        </>*/}
+                {/*    )}*/}
+                {/*</Popover>*/}
+
+                {/* Session */}
+                <Popover>
+                    {({open, setOpen, triggerRef, contentRef}) => (
+                        <>
+                            <PopoverTrigger
+                                open={open}
+                                setOpen={setOpen}
+                                triggerRef={triggerRef}
+                            >
+                <span
+                    className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                   {t("filter.session")}:{" "}
                   {filterSession === "All"
                     ? t("session.all")
@@ -390,9 +469,22 @@ export const InternshipApplications = () => {
         </Popover>
       </div>
 
-      {/* Tableau */}
-        {loading ? <p>{t("table.loading")}</p> :
-      <DataTable columns={columns} data={tableData} onAction={handleAction} />}
+            {/* Tableau */}
+            {loading ? <p>{t("table.loading")}</p> :
+                // <DataTable columns={columns} data={tableData} onAction={handleAction}/>}
+                <Table
+                    headers={[
+                        t("table.offerTitle"),
+                        t("table.studentName"),
+                        t("table.studentEmail"),
+                        t("table.appliedAt"),
+                        t("table.action"),
+
+                    ]}
+                    rows={tableRows()}
+                    emptyMessage={t("table.noApplications")}
+                />
+            }
 
       {/* Aperçu du CV */}
       {previewUrl && (
@@ -426,147 +518,147 @@ export const InternshipApplications = () => {
         </div>
       )}
 
-        {selectedApplication && isModalOpen && modalType !== "convocation" && (
-            <Modal
-                open={isModalOpen}
-                onClose={() => {
-                    setIsModalOpen(false);
-                    setModalMode("details");
-                    setRejectReason("");
-                    setSelectedApplication(null);
-                }}
-                title={
-                    modalMode === "details"
-                        ? selectedApplication
-                            ? `${selectedApplication.studentFirstName} ${selectedApplication.studentLastName}`
-                            : ""
-                        : t("reasonModal.title")
-                }
-                size="default"
-                footer={
-                    modalMode === "details" ? (
-                        <>
-                            <button
-                                onClick={() => {
-                                    setIsModalOpen(false);
-                                    setModalMode("details");
-                                    setSelectedApplication(null);
-                                }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                            >
-                                <span>{t("modal.close")}</span>
-                            </button>
-                            {selectedApplication?.status === "PENDING" && (
-                                <>
-                                    <button
-                                        onClick={() => setModalMode("reject")}
-                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
-                                    >
-                                        <Cross2Icon className="w-4 h-4" />
-                                        <span>{t("table.reject")}</span>
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            handleApproveApplication(selectedApplication);
-                                            setIsModalOpen(false);
-                                            setModalMode("details");
-                                            setSelectedApplication(null);
-                                        }}
-                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                                    >
-                                        <CheckIcon className="w-4 h-4" />
-                                        <span>{t("table.accept")}</span>
-                                    </button>
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <button
-                                onClick={() => {
-                                    setModalMode("details");
-                                    setRejectReason("");
-                                }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                            >
-                                <span>{t("reasonModal.cancel")}</span>
-                            </button>
-                            <button
-                                onClick={() => {
-                                    if (!rejectReason.trim()) {
-                                        toast.error(t("reasonModal.errorEmpty"));
-                                        return;
-                                    }
-                                    handleRejectApplication(rejectReason);
-                                }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
-                            >
-                                <span>{t("reasonModal.confirm")}</span>
-                            </button>
-                        </>
-                    )
-                }
-            >
-                {modalMode === "details" && (
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.email")}
-                                </h3>
-                                <p className="text-gray-600">
-                                    {selectedApplication.studentEmail}
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.cv")}
-                                </h3>
-                                <p className="text-gray-600">
-                                    {selectedApplication.selectedCvFileName || t("table.noCv")}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.offerTitle")}
-                                </h3>
-                                <p className="text-gray-600">
-                                    {selectedApplication.internshipOfferTitle}
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.status")}
-                                </h3>
-                                <span
-                                    className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                        selectedApplication.status === "ACCEPTED"
-                                            ? "bg-green-100 text-green-800"
-                                            : selectedApplication.status === "REJECTED"
-                                                ? "bg-red-100 text-red-800"
-                                                : "bg-yellow-100 text-yellow-800"
-                                    }`}
+            {selectedApplication && isModalOpen && modalType !== "convocation" && (
+                <Modal
+                    open={isModalOpen}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setModalMode("details");
+                        setRejectReason("");
+                        setSelectedApplication(null);
+                    }}
+                    title={
+                        modalMode === "details"
+                            ? selectedApplication
+                                ? `${selectedApplication.studentFirstName} ${selectedApplication.studentLastName}`
+                                : ""
+                            : t("reasonModal.title")
+                    }
+                    size="default"
+                    footer={
+                        modalMode === "details" ? (
+                            <>
+                                <button
+                                    onClick={() => {
+                                        setIsModalOpen(false);
+                                        setModalMode("details");
+                                        setSelectedApplication(null);
+                                    }}
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                                 >
-                            {t(`status.${selectedApplication.status?.toLowerCase()}`)}
-                        </span>
-                            </div>
-                        </div>
+                                    <span>{t("modal.close")}</span>
+                                </button>
+                                {selectedApplication?.status === "PENDING" && (
+                                    <>
+                                        <button
+                                            onClick={() => setModalMode("reject")}
+                                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                        >
+                                            <Cross2Icon className="w-4 h-4"/>
+                                            <span>{t("table.reject")}</span>
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                handleApproveApplication(selectedApplication);
+                                                setIsModalOpen(false);
+                                                setModalMode("details");
+                                                setSelectedApplication(null);
+                                            }}
+                                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                        >
+                                            <CheckIcon className="w-4 h-4"/>
+                                            <span>{t("table.accept")}</span>
+                                        </button>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={() => {
+                                        setModalMode("details");
+                                        setRejectReason("");
+                                    }}
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                >
+                                    <span>{t("reasonModal.cancel")}</span>
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (!rejectReason.trim()) {
+                                            toast.error(t("reasonModal.errorEmpty"));
+                                            return;
+                                        }
+                                        handleRejectApplication(rejectReason);
+                                    }}
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                >
+                                    <span>{t("reasonModal.confirm")}</span>
+                                </button>
+                            </>
+                        )
+                    }
+                >
+                    {/*{modalMode === "details" && (*/}
+                    {/*    <div className="space-y-4">*/}
+                    {/*        <div className="grid grid-cols-2 gap-4">*/}
+                    {/*            <div>*/}
+                    {/*                <h3 className="text-lg font-semibold text-gray-700 mb-2">*/}
+                    {/*                    {t("modal.email")}*/}
+                    {/*                </h3>*/}
+                    {/*                <p className="text-gray-600">*/}
+                    {/*                    {selectedApplication.studentEmail}*/}
+                    {/*                </p>*/}
+                    {/*            </div>*/}
 
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                {t("modal.appliedAt")}
-                            </h3>
-                            <p className="text-gray-600">
-                                {new Date(selectedApplication.createdAt).toLocaleDateString()}
-                            </p>
-                        </div>
-                    </div>
-                )}
+                    {/*            <div>*/}
+                    {/*                <h3 className="text-lg font-semibold text-gray-700 mb-2">*/}
+                    {/*                    {t("modal.cv")}*/}
+                    {/*                </h3>*/}
+                    {/*                <p className="text-gray-600">*/}
+                    {/*                    {selectedApplication.selectedCvFileName || t("table.noCv")}*/}
+                    {/*                </p>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+
+                    {/*        <div className="grid grid-cols-2 gap-4">*/}
+                    {/*            <div>*/}
+                    {/*                <h3 className="text-lg font-semibold text-gray-700 mb-2">*/}
+                    {/*                    {t("modal.offerTitle")}*/}
+                    {/*                </h3>*/}
+                    {/*                <p className="text-gray-600">*/}
+                    {/*                    {selectedApplication.internshipOfferTitle}*/}
+                    {/*                </p>*/}
+                    {/*            </div>*/}
+
+                    {/*            <div>*/}
+                    {/*                <h3 className="text-lg font-semibold text-gray-700 mb-2">*/}
+                    {/*                    {t("modal.status")}*/}
+                    {/*                </h3>*/}
+                    {/*                <span*/}
+                    {/*                    className={`px-3 py-1 rounded-full text-sm font-semibold ${*/}
+                    {/*                        selectedApplication.status === "ACCEPTED"*/}
+                    {/*                            ? "bg-green-100 text-green-800"*/}
+                    {/*                            : selectedApplication.status === "REJECTED"*/}
+                    {/*                                ? "bg-red-100 text-red-800"*/}
+                    {/*                                : "bg-yellow-100 text-yellow-800"*/}
+                    {/*                    }`}*/}
+                    {/*                >*/}
+                    {/*            {t(`status.${selectedApplication.status?.toLowerCase()}`)}*/}
+                    {/*        </span>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+
+                    {/*        <div>*/}
+                    {/*            <h3 className="text-lg font-semibold text-gray-700 mb-2">*/}
+                    {/*                {t("modal.appliedAt")}*/}
+                    {/*            </h3>*/}
+                    {/*            <p className="text-gray-600">*/}
+                    {/*                {new Date(selectedApplication.createdAt).toLocaleDateString()}*/}
+                    {/*            </p>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                 {modalMode === "reject" && (
                     <div className="space-y-4">
