@@ -12,12 +12,12 @@ export const TableActionButton = ({
                                   }) => {
     return (
         <button
-            onClick={()=>{if(interactive) {
-                onClick
+            onClick={()=>{if(interactive===true) {
+                onClick()
             }}}
             className={clsx(
                 `inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 
-         text-${text_color} bg-${bg_color} ${interactive?"hover:bg-current/25":""} hover:text-${text_color}
+         text-${text_color} bg-${bg_color} ${interactive===true?"hover:bg-current/25":""} hover:text-${text_color}
          max-sm:w-9 max-sm:h-9 max-sm:gap-0 min-w-[2.5rem] ${className}`,
             )}
         >
