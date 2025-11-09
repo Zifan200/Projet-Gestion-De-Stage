@@ -20,11 +20,12 @@ export const OfferList = () => {
   const user = useAuthStore((s) => s.user);
   const { offers, loadOffers, downloadOfferPdf } = useOfferStore();
   const navigate = useNavigate();
+  const currentYear = new Date().getFullYear();
 
   const [filterStatus, setFilterStatus] = useState(null);
   const [sortKey, setSortKey] = useState("date");
   const [filterSession, setFilterSession] = useState("hiver");
-  const [filterYear, setFilterYear] = useState("All");
+  const [filterYear, setFilterYear] = useState(currentYear.toString());
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
@@ -57,23 +58,17 @@ export const OfferList = () => {
   }, [offers]);
 
   const sortedAndFilteredOffers = useMemo(() => {
-    let filtered = offers;
+    return offers
+        .filter(o => !filterSession || o.session?.toLowerCase() === filterSession.toLowerCase())
+        .filter(o => !filterYear || (o.startDate && new Date(o.startDate).getFullYear().toString() === filterYear))
+        .filter(o => !filterStatus || o.status === filterStatus)
+        .sort((a, b) => {
+          if (sortKey === "date") return new Date(b.expirationDate) - new Date(a.expirationDate);
+          if (sortKey === "applications") return (b.applicationCount || 0) - (a.applicationCount || 0);
+          return 0;
+        });
+  }, [offers, sortKey, filterSession, filterYear, filterStatus]);
 
-    if (filterStatus) filtered = filtered.filter((o) => o.status === filterStatus);
-    if (filterSession !== "All")
-      filtered = filtered.filter(
-          (o) => o.session?.toLowerCase() === filterSession.toLowerCase()
-      );
-    if (filterYear !== "All") filtered = filtered.filter(
-        (o) => o.startDate && new Date(o.startDate).getFullYear().toString() === filterYear
-    );
-
-    return [...filtered].sort((a, b) => {
-      if (sortKey === "date") return new Date(b.expirationDate) - new Date(a.expirationDate);
-      if (sortKey === "applications") return (b.applicationCount || 0) - (a.applicationCount || 0);
-      return 0;
-    });
-  }, [offers, filterStatus, filterSession, filterYear, sortKey]);
 
   const columns = [
     { key: "title", label: t("table.offerTitle") },
@@ -238,9 +233,7 @@ export const OfferList = () => {
                             {year}
                           </button>
                       ))}
-                      <button onClick={() => { setFilterYear("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
-                        {t("session.AllYears")}
-                      </button>
+
                       <PopoverClose setOpen={setOpen}>
                         <span className="text-sm text-gray-600">{t("menu.close")}</span>
                       </PopoverClose>
