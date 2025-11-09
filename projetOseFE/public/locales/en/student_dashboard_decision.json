@@ -31,7 +31,8 @@
     "studentStatus": "My decision",
     "selectedCv": "Selected CV",
     "applicationDate": "Application date",
-    "close": "Close"
+    "close": "Close",
+    "salary": "Salary"
   },
   "filter":
   {

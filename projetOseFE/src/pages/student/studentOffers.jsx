@@ -170,7 +170,10 @@ export const StudentOffers = () => {
           {({ open, setOpen, triggerRef, contentRef }) => (
               <>
                 <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-          <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+          <span
+              className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer
+              hover:bg-zinc-200 transition"
+          >
             {t("student_dashboard_offers:filter.session")}:{" "}
             {filterSession !== "All" ? filterSession : t("student_dashboard_offers:session.all")}
           </span>
@@ -181,7 +184,9 @@ export const StudentOffers = () => {
                         <button
                             key={session}
                             onClick={() => { setFilterSession(session); setOpen(false); }}
-                            className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                            className={`px-3 py-1 rounded text-left 
+                              ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`
+                            }
                         >
                           {session}
                         </button>
@@ -206,10 +211,12 @@ export const StudentOffers = () => {
           {({ open, setOpen, triggerRef, contentRef }) => (
               <>
                 <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-          <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-            {t("student_dashboard_offers:filter.year")}:{" "}
-            {filterYear !== "All" ? filterYear : t("student_dashboard_offers:session.year")}
-          </span>
+                  <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm
+                    cursor-pointer hover:bg-zinc-200 transition"
+                  >
+                    {t("student_dashboard_offers:filter.year")}:{" "}
+                    {filterYear !== "All" ? filterYear : t("student_dashboard_offers:session.year")}
+                  </span>
                 </PopoverTrigger>
                 <PopoverContent open={open} contentRef={contentRef}>
                   <div className="flex flex-col gap-2 min-w-[150px]">
@@ -217,7 +224,9 @@ export const StudentOffers = () => {
                         <button
                             key={year}
                             onClick={() => { setFilterYear(year.toString()); setOpen(false); }}
-                            className={`px-3 py-1 rounded text-left ${filterYear === year.toString() ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                            className={`px-3 py-1 rounded text-left 
+                              ${filterYear === year.toString() ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`
+                            }
                         >
                           {year}
                         </button>
@@ -260,7 +269,8 @@ export const StudentOffers = () => {
                 setSelectedOffer(null);
                 setSelectedCv(null);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+              transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
             >
               <span>{t("modal.close")}</span>
             </button>
@@ -312,12 +322,21 @@ export const StudentOffers = () => {
               </div>
             </div>
 
-            {selectedOffer.description && (
+            <div className="grid grid-cols-2 gap-4">
+              {selectedOffer.description && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                    <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                  </div>
+              )}
+
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
+                <p className="text-gray-600">
+                  {selectedOffer.salary}$
+                </p>
               </div>
-            )}
+            </div>
 
             {/* CV Select */}
             <div>
@@ -325,7 +344,8 @@ export const StudentOffers = () => {
                 {t("modal.selectCv")}
               </label>
               <select
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none
+                focus:ring-2 focus:ring-blue-300"
                 value={selectedCv?.id || ""}
                 onChange={(e) =>
                   setSelectedCv(

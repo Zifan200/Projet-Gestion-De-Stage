@@ -261,12 +261,26 @@ export default function OffresAConfirmer() {
                             </div>
                         </div>
 
-                        {selectedOffer.internshipOfferDescription && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {selectedOffer.internshipOfferDescription && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
+                                    <p className="text-gray-600 whitespace-pre-wrap">
+                                        {selectedOffer.internshipOfferDescription}
+                                    </p>
+                                </div>
+                            )}
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.internshipOfferDescription}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.salary")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedOffer.salary}$
+                                </p>
                             </div>
-                        )}
+                        </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             {selectedOffer.startDate && (
@@ -287,7 +301,8 @@ export default function OffresAConfirmer() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employerStatus")}</h3>
-                                <span className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                                <span
+                                    className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
                                     {t(`employerStatus.${selectedOffer.status.toLowerCase()}`)}
                                 </span>
                             </div>
@@ -296,8 +311,8 @@ export default function OffresAConfirmer() {
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentStatus")}</h3>
                                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                     selectedOffer.etudiantStatus === "CONFIRMED_BY_STUDENT" ? "bg-green-100 text-green-800" :
-                                    selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? "bg-red-100 text-red-800" :
-                                    "bg-yellow-100 text-yellow-800"
+                                        selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? "bg-red-100 text-red-800" :
+                                            "bg-yellow-100 text-yellow-800"
                                 }`}>
                                     {selectedOffer.etudiantStatus ? t(`studentStatus.${selectedOffer.etudiantStatus.toLowerCase()}`) : t("studentStatus.pending")}
                                 </span>
