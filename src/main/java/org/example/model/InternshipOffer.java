@@ -42,11 +42,14 @@ public class InternshipOffer {
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
+    private float salary;
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-            ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session, List<InternshipApplication> applications
+            Long id, String title, String description, String targetedProgramme, Employer employer,
+            LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason,
+            LocalDate startDate, LocalDate endDate, String session, List<InternshipApplication> applications,
+            float salary
     ){
         this.id = id;
         this.title = title;
@@ -61,5 +64,6 @@ public class InternshipOffer {
         this.endDate = endDate;
         this.session = session;
         this.applications = applications;
+        this.salary = salary;
     }
 }
