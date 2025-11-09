@@ -25,6 +25,7 @@ export default function AddIntership() {
     defaultValues: {
       title: "",
       description: "",
+      salary: "",
       targetedProgramme: "",
       employerEmail: user?.email || "",
       startDate: "",
@@ -89,6 +90,17 @@ export default function AddIntership() {
                       </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Salaire */}
+              <div className="w-full">
+                <Label name="salary" label={t("form.salary")} />
+                <Input
+                    name="salary"
+                    type="number"
+                    placeholder={t("form.placeholders.salary")}
+                    {...form.register("salary")}
+                />
               </div>
 
               {/* Start Date */}

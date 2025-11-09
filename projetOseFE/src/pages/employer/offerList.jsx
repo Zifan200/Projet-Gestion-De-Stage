@@ -275,51 +275,59 @@ export const OfferList = () => {
             }
         >
           {selectedOffer && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.enterprise")}</h3>
-                  <p className="text-gray-600">{selectedOffer.enterpriseName}</p>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.enterprise")}</h3>
+                    <p className="text-gray-600">{selectedOffer.enterpriseName}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.program")}</h3>
+                    <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.program")}</h3>
-                  <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
-                </div>
-              </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.deadline")}</h3>
+                    <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.deadline")}</h3>
-                  <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.status")}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    selectedOffer.status === "ACCEPTED" ? "bg-green-100 text-green-800" :
-                    selectedOffer.status === "REJECTED" ? "bg-red-100 text-red-800" :
-                    "bg-yellow-100 text-yellow-800"
-                  }`}>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.status")}</h3>
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        selectedOffer.status === "ACCEPTED" ? "bg-green-100 text-green-800" :
+                            selectedOffer.status === "REJECTED" ? "bg-red-100 text-red-800" :
+                                "bg-yellow-100 text-yellow-800"
+                    }`}>
                     {t(`status.${selectedOffer.status?.toLowerCase()}`)}
                   </span>
+                  </div>
+                </div>
+
+                {selectedOffer.reason?.trim() && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.reason")}</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.reason}</p>
+                    </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                  {selectedOffer.description && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.description")}</h3>
+                        <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                      </div>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
+                    <p className="text-gray-600">
+                      {selectedOffer.salary}$
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              {selectedOffer.reason?.trim() && (
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.reason")}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.reason}</p>
-                </div>
-              )}
-
-              {selectedOffer.description && (
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.description")}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
-                </div>
-              )}
-            </div>
           )}
         </Modal>
       </div>

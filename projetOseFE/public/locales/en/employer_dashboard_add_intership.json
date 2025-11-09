@@ -4,6 +4,7 @@
   "form": {
     "title": "Title",
     "description": "Description",
+    "salary": "Salary",
     "program": "Targeted Program",
     "deadline": "Deadline to apply",
     "startDate": "Internship Start Date",
@@ -11,7 +12,8 @@
     "placeholders": {
       "title": "Please enter the title of your internship offer",
       "description": "Please enter the full description of the offered internship",
-      "program": "Please select the targeted program"
+      "program": "Please select the targeted program",
+      "salary": "16.10"
     }
   },
   "submit": "Publish Offer",
@@ -26,6 +28,7 @@
     "title_required": "A title is required.",
     "description_required": "A description is required.",
     "program_required": "A program is required.",
+    "salary_required": "A salary is required.",
     "invalid_email": "Please enter a valid email address.",
     "expiration_required": "A deadline is required.",
     "start_required": "A start date is required.",
