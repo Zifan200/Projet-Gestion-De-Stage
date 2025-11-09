@@ -69,11 +69,12 @@ export const InternshipApplications = () => {
         return Array.from(
             new Set(
                 applications
-                    .filter((app) => app.createdAt)
-                    .map((app) => new Date(app.createdAt).getFullYear()),
+                    .filter((app) => app.startDate)
+                    .map((app) => new Date(app.startDate).getFullYear()),
             ),
         ).sort((a, b) => b - a);
     }, [applications]);
+
 
     // Gestion acceptation
     const handleApproveApplication = async (application) => {
@@ -194,18 +195,19 @@ export const InternshipApplications = () => {
         },
     ];
 
-    // Filtrage + tri
     const filteredApplications = useMemo(() => {
         return applications
             .filter((app) => (filterStatus ? app.status === filterStatus : true))
             .filter((app) => app.session === filterSession)
-            .filter(
-                (app) =>
-                    app.createdAt &&
-                    new Date(app.createdAt).getFullYear().toString() === filterYear
-            )
+            .filter((app) => {
+                const appYear = new Date(app.startDate).getFullYear().toString(); // <-- startDate
+                return appYear === filterYear;
+            })
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }, [applications, filterStatus, filterSession, filterYear]);
+
+
+
 
     const tableData = filteredApplications.map((app) => ({
         ...app,
