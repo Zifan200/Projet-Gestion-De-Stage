@@ -223,21 +223,24 @@ export const OfferList = () => {
                 </span>
                   </PopoverTrigger>
                   <PopoverContent open={open} contentRef={contentRef}>
-                    <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">
-                      {availableYears.map((year) => (
-                          <button
-                              key={year}
-                              onClick={() => { setFilterYear(year.toString()); setOpen(false); }}
-                              className={`px-3 py-1 rounded text-left ${filterYear === year.toString() ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
-                          >
-                            {year}
-                          </button>
-                      ))}
+                      <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
+                          {availableYears.map((year) => (
+                              <button
+                                  key={year}
+                                  onClick={() => {
+                                      setFilterYear(year.toString());
+                                      setOpen(false);
+                                  }}
+                                  className={`px-3 py-1 rounded text-left ${filterYear === year.toString() ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                              >
+                                  {year}
+                              </button>
+                          ))}
 
-                      <PopoverClose setOpen={setOpen}>
-                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
-                      </PopoverClose>
-                    </div>
+                          <PopoverClose setOpen={setOpen}>
+                              <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                          </PopoverClose>
+                      </div>
                   </PopoverContent>
                 </>
             )}

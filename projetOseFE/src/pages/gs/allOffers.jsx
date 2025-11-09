@@ -433,22 +433,22 @@ export const AllOffers = () => {
                 </span>
               </PopoverTrigger>
               <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px]">
+                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
                   {availableYears.map((year) => (
-                    <button
-                      key={year}
-                      onClick={() => {
-                        setCurrentYear(year.toString());
-                        setOpen(false);
-                      }}
-                      className={`px-3 py-1 rounded text-left ${
-                        currentYear === year.toString()
-                          ? "bg-blue-100 font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {year}
-                    </button>
+                      <button
+                          key={year}
+                          onClick={() => {
+                            setCurrentYear(year.toString());
+                            setOpen(false);
+                          }}
+                          className={`px-3 py-1 rounded text-left ${
+                              currentYear === year.toString()
+                                  ? "bg-blue-100 font-semibold"
+                                  : "hover:bg-gray-100"
+                          }`}
+                      >
+                        {year}
+                      </button>
                   ))}
 
                   <PopoverClose setOpen={setOpen}>
