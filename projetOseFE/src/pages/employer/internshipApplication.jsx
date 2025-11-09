@@ -219,14 +219,7 @@ export const InternshipApplications = () => {
                                        downloadCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
                                    }}
                 />
-                {isOfferedInterview(application) ?
 
-                    <TableActionButton icon={ContactIcon} label={t("table.convocation")}
-                                       bg_color={"gray-100"} text_color={"gray-200"} interactive={false}
-
-                    />
-                    :
-                    <>
                         <TableActionButton icon={ContactIcon} label={t("table.convocation")}
                                            bg_color={"amber-100"} text_color={"amber-700"}
                                            onClick={() => {
@@ -235,9 +228,9 @@ export const InternshipApplications = () => {
                                                setModalType("convocation");
                                                console.log(convocations)
                                            }}
+                                           interactive={!isOfferedInterview(application)}
                         />
-                    </>
-                }
+
             </td>
         </tr>
     ));
