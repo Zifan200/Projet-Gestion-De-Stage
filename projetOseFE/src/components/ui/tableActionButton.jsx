@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx"; // optional but handy for conditional classes
 
 export const TableActionButton = ({
                                       label,
@@ -6,22 +7,30 @@ export const TableActionButton = ({
                                       onClick,
                                       bg_color = "gray-200",
                                       text_color = "gray-700",
-                                      icon_fill_color = "",
-                                      icon_stroke_color = ""
-
                                   }) => {
     return (
         <button
             onClick={onClick}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 text-${text_color}  bg-${bg_color} hover:bg-current/25 hover:text-${text_color}`}
+            className={clsx(
+                `inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 
+         text-${text_color} bg-${bg_color} hover:bg-current/25 hover:text-${text_color}
+         max-sm:w-9 max-sm:h-9 max-sm:gap-0 min-w-[2.5rem]`,
+            )}
         >
             {Icon && (
                 <Icon
-                    className={`relative z-10 w-4 h-4 fill-current ${icon_fill_color?"fill-"+icon_fill_color:""} ${icon_stroke_color?"stroke-"+icon_stroke_color+" stroke-1":""}`}
+                    className={clsx(
+                        `relative z-10 w-4 h-4 stroke-0.5 stroke-current  
+             max-sm:w-5 max-sm:h-5 shrink-0`,
+                    )}
                 />
             )}
-            <span className={`relative z-10`}>{label}</span>
+            {/* Label hidden on small screens */}
+            <span
+                className={`relative z-10 max-sm:opacity-0 max-sm:w-0 max-sm:overflow-hidden transition-all duration-200 whitespace-nowrap`}
+            >
+        {label}
+      </span>
         </button>
-
     );
 };

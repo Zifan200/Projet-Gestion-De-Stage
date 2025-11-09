@@ -7,7 +7,7 @@ export const Table = ({ headers, rows, emptyMessage }) => {
           <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
           <tr>
             {headers.map((h) => (
-              <th key={h} className="px-4 py-3">
+              <th key={h} className="px-4 py-3 md:whitespace-nowrap">
                 {h}
               </th>
             ))}

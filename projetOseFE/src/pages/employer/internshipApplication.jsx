@@ -8,111 +8,123 @@ import {Table} from "../../components/ui/table.jsx";
 import {TableActionButton} from "../../components/ui/tableActionButton.jsx";
 
 import {Modal} from "../../components/ui/modal.jsx";
-import {DataTable} from "../../components/ui/data-table.jsx";
 import {Header} from "../../components/ui/header.jsx";
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverClose,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverClose,
 } from "../../components/ui/popover.jsx";
 import {
-  EyeOpenIcon,
-  DownloadIcon,
-  FileTextIcon,
-  Cross2Icon,
-  CheckIcon,
+    DownloadIcon,
+    FileTextIcon,
+    Cross2Icon,
+    CheckIcon, CheckboxIcon, CircleIcon,
 } from "@radix-ui/react-icons";
 
-import {PhoneCallIcon, PhoneIcon} from "lucide-react";
+
+import {
+    AlertCircle,
+    AlertCircleIcon,
+    CheckCircleIcon,
+    CheckSquareIcon,
+    PhoneCallIcon,
+    PhoneIcon,
+    ContactIcon
+} from "lucide-react";
 import {convocationSchema} from "../../models/convocation.js";
 import {authService} from "../../services/authService.js";
+import {Warning} from "postcss";
 
 export const InternshipApplications = () => {
-  const { t } = useTranslation("internship_applications");
-  const user = useAuthStore((s) => s.user);
+    const {t} = useTranslation("internship_applications");
+    const user = useAuthStore((s) => s.user);
 
-  const {
-      applications,
-    fetchApplications,
-    approveApplication,
-    rejectApplication,
-    loading
-  } = useEmployerStore();
-  const {
-    previewUrl,
-    previewType,
-    previewCvForEmployer,
-    downloadCvForEmployer,
-    closePreview,
-  } = useCvStore();
-  const {createConvocation: sendConvocation} = useEmployerStore();
+    const {
+        fetchApplications,
+        fetchListConvocation,
+        approveApplication,
+        rejectApplication,
+        loading
+    } = useEmployerStore();
+    const {
+        previewUrl,
+        previewType,
+        previewCvForEmployer,
+        downloadCvForEmployer,
+        closePreview,
+    } = useCvStore();
+    const {createConvocation: sendConvocation} = useEmployerStore();
 
-  const [currentApplicationsList, setCurrentApplicationsList] = useState([]);
-  const [selectedApplication, setSelectedApplication] = useState(null);
+    const [currentApplicationsList, setCurrentApplicationsList] = useState([]);
+    const [selectedApplication, setSelectedApplication] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("details");
-  const [modalType, setModalType] = useState(null);
+    const convocations = useEmployerStore((s) => s.convocations);
+    const applications =  useEmployerStore((s) => s.applications);
 
-  const [filterStatus, setFilterStatus] = useState(null);
-  const [filterSession, setFilterSession] = useState("All");
-  const [filterYear, setFilterYear] = useState("All");
 
-  const [modeConvocation, setModeConvocation] = useState("");
-  const [dateConvocation, setDateConvocation] = useState("");
-  const [timeConvocation, setTimeConvocation] = useState("09:00");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState("details");
+    const [modalType, setModalType] = useState(null);
 
-  const [link, setLink] = useState("");
-  const [location, setLocation] = useState("");
-  const [rejectReason, setRejectReason] = useState("");
+    const [filterStatus, setFilterStatus] = useState(null);
+    const [filterSession, setFilterSession] = useState("All");
+    const [filterYear, setFilterYear] = useState("All");
+
+    const [modeConvocation, setModeConvocation] = useState("");
+    const [dateConvocation, setDateConvocation] = useState("");
+    const [timeConvocation, setTimeConvocation] = useState("09:00");
+
+    const [link, setLink] = useState("");
+    const [location, setLocation] = useState("");
+    const [rejectReason, setRejectReason] = useState("");
 
     useEffect(() => {
         //load all applications
         const loadAllData = async () => {
             await fetchApplications();
-            const {applications} = useEmployerStore.getState();
-            setCurrentApplicationsList(applications);
+            await fetchListConvocation();
+            // const applications =
         }
         loadAllData();
 
-      //
-  }, []);
+        //
+    }, []);
 
-  // Extraire les années disponibles à partir des candidatures
-  // const availableYears = useMemo(() => {
-  //   return Array.from(
-  //     new Set(
-  //       applications
-  //         .filter((app) => app.createdAt)
-  //         .map((app) => new Date(app.createdAt).getFullYear()),
-  //     ),
-  //   ).sort((a, b) => b - a);
-  // }, [applications]);
+    // Extraire les années disponibles à partir des candidatures
+    // const availableYears = useMemo(() => {
+    //   return Array.from(
+    //     new Set(
+    //       applications
+    //         .filter((app) => app.createdAt)
+    //         .map((app) => new Date(app.createdAt).getFullYear()),
+    //     ),
+    //   ).sort((a, b) => b - a);
+    // }, [applications]);
 
-  // Gestion acceptation
-  const handleApproveApplication = async (application) => {
-    try {
-      await approveApplication(user.token, application.id);
-      toast.success(t("success.accepted"));
-    } catch {
-      toast.error(t("errors.accept"));
-    }
-  };
+    // Gestion acceptation
+    const handleApproveApplication = async (application) => {
+        try {
+            await approveApplication(user.token, application.id);
+            toast.success(t("success.accepted"));
+        } catch {
+            toast.error(t("errors.accept"));
+        }
+    };
 
-  // Gestion rejet
-  const handleRejectApplication = async (reason) => {
-    try {
-      await rejectApplication(user.token, selectedApplication.id, reason);
-      toast.success(t("success.rejected"));
-      setIsModalOpen(false);
-      setModalMode("details");
-      setRejectReason("");
-      setSelectedApplication(null);
-    } catch {
-      toast.error(t("errors.reject"));
-    }
-  };
+    // Gestion rejet
+    const handleRejectApplication = async (reason) => {
+        try {
+            await rejectApplication(user.token, selectedApplication.id, reason);
+            toast.success(t("success.rejected"));
+            setIsModalOpen(false);
+            setModalMode("details");
+            setRejectReason("");
+            setSelectedApplication(null);
+        } catch {
+            toast.error(t("errors.reject"));
+        }
+    };
 
 // Gestion actions (vue, téléchargement, etc.)
     const handleAction = (action, app) => {
@@ -260,47 +272,84 @@ export const InternshipApplications = () => {
         // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }, [applications, filterStatus, filterSession, filterYear]);
 
-    const tableData = currentApplicationsList.map((application) => ({
-        ...application,
-        studentName: `${application.studentFirstName} ${application.studentLastName}`,
-        publishDate: application.internshipOfferPublishedDate,
-        status: application.status
-    }));
+    // const tableData = currentApplicationsList.map((application) => ({
+    //     ...application,
+    //     studentName: `${application.studentFirstName} ${application.studentLastName}`,
+    //     publishDate: application.internshipOfferPublishedDate,
+    //     status: application.status
+    // }));
 
-    const tableRows = () => currentApplicationsList.map((application) => (
+    function isOfferedInterview(application) {
+        if (!Array.isArray(convocations)) return false;
+
+        return convocations.some((convocation, i) => {
+            if (!convocation) {
+                console.warn(`⚠️ Convocation at index ${i} is undefined:`, convocations);
+                return false;
+            }
+
+            return convocation.internshipApplicationId === application.id;
+        });
+    }
+
+
+
+
+    const tableRows = () => applications.map((application) => (
         <tr key={application.id}
             className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm"
         >
             {/*offer title*/}
-            <td className="px-4 py-3 align-middle">
+            <td className="px-4 py-3 align-middle md:whitespace-nowrap">
                 <div
-                    className="items-center px-3 py-1.5 text-md whitespace-nowrap">
+                    className="items-center px-3 py-1.5 text-md">
                     {application.internshipOfferTitle}
                 </div>
             </td>
             {/*student name*/}
-            <td className="px-4 py-3 align-middle whitespace-nowrap ">
+            <td className="px-4 py-3 align-middle md:whitespace-nowrap">
                 <div
                     className="inline-flex items-center px-3 py-1.5 text-md transition-colors ">
                     {application.studentFirstName} {application.studentLastName}
                 </div>
             </td>
             {/*student email*/}
-            <td className="px-4 py-3 align-middle">{application.studentEmail}</td>
+            <td className="px-4 py-3 align-middle md:whitespace-nowrap">{application.studentEmail}</td>
             {/*applicaiton date*/}
-            <td className="px-4 py-3 align-middle whitespace-nowrap ">{application.internshipOfferPublishedDate}</td>
+            <td className="px-4 py-3 align-middle md:whitespace-nowrap">{application.internshipOfferPublishedDate}</td>
             {/*actions*/}
-            <td className="px-4 py-3 align-middle flex  whitespace-nowrap gap-2">
+            <td className="px-4 py-3 align-middle flex gap-2 md:whitespace-nowrap">
                 <TableActionButton icon={FileTextIcon} label={t("table.preview")}
-                                   bg_color={"indigo-100"} text_color={"indigo-700"}/>
+                                   bg_color={"indigo-100"} text_color={"indigo-700"}
+                                   onClick={() => {
+                                       previewCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
+                                   }}
+                />
 
                 <TableActionButton icon={DownloadIcon} label={t("table.download")}
-                                   bg_color={"green-100"} text_color={"green-700"}/>
+                                   bg_color={"green-100"} text_color={"green-700"}
+                                   onClick={() => {
+                                       downloadCvForEmployer(application.selectedCvFileData, application.selectedCvFileName);
+                                   }}
+                />
+                {isOfferedInterview(application) ?
 
-                <TableActionButton icon={PhoneCallIcon} label={t("table.convocation")}/>
+                    <TableActionButton icon={ContactIcon} label={t("table.convocation")}
+                                       bg_color={"gray-100"} text_color={"gray-700"}
+
+                    />
+                    :
+                    <TableActionButton icon={ContactIcon} label={t("table.convocation")}
+                                       bg_color={"amber-100"} text_color={"amber-700"}
+                                       onClick={() => {
+                                           setSelectedApplication(application);
+                                           setIsModalOpen(true);
+                                           setModalType("convocation");
+                                           console.log(convocations)
+                                       }}
+                    />
+                }
             </td>
-
-
         </tr>
     ));
 
@@ -362,112 +411,112 @@ export const InternshipApplications = () => {
                 {/*</Popover>*/}
 
                 {/* Session */}
-                <Popover>
-                    {({open, setOpen, triggerRef, contentRef}) => (
-                        <>
-                            <PopoverTrigger
-                                open={open}
-                                setOpen={setOpen}
-                                triggerRef={triggerRef}
-                            >
-                <span
-                    className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.session")}:{" "}
-                  {filterSession === "All"
-                    ? t("session.all")
-                    : t(`session.${filterSession.toLowerCase()}`)}
-                </span>
-              </PopoverTrigger>
-              <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px]">
-                  {["Automne", "Hiver"].map((session) => (
-                    <button
-                      key={session}
-                      onClick={() => {
-                        setFilterSession(session);
-                        setOpen(false);
-                      }}
-                      className={`px-3 py-1 rounded text-left ${
-                        filterSession === session
-                          ? "bg-blue-100 font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {t(`session.${session.toLowerCase()}`)}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => {
-                      setFilterSession("All");
-                      setOpen(false);
-                    }}
-                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                  >
-                    {t("session.all")}
-                  </button>
-                  <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
-                  </PopoverClose>
-                </div>
-              </PopoverContent>
-            </>
-          )}
-        </Popover>
+                {/*<Popover>*/}
+                {/*            {({open, setOpen, triggerRef, contentRef}) => (*/}
+                {/*                <>*/}
+                {/*                    <PopoverTrigger*/}
+                {/*                        open={open}*/}
+                {/*                        setOpen={setOpen}*/}
+                {/*                        triggerRef={triggerRef}*/}
+                {/*                    >*/}
+                {/*        <span*/}
+                {/*            className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">*/}
+                {/*          {t("filter.session")}:{" "}*/}
+                {/*          {filterSession === "All"*/}
+                {/*            ? t("session.all")*/}
+                {/*            : t(`session.${filterSession.toLowerCase()}`)}*/}
+                {/*        </span>*/}
+                {/*      </PopoverTrigger>*/}
+                {/*      <PopoverContent open={open} contentRef={contentRef}>*/}
+                {/*        <div className="flex flex-col gap-2 min-w-[150px]">*/}
+                {/*          {["Automne", "Hiver"].map((session) => (*/}
+                {/*            <button*/}
+                {/*              key={session}*/}
+                {/*              onClick={() => {*/}
+                {/*                setFilterSession(session);*/}
+                {/*                setOpen(false);*/}
+                {/*              }}*/}
+                {/*              className={`px-3 py-1 rounded text-left ${*/}
+                {/*                filterSession === session*/}
+                {/*                  ? "bg-blue-100 font-semibold"*/}
+                {/*                  : "hover:bg-gray-100"*/}
+                {/*              }`}*/}
+                {/*            >*/}
+                {/*              {t(`session.${session.toLowerCase()}`)}*/}
+                {/*            </button>*/}
+                {/*          ))}*/}
+                {/*          <button*/}
+                {/*            onClick={() => {*/}
+                {/*              setFilterSession("All");*/}
+                {/*              setOpen(false);*/}
+                {/*            }}*/}
+                {/*            className="px-3 py-1 rounded text-left hover:bg-gray-100"*/}
+                {/*          >*/}
+                {/*            {t("session.all")}*/}
+                {/*          </button>*/}
+                {/*          <PopoverClose setOpen={setOpen}>*/}
+                {/*            <span className="text-sm text-gray-600">*/}
+                {/*              {t("menu.close")}*/}
+                {/*            </span>*/}
+                {/*          </PopoverClose>*/}
+                {/*        </div>*/}
+                {/*      </PopoverContent>*/}
+                {/*    </>*/}
+                {/*  )}*/}
+                {/*</Popover>*/}
 
-        {/* Année */}
-        <Popover>
-          {({ open, setOpen, triggerRef, contentRef }) => (
-            <>
-              <PopoverTrigger
-                open={open}
-                setOpen={setOpen}
-                triggerRef={triggerRef}
-              >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.year")}:{" "}
-                  {filterYear === "All" ? t("session.AllYears") : filterYear}
-                </span>
-              </PopoverTrigger>
-              {/*<PopoverContent open={open} contentRef={contentRef}>*/}
-              {/*  <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">*/}
-              {/*    {availableYears.map((year) => (*/}
-              {/*      <button*/}
-              {/*        key={year}*/}
-              {/*        onClick={() => {*/}
-              {/*          setFilterYear(year.toString());*/}
-              {/*          setOpen(false);*/}
-              {/*        }}*/}
-              {/*        className={`px-3 py-1 rounded text-left ${*/}
-              {/*          filterYear === year.toString()*/}
-              {/*            ? "bg-blue-100 font-semibold"*/}
-              {/*            : "hover:bg-gray-100"*/}
-              {/*        }`}*/}
-              {/*      >*/}
-              {/*        {year}*/}
-              {/*      </button>*/}
-              {/*    ))}*/}
-              {/*    <button*/}
-              {/*      onClick={() => {*/}
-              {/*        setFilterYear("All");*/}
-              {/*        setOpen(false);*/}
-              {/*      }}*/}
-              {/*      className="px-3 py-1 rounded text-left hover:bg-gray-100"*/}
-              {/*    >*/}
-              {/*      {t("session.AllYears")}*/}
-              {/*    </button>*/}
-              {/*    <PopoverClose setOpen={setOpen}>*/}
-              {/*      <span className="text-sm text-gray-600">*/}
-              {/*        {t("menu.close")}*/}
-              {/*      </span>*/}
-              {/*    </PopoverClose>*/}
-              {/*  </div>*/}
-              {/*</PopoverContent>*/}
-            </>
-          )}
-        </Popover>
-      </div>
+                {/*/!* Année *!/*/}
+                {/*<Popover>*/}
+                {/*  {({ open, setOpen, triggerRef, contentRef }) => (*/}
+                {/*    <>*/}
+                {/*      <PopoverTrigger*/}
+                {/*        open={open}*/}
+                {/*        setOpen={setOpen}*/}
+                {/*        triggerRef={triggerRef}*/}
+                {/*      >*/}
+                {/*        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">*/}
+                {/*          {t("filter.year")}:{" "}*/}
+                {/*          {filterYear === "All" ? t("session.AllYears") : filterYear}*/}
+                {/*        </span>*/}
+                {/*      </PopoverTrigger>*/}
+                {/*      /!*<PopoverContent open={open} contentRef={contentRef}>*!/*/}
+                {/*      /!*  <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">*!/*/}
+                {/*      /!*    {availableYears.map((year) => (*!/*/}
+                {/*      /!*      <button*!/*/}
+                {/*      /!*        key={year}*!/*/}
+                {/*      /!*        onClick={() => {*!/*/}
+                {/*      /!*          setFilterYear(year.toString());*!/*/}
+                {/*      /!*          setOpen(false);*!/*/}
+                {/*      /!*        }}*!/*/}
+                {/*      /!*        className={`px-3 py-1 rounded text-left ${*!/*/}
+                {/*      /!*          filterYear === year.toString()*!/*/}
+                {/*      /!*            ? "bg-blue-100 font-semibold"*!/*/}
+                {/*      /!*            : "hover:bg-gray-100"*!/*/}
+                {/*      /!*        }`}*!/*/}
+                {/*      /!*      >*!/*/}
+                {/*      /!*        {year}*!/*/}
+                {/*      /!*      </button>*!/*/}
+                {/*      /!*    ))}*!/*/}
+                {/*      /!*    <button*!/*/}
+                {/*      /!*      onClick={() => {*!/*/}
+                {/*      /!*        setFilterYear("All");*!/*/}
+                {/*      /!*        setOpen(false);*!/*/}
+                {/*      /!*      }}*!/*/}
+                {/*      /!*      className="px-3 py-1 rounded text-left hover:bg-gray-100"*!/*/}
+                {/*      /!*    >*!/*/}
+                {/*      /!*      {t("session.AllYears")}*!/*/}
+                {/*      /!*    </button>*!/*/}
+                {/*      /!*    <PopoverClose setOpen={setOpen}>*!/*/}
+                {/*      /!*      <span className="text-sm text-gray-600">*!/*/}
+                {/*      /!*        {t("menu.close")}*!/*/}
+                {/*      /!*      </span>*!/*/}
+                {/*      /!*    </PopoverClose>*!/*/}
+                {/*      /!*  </div>*!/*/}
+                {/*      /!*</PopoverContent>*!/*/}
+                {/*    </>*/}
+                {/*  )}*/}
+                {/*</Popover>*/}
+            </div>
 
             {/* Tableau */}
             {loading ? <p>{t("table.loading")}</p> :
@@ -486,37 +535,37 @@ export const InternshipApplications = () => {
                 />
             }
 
-      {/* Aperçu du CV */}
-      {previewUrl && (
-        <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-xl font-semibold">{t("previewCv")}</h3>
-            <button
-              className="flex items-center gap-2 px-3 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-              onClick={closePreview}
-            >
-              <Cross2Icon className="w-4 h-4" />
-              {t("closeCvPreview")}
-            </button>
-          </div>
-          {previewType === "pdf" ? (
-            <iframe
-              src={previewUrl}
-              className="w-full h-[600px] border"
-              title="Preview CV"
-            />
-          ) : (
-            <a
-              href={previewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              Ouvrir le CV
-            </a>
-          )}
-        </div>
-      )}
+            {/* Aperçu du CV */}
+            {previewUrl && (
+                <div className="mt-6 p-4 border-t border-gray-300 bg-gray-50 rounded">
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-xl font-semibold">{t("previewCv")}</h3>
+                        <button
+                            className="flex items-center gap-2 px-3 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                            onClick={closePreview}
+                        >
+                            <Cross2Icon className="w-4 h-4"/>
+                            {t("closeCvPreview")}
+                        </button>
+                    </div>
+                    {previewType === "pdf" ? (
+                        <iframe
+                            src={previewUrl}
+                            className="w-full h-[600px] border"
+                            title="Preview CV"
+                        />
+                    ) : (
+                        <a
+                            href={previewUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                        >
+                            Ouvrir le CV
+                        </a>
+                    )}
+                </div>
+            )}
 
             {selectedApplication && isModalOpen && modalType !== "convocation" && (
                 <Modal
