@@ -225,7 +225,9 @@ export const InternshipApplications = () => {
                                    }}
                 />
 
-                        <TableActionButton icon={ContactIcon} label={!isOfferedInterview(application)?t("table.convocation"):getConvocationDate(application)}
+                        <TableActionButton icon={ContactIcon} 
+                                                         label={!isOfferedInterview(application) ? t("table.convocation") : 
+                                                         getConvocationDate(application)}
                                            bg_color={"amber-100"} text_color={"amber-700"}
                                            onClick={() => {
                                                setSelectedApplication(application);
