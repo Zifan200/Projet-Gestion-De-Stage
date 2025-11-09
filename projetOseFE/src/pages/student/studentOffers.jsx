@@ -79,20 +79,21 @@ export const StudentOffers = () => {
     }
   };
 
-  const currentYear = new Date().getFullYear().toString();
+  const currentYear = (new Date().getFullYear() + 1).toString();
 
   const filteredOffers = useMemo(() => {
     return offers
-        .filter((offer) => offer.session?.toLowerCase() === "hiver") // session Hiver
+        .filter((offer) => offer.session?.toLowerCase() === "hiver")
         .filter(
             (offer) =>
                 offer.startDate &&
-                new Date(offer.startDate).getFullYear().toString() === currentYear // année actuelle
+                new Date(offer.startDate).getFullYear().toString() === currentYear
         )
         .filter(
-            (offer) => !applications.find((a) => a.internshipOfferId === offer.id) // exclure offres déjà appliquées
+            (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
         );
   }, [offers, applications]);
+
 
 
   // Extract available years
