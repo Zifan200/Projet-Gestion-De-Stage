@@ -1,22 +1,22 @@
 package org.example.model;
 
-import jakarta.persistence.OneToMany;
-import org.example.model.CV;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.*;
-import org.example.model.auth.Credentials;
-import org.example.model.auth.Role;
-import org.springframework.cglib.core.Local;
-import org.springframework.security.core.userdetails.User;
-
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import lombok.*;
+import org.example.model.CV;
+import org.example.model.auth.Credentials;
+import org.example.model.auth.Role;
+import org.springframework.cglib.core.Local;
+import org.springframework.security.core.userdetails.User;
 
 @Entity
 @Getter
@@ -25,25 +25,58 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 public class Etudiant extends UserApp {
+
     private LocalDate since;
     private String phone;
     private String adresse;
     private String program;
-    @OneToMany(mappedBy = "etudiant", cascade = jakarta.persistence.CascadeType.ALL)
+
+    @OneToMany(
+        mappedBy = "etudiant",
+        cascade = jakarta.persistence.CascadeType.ALL
+    )
     private List<CV> cv = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student", cascade = jakarta.persistence.CascadeType.ALL)
+    @OneToMany(
+        mappedBy = "student",
+        cascade = jakarta.persistence.CascadeType.ALL
+    )
     private List<InternshipApplication> applications = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
+
     @Builder
-    public Etudiant(Long id, String firstName, String lastName, String email, String password, boolean active
-    , String phone, String adresse, String program, LocalDate since,
-                    LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
-        super(id, firstName, lastName, Credentials.builder()
+    public Etudiant(
+        Long id,
+        String firstName,
+        String lastName,
+        String email,
+        String password,
+        boolean active,
+        String phone,
+        String adresse,
+        String program,
+        LocalDate since,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        LocalDateTime lastLoginAt
+    ) {
+        super(
+            id,
+            firstName,
+            lastName,
+            Credentials.builder()
                 .email(email)
                 .password(password)
                 .role(Role.STUDENT)
-                .build(), active, createdAt, updatedAt, lastLoginAt);
+                .build(),
+            active,
+            createdAt,
+            updatedAt,
+            lastLoginAt
+        );
         this.since = since;
         this.phone = phone;
         this.adresse = adresse;
