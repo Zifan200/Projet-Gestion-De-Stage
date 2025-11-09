@@ -23,7 +23,7 @@ export const OfferList = () => {
 
   const [filterStatus, setFilterStatus] = useState(null);
   const [sortKey, setSortKey] = useState("date");
-  const [filterSession, setFilterSession] = useState("All");
+  const [filterSession, setFilterSession] = useState("hiver");
   const [filterYear, setFilterYear] = useState("All");
   const [selectedOffer, setSelectedOffer] = useState(null);
 
@@ -186,7 +186,7 @@ export const OfferList = () => {
             )}
           </Popover>
 
-          {/* Session Filter */}
+          {/* Session Filter
           <Popover>
             {({ open, setOpen, triggerRef, contentRef }) => (
                 <>
@@ -203,7 +203,7 @@ export const OfferList = () => {
                             onClick={() => { setFilterSession(session); setOpen(false); }}
                             className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                         >
-                          {t(`session.${session.toLowerCase()}`)} {/* <-- ici la traduction */}
+                          {t(`session.${session.toLowerCase()}`)}  <-- ici la traduction
                         </button>
                     ))}
                       <button onClick={() => { setFilterSession("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
@@ -216,7 +216,7 @@ export const OfferList = () => {
                   </PopoverContent>
                 </>
             )}
-          </Popover>
+          </Popover>*/}
 
           {/* Year Filter */}
           <Popover>
