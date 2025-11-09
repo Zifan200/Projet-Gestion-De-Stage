@@ -205,7 +205,10 @@ export const InternshipApplications = () => {
             {/*student email*/}
             <td className="px-4 py-3 align-middle md:whitespace-nowrap">{application.studentEmail}</td>
             {/*applicaiton date*/}
-            <td className="px-4 py-3 align-middle md:whitespace-nowrap">{application.internshipOfferPublishedDate}</td>
+            <td className="px-4 py-3 align-middle md:whitespace-nowrap">
+                {new Date(application.createdAt).toLocaleDateString()} {" "}
+                {new Date(application.createdAt).toLocaleTimeString()}
+            </td>
             {/*actions*/}
             <td className="px-4 py-3 align-middle flex gap-2 md:whitespace-nowrap">
                 <TableActionButton icon={FileTextIcon} label={t("table.preview")}
