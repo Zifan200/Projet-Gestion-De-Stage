@@ -50,7 +50,7 @@ export const InternshipApplications = () => {
     const [modalMode, setModalMode] = useState("details");
     const [rejectReason, setRejectReason] = useState("");
     const [filterStatus, setFilterStatus] = useState(null);
-    const [filterSession, setFilterSession] = useState(currentSession);
+    const [filterSession, setFilterSession] = useState("Hiver");
     const [filterYear, setFilterYear] = useState(currentYear.toString());
     const {createConvocation: sendConvocation} = useEmployerStore();
     const [modalType, setModalType] = useState(null);
@@ -269,6 +269,43 @@ export const InternshipApplications = () => {
                     )}
                 </Popover>
 
+                {/* Annee */}
+                {/*<Popover>
+                    {({ open, setOpen, triggerRef, contentRef }) => (
+                        <>
+                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
+        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+          {t("filter.session")}: {t(`session.${filterSession.toLowerCase()}`)}
+        </span>
+                            </PopoverTrigger>
+                            <PopoverContent open={open} contentRef={contentRef}>
+                                <div className="flex flex-col gap-2 min-w-[150px] items-center">
+                                    {["Automne", "Hiver"].map((session) => (
+                                        <button
+                                            key={session}
+                                            onClick={() => {
+                                                setFilterSession(session);
+                                                setOpen(false);
+                                            }}
+                                            className={`px-4 py-2 rounded text-center w-full ${
+                                                filterSession === session
+                                                    ? "bg-blue-100 font-semibold"
+                                                    : "hover:bg-gray-100"
+                                            }`}
+                                        >
+                                            {t(`session.${session.toLowerCase()}`)}
+                                        </button>
+                                    ))}
+                                    <PopoverClose setOpen={setOpen}>
+                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
+                                    </PopoverClose>
+                                </div>
+                            </PopoverContent>
+                        </>
+                    )}
+                </Popover>*/}
+
+
                 {/* Session */}
                 <Popover>
                     {({ open, setOpen, triggerRef, contentRef }) => (
@@ -278,67 +315,13 @@ export const InternshipApplications = () => {
                                 setOpen={setOpen}
                                 triggerRef={triggerRef}
                             >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.session")}:{" "}
-                    {filterSession === "All"
-                        ? t("session.all")
-                        : t(`session.${filterSession.toLowerCase()}`)}
-                </span>
+        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+          {t("filter.year")}: {filterYear}
+        </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
-                                <div className="flex flex-col gap-2 min-w-[150px]">
-                                    {["Automne", "Hiver"].map((session) => (
-                                        <button
-                                            key={session}
-                                            onClick={() => {
-                                                setFilterSession(session);
-                                                setOpen(false);
-                                            }}
-                                            className={`px-3 py-1 rounded text-left ${
-                                                filterSession === session
-                                                    ? "bg-blue-100 font-semibold"
-                                                    : "hover:bg-gray-100"
-                                            }`}
-                                        >
-                                            {t(`session.${session.toLowerCase()}`)}
-                                        </button>
-                                    ))}
-                                    <button
-                                        onClick={() => {
-                                            setFilterSession("All");
-                                            setOpen(false);
-                                        }}
-                                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                                    >
-                                        {t("session.all")}
-                                    </button>
-                                    <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
-                                    </PopoverClose>
-                                </div>
-                            </PopoverContent>
-                        </>
-                    )}
-                </Popover>
-
-                {/* Année */}
-                <Popover>
-                    {({ open, setOpen, triggerRef, contentRef }) => (
-                        <>
-                            <PopoverTrigger
-                                open={open}
-                                setOpen={setOpen}
-                                triggerRef={triggerRef}
-                            >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.year")}:{" "}
-                    {filterYear === "All" ? t("session.AllYears") : filterYear}
-                </span>
-                            </PopoverTrigger>
-                            <PopoverContent open={open} contentRef={contentRef}>
-                                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">
+                                <div
+                                    className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
                                     {availableYears.map((year) => (
                                         <button
                                             key={year}
@@ -355,25 +338,17 @@ export const InternshipApplications = () => {
                                             {year}
                                         </button>
                                     ))}
-                                    <button
-                                        onClick={() => {
-                                            setFilterYear("All");
-                                            setOpen(false);
-                                        }}
-                                        className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                                    >
-                                        {t("session.AllYears")}
-                                    </button>
                                     <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
+            <span className="text-sm text-gray-600">
+              {t("menu.close")}
+            </span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
                         </>
                     )}
                 </Popover>
+
             </div>
 
             {/* Tableau */}
