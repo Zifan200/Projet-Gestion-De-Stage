@@ -2,9 +2,9 @@ import React from "react";
 
 export const Table = ({ headers, rows, emptyMessage }) => {
   return (
-    <div className="overflow-x-auto bg-white shadow rounded">
-      <table className="w-full text-sm text-left border-collapse">
-        <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
+      <div className="overflow-x-auto bg-white shadow rounded">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
           <tr>
             {headers.map((h) => (
               <th key={h} className="px-4 py-3">
