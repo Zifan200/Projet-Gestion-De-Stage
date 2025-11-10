@@ -51,6 +51,8 @@ import {DashboardCardWrapperStudent} from "./pages/student/wrapper/dashboardCard
 import {DashboardCardWrapper} from "./pages/employer/wrapper/dashboardCardWrapper.jsx";
 import {CvsWrapper} from "./pages/student/wrapper/cvsWrapper.jsx";
 import {StudentOffersWrapper} from "./pages/student/wrapper/studentOffersWrapper.jsx";
+import {StudentConvocationDecisionWrapper} from "./pages/student/wrapper/studentConvocationDecisionWrapper.jsx";
+import {StudentApplicationsWrapper} from "./pages/student/wrapper/internshipApplicationsStudentWrapper.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -251,9 +253,24 @@ function App() {
               />
 
               <Route path="settings" element={<DashboardSettings />} />
-              <Route path="applications" element={<StudentApplications />} />
+              <Route
+                  path="applications"
+                  element={
+                    <StudentApplicationsWrapper
+                        DesktopComponent={StudentApplications}
+                    />
+                  }
+              />
               <Route path="internshipFinalDecision" element={<OffresAConfirmer />} />
-              <Route path="convocations" element={<StudentConvocations />} />
+              <Route
+                  path="convocations"
+                  element={
+                    <StudentConvocationDecisionWrapper
+                        DesktopComponent={StudentConvocations}
+                    />
+                  }
+              />
+
             </Route>
 
             <Route
