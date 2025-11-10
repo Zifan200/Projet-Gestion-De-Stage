@@ -46,8 +46,11 @@ import { StudentApplications } from "./pages/student/internshipApplications.jsx"
 import {ResponsiveRoute} from "./ResponsiveRoute.jsx";
 import {InternshipApplicationsWrapper} from "./pages/employer/wrapper/InternshipApplicationsWrapper.jsx";
 import {DashboardPhoneWrapper} from "./components/layouts/wrapper/dashboardWrapper.jsx";
-import {DashboardCardWrapper} from "./pages/employer/wrapper/dashboardCardWrapper.jsx";
 import {OfferListWrapper} from "./pages/employer/wrapper/offerListWrapper.jsx";
+import {DashboardCardWrapperStudent} from "./pages/student/wrapper/dashboardCardWrapper.jsx";
+import {DashboardCardWrapper} from "./pages/employer/wrapper/dashboardCardWrapper.jsx";
+import {CvsWrapper} from "./pages/student/wrapper/cvsWrapper.jsx";
+import {StudentOffersWrapper} from "./pages/student/wrapper/studentOffersWrapper.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -207,32 +210,51 @@ function App() {
 
           {/* Routes Étudiant */}
           <Route path="/signup/student" element={<StudentSignUpPage />} />
-          <Route
-            path="/dashboard/student/"
-            element={
-              <DashboardLayout
-                sidebarLinks={studentDashboardSidebarLinks}
-                title={t("student_dashboard:titles.dashboard")}
+            <Route path="/dashboard/student/*" element={
+              <DashboardPhoneWrapper
+                  sidebarLinks={studentDashboardSidebarLinks}
+                  title={t("student_dashboard:titles.dashboard")}
+                  DesktopComponent={DashboardLayout}
               />
-            }
-          >
-            <Route index element={<StudentDashboard />} />
-            <Route path="/dashboard/student/cvs" element={<StudentCVs />} />
-            <Route path="/dashboard/student/offers" element={<StudentOffers />} />
-            <Route
-              path="/dashboard/student/settings"
-              element={<DashboardSettings />}
-            />
-              <Route path="/dashboard/student/applications" element={<StudentApplications />} />
+            }>
               <Route
-                path="/dashboard/student/internshipFinalDecision"
-                element={<OffresAConfirmer />}
-            />
-            <Route
-                path="/dashboard/student/convocations"
-                element={<StudentConvocations />}
-            />
-          </Route>
+                  index
+                  element={
+                    <DashboardCardWrapperStudent
+                        sidebarLinks={studentDashboardSidebarLinks}
+                        title={t("student_dashboard:titles.dashboard")}
+                        DesktopComponent={StudentDashboard}
+                    />
+                  }
+              />
+
+              <Route
+                  path="cvs"
+                  element={
+                    <CvsWrapper
+                        sidebarLinks={studentDashboardSidebarLinks}
+                        title={t("student_dashboard_cvs:myCvs")}
+                        DesktopComponent={StudentCVs}
+                    />
+                  }
+              />
+
+              <Route
+                  path="offers"
+                  element={
+                    <StudentOffersWrapper
+                        sidebarLinks={studentDashboardSidebarLinks}
+                        title={t("student_dashboard_offers:title")}
+                        DesktopComponent={StudentOffers}
+                    />
+                  }
+              />
+
+              <Route path="settings" element={<DashboardSettings />} />
+              <Route path="applications" element={<StudentApplications />} />
+              <Route path="internshipFinalDecision" element={<OffresAConfirmer />} />
+              <Route path="convocations" element={<StudentConvocations />} />
+            </Route>
 
             <Route
                 path="/dashboard/employer/*"

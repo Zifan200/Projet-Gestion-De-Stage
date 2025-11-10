@@ -100,13 +100,13 @@ export const StudentDashboard = () => {
   }, [cvs, offers, t]);
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">{t("titles.dashboard")}</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-        {stats.map((s, i) => (
-          <StatCard key={i} title={s.title} value={s.value} icon={s.icon} />
-        ))}
+      <div className="space-y-6">
+        <h1 className="text-2xl font-semibold">{t("titles.dashboard")}</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          {stats.map((s, i) => (
+              <StatCard key={i} title={s.title} value={s.value} icon={s.icon}/>
+          ))}
+        </div>
       </div>
-    </div>
   );
 };

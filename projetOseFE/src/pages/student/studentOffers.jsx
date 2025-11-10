@@ -26,7 +26,7 @@ export const StudentOffers = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const { offers, loadOffersSummary, viewOffer, downloadOfferPdf } =
-    useOfferStore();
+      useOfferStore();
   const { cvs, loadCvs, applyCvStore } = useCvStore();
   const { applications, loadAllApplications } = useStudentStore();
 
@@ -79,31 +79,22 @@ export const StudentOffers = () => {
     }
   };
 
-  // Filter offers by session, year, and exclude already applied offers
+  const currentYear = (new Date().getFullYear() + 1).toString();
+
   const filteredOffers = useMemo(() => {
-    let filtered = offers;
+    return offers
+        .filter((offer) => offer.session?.toLowerCase() === "hiver")
+        .filter(
+            (offer) =>
+                offer.startDate &&
+                new Date(offer.startDate).getFullYear().toString() === currentYear
+        )
+        .filter(
+            (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
+        );
+  }, [offers, applications]);
 
-    // Filter by session
-    if (filterSession && filterSession !== "All") {
-      filtered = filtered.filter((offer) => offer.session === filterSession);
-    }
 
-    // Filter by year
-    if (filterYear && filterYear !== "All") {
-      filtered = filtered.filter(
-        (offer) =>
-          offer.startDate &&
-          new Date(offer.startDate).getFullYear().toString() === filterYear
-      );
-    }
-
-    // Exclude offers already applied to
-    filtered = filtered.filter(
-      (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
-    );
-
-    return filtered;
-  }, [offers, filterSession, filterYear, applications]);
 
   // Extract available years
   const availableYears = useMemo(() => {
@@ -133,19 +124,19 @@ export const StudentOffers = () => {
         {
           key: "view",
           label: (
-            <>
-              <EyeOpenIcon className="w-4 h-4" />
-              <span>{t("actions.apply")}</span>
-            </>
+              <>
+                <EyeOpenIcon className="w-4 h-4" />
+                <span>{t("actions.apply")}</span>
+              </>
           ),
         },
         {
           key: "download",
           label: (
-            <>
-              <DownloadIcon className="w-4 h-4" />
-              <span>{t("actions.download")}</span>
-            </>
+              <>
+                <DownloadIcon className="w-4 h-4" />
+                <span>{t("actions.download")}</span>
+              </>
           ),
         },
       ],
@@ -155,17 +146,17 @@ export const StudentOffers = () => {
   const tableData = filteredOffers.map((offer) => ({
     ...offer,
     expirationDate: offer.expirationDate
-      ? new Date(offer.expirationDate).toLocaleDateString()
-      : "-",
+        ? new Date(offer.expirationDate).toLocaleDateString()
+        : "-",
   }));
 
   return (
-    <div className="space-y-6">
-      <Header title={t("title")} />
+      <div className="space-y-6">
+        <Header title={t("title")} />
 
-      {/* Session et Year Filters avec popover */}
+        {/*  Session et Year Filters avec popover
       <div className="flex justify-start gap-4 mb-4">
-        {/* Session Filter */}
+         Session Filter
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
               <>
@@ -199,9 +190,9 @@ export const StudentOffers = () => {
                 </PopoverContent>
               </>
           )}
-        </Popover>
+        </Popover>*/}
 
-        {/* Year Filter */}
+        {/* Year Filter
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
               <>
@@ -235,117 +226,117 @@ export const StudentOffers = () => {
                 </PopoverContent>
               </>
           )}
-        </Popover>
+        </Popover>*/}
+        {/*</div>*/}
+
+
+
+        <DataTable columns={columns} data={tableData} onAction={handleAction} />
+
+        {/* Modal */}
+        <Modal
+            open={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedOffer(null);
+              setSelectedCv(null);
+            }}
+            title={selectedOffer?.title}
+            size="default"
+            footer={
+              <>
+                <button
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setSelectedOffer(null);
+                      setSelectedCv(null);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  <span>{t("modal.close")}</span>
+                </button>
+                <button
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        selectedCv
+                            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                    onClick={handleApply}
+                    disabled={!selectedCv}
+                >
+                  <span>{t("modal.apply")}</span>
+                </button>
+              </>
+            }
+        >
+          {selectedOffer && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
+                    <p className="text-gray-600">{selectedOffer.employerEmail}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.targetedProgramme")}</h3>
+                    <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.publishedDate")}</h3>
+                    <p className="text-gray-600">
+                      {selectedOffer.publishedDate
+                          ? new Date(selectedOffer.publishedDate).toLocaleDateString()
+                          : "-"}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.deadline")}</h3>
+                    <p className="text-gray-600">
+                      {selectedOffer.expirationDate
+                          ? new Date(selectedOffer.expirationDate).toLocaleDateString()
+                          : "-"}
+                    </p>
+                  </div>
+                </div>
+
+                {selectedOffer.description && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                    </div>
+                )}
+
+                {/* CV Select */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t("modal.selectCv")}
+                  </label>
+                  <select
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      value={selectedCv?.id || ""}
+                      onChange={(e) =>
+                          setSelectedCv(
+                              cvs.find((cv) => cv.id.toString() === e.target.value),
+                          )
+                      }
+                  >
+                    <option value="">-- {t("modal.chooseCv")} --</option>
+                    {cvs
+                        .filter((cv) => cv.status === "ACCEPTED")
+                        .map((cv) => (
+                            <option key={cv.id} value={cv.id}>
+                              {cv.name || cv.fileName}
+                            </option>
+                        ))}
+                  </select>
+                </div>
+              </div>
+          )}
+        </Modal>
       </div>
-
-
-
-      <DataTable columns={columns} data={tableData} onAction={handleAction} />
-
-      {/* Modal */}
-      <Modal
-        open={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedOffer(null);
-          setSelectedCv(null);
-        }}
-        title={selectedOffer?.title}
-        size="default"
-        footer={
-          <>
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
-                setSelectedOffer(null);
-                setSelectedCv(null);
-              }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-            >
-              <span>{t("modal.close")}</span>
-            </button>
-            <button
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedCv
-                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-              onClick={handleApply}
-              disabled={!selectedCv}
-            >
-              <span>{t("modal.apply")}</span>
-            </button>
-          </>
-        }
-      >
-        {selectedOffer && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
-                <p className="text-gray-600">{selectedOffer.employerEmail}</p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.targetedProgramme")}</h3>
-                <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.publishedDate")}</h3>
-                <p className="text-gray-600">
-                  {selectedOffer.publishedDate
-                    ? new Date(selectedOffer.publishedDate).toLocaleDateString()
-                    : "-"}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.deadline")}</h3>
-                <p className="text-gray-600">
-                  {selectedOffer.expirationDate
-                    ? new Date(selectedOffer.expirationDate).toLocaleDateString()
-                    : "-"}
-                </p>
-              </div>
-            </div>
-
-            {selectedOffer.description && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
-              </div>
-            )}
-
-            {/* CV Select */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("modal.selectCv")}
-              </label>
-              <select
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                value={selectedCv?.id || ""}
-                onChange={(e) =>
-                  setSelectedCv(
-                    cvs.find((cv) => cv.id.toString() === e.target.value),
-                  )
-                }
-              >
-                <option value="">-- {t("modal.chooseCv")} --</option>
-                {cvs
-                  .filter((cv) => cv.status === "ACCEPTED")
-                  .map((cv) => (
-                    <option key={cv.id} value={cv.id}>
-                      {cv.name || cv.fileName}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          </div>
-        )}
-      </Modal>
-    </div>
   );
 };
