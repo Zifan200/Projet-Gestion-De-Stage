@@ -9,11 +9,14 @@ import { FileTextIcon, DownloadIcon } from "@radix-ui/react-icons";
 import { ContactIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "../../../components/ui/popover.jsx";
+import { Modal } from "../../../components/ui/modal.jsx";
+import { Phone } from "lucide-react";
+
 
 export const InternshipApplicationsPhone = () => {
     const { t } = useTranslation("internship_applications");
     const user = useAuthStore((s) => s.user);
-    const { applications, fetchApplications, convocations } = useEmployerStore();
+    const { applications, fetchApplications, convocations, createConvocation } = useEmployerStore();
 
     const previewCvForEmployer = useCvStore((s) => s.previewCvForEmployer);
     const downloadCvForEmployer = useCvStore((s) => s.downloadCvForEmployer);
@@ -24,6 +27,14 @@ export const InternshipApplicationsPhone = () => {
     const [loading, setLoading] = useState(true);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState("");
+    const [modeConvocation, setModeConvocation] = useState("");
+    const [dateConvocation, setDateConvocation] = useState("");
+    const [timeConvocation, setTimeConvocation] = useState("09:00");
+    const [link, setLink] = useState("");
+    const [location, setLocation] = useState("");
 
     useEffect(() => {
         const loadApplications = async () => {
@@ -62,6 +73,29 @@ export const InternshipApplicationsPhone = () => {
         return conv ? new Date(conv.convocationDate).toLocaleString() : "";
     };
 
+    const handleConvocationSend = async () => {
+        if (!selectedApplication) return;
+        try {
+            await createConvocation({
+                internshipApplicationId: selectedApplication.id,
+                mode: modeConvocation,
+                convocationDate: `${dateConvocation}T${timeConvocation}`,
+                link,
+                location,
+            });
+            toast.success(t("success.convocationSent"));
+            setIsModalOpen(false);
+            setSelectedApplication(null);
+            setModeConvocation("");
+            setDateConvocation("");
+            setTimeConvocation("09:00");
+            setLink("");
+            setLocation("");
+        } catch {
+            toast.error(t("errors.sendConvocation"));
+        }
+    };
+
     const tableRows = () =>
         filteredApplications.map((app) => (
             <tr key={app.id} className="select-none border-t border-gray-200 text-gray-700 text-sm">
@@ -94,7 +128,11 @@ export const InternshipApplicationsPhone = () => {
                         inactive_text_color="blue-500"
                         onClick={() => {
                             if (!isOfferedInterview(app)) {
-                                toast.info(t("table.convocationPending"));
+                                setModalType("convocation");
+                                setSelectedApplication(app);
+                                setIsModalOpen(true);
+                            } else {
+                                toast.info(getConvocationDate(app));
                             }
                         }}
                     />
@@ -117,8 +155,7 @@ export const InternshipApplicationsPhone = () => {
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
-                                <div
-                                    className="flex flex-col gap-2 min-w-[150px] max-h-[200px] overflow-y-auto items-center">
+                                <div className="flex flex-col gap-2 min-w-[150px] max-h-[200px] overflow-y-auto items-center">
                                     {availableYears.map((year) => (
                                         <button
                                             key={year}
@@ -152,6 +189,109 @@ export const InternshipApplicationsPhone = () => {
                     />
                 </div>
             )}
+
+            {modalType === "convocation" && isModalOpen && selectedApplication && (
+                <Modal
+                    open={isModalOpen}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setSelectedApplication(null);
+                        setModalType("");
+                        setModeConvocation("");
+                        setDateConvocation("");
+                        setTimeConvocation("09:00");
+                        setLink("");
+                        setLocation("");
+                    }}
+                    title={
+                        <div className="flex items-center gap-2">
+                            <Phone className="w-5 h-5 text-blue-500" />
+                            <span>{t("modal.convocationTitle")} {selectedApplication.studentFirstName} {selectedApplication.studentLastName}</span>
+                        </div>
+                    }
+                    size="default"
+                    footer={
+                        <div className="flex justify-end gap-2">
+                            {/* Bouton Send en bleu foncé moyen */}
+                            <button
+                                onClick={handleConvocationSend}
+                                disabled={!dateConvocation || !timeConvocation}
+                                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                    dateConvocation && timeConvocation
+                                        ? "bg-blue-600 text-white hover:bg-blue-500"
+                                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                }`}
+                            >
+                                <Phone className="w-4 h-4 text-white" />
+                                {t("modal.sendConvocation")}
+                            </button>
+
+                            {/* Bouton Close en rouge foncé moyen avec X blanc */}
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-500 text-white hover:bg-red-700"
+                            >
+                                <span className="font-bold text-white">X</span>
+                                {t("menu.close")}
+                            </button>
+                        </div>
+                    }
+
+
+                >
+                    <div className="space-y-4">
+                        {/* Row 1 : Date + Time */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t("modal.date")}</label>
+                                <input
+                                    type="date"
+                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                    value={dateConvocation}
+                                    onChange={(e) => setDateConvocation(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t("modal.time")}</label>
+                                <input
+                                    type="time"
+                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                    value={timeConvocation}
+                                    onChange={(e) => setTimeConvocation(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Row 2 : Mode + Link/Location */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t("modal.mode")}</label>
+                                <select
+                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                    value={modeConvocation}
+                                    onChange={(e) => setModeConvocation(e.target.value)}
+                                >
+                                    <option value="">{t("modal.selectMode")}</option>
+                                    <option value="online">{t("modal.online")}</option>
+                                    <option value="inPerson">{t("modal.inPerson")}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t("modal.linkOrLocation")}</label>
+                                <input
+                                    type="text"
+                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                    value={modeConvocation === "online" ? link : location}
+                                    onChange={(e) => modeConvocation === "online" ? setLink(e.target.value) : setLocation(e.target.value)}
+                                    placeholder={modeConvocation === "online" ? t("modal.enterLink") : t("modal.enterLocation")}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+
+
 
             {/* Preview CV modal responsive */}
             {previewUrl && selectedApplication && (

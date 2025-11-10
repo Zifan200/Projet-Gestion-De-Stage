@@ -38,7 +38,19 @@
     "appliedAt": "Applied on",
     "close": "Close",
     "reason": "Reason",
-    "submit": "Submit convocation"
+    "submit": "Submit convocation",
+    "convocationTitle": "Convocation form for: ",
+    "sendConvocation": "Send the convocation",
+    "mode": "Type of convocation",
+    "selectMode": "--Select--",
+    "online": "Online",
+    "inPerson": "In person",
+    "date": "Convocation date",
+    "time": "Convocation time",
+    "linkOrLocation": "Link / Location",
+    "enterLink": "Enter the link",
+    "enterLocation": "Enter the location"
+
   },
   "reasonModal": {
     "title": "Rejection Reason",

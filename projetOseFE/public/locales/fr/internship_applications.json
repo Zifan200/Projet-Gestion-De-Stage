@@ -38,7 +38,18 @@
     "appliedAt": "Postulé le",
     "close": "Fermer",
     "reason": "Raison",
-    "submit": "Envoyer la convocation"
+    "submit": "Envoyer la convocation",
+    "convocationTitle": "Formulaire de convocation pour ",
+    "sendConvocation": "Envoyer la convocation",
+    "mode": "Type de convocation",
+    "selectMode": "--Sélectionner--",
+    "online": "En ligne",
+    "inPerson": "En personne",
+    "date": "Date de convocation",
+    "time": "Heure de convocation",
+    "linkOrLocation": "Lien / Lieu",
+    "enterLink": "Entrez le lien",
+    "enterLocation": "Entrez le lieu"
   },
   "reasonModal": {
     "title": "Raison du refus",
