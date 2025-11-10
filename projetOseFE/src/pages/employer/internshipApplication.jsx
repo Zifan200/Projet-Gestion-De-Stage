@@ -176,6 +176,7 @@ export const InternshipApplications = () => {
         </tr>
     ));
 
+
     return (
         <div className="space-y-6">
             <Header title={t("title")} />
@@ -274,6 +275,150 @@ export const InternshipApplications = () => {
                             Ouvrir le CV
                         </a>
                     )}
+                </div>
+            )}
+            {modalType === "convocation" && isModalOpen && selectedApplication && (
+                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg">
+                        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <PhoneCallIcon className="w-5 h-5 text-blue-500"/>
+                            {t("convocations.title")} : {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
+                        </h2>
+
+                        <form
+                            onSubmit={async (e) => {
+                                e.preventDefault();
+                                try {
+                                    const token = localStorage.getItem("token");
+                                    const employerData = await authService.getMe(token);
+                                    const dateTimeConvocation = `${dateConvocation}T${timeConvocation}`;
+
+                                    const formData = {
+                                        studentEmail: selectedApplication.studentEmail,
+                                        employerEmail: employerData.email,
+                                        convocationDate: dateTimeConvocation,
+                                        location,
+                                        link,
+                                        internshipApplicationId: selectedApplication.id
+                                    };
+
+                                    const result = convocationSchema.safeParse(formData);
+                                    if (!result.success) {
+                                        toast.error(result.error.errors[0]?.message || t("errors.form"));
+                                        return;
+                                    }
+
+                                    await sendConvocation(formData);
+                                    toast.success(t("convocations.success"));
+                                    setIsModalOpen(false);
+                                    setSelectedApplication(null);
+                                    setModalType(null);
+
+                                } catch (error) {
+                                    toast.error(error.message || t("convocations.unknown"));
+                                }
+                            }}
+                            className="flex flex-col gap-4"
+                        >
+                            {/* Date */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium mb-1">{t("convocations.date")}</label>
+                                <input
+                                    type="date"
+                                    min={new Date().toISOString().split("T")[0]}
+                                    value={dateConvocation}
+                                    onChange={(e) => setDateConvocation(e.target.value)}
+                                    className="border border-gray-300 rounded p-2"
+                                    required
+                                />
+                            </div>
+
+                            {/* Time */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium mb-1">{t("convocations.time")}</label>
+                                <input
+                                    type="time"
+                                    value={timeConvocation}
+                                    onChange={(e) => setTimeConvocation(e.target.value)}
+                                    className="border border-gray-300 rounded p-2"
+                                    required
+                                />
+                            </div>
+
+                            {/* Type (online / in-person) */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium mb-1">{t("convocations.type")}</label>
+                                <select
+                                    value={modeConvocation}
+                                    onChange={(e) => {
+                                        setModeConvocation(e.target.value);
+                                        setLocation("");
+                                        setLink("");
+                                    }}
+                                    className="border border-gray-300 rounded p-2"
+                                    required
+                                >
+                                    <option value="placeholder">{t("convocations.select")}</option>
+                                    <option value="online">{t("convocations.online")}</option>
+                                    <option value="in-person">{t("convocations.inPerson")}</option>
+                                </select>
+                            </div>
+
+                            {/* Online link */}
+                            {modeConvocation === "online" && (
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium mb-1">{t("convocations.online")}</label>
+                                    <input
+                                        type="url"
+                                        placeholder="https://meet.google.com/..."
+                                        value={link}
+                                        onChange={(e) => setLink(e.target.value)}
+                                        className="border border-gray-300 rounded p-2"
+                                        required
+                                    />
+                                </div>
+                            )}
+
+                            {/* In-person location */}
+                            {modeConvocation === "in-person" && (
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium mb-1">{t("convocations.address")}</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ex : 1111 Rue Lapierre"
+                                        value={location}
+                                        onChange={(e) => setLocation(e.target.value)}
+                                        className="border border-gray-300 rounded p-2"
+                                        required
+                                    />
+                                </div>
+                            )}
+
+                            {/* Buttons */}
+                            <div className="flex mt-6 justify-end gap-3">
+                                <button
+                                    type="submit"
+                                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                >
+                                    <PhoneCallIcon className="w-4 h-4" />
+                                    {t("modal.submit")}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                    onClick={() => {
+                                        setIsModalOpen(false);
+                                        setSelectedApplication(null);
+                                        setModalType(null);
+                                    }}
+                                >
+                                    <Cross2Icon className="w-4 h-4" />
+                                    {t("modal.close")}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>
