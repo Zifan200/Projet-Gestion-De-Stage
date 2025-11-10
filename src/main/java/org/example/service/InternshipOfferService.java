@@ -296,7 +296,7 @@ public class InternshipOfferService {
         Text datePostulation_en = new Text(offerDto.getPublishedDate() + " to "
                 + offerDto.getExpirationDate() + ". ").setFont(boldFont);
         Text email = new Text(offerDto.getEmployerEmail()).setFont(boldFont);
-        Text salary = new Text(Float.toString(offerDto.getSalary())).setFont(boldFont);
+        Text salary = new Text(String.format("%1$.2f", offerDto.getSalary())).setFont(boldFont);
 
 
 
@@ -355,7 +355,9 @@ public class InternshipOfferService {
                 .setMarginBottom(20f);
         document.add(stageInfos);
 
-        Paragraph stageSalary = new Paragraph("Notre taux horaire est de " + offerDto.getSalary() + "$.")
+        Paragraph stageSalary = new Paragraph("Le salaire offert est de ")
+                .add(salary)
+                .add("$.")
                 .setFontSize(15)
                 .setMarginTop(20f)
                 .setMarginBottom(20f);
@@ -409,7 +411,9 @@ public class InternshipOfferService {
                 .setMarginBottom(20f);
         document.add(stageInfosEn);
 
-        Paragraph stageSalaryEn = new Paragraph("Our hourly rate is " + offerDto.getSalary() + "$.")
+        Paragraph stageSalaryEn = new Paragraph("The offered salary is ")
+                .add(salary)
+                .add("$.")
                 .setFontSize(15)
                 .setMarginTop(20f)
                 .setMarginBottom(20f);

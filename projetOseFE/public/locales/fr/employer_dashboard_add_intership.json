@@ -12,8 +12,7 @@
     "placeholders": {
       "title": "Veuillez saisir le titre de votre offre de stage",
       "description": "Veuillez saisir la description complète du stage proposé",
-      "program": "Veuillez sélectionner le programme visé",
-      "salary": "16.10"
+      "program": "Veuillez sélectionner le programme visé"
     }
   },
   "submit": "Publier l’offre",
@@ -28,6 +27,7 @@
     "title_required": "Un titre est obligatoire.",
     "description_required": "Une description est obligatoire.",
     "program_required": "Un programme est obligatoire.",
+    "invalid_salary": "Veuillez entrer un salaire valide.",
     "invalid_email": "Veuillez entrer un courriel valide.",
     "expiration_required": "Une date limite est obligatoire.",
     "start_required": "Une date de début est obligatoire.",

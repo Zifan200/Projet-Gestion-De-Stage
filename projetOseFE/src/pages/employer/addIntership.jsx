@@ -95,17 +95,20 @@ export default function AddIntership() {
               {/* Salaire */}
               <div className="w-full">
                 <Label name="salary" label={t("form.salary")} />
-                <Input
-                    name="salary"
-                    type="number"
-                    placeholder={t("form.placeholders.salary")}
-                    {...form.register("salary")}
-                />
+                <div className="flex">
+                  <span className={"content-center me-1"}>$</span>
+                  <Input
+                      name="salary"
+                      type="text"
+                      placeholder="16.10"
+                      {...form.register("salary")}
+                  />
+                </div>
               </div>
 
               {/* Start Date */}
               <div className="w-full">
-                <Label name="startDate" label={t("form.startDate")} />
+                <Label name="startDate" label={t("form.startDate")}/>
                 <Input
                     name="startDate"
                     type="date"

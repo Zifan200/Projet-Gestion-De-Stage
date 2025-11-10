@@ -586,7 +586,10 @@ export const AllOffers = () => {
               <div>
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
                 <p className="text-gray-600">
-                  {selectedOffer.salary}$
+                  { localStorage.key("lang") === "fr" ?
+                      selectedOffer.salary.toLocaleString("fr-CA", {style:"currency", currency:"CAD"}) :
+                      selectedOffer.salary.toLocaleString("en-CA", {style:"currency", currency:"CAD"})
+                  }
                 </p>
               </div>
             </div>

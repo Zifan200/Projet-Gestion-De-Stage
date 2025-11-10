@@ -47,7 +47,9 @@ export default function OffresAConfirmer() {
             clearMessages();
         }
         if (error) {
-            const errorMessage = typeof error === "string" ? error : error?.message || t("errors.generic");
+            const errorMessage = typeof error === "string" ?
+                error :
+                error?.message || t("errors.generic");
             toast.error(errorMessage);
             clearMessages();
         }
@@ -59,7 +61,9 @@ export default function OffresAConfirmer() {
         {
             key: "etudiantStatus",
             label: t("table.studentStatus"),
-            format: (status) => status ? t(`studentStatus.${status.toLowerCase()}`) : t("studentStatus.pending")
+            format: (status) => status ?
+                t(`studentStatus.${status.toLowerCase()}`) :
+                t("studentStatus.pending")
         },
         {
             key: "actions",
@@ -113,7 +117,8 @@ export default function OffresAConfirmer() {
                                         setOpen={setOpen}
                                         triggerRef={triggerRef}
                                     >
-                                        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                        shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                                             {t("filter.studentStatus")}:{" "}
                                             {filterStudentStatus
                                                 ? t(`studentStatus.${filterStudentStatus.toLowerCase()}`)
@@ -122,7 +127,8 @@ export default function OffresAConfirmer() {
                                     </PopoverTrigger>
                                     <PopoverContent open={open} contentRef={contentRef}>
                                         <div className="flex flex-col gap-2 min-w-[200px]">
-                                            {["PENDING", "CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"].map((status) => (
+                                            {["PENDING", "CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"]
+                                                .map((status) => (
                                                 <button
                                                     key={status}
                                                     onClick={() => {
@@ -190,7 +196,8 @@ export default function OffresAConfirmer() {
                                     setShowModal(false);
                                     setModalMode("details");
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+                                transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 <span>{t("modal.close")}</span>
                             </button>
@@ -198,7 +205,8 @@ export default function OffresAConfirmer() {
                                 <>
                                     <button
                                         onClick={() => setModalMode("reject")}
-                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                        font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
                                     >
                                         <Cross2Icon className="w-4 h-4" />
                                         <span>{t("actions.reject")}</span>
@@ -209,7 +217,9 @@ export default function OffresAConfirmer() {
                                             setShowModal(false);
                                             setModalMode("details");
                                         }}
-                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg
+                                        text-sm font-medium transition-colors bg-emerald-100 text-emerald-700
+                                        hover:bg-emerald-200"
                                     >
                                         <CheckIcon className="w-4 h-4" />
                                         <span>{t("actions.accept")}</span>
@@ -224,7 +234,8 @@ export default function OffresAConfirmer() {
                                     setModalMode("details");
                                     setRejectReason("");
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+                                transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 <span>Annuler</span>
                             </button>
@@ -239,7 +250,8 @@ export default function OffresAConfirmer() {
                                     setModalMode("details");
                                     setRejectReason("");
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+                                transition-colors bg-red-100 text-red-700 hover:bg-red-200"
                             >
                                 <span>Confirmer</span>
                             </button>
@@ -251,12 +263,16 @@ export default function OffresAConfirmer() {
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.offerTitle")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.offerTitle")}
+                                </h3>
                                 <p className="text-gray-600">{selectedOffer.internshipOfferTitle}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employer")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.employer")}
+                                </h3>
                                 <p className="text-gray-600">{selectedOffer.employerEmail}</p>
                             </div>
                         </div>
@@ -277,7 +293,10 @@ export default function OffresAConfirmer() {
                                     {t("modal.salary")}
                                 </h3>
                                 <p className="text-gray-600">
-                                    {selectedOffer.salary}$
+                                    { localStorage.key("lang") === "fr" ?
+                                        selectedOffer.salary.toLocaleString("fr-CA", {style:"currency", currency:"CAD"}) :
+                                        selectedOffer.salary.toLocaleString("en-CA", {style:"currency", currency:"CAD"})
+                                    }
                                 </p>
                             </div>
                         </div>
@@ -285,14 +304,20 @@ export default function OffresAConfirmer() {
                         <div className="grid grid-cols-2 gap-4">
                             {selectedOffer.startDate && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.startDate")}</h3>
-                                    <p className="text-gray-600">{new Date(selectedOffer.startDate).toLocaleDateString()}</p>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.startDate")}
+                                    </h3>
+                                    <p className="text-gray-600">
+                                        {new Date(selectedOffer.startDate).toLocaleDateString()}
+                                    </p>
                                 </div>
                             )}
 
                             {selectedOffer.session && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.session")}</h3>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.session")}
+                                    </h3>
                                     <p className="text-gray-600">{selectedOffer.session}</p>
                                 </div>
                             )}
@@ -300,36 +325,52 @@ export default function OffresAConfirmer() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employerStatus")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.employerStatus")}
+                                </h3>
                                 <span
-                                    className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                                    className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100
+                                    text-green-800"
+                                >
                                     {t(`employerStatus.${selectedOffer.status.toLowerCase()}`)}
                                 </span>
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentStatus")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentStatus")}
+                                </h3>
                                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                    selectedOffer.etudiantStatus === "CONFIRMED_BY_STUDENT" ? "bg-green-100 text-green-800" :
-                                        selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? "bg-red-100 text-red-800" :
+                                    selectedOffer.etudiantStatus === "CONFIRMED_BY_STUDENT" ? 
+                                        "bg-green-100 text-green-800" :
+                                        selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? 
+                                            "bg-red-100 text-red-800" :
                                             "bg-yellow-100 text-yellow-800"
                                 }`}>
-                                    {selectedOffer.etudiantStatus ? t(`studentStatus.${selectedOffer.etudiantStatus.toLowerCase()}`) : t("studentStatus.pending")}
+                                    {selectedOffer.etudiantStatus ?
+                                        t(`studentStatus.${selectedOffer.etudiantStatus.toLowerCase()}`) :
+                                        t("studentStatus.pending")}
                                 </span>
                             </div>
                         </div>
 
                         {selectedOffer.selectedCvFileName && (
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.selectedCv")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.selectedCv")}
+                                </h3>
                                 <p className="text-gray-600">{selectedOffer.selectedCvFileName}</p>
                             </div>
                         )}
 
                         {selectedOffer.createdAt && (
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.applicationDate")}</h3>
-                                <p className="text-gray-600">{new Date(selectedOffer.createdAt).toLocaleDateString()}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.applicationDate")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {new Date(selectedOffer.createdAt).toLocaleDateString()}
+                                </p>
                             </div>
                         )}
                     </div>
@@ -346,7 +387,8 @@ export default function OffresAConfirmer() {
                                 value={rejectReason}
                                 onChange={(e) => setRejectReason(e.target.value)}
                                 placeholder={t("reasonModal.placeholder")}
-                                className="w-full min-h-[150px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                className="w-full min-h-[150px] rounded-lg border border-gray-300 px-3 py-2 text-sm
+                                focus:outline-none focus:ring-2 focus:ring-blue-300"
                             />
                         </div>
                     </div>

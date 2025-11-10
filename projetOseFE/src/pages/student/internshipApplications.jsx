@@ -414,7 +414,16 @@ export const StudentApplications = () => {
                                     {t("modal.salary")}
                                 </h3>
                                 <p className="text-gray-600">
-                                    {selectedApplication.salary}$
+                                    { localStorage.key("lang") === "fr" ?
+                                        selectedApplication.salary.toLocaleString(
+                                            "fr-CA",
+                                            {style:"currency", currency:"CAD"}
+                                        ) :
+                                        selectedApplication.salary.toLocaleString(
+                                            "en-CA",
+                                            {style:"currency", currency:"CAD"}
+                                        )
+                                    }
                                 </p>
                             </div>
                         </div>

@@ -12,8 +12,7 @@
     "placeholders": {
       "title": "Please enter the title of your internship offer",
       "description": "Please enter the full description of the offered internship",
-      "program": "Please select the targeted program",
-      "salary": "16.10"
+      "program": "Please select the targeted program"
     }
   },
   "submit": "Publish Offer",
@@ -28,7 +27,7 @@
     "title_required": "A title is required.",
     "description_required": "A description is required.",
     "program_required": "A program is required.",
-    "salary_required": "A salary is required.",
+    "invalid_salary": "Please enter a valid salary.",
     "invalid_email": "Please enter a valid email address.",
     "expiration_required": "A deadline is required.",
     "start_required": "A start date is required.",
