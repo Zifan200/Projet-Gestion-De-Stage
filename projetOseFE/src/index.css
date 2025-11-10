@@ -24,11 +24,3 @@ html {
     background-repeat: no-repeat;
 }
 
-@layer utilities {
-    @media screen and (max-width: 430px) and (max-height: 932px) {
-        .text-phone {
-            @apply text-sm;
-        }
-    }
-}
-
