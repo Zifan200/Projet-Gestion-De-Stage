@@ -18,8 +18,9 @@ export const InternshipApplicationsGE = () => {
     const { applications = [], loadAllInternshipApplications } = useGeStore();
 
     const [filterStatus, setFilterStatus] = useState(null);
-    const [filterSession, setFilterSession] = useState("All");
-    const [filterYear, setFilterYear] = useState("All");
+    const currentYear = new Date().getFullYear().toString();
+    const [filterSession, setFilterSession] = useState("Hiver"); // session = Hiver
+    const [filterYear, setFilterYear] = useState(currentYear);
 
     useEffect(() => {
         loadAllInternshipApplications();
@@ -48,29 +49,20 @@ export const InternshipApplicationsGE = () => {
     ];
 
     const sortedAndFilteredApplications = useMemo(() => {
-        let filtered = applications.filter(app => app.etudiantStatus);
-
-        if (filterStatus)
-            filtered = filtered.filter(
-                (app) => app.etudiantStatus?.toLowerCase() === filterStatus.toLowerCase()
-            );
-
-        if (filterSession !== "All")
-            filtered = filtered.filter((app) => app.session === filterSession);
-
-        if (filterYear !== "All") {
-            filtered = filtered.filter((app) => {
-                if (!app.createdAt) return false;
-                const year = new Date(app.createdAt).getFullYear();
-                return year.toString() === filterYear.toString();
-            });
-        }
+        return applications
+            .filter(app => app.etudiantStatus)
+            .filter(app => app.session === "Hiver")
+            .filter(app => {
+                if (!app.startDate) return false;
+                const year = new Date(app.startDate).getFullYear();
+                // filtrage dynamique selon filterYear (peut être "All")
+                return filterYear === "All" || year.toString() === filterYear.toString();
+            })
+            .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    }, [applications, filterYear]);
 
 
-        return [...filtered].sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-    }, [applications, filterStatus, filterSession, filterYear]);
+
 
     const tableData = sortedAndFilteredApplications.map((app) => ({
         ...app,
@@ -81,8 +73,8 @@ export const InternshipApplicationsGE = () => {
     const availableYears = Array.from(
         new Set(
             applications
-                .filter(app => app.createdAt)
-                .map(app => new Date(app.createdAt).getFullYear())
+                .filter(app => app.startDate)
+                .map(app => new Date(app.startDate).getFullYear())
         )
     ).sort((a, b) => b - a);
 
@@ -127,7 +119,7 @@ export const InternshipApplicationsGE = () => {
                     )}
                 </Popover>
 
-                {/* Session Filter */}
+                {/* Session Filter
                 <Popover>
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
@@ -157,7 +149,7 @@ export const InternshipApplicationsGE = () => {
                             </PopoverContent>
                         </>
                     )}
-                </Popover>
+                </Popover>*/}
 
                 {/* Year Filter */}
                 <Popover>
@@ -169,19 +161,20 @@ export const InternshipApplicationsGE = () => {
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
-                                <div className="flex flex-col gap-2 min-w-[150px]">
+                                <div
+                                    className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
                                     {availableYears.map((year) => (
                                         <button
                                             key={year}
-                                            onClick={() => { setFilterYear(year); setOpen(false); }}
+                                            onClick={() => {
+                                                setFilterYear(year);
+                                                setOpen(false);
+                                            }}
                                             className={`px-3 py-1 rounded text-left ${filterYear === year ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                                         >
                                             {year}
                                         </button>
                                     ))}
-                                    <button onClick={() => { setFilterYear("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
-                                        {t("session.AllYears")}
-                                    </button>
                                     <PopoverClose setOpen={setOpen}>
                                         <span className="text-sm text-gray-600">{t("menu.close")}</span>
                                     </PopoverClose>

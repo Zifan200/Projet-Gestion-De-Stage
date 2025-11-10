@@ -53,6 +53,10 @@ import {CvsWrapper} from "./pages/student/wrapper/cvsWrapper.jsx";
 import {StudentOffersWrapper} from "./pages/student/wrapper/studentOffersWrapper.jsx";
 import {StudentConvocationDecisionWrapper} from "./pages/student/wrapper/studentConvocationDecisionWrapper.jsx";
 import {StudentApplicationsWrapper} from "./pages/student/wrapper/internshipApplicationsStudentWrapper.jsx";
+import {DashboardGsWrapper} from "./pages/gs/wrapper/dashboardGsWrapper.jsx";
+import {AllOffersGsWrapper} from "./pages/gs/wrapper/allOffersGsWrapper.jsx";
+import {CvsGsWrapper} from "./pages/gs/wrapper/cvsGsWrapper.jsx";
+import {InternshipApplicationsGsWrapper} from "./pages/gs/wrapper/internshipApplicationGsWrapper.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -184,27 +188,54 @@ function App() {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/request-password" element={<RequestPassword />} />
 
-            {/* Routes Ge */}
+            {/* Routes GS */}
             <Route
                 path="/dashboard/gs/"
                 element={
-                  <DashboardLayout
+                  <DashboardPhoneWrapper
                       sidebarLinks={gsDashboardSidebarLinks}
                       title={t("gs_dashboard:titles.dashboard")}
+                      DesktopComponent={DashboardLayout}
                   />
                 }
             >
-              <Route index element={<GsDashboard />} />
+              <Route
+                  index
+                  element={
+                    <DashboardGsWrapper
+                        sidebarLinks={gsDashboardSidebarLinks}
+                        title={t("gs_dashboard:titles.dashboard")}
+                        DesktopComponent={GsDashboard}
+                    />
+                  }
+              />
+
               <Route
                   path="/dashboard/gs/manage-students-cvs"
-                  element={<GsManageCvs />}
+                  element={
+                    <CvsGsWrapper
+                        DesktopComponent={GsManageCvs}
+                    />
+                  }
               />
-              <Route path="/dashboard/gs/internships" element={<AllOffers />} />
-              <Route
-                  path="/dashboard/gs/applications"
-                  element={<InternshipApplicationsGE />}
-              />
-              <Route
+                <Route
+                    path="/dashboard/gs/internships"
+                    element={
+                        <AllOffersGsWrapper
+                            DesktopComponent={AllOffers}
+                        />
+                    }
+                />
+                <Route
+                    path="/dashboard/gs/applications"
+                    element={
+                        <InternshipApplicationsGsWrapper
+                            DesktopComponent={InternshipApplicationsGE}
+                        />
+                    }
+                />
+
+                <Route
                   path="/dashboard/gs/settings"
                   element={<DashboardSettings />}
               />
