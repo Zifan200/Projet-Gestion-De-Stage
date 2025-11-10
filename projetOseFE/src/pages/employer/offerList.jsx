@@ -20,11 +20,12 @@ export const OfferList = () => {
   const user = useAuthStore((s) => s.user);
   const { offers, loadOffers, downloadOfferPdf } = useOfferStore();
   const navigate = useNavigate();
+  const currentYear = new Date().getFullYear();
 
   const [filterStatus, setFilterStatus] = useState(null);
   const [sortKey, setSortKey] = useState("date");
-  const [filterSession, setFilterSession] = useState("All");
-  const [filterYear, setFilterYear] = useState("All");
+  const [filterSession, setFilterSession] = useState("hiver");
+  const [filterYear, setFilterYear] = useState(currentYear.toString());
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
@@ -57,23 +58,17 @@ export const OfferList = () => {
   }, [offers]);
 
   const sortedAndFilteredOffers = useMemo(() => {
-    let filtered = offers;
+    return offers
+        .filter(o => !filterSession || o.session?.toLowerCase() === filterSession.toLowerCase())
+        .filter(o => !filterYear || (o.startDate && new Date(o.startDate).getFullYear().toString() === filterYear))
+        .filter(o => !filterStatus || o.status === filterStatus)
+        .sort((a, b) => {
+          if (sortKey === "date") return new Date(b.expirationDate) - new Date(a.expirationDate);
+          if (sortKey === "applications") return (b.applicationCount || 0) - (a.applicationCount || 0);
+          return 0;
+        });
+  }, [offers, sortKey, filterSession, filterYear, filterStatus]);
 
-    if (filterStatus) filtered = filtered.filter((o) => o.status === filterStatus);
-    if (filterSession !== "All")
-      filtered = filtered.filter(
-          (o) => o.session?.toLowerCase() === filterSession.toLowerCase()
-      );
-    if (filterYear !== "All") filtered = filtered.filter(
-        (o) => o.startDate && new Date(o.startDate).getFullYear().toString() === filterYear
-    );
-
-    return [...filtered].sort((a, b) => {
-      if (sortKey === "date") return new Date(b.expirationDate) - new Date(a.expirationDate);
-      if (sortKey === "applications") return (b.applicationCount || 0) - (a.applicationCount || 0);
-      return 0;
-    });
-  }, [offers, filterStatus, filterSession, filterYear, sortKey]);
 
   const columns = [
     { key: "title", label: t("table.offerTitle") },
@@ -186,7 +181,7 @@ export const OfferList = () => {
             )}
           </Popover>
 
-          {/* Session Filter */}
+          {/* Session Filter
           <Popover>
             {({ open, setOpen, triggerRef, contentRef }) => (
                 <>
@@ -203,7 +198,7 @@ export const OfferList = () => {
                             onClick={() => { setFilterSession(session); setOpen(false); }}
                             className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                         >
-                          {t(`session.${session.toLowerCase()}`)} {/* <-- ici la traduction */}
+                          {t(`session.${session.toLowerCase()}`)}  <-- ici la traduction
                         </button>
                     ))}
                       <button onClick={() => { setFilterSession("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
@@ -216,7 +211,7 @@ export const OfferList = () => {
                   </PopoverContent>
                 </>
             )}
-          </Popover>
+          </Popover>*/}
 
           {/* Year Filter */}
           <Popover>
@@ -228,19 +223,20 @@ export const OfferList = () => {
                 </span>
                   </PopoverTrigger>
                   <PopoverContent open={open} contentRef={contentRef}>
-                    <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto">
+                    <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
                       {availableYears.map((year) => (
                           <button
                               key={year}
-                              onClick={() => { setFilterYear(year.toString()); setOpen(false); }}
+                              onClick={() => {
+                                setFilterYear(year.toString());
+                                setOpen(false);
+                              }}
                               className={`px-3 py-1 rounded text-left ${filterYear === year.toString() ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                           >
                             {year}
                           </button>
                       ))}
-                      <button onClick={() => { setFilterYear("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
-                        {t("session.AllYears")}
-                      </button>
+
                       <PopoverClose setOpen={setOpen}>
                         <span className="text-sm text-gray-600">{t("menu.close")}</span>
                       </PopoverClose>
@@ -267,59 +263,59 @@ export const OfferList = () => {
             size="default"
             footer={
               <button
-                onClick={() => setSelectedOffer(null)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  onClick={() => setSelectedOffer(null)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
               >
                 <span>{t("actions.close")}</span>
               </button>
             }
         >
           {selectedOffer && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.enterprise")}</h3>
-                  <p className="text-gray-600">{selectedOffer.enterpriseName}</p>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.enterprise")}</h3>
+                    <p className="text-gray-600">{selectedOffer.enterpriseName}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.program")}</h3>
+                    <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.program")}</h3>
-                  <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
-                </div>
-              </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.deadline")}</h3>
+                    <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.deadline")}</h3>
-                  <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.status")}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    selectedOffer.status === "ACCEPTED" ? "bg-green-100 text-green-800" :
-                    selectedOffer.status === "REJECTED" ? "bg-red-100 text-red-800" :
-                    "bg-yellow-100 text-yellow-800"
-                  }`}>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.status")}</h3>
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        selectedOffer.status === "ACCEPTED" ? "bg-green-100 text-green-800" :
+                            selectedOffer.status === "REJECTED" ? "bg-red-100 text-red-800" :
+                                "bg-yellow-100 text-yellow-800"
+                    }`}>
                     {t(`status.${selectedOffer.status?.toLowerCase()}`)}
                   </span>
+                  </div>
                 </div>
+
+                {selectedOffer.reason?.trim() && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.reason")}</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.reason}</p>
+                    </div>
+                )}
+
+                {selectedOffer.description && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.description")}</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                    </div>
+                )}
               </div>
-
-              {selectedOffer.reason?.trim() && (
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.reason")}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.reason}</p>
-                </div>
-              )}
-
-              {selectedOffer.description && (
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("table.description")}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
-                </div>
-              )}
-            </div>
           )}
         </Modal>
       </div>

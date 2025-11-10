@@ -16,6 +16,10 @@ import Home from "./pages/home.jsx";
 import { EmployerDashboard } from "./pages/employer/dashboard.jsx";
 import { DashboardLayout } from "./components/layouts/dashboard.jsx";
 import OffresAConfirmer from "./pages/student/internshipFinalDecision.jsx";
+import { DashboardCardPhone } from "./pages/employer/phone/dashboardCardPhone.jsx";
+import { DashboardPhone } from "./components/layouts/phone/dashboardPhone.jsx";
+import { InternshipApplicationsPhone } from "./pages/employer/phone/internshipApplicationPhone.jsx";
+
 import {
   BackpackIcon,
   PersonIcon,
@@ -39,6 +43,11 @@ import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
 import {PhoneCallIcon} from "lucide-react";
 import { StudentApplications } from "./pages/student/internshipApplications.jsx";
+import {ResponsiveRoute} from "./ResponsiveRoute.jsx";
+import {InternshipApplicationsWrapper} from "./pages/employer/wrapper/InternshipApplicationsWrapper.jsx";
+import {DashboardPhoneWrapper} from "./components/layouts/wrapper/dashboardWrapper.jsx";
+import {DashboardCardWrapper} from "./pages/employer/wrapper/dashboardCardWrapper.jsx";
+import {OfferListWrapper} from "./pages/employer/wrapper/offerListWrapper.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -226,32 +235,74 @@ function App() {
           </Route>
 
             <Route
-                path="/dashboard/employer/"
+                path="/dashboard/employer/*"
                 element={
-                  <DashboardLayout
+                  <DashboardPhoneWrapper
                       sidebarLinks={employerDashboardSidebarLinks}
                       title={t("employer_dashboard:titles.dashboard")}
+                      DesktopComponent={DashboardLayout}
                   />
                 }
             >
-              <Route index element={<EmployerDashboard />} />
+              {/* Route principale */}
               <Route
-                  path="/dashboard/employer/add-intership"
-                  element={<AddIntership />}
+                  path="/dashboard/employer/*"
+                  element={
+                    <DashboardCardWrapper sidebarLinks={employerDashboardSidebarLinks} title="Accueil" />
+                  }
               />
+
+              {/* Ajouter un stage */}
               <Route
-                  path="/dashboard/employer/my-offers"
-                  element={<OfferList />}
+                  path="add-intership"
+                  element={
+                    <ResponsiveRoute
+                        DesktopComponent={AddIntership}
+                        PhoneComponent={() => (
+                            <DashboardPhone
+                                sidebarLinks={employerDashboardSidebarLinks}
+                                title="Ajouter un stage"
+                            />
+                        )}
+                    />
+                  }
               />
+
+              {/* Mes offres */}
               <Route
-                  path="/dashboard/employer/applications"
-                  element={<InternshipApplications />}
+                  path="my-offers"
+                  element={
+                    < OfferListWrapper />
+                  }
               />
+
+              {/* Candidatures */}
               <Route
-                  path="/dashboard/employer/settings"
-                  element={<DashboardSettings />}
+                  path="applications"
+                  element={
+                    <InternshipApplicationsWrapper />
+                  }
+              />
+
+              {/* Paramètres */}
+              <Route
+                  path="settings"
+                  element={
+                    <ResponsiveRoute
+                        DesktopComponent={DashboardSettings}
+                        PhoneComponent={() => (
+                            <DashboardPhone
+                                sidebarLinks={employerDashboardSidebarLinks}
+                                title="Paramètres"
+                            />
+                        )}
+                    />
+                  }
               />
             </Route>
+
+
+
             {/* Routes Employeur */}
             <Route path="/signup/employer" element={<EmployerSignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
