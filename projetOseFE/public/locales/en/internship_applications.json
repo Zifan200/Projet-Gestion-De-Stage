@@ -1,6 +1,7 @@
 {
   "title": "Applications",
   "table": {
+    "loading": "loading",
     "offerTitle": "Offer Title",
     "studentName": "Student Name",
     "studentEmail": "Student Email",
@@ -11,14 +12,15 @@
     "status": "Status",
     "action": "Action",
     "actionView": "View",
-    "convocation": "Convocation",
-    "actionView": "View",
+    "convocation": "Convoke",
     "studentChoice": "Student's Choice",
     "accept": "Accept",
     "reject": "Reject",
     "appliedAt": "Applied at",
+    "publicationDate": "Application date",
     "employerDecision": "Employer's decision",
-    "myDecision": "My decision"
+    "myDecision": "My decision",
+    "noApplications": "no applications"
   },
   "status": {
     "pending": "Under Review",
