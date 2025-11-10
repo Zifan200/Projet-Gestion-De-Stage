@@ -2,7 +2,11 @@
 module.exports = {
     content: ['./index.html', './src/**/*.{js,jsx}'],
     theme: {
-        extend: {},
+        extend: {
+            screens: {
+                phone: { max: '430px' }, // s'applique uniquement pour écrans ≤430px
+            },
+        },
     },
     plugins: [],
 };
