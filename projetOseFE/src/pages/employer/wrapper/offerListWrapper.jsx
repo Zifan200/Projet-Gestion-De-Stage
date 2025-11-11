@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { OfferListPhone } from "../phone/OfferListPhone.jsx";
 import {OfferList} from "../offerList.jsx";
+import {OfferListPhone} from "../phone/offerListPhone.jsx";
 
 export const OfferListWrapper = () => {
     const [isPhone, setIsPhone] = useState(false);
