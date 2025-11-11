@@ -4,6 +4,7 @@ package org.example.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,11 +43,12 @@ public class InternshipOffer {
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
+    private TypeHoraire typeHoraire = TypeHoraire.UNSELECTED;
 
     @Builder
     public InternshipOffer(
             Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-            ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session, List<InternshipApplication> applications
+            ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session, TypeHoraire typeHoraire, List<InternshipApplication> applications
     ){
         this.id = id;
         this.title = title;
@@ -60,6 +62,7 @@ public class InternshipOffer {
         this.startDate = startDate;
         this.endDate = endDate;
         this.session = session;
+        this.typeHoraire = typeHoraire != null ? typeHoraire : TypeHoraire.UNSELECTED;
         this.applications = applications;
     }
 }

@@ -73,6 +73,7 @@ public class InternshipOfferService {
                 .startDate(internshipOfferDto.getStartDate())
                 .endDate(internshipOfferDto.getEndDate())
                 .session(session)
+                .typeHoraire(internshipOfferDto.getTypeHoraire())
                 .applications(new ArrayList<>())
                 .build();
 
@@ -113,6 +114,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .collect(Collectors.toList());
 
@@ -141,6 +143,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .typeHoraire(offer.getTypeHoraire())
                         .applicationCount(offer.getApplications().size())
                         .build())
                 .collect(Collectors.toList());
@@ -193,6 +196,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .toList();
     }
