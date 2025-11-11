@@ -176,6 +176,7 @@ export const InternshipApplications = () => {
         </tr>
     ));
 
+
     return (
         <div className="space-y-6">
             <Header title={t("title")} />
