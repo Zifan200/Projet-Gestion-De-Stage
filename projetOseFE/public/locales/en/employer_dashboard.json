@@ -2,10 +2,11 @@
   "stats": {
     "myOffers": "My offers",
     "offerConfirm": "Confirmed applications",
-    "applications": "Total applications",
+    "applications": "Invite to Interviews",
     "activeApplications": "Active applications",
     "totalStudents": "Unique students",
-    "createOffer": "Create an offer"
+    "createOffer": "Create an offer",
+    "interviews": "Post-interview"
   },
   "titles": {
     "home": "Home",
