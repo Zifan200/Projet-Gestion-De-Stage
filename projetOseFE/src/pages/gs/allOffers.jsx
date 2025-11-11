@@ -53,8 +53,9 @@ export const AllOffers = () => {
     offerStatuses.ALL,
   );
   const [currentProgram, setCurrentProgram] = useState(null);
-  const [currentSession, setCurrentSession] = useState("All");
-  const [currentYear, setCurrentYear] = useState("All");
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear().toString());
+  const [currentSession, setCurrentSession] = useState("Hiver");
+
 
   const {
     offers,
@@ -124,21 +125,21 @@ export const AllOffers = () => {
     }
 
     // Filter by session
-    if (currentSession !== "All") {
+    if (currentSession && currentSession !== "All") {
       filtered = filtered.filter((o) => o.session === currentSession);
     }
 
     // Filter by year
-    if (currentYear !== "All") {
-      filtered = filtered.filter((o) => {
-        if (!o.startDate) return false;
-        const year = new Date(o.startDate).getFullYear();
-        return year.toString() === currentYear;
-      });
-    }
+    filtered = filtered.filter((o) => {
+      if (!o.startDate) return false;
+      const year = new Date(o.startDate).getFullYear();
+      return year.toString() === currentYear;
+    });
 
+    // **Update the state**
     setCurrentOffers(filtered);
   };
+
 
   // Extract available years
   const availableYears = Array.from(
@@ -361,7 +362,7 @@ export const AllOffers = () => {
           )}
         </Popover>
 
-        {/* Session Filter */}
+        {/* Session Filter
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
             <>
@@ -413,7 +414,7 @@ export const AllOffers = () => {
               </PopoverContent>
             </>
           )}
-        </Popover>
+        </Popover>*/}
 
         {/* Year Filter */}
         <Popover>
@@ -432,32 +433,24 @@ export const AllOffers = () => {
                 </span>
               </PopoverTrigger>
               <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px]">
+                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
                   {availableYears.map((year) => (
-                    <button
-                      key={year}
-                      onClick={() => {
-                        setCurrentYear(year.toString());
-                        setOpen(false);
-                      }}
-                      className={`px-3 py-1 rounded text-left ${
-                        currentYear === year.toString()
-                          ? "bg-blue-100 font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {year}
-                    </button>
+                      <button
+                          key={year}
+                          onClick={() => {
+                            setCurrentYear(year.toString());
+                            setOpen(false);
+                          }}
+                          className={`px-3 py-1 rounded text-left ${
+                              currentYear === year.toString()
+                                  ? "bg-blue-100 font-semibold"
+                                  : "hover:bg-gray-100"
+                          }`}
+                      >
+                        {year}
+                      </button>
                   ))}
-                  <button
-                    onClick={() => {
-                      setCurrentYear("All");
-                      setOpen(false);
-                    }}
-                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                  >
-                    {t("gs_dashboard_offers:session.year")}
-                  </button>
+
                   <PopoverClose setOpen={setOpen}>
                     <span className="text-sm text-gray-600">
                       {t("menu.close")}

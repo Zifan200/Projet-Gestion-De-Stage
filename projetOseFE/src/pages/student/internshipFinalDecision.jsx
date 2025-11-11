@@ -18,6 +18,7 @@ export default function OffresAConfirmer() {
     const [filterStudentStatus, setFilterStudentStatus] = useState(null);
 
     const {
+        convocations,
         applications,
         loadAcceptedApplications,
         loading,
@@ -72,9 +73,7 @@ export default function OffresAConfirmer() {
         }
     ], [t]);
 
-    const approvedApplications = applications.filter(
-        app => app.status === "ACCEPTED" && app.etudiantStatus === null
-    );
+    const approvedApplications = convocations.filter(app => app.status === "ACCEPTED");
 
     const filteredApplications = useMemo(() => {
         let filtered = approvedApplications;

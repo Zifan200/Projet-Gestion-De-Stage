@@ -53,7 +53,7 @@ public class ConvocationService {
             throw new InvalidInternshipApplicationException("Invalid convocation : internship application does not exist");
         }
 
-        var internship = internshipApplication.get();
+        InternshipApplication internship = internshipApplication.get();
 
         if (!internship.getStudent().getId().equals(student.get().getId()) ||
                 !internship.getOffer().getEmployer().getId().equals(employer.get().getId())) {
