@@ -2,6 +2,7 @@ package org.example.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 
@@ -42,6 +43,8 @@ public class InternshipOffer {
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
+
+    @Min(0)
     private float salary;
 
     @Builder
