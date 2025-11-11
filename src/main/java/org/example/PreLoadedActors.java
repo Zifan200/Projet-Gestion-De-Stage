@@ -193,6 +193,19 @@ public class PreLoadedActors {
         return employers;
     }
 
+    public float genSalary() {
+        float min = 16.1f;
+        float max = 25f;
+        float range = max - min + 1;
+        float result = (float) (Math.random() * range) + min;
+
+        int decimals = 2;
+        result = (float) (result * Math.pow(10, decimals));
+        result = (float) Math.floor(result);
+
+        return (float) (result / Math.pow(10, decimals));
+    }
+
 
     public List<InternshipOfferDto> genInternshipOffers(int quantity) {
         if (employers.isEmpty()) {
@@ -210,6 +223,7 @@ public class PreLoadedActors {
                     .targetedProgramme("Informatique")
                     .status(ApprovalStatus.ACCEPTED)
                     .expirationDate(LocalDate.now().plusDays( 30 ))
+                    .salary(genSalary())
                     .build();
             InternshipOfferResponseDto savedOffer = internshipOfferService.saveInternshipOffer(employerEmail, offer);
             internshipOfferService.updateOfferStatus(savedOffer.getId(),ApprovalStatus.ACCEPTED,"");
@@ -217,8 +231,4 @@ public class PreLoadedActors {
         }
         return offers;
     }
-
-    public void associateEmployerToAInternshipOffer(EtudiantDTO studentDto) {
-    }
-
 }

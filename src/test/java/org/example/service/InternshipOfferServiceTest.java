@@ -93,6 +93,7 @@ public class InternshipOfferServiceTest {
                 .description("loremipsum")
                 .employer(employer)
                 .publishedDate(offerPublishDateTime)
+                .salary(18.25f)
                 .applications(new ArrayList<>())
                 .build();
     }
@@ -112,6 +113,7 @@ public class InternshipOfferServiceTest {
         Employer employer = buildEmployer();
         EmployerDto employerDto = buildEmployerDto();
         LocalDate offerPublishDateTime = LocalDate.now();
+        float offerSalary = 18.25f;
         InternshipOffer createdOffer = buildInternshipOffer(employer, offerPublishDateTime);
 
         when(employerRepository.findByCredentialsEmail(employerDto.getEmail()))
@@ -131,6 +133,7 @@ public class InternshipOfferServiceTest {
         verify(internshipOfferRepository).save(any(InternshipOffer.class));
         verify(eventPublisher).publishEvent(any(EmployerCreatedInternshipOfferEvent.class));
         assertSame(savedOffer.getPublishedDate(), offerPublishDateTime);
+        assertEquals(savedOffer.getSalary(), offerSalary);
     }
 
     @Test

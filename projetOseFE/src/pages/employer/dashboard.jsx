@@ -12,7 +12,7 @@ export const EmployerDashboard = () => {
     applications,
     fetchApplications,
     convocations,
-    loadConvocations,
+    fetchListConvocation,
     loading,
     error
   } = useEmployerStore();
@@ -21,9 +21,9 @@ export const EmployerDashboard = () => {
   useEffect(() => {
     if (user?.role === "EMPLOYER") {
       fetchApplications();
-      loadConvocations();
+      fetchListConvocation();
     }
-  }, [fetchApplications, loadConvocations, user]);
+  }, [fetchApplications, fetchListConvocation, user]);
 
   const stats = useMemo(() => {
     const totalApplications = applications.length;

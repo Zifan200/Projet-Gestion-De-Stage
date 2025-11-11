@@ -116,5 +116,17 @@ export const employerService = {
       console.error("Erreur lors de la création :", error);
       toast.error(error.message);
     }
+  },
+
+  getListConvocation: async (token) =>{
+    const res = await api.get(
+        `/employer/liste-convocations-employer`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+    );
+    return res.data
   }
 };
