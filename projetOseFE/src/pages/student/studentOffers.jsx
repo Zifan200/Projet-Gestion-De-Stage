@@ -79,31 +79,22 @@ export const StudentOffers = () => {
     }
   };
 
-  // Filter offers by session, year, and exclude already applied offers
+  const currentYear = (new Date().getFullYear() + 1).toString();
+
   const filteredOffers = useMemo(() => {
-    let filtered = offers;
+    return offers
+        .filter((offer) => offer.session?.toLowerCase() === "hiver")
+        .filter(
+            (offer) =>
+                offer.startDate &&
+                new Date(offer.startDate).getFullYear().toString() === currentYear
+        )
+        .filter(
+            (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
+        );
+  }, [offers, applications]);
 
-    // Filter by session
-    if (filterSession && filterSession !== "All") {
-      filtered = filtered.filter((offer) => offer.session === filterSession);
-    }
 
-    // Filter by year
-    if (filterYear && filterYear !== "All") {
-      filtered = filtered.filter(
-        (offer) =>
-          offer.startDate &&
-          new Date(offer.startDate).getFullYear().toString() === filterYear
-      );
-    }
-
-    // Exclude offers already applied to
-    filtered = filtered.filter(
-      (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
-    );
-
-    return filtered;
-  }, [offers, filterSession, filterYear, applications]);
 
   // Extract available years
   const availableYears = useMemo(() => {
@@ -163,9 +154,9 @@ export const StudentOffers = () => {
     <div className="space-y-6">
       <Header title={t("title")} />
 
-      {/* Session et Year Filters avec popover */}
+     {/*  Session et Year Filters avec popover
       <div className="flex justify-start gap-4 mb-4">
-        {/* Session Filter */}
+         Session Filter
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
               <>
@@ -199,9 +190,9 @@ export const StudentOffers = () => {
                 </PopoverContent>
               </>
           )}
-        </Popover>
+        </Popover>*/}
 
-        {/* Year Filter */}
+        {/* Year Filter
         <Popover>
           {({ open, setOpen, triggerRef, contentRef }) => (
               <>
@@ -235,8 +226,8 @@ export const StudentOffers = () => {
                 </PopoverContent>
               </>
           )}
-        </Popover>
-      </div>
+        </Popover>*/}
+      {/*</div>*/}
 
 
 
