@@ -569,12 +569,23 @@ export const AllOffers = () => {
               </div>
             </div>
 
-            {selectedOffer.description && (
+            <div className="grid grid-cols-2 gap-4">
+              {selectedOffer.description && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                    <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                  </div>
+              )}
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
+                <p className="text-gray-600">
+                  { localStorage.key("lang") === "fr" ?
+                      selectedOffer.salary.toLocaleString("fr-CA", {style:"currency", currency:"CAD"}) :
+                      selectedOffer.salary.toLocaleString("en-CA", {style:"currency", currency:"CAD"})
+                  }
+                </p>
               </div>
-            )}
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
               {selectedOffer.publishedDate && (

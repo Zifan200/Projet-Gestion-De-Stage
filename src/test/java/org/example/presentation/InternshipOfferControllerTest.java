@@ -52,6 +52,7 @@ public class InternshipOfferControllerTest {
                 .id(1L)
                 .title("Dev Java")
                 .enterpriseName("TechCorp")
+                .salary(18.25f)
                 .expirationDate(LocalDate.now().plusDays(30))
                 .build();
 
@@ -59,19 +60,23 @@ public class InternshipOfferControllerTest {
                 .id(2L)
                 .title("Frontend React")
                 .enterpriseName("WebInc")
+                .salary(16.5f)
                 .expirationDate(LocalDate.now().plusDays(25))
                 .build();
 
         when(internshipOfferService.getAllOffersSummary()).thenReturn(List.of(offer1, offer2));
 
         // Act
-        ResponseEntity<List<InternshipOfferListDto>> response = internshipOfferController.getAllInternshipOffersSummary();
+        ResponseEntity<List<InternshipOfferListDto>> response =
+                internshipOfferController.getAllInternshipOffersSummary();
 
         // Assert
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).hasSize(2);
         assertThat(response.getBody().get(0).getTitle()).isEqualTo("Dev Java");
+        assertThat(response.getBody().get(0).getSalary()).isEqualTo(18.25f);
         assertThat(response.getBody().get(1).getEnterpriseName()).isEqualTo("WebInc");
+        assertThat(response.getBody().get(1).getSalary()).isEqualTo(16.5f);
     }
 
     @Test
@@ -96,6 +101,7 @@ public class InternshipOfferControllerTest {
                 .description("Stage backend Java")
                 .targetedProgramme("Informatique")
                 .employerEmail(employer.getEmail())
+                .salary(18.25f)
                 .expirationDate(LocalDate.now().plusDays(30))
                 .build();
 
@@ -108,6 +114,7 @@ public class InternshipOfferControllerTest {
         assertThat(response.getBody().getTitle()).isEqualTo("Dev Java");
         assertThat(response.getBody().getTargetedProgramme()).isEqualTo("Informatique");
         assertThat(response.getBody().getEmployerEmail()).isEqualTo("alice@example.com");
+        assertThat(response.getBody().getSalary()).isEqualTo(18.25f);
     }
 
 
@@ -152,6 +159,7 @@ public class InternshipOfferControllerTest {
                 .title("Développeur Java")
                 .enterpriseName("TechCorp")
                 .expirationDate(LocalDate.now().plusDays(30))
+                .salary(18.25f)
                 .build();
 
         InternshipOfferListDto offer2 = InternshipOfferListDto.builder()
@@ -159,6 +167,7 @@ public class InternshipOfferControllerTest {
                 .title("Frontend React")
                 .enterpriseName("TechCorp")
                 .expirationDate(LocalDate.now().plusDays(25))
+                .salary(16.5f)
                 .build();
 
         when(internshipOfferService.getAcceptedOffersByProgramme(programme))
@@ -172,7 +181,9 @@ public class InternshipOfferControllerTest {
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).hasSize(2);
         assertThat(response.getBody().get(0).getTitle()).isEqualTo("Développeur Java");
+        assertThat(response.getBody().get(0).getSalary()).isEqualTo(18.25f);
         assertThat(response.getBody().get(1).getTitle()).isEqualTo("Frontend React");
+        assertThat(response.getBody().get(1).getSalary()).isEqualTo(16.5f);
     }
 
     @Test
@@ -213,6 +224,7 @@ public class InternshipOfferControllerTest {
                 .description("N/A")
                 .employer(employer)
                 .targetedProgramme("Computer Science")
+                .salary(18.25f)
                 .applications(new ArrayList<>())
                 .build();
 
@@ -222,8 +234,12 @@ public class InternshipOfferControllerTest {
         InternshipOfferResponseDto updatedResponse = InternshipOfferResponseDto.create(offer);
         updatedResponse.setStatus(ApprovalStatus.ACCEPTED);
 
-        when(internshipOfferService.updateOfferStatus(offerResponse.getId(), ApprovalStatus.ACCEPTED, "the offer looks good"))
-                .thenReturn(updatedResponse);
+        when(internshipOfferService.updateOfferStatus(
+                offerResponse.getId(),
+                ApprovalStatus.ACCEPTED,
+                "the offer looks good"
+                )
+        ).thenReturn(updatedResponse);
 
         mockMvc.perform(post("/api/v1/internship-offers/{id}/update-status", offerResponse.getId())
                         .param("status", "ACCEPTED")
@@ -233,7 +249,8 @@ public class InternshipOfferControllerTest {
                 .andExpect(jsonPath("$.title").value("Java Dev"))
                 .andExpect(jsonPath("$.description").value("N/A"))
                 .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"))
-                .andExpect(jsonPath("$.status").value("ACCEPTED"));
+                .andExpect(jsonPath("$.status").value("ACCEPTED"))
+                .andExpect(jsonPath("$.salary").value("18.25"));
     }
 
     @Test
@@ -326,12 +343,14 @@ public class InternshipOfferControllerTest {
         InternshipOfferListDto offer1 = InternshipOfferListDto.builder()
                 .id(1L)
                 .title("Backend Developer")
+                .salary(18.25f)
                 .applicationCount(3)
                 .build();
 
         InternshipOfferListDto offer2 = InternshipOfferListDto.builder()
                 .id(2L)
                 .title("Frontend Developer")
+                .salary(16.5f)
                 .applicationCount(1)
                 .build();
 
@@ -347,7 +366,9 @@ public class InternshipOfferControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].title").value("Backend Developer"))
-                .andExpect(jsonPath("$[1].title").value("Frontend Developer"));
+                .andExpect(jsonPath("$[0].salary").value("18.25"))
+                .andExpect(jsonPath("$[1].title").value("Frontend Developer"))
+                .andExpect(jsonPath("$[1].salary").value("16.5"));
     }
 
     @Test

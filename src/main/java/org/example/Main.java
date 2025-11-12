@@ -91,6 +91,7 @@ public class Main {
                             .startDate(LocalDate.of(2025, 2, 15))
                             .EndDate(LocalDate.of(2025, 5, 15))
                             .employerEmail(employer.getEmail())
+                            .salary(18f)
                             .build());
 
             InternshipOfferResponseDto offer2 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
@@ -102,6 +103,7 @@ public class Main {
                             .startDate(LocalDate.of(2025, 3, 1))
                             .EndDate(LocalDate.of(2025, 6, 1))
                             .employerEmail(employer.getEmail())
+                            .salary(17.75f)
                             .build());
 
             InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
@@ -113,6 +115,7 @@ public class Main {
                             .startDate(LocalDate.of(2025, 4, 1))
                             .EndDate(LocalDate.of(2025, 7, 1))
                             .employerEmail(employer.getEmail())
+                            .salary(16.25f)
                             .build());
 
             InternshipOfferResponseDto offer4 = internshipOfferService.saveInternshipOffer(employer.getEmail(),
@@ -124,6 +127,7 @@ public class Main {
                             .startDate(LocalDate.of(2025, 3, 1))
                             .EndDate(LocalDate.of(2025, 6, 1))
                             .employerEmail(employer.getEmail())
+                            .salary(16.10f)
                             .build());
                             internshipOfferService.updateOfferStatus(offer1.getId(), ApprovalStatus.ACCEPTED, "");
                             internshipOfferService.updateOfferStatus(offer2.getId(), ApprovalStatus.ACCEPTED, "");

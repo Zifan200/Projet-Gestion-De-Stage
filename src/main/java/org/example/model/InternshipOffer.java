@@ -2,6 +2,7 @@ package org.example.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.TypeHoraire;
@@ -45,10 +46,15 @@ public class InternshipOffer {
     private String session;
     private TypeHoraire typeHoraire = TypeHoraire.UNSELECTED;
 
+    @Min(0)
+    private float salary;
+
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-            ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session, TypeHoraire typeHoraire, List<InternshipApplication> applications
+            Long id, String title, String description, String targetedProgramme, Employer employer,
+            LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason,
+            LocalDate startDate, LocalDate endDate, String session, TypeHoraire typeHoraire, List<InternshipApplication> applications,
+            float salary
     ){
         this.id = id;
         this.title = title;
@@ -64,5 +70,6 @@ public class InternshipOffer {
         this.session = session;
         this.typeHoraire = typeHoraire != null ? typeHoraire : TypeHoraire.UNSELECTED;
         this.applications = applications;
+        this.salary = salary;
     }
 }

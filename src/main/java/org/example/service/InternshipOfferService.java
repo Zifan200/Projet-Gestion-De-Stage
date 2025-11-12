@@ -73,8 +73,9 @@ public class InternshipOfferService {
                 .startDate(internshipOfferDto.getStartDate())
                 .endDate(internshipOfferDto.getEndDate())
                 .session(session)
-                .typeHoraire(internshipOfferDto.getTypeHoraire())
                 .applications(new ArrayList<>())
+                .salary(internshipOfferDto.getSalary())
+                .typeHoraire(internshipOfferDto.getTypeHoraire())
                 .build();
 
         var savedInternshipOffer = internshipOfferRepository.save(internshipOffer);
@@ -114,6 +115,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .salary(offer.getSalary())
                         .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .collect(Collectors.toList());
@@ -143,8 +145,9 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
-                        .typeHoraire(offer.getTypeHoraire())
                         .applicationCount(offer.getApplications().size())
+                        .salary(offer.getSalary())
+                        .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -176,6 +179,8 @@ public class InternshipOfferService {
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())
                         .status(offer.getStatus())
+                        .salary(offer.getSalary())
+                        .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .toList();
     }
@@ -196,6 +201,7 @@ public class InternshipOfferService {
                         .startDate(offer.getStartDate())
                         .endDate(offer.getEndDate())
                         .session(offer.getSession())
+                        .salary(offer.getSalary())
                         .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .toList();
@@ -213,6 +219,11 @@ public class InternshipOfferService {
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())
                         .status(offer.getStatus())
+                        .startDate(offer.getStartDate())
+                        .endDate(offer.getEndDate())
+                        .session(offer.getSession())
+                        .salary(offer.getSalary())
+                        .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .toList();
     }
@@ -230,6 +241,11 @@ public class InternshipOfferService {
                         .targetedProgramme(offer.getTargetedProgramme())
                         .reason(offer.getReason())
                         .status(offer.getStatus())
+                        .startDate(offer.getStartDate())
+                        .endDate(offer.getEndDate())
+                        .session(offer.getSession())
+                        .salary(offer.getSalary())
+                        .typeHoraire(offer.getTypeHoraire())
                         .build())
                 .toList();
     }
@@ -287,6 +303,7 @@ public class InternshipOfferService {
         Text datePostulation_en = new Text(offerDto.getPublishedDate() + " to "
                 + offerDto.getExpirationDate() + ". ").setFont(boldFont);
         Text email = new Text(offerDto.getEmployerEmail()).setFont(boldFont);
+        Text salary = new Text(String.format("%1$.2f", offerDto.getSalary())).setFont(boldFont);
 
 
 
@@ -345,6 +362,14 @@ public class InternshipOfferService {
                 .setMarginBottom(20f);
         document.add(stageInfos);
 
+        Paragraph stageSalary = new Paragraph("Le salaire offert est de ")
+                .add(salary)
+                .add("$.")
+                .setFontSize(15)
+                .setMarginTop(20f)
+                .setMarginBottom(20f);
+        document.add(stageSalary);
+
         Paragraph date = new Paragraph("L'offre de stage sera disponible du ")
                 .add(datePostulation)
                 .setFontSize(15)
@@ -392,6 +417,14 @@ public class InternshipOfferService {
                 .setMarginTop(20f)
                 .setMarginBottom(20f);
         document.add(stageInfosEn);
+
+        Paragraph stageSalaryEn = new Paragraph("The offered salary is ")
+                .add(salary)
+                .add("$.")
+                .setFontSize(15)
+                .setMarginTop(20f)
+                .setMarginBottom(20f);
+        document.add(stageSalaryEn);
 
         Paragraph dateEn = new Paragraph("This internship offer will be available from ")
                 .add(datePostulation_en)
