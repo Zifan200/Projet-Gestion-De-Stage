@@ -28,44 +28,26 @@ public class InternshipRecommendationController {
     private final UserAppService userAppService;
 
     @PostMapping
-    public ResponseEntity<?> createOrUpdateRecommendation(
+    public ResponseEntity<
+        RecommendationResponseDTO
+    > createOrUpdateRecommendation(
         HttpServletRequest request,
         @Valid @RequestBody RecommendationRequestDTO requestDTO
     ) {
-        try {
-            UserDTO user = userAppService.getMe(
-                JwtTokenUtils.getTokenFromRequest(request)
-            );
+        UserDTO user = userAppService.getMe(
+            JwtTokenUtils.getTokenFromRequest(request)
+        );
 
-            if (user.getRole() != Role.GESTIONNAIRE) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    "Seuls les gestionnaires peuvent créer des recommandations"
-                );
-            }
-
-            RecommendationResponseDTO response =
-                recommendationService.createOrUpdateRecommendation(
-                    requestDTO,
-                    user.getEmail()
-                );
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                e.getMessage()
-            );
-        } catch (MaxGoldRecommendationsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                e.getMessage()
-            );
-        } catch (RecommendationNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                e.getMessage()
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                "Erreur lors de la création de la recommandation"
-            );
+        if (user.getRole() != Role.GESTIONNAIRE) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
+        RecommendationResponseDTO response =
+            recommendationService.createOrUpdateRecommendation(
+                requestDTO,
+                user.getEmail()
+            );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/student/{studentId}")
@@ -107,45 +89,29 @@ public class InternshipRecommendationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRecommendationById(@PathVariable Long id) {
-        try {
-            RecommendationResponseDTO recommendation =
-                recommendationService.getRecommendationById(id);
-            return ResponseEntity.ok(recommendation);
-        } catch (RecommendationNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                e.getMessage()
-            );
-        }
+    public ResponseEntity<RecommendationResponseDTO> getRecommendationById(
+        @PathVariable Long id
+    ) {
+        RecommendationResponseDTO recommendation =
+            recommendationService.getRecommendationById(id);
+        return ResponseEntity.ok(recommendation);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRecommendation(@PathVariable Long id) {
-        try {
-            recommendationService.deleteRecommendation(id);
-            return ResponseEntity.noContent().build();
-        } catch (RecommendationNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                e.getMessage()
-            );
-        }
+    public ResponseEntity<Void> deleteRecommendation(@PathVariable Long id) {
+        recommendationService.deleteRecommendation(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/student/{studentId}/offer/{offerId}")
-    public ResponseEntity<?> deleteRecommendationByStudentAndOffer(
+    public ResponseEntity<Void> deleteRecommendationByStudentAndOffer(
         @PathVariable Long studentId,
         @PathVariable Long offerId
     ) {
-        try {
-            recommendationService.deleteRecommendationByStudentAndOffer(
-                studentId,
-                offerId
-            );
-            return ResponseEntity.noContent().build();
-        } catch (RecommendationNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                e.getMessage()
-            );
-        }
+        recommendationService.deleteRecommendationByStudentAndOffer(
+            studentId,
+            offerId
+        );
+        return ResponseEntity.noContent().build();
     }
 }

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.example.model.auth.Role;
 import org.example.model.enums.PriorityCode;
+import org.example.presentation.exception.InternshipRecommendationControllerException;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.InternshipRecommendationService;
 import org.example.service.UserAppService;
@@ -51,7 +52,11 @@ class InternshipRecommendationControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+            .setControllerAdvice(
+                new InternshipRecommendationControllerException()
+            )
+            .build();
         objectMapper = new ObjectMapper();
     }
 
@@ -152,12 +157,7 @@ class InternshipRecommendationControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(requestDTO))
             )
-            .andExpect(status().isForbidden())
-            .andExpect(
-                content().string(
-                    "Seuls les gestionnaires peuvent créer des recommandations"
-                )
-            );
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -189,7 +189,8 @@ class InternshipRecommendationControllerTest {
                     .content(objectMapper.writeValueAsString(requestDTO))
             )
             .andExpect(status().isNotFound())
-            .andExpect(content().string("userNotFound"));
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.errorCode").value("USER_NOT_FOUND"));
     }
 
     @Test
@@ -225,9 +226,10 @@ class InternshipRecommendationControllerTest {
                     .content(objectMapper.writeValueAsString(requestDTO))
             )
             .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
             .andExpect(
-                content().string(
-                    "Maximum de 3 recommandations OR atteint pour cet étudiant"
+                jsonPath("$.errorCode").value(
+                    "MAX_GOLD_RECOMMENDATIONS_EXCEEDED"
                 )
             );
     }
@@ -315,7 +317,10 @@ class InternshipRecommendationControllerTest {
         mockMvc
             .perform(get(path + "/999"))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Recommandation introuvable"));
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(
+                jsonPath("$.errorCode").value("RECOMMENDATION_NOT_FOUND")
+            );
     }
 
     @Test
@@ -341,7 +346,10 @@ class InternshipRecommendationControllerTest {
         mockMvc
             .perform(delete(path + "/999"))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Recommandation introuvable"));
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(
+                jsonPath("$.errorCode").value("RECOMMENDATION_NOT_FOUND")
+            );
     }
 
     @Test
@@ -376,10 +384,9 @@ class InternshipRecommendationControllerTest {
         mockMvc
             .perform(delete(path + "/student/999/offer/999"))
             .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status").value(404))
             .andExpect(
-                content().string(
-                    "Recommandation introuvable pour cet étudiant et cette offre"
-                )
+                jsonPath("$.errorCode").value("RECOMMENDATION_NOT_FOUND")
             );
     }
 }
