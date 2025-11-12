@@ -85,6 +85,20 @@ public class InternshipOfferController {
         return ResponseEntity.ok(internshipOfferService.getAcceptedOffers());
     }
 
+    @GetMapping("/filter-by-accepted-offers-with-priority")
+    public ResponseEntity<
+        List<org.example.service.dto.internship.InternshipOfferWithPriorityDto>
+    > getAcceptedOffersWithPriority(HttpServletRequest request) {
+        // Extraire l'email de l'utilisateur connecté depuis le token
+        String email = userAppService
+            .getMe(JwtTokenUtils.getTokenFromRequest(request))
+            .getEmail();
+
+        return ResponseEntity.ok(
+            internshipOfferService.getAcceptedOffersWithPriorityByEmail(email)
+        );
+    }
+
     @GetMapping("/filter-by-rejected-offers")
     public ResponseEntity<List<InternshipOfferListDto>> getRejectedOffers() {
         return ResponseEntity.ok(internshipOfferService.getRejectedOffers());
