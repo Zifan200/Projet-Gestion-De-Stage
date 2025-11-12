@@ -30,13 +30,15 @@ public class InternshipOfferResponseDto {
     private String session;
     private float salary;
     private TypeHoraire typeHoraire;
+    private float nbHeures;
+    private String address;
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
                                       String employerEmail, Integer applicationCount, LocalDate publishedDate,
                                       LocalDate expirationDate, ApprovalStatus status, String reason,
                                       LocalDate startDate, LocalDate endDate, String session, float salary,
-                                      TypeHoraire typeHoraire) {
+                                      TypeHoraire typeHoraire, float nbHeures, String address) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -52,6 +54,8 @@ public class InternshipOfferResponseDto {
         this.session = session;
         this.salary = salary;
         this.typeHoraire = typeHoraire;
+        this.nbHeures = nbHeures;
+        this.address = address;
     }
 
     public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
@@ -71,6 +75,8 @@ public class InternshipOfferResponseDto {
                 .session(internshipOffer.getSession())
                 .salary(internshipOffer.getSalary())
                 .typeHoraire(internshipOffer.getTypeHoraire())
+                .nbHeures(internshipOffer.getNbHeures())
+                .address(internshipOffer.getAddress())
                 .build();
     }
 

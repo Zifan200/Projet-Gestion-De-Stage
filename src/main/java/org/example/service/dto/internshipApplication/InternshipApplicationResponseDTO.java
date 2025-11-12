@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.InternshipApplication;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,12 +35,20 @@ public class InternshipApplicationResponseDTO {
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
+    private String employerFirstName;
+    private String employerLastName;
+    private String employerEnterpriseName;
+    private String employerAddress;
     private float salary;
+    private TypeHoraire typeHoraire;
+    private float nbHeures;
+    private String address;
 
     private ApprovalStatus status;
     private ApprovalStatus etudiantStatus;
     private LocalDateTime createdAt;
     private LocalDate startDate;
+    private LocalDate endDate;
     private String session;
     private String reason;
     private String etudiantRaison;
@@ -62,11 +71,19 @@ public class InternshipApplicationResponseDTO {
             LocalDate internshipOfferPublishedDate,
             LocalDate internshipOfferExpirationDate,
             String employerEmail,
+            String employerFirstName,
+            String employerLastName,
+            String employerEnterpriseName,
+            String employerAddress,
             float salary,
+            TypeHoraire typeHoraire,
+            float nbHeures,
+            String address,
             ApprovalStatus status,
             ApprovalStatus etudiantStatus,
             LocalDateTime createdAt,
             LocalDate startDate,
+            LocalDate endDate,
             String session,
             String reason,
             String etudiantRaison
@@ -87,11 +104,19 @@ public class InternshipApplicationResponseDTO {
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
+        this.employerFirstName = employerFirstName;
+        this.employerLastName = employerLastName;
+        this.employerEnterpriseName = employerEnterpriseName;
+        this.employerAddress = employerAddress;
         this.salary = salary;
+        this.typeHoraire = typeHoraire;
+        this.nbHeures = nbHeures;
+        this.address = address;
         this.status = status;
         this.etudiantStatus = etudiantStatus;
         this.createdAt = createdAt;
         this.startDate = startDate;
+        this.endDate = endDate;
         this.session = session;
         this.reason = reason;
         this.etudiantRaison = etudiantRaison;
@@ -115,11 +140,19 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
+                .employerEmail(internshipApplication.getOffer().getEmployer().getEmail())
+                .employerFirstName(internshipApplication.getOffer().getEmployer().getFirstName())
+                .employerLastName(internshipApplication.getOffer().getEmployer().getLastName())
+                .employerEnterpriseName(internshipApplication.getOffer().getEmployer().getEnterpriseName())
                 .salary(internshipApplication.getOffer().getSalary())
+                .typeHoraire(internshipApplication.getOffer().getTypeHoraire())
+                .nbHeures(internshipApplication.getOffer().getNbHeures())
+                .employerAddress(internshipApplication.getOffer().getAddress())
                 .status(internshipApplication.getStatus())
                 .etudiantStatus(internshipApplication.getEtudiantStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .startDate(internshipApplication.getStartDate())
+                .endDate(internshipApplication.getOffer().getEndDate())
                 .session(internshipApplication.getSession())
                 .reason(internshipApplication.getReason())
                 .etudiantRaison(internshipApplication.getEtudiantRaison())

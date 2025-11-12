@@ -25,6 +25,8 @@ public class InternshipOfferListDto {
     private String session;
     private float salary;
     private TypeHoraire typeHoraire;
+    private float nbHeures;
+    private String address;
 
     public static InternshipOfferListDto create(InternshipOffer internshipOffer) {
         return InternshipOfferListDto.builder()
@@ -46,6 +48,8 @@ public class InternshipOfferListDto {
                 .session(internshipOffer.getSession())
                 .salary(internshipOffer.getSalary())
                 .typeHoraire(internshipOffer.getTypeHoraire())
+                .nbHeures(internshipOffer.getNbHeures())
+                .address(internshipOffer.getAddress())
                 .build();
     }
 }

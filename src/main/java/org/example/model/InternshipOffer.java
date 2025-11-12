@@ -47,6 +47,10 @@ public class InternshipOffer {
     private TypeHoraire typeHoraire = TypeHoraire.UNSELECTED;
 
     @Min(0)
+    private float nbHeures;
+    private String address;
+
+    @Min(0)
     private float salary;
 
     @Builder
@@ -54,7 +58,7 @@ public class InternshipOffer {
             Long id, String title, String description, String targetedProgramme, Employer employer,
             LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason,
             LocalDate startDate, LocalDate endDate, String session, TypeHoraire typeHoraire, List<InternshipApplication> applications,
-            float salary
+            float nbHeures, String address, float salary
     ){
         this.id = id;
         this.title = title;
@@ -70,6 +74,8 @@ public class InternshipOffer {
         this.session = session;
         this.typeHoraire = typeHoraire != null ? typeHoraire : TypeHoraire.UNSELECTED;
         this.applications = applications;
+        this.nbHeures = nbHeures;
+        this.address = address;
         this.salary = salary;
     }
 }
