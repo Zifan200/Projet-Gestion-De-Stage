@@ -8,8 +8,8 @@ export const ApprovalStatus = {
 };
 
 export const statusMessages = {
-    CONFIRMED_BY_STUDENT: "Offre acceptée avec succès",
-    REJECTED_BY_STUDENT: "Offre refusée avec succès",
+    CONFIRMED_BY_STUDENT: "Offre de stage acceptée avec succès",
+    REJECTED_BY_STUDENT: "Offre de stage refusée avec succès",
 };
 
 export const useStudentStore = create(

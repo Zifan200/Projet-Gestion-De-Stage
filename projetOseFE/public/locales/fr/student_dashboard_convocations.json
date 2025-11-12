@@ -28,7 +28,7 @@
     "unknownOffer": "???"
   },
   "convocationStatus": {
-    "pending": "En attente",
+    "pending": "En attente de confirmation de convocation",
     "confirmed_by_student": "Confirmé",
     "rejected_by_student": "Refusé"
   },

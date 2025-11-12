@@ -1,7 +1,7 @@
 {
   "title": "My applications",
   "table": {
-    "offerTitle": "Offer Title",
+    "offerTitle": "Internship offer Title",
     "studentName": "Student Name",
     "studentEmail": "Student Email",
     "cv": "CV",
@@ -28,7 +28,7 @@
     "declined": "Declined"
   },
   "modal": {
-    "title": "Offer Details",
+    "title": "Internship offer Details",
     "description": "Description",
     "session": "Semester",
     "hiver": "Winter",
@@ -40,7 +40,7 @@
     "noSemester": "No semester (date undefined)",
     "email": "Email",
     "cv": "CV",
-    "offerTitle": "Offer",
+    "offerTitle": "Internship offer",
     "status": "Status",
     "appliedAt": "Applied on",
     "close": "Close",

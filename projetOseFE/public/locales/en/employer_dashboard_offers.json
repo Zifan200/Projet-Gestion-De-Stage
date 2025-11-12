@@ -9,9 +9,9 @@
     "status": "Status",
     "applications": "Applications",
     "actions": "Actions",
-    "noOffers": "No offers available.",
+    "noOffers": "No internship offers available.",
     "reason": "Rejection Reason",
-    "offerDetails": "Offer Details",
+    "offerDetails": "Internship offer details",
     "description": "Description"
   },
   "modal": {
@@ -48,13 +48,13 @@
     "rejected": "Rejected"
   },
   "success": {
-    "download": "Offer downloaded successfully!"
+    "download": "Internship offer downloaded successfully!"
   },
   "error": {
-    "load": "Failed to load offers.",
-    "download": "Failed to download the offer."
+    "load": "Failed to load internship offers.",
+    "download": "Failed to download the internship offer."
   },
-  "noDescription": "No description provided for this offer.",
+  "noDescription": "No description provided for this internship offer.",
   "menu": {
     "close": "Close"
   }
