@@ -72,19 +72,24 @@ export default function OffresAConfirmer() {
     const approvedApplications = convocations.filter(app => app.status === "ACCEPTED");
 
     const filteredApplications = useMemo(() => {
-        let filtered = approvedApplications;
+        const currentYear = new Date().getFullYear();
 
-        if (filterStudentStatus) {
-            filtered = filtered.filter((app) => {
-                if (filterStudentStatus === "PENDING") {
-                    return !app.etudiantStatus || app.etudiantStatus === "PENDING";
-                }
-                return app.etudiantStatus === filterStudentStatus;
-            });
-        }
+        const result = approvedApplications.filter((app) => {
+            const startYear = app.startDate ? new Date(app.startDate).getFullYear() : null;
+            const isCorrectYear = startYear === currentYear || startYear === currentYear + 1;
+            const isWinterSession = app.session?.toLowerCase() === "hiver"; // <-- ici
 
-        return filtered;
-    }, [approvedApplications, filterStudentStatus]);
+            console.log(app.internshipOfferTitle, "=>", { startYear, isCorrectYear, session: app.session, isWinterSession });
+
+            return isCorrectYear && isWinterSession;
+        });
+
+        console.log("Applications après filtrage :", result);
+
+        return result;
+    }, [approvedApplications]);
+
+
 
     return (
         <div className="p-6">

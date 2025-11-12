@@ -70,12 +70,6 @@ function App() {
       icon: EnvelopeOpenIcon,
     },
     {
-      key: "decision",
-      label: t("student_dashboard_decision:stats.decisionStatus"),
-      href: "/dashboard/student/internshipFinalDecision",
-      icon: CheckIcon,
-    },
-    {
       key: "applications",
       label: t("student_dashboard:stats.myApplications"),
       href: "/dashboard/student/applications",
@@ -86,6 +80,12 @@ function App() {
       label: t("student_dashboard:titles.convocation"),
       href: "/dashboard/student/convocations",
       icon: PhoneCallIcon
+    },
+    {
+      key: "decision",
+      label: t("student_dashboard_decision:stats.decisionStatus"),
+      href: "/dashboard/student/internshipFinalDecision",
+      icon: CheckIcon,
     },
     {
       key: "settings",

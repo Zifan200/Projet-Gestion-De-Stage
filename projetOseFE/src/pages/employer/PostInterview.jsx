@@ -16,7 +16,9 @@ export const PostInterview = () => {
 
     const {
         applications,
+        convocations,
         fetchApplications,
+        fetchListConvocation,
         approveApplication,
         rejectApplication,
         loading,
@@ -28,11 +30,17 @@ export const PostInterview = () => {
     const [rejectReason, setRejectReason] = useState("");
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
 
+    // 🔹 Fetch applications et convocations
     useEffect(() => {
-        fetchApplications();
-    }, [fetchApplications]);
+        const fetchData = async () => {
+            await fetchApplications();
+            const token = localStorage.getItem("token");
+            await fetchListConvocation(token);
+        };
+        fetchData();
+    }, [fetchApplications, fetchListConvocation]);
 
-    // Liste des années disponibles pour le filtre
+    // 🔹 Liste des années disponibles pour le filtre
     const availableYears = useMemo(() => {
         return Array.from(
             new Set(
@@ -65,12 +73,28 @@ export const PostInterview = () => {
         }
     };
 
-    // Filtrage par année
+    // 🔹 Associer le status de la convocation à chaque application
+    const applicationsWithConvocationStatus = useMemo(() => {
+        return applications.map((app) => {
+            const convocation = convocations.find(c => c.internshipApplicationId === app.id);
+            return {
+                ...app,
+                convocationStatus: convocation?.status || null,
+            };
+        });
+    }, [applications, convocations]);
+
+    // 🔹 Filtrage des applications selon la convocation et l'année
     const filteredApplications = useMemo(() => {
-        return applications
-            .filter((app) => filterYear === "All" ? true : new Date(app.startDate).getFullYear().toString() === filterYear)
+        return applicationsWithConvocationStatus
+            .filter(app => app.convocationStatus === "CONFIRMED_BY_STUDENT")
+            .filter(app =>
+                filterYear === "All"
+                    ? true
+                    : new Date(app.startDate).getFullYear().toString() === filterYear
+            )
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }, [applications, filterYear]);
+    }, [applicationsWithConvocationStatus, filterYear]);
 
     return (
         <div className="space-y-6">
