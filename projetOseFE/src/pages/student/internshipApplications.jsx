@@ -400,16 +400,35 @@ export const StudentApplications = () => {
                             </div>
                         </div>
 
-                        {selectedApplication.internshipOfferDescription && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {selectedApplication.internshipOfferDescription && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
+                                    <p className="text-gray-600 whitespace-pre-wrap">
+                                        {selectedApplication.internshipOfferDescription}
+                                    </p>
+                                </div>
+                            )}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.description")}
+                                    {t("modal.salary")}
                                 </h3>
-                                <p className="text-gray-600 whitespace-pre-wrap">
-                                    {selectedApplication.internshipOfferDescription}
+                                <p className="text-gray-600">
+                                    { localStorage.key("lang") === "fr" ?
+                                        selectedApplication.salary.toLocaleString(
+                                            "fr-CA",
+                                            {style:"currency", currency:"CAD"}
+                                        ) :
+                                        selectedApplication.salary.toLocaleString(
+                                            "en-CA",
+                                            {style:"currency", currency:"CAD"}
+                                        )
+                                    }
                                 </p>
                             </div>
-                        )}
+                        </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             {selectedApplication.startDate && (
@@ -431,9 +450,9 @@ export const StudentApplications = () => {
                                     <p className="text-gray-600">
                                         {
                                             (selectedApplication.session.toUpperCase() !== "AUTOMNE" &&
-                                            selectedApplication.session.toUpperCase() !== "HIVER") ?
-                                            t("modal.noSemester") :
-                                            t(`modal.${selectedApplication.session.toLowerCase()}`)
+                                                selectedApplication.session.toUpperCase() !== "HIVER") ?
+                                                t("modal.noSemester") :
+                                                t(`modal.${selectedApplication.session.toLowerCase()}`)
                                         }
                                     </p>
                                 </div>
@@ -451,9 +470,9 @@ export const StudentApplications = () => {
                                 >
                                     {
                                         (selectedApplication.status.toUpperCase() !== "ACCEPTED" &&
-                                        selectedApplication.status.toUpperCase() !== "DECLINED") ?
-                                        t("status.pending")    :
-                                        t(`status.${selectedApplication.status.toLowerCase()}`)
+                                            selectedApplication.status.toUpperCase() !== "DECLINED") ?
+                                            t("status.pending") :
+                                            t(`status.${selectedApplication.status.toLowerCase()}`)
                                     }
                                 </span>
                             </div>

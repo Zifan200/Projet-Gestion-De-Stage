@@ -3,6 +3,8 @@ import {devtools} from "zustand/middleware";
 import {employerService} from "../services/employerService.js";
 import { toast } from "sonner";
 
+import { create } from "zustand";
+import { employerService } from "../services/employerService.js";
 
 export const useEmployerStore = create((set, get) => ({
     employers: [],
@@ -28,7 +30,7 @@ export const useEmployerStore = create((set, get) => ({
     // Récupérer toutes les candidatures pour l'employeur connecté
     fetchApplications: async () => {
         try {
-            set({loading: true, error: null });
+            set({loading: true, error: null});
             const data = await employerService.getAllApplications();
             set({applications: data, loading: false});
         } catch (e) {

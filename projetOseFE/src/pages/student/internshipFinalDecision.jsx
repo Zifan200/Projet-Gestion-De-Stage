@@ -11,7 +11,6 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 export default function OffresAConfirmer() {
     const { t } = useTranslation("student_dashboard_decision");
     const { token, user } = useAuthStore();
-
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState("details");
@@ -36,27 +35,25 @@ export default function OffresAConfirmer() {
         }
     }, [loadAllApplications, token, user?.role]);
 
-    // Filtrer les candidatures avec postInterviewStatus ACCEPTED
-    const approvedApplications = useMemo(() =>
-            applications.filter(app => app.postInterviewStatus === "ACCEPTED"),
+    // Filtrer les candidatures ACCEPTED
+    const approvedApplications = useMemo(
+        () => applications.filter(app => app.postInterviewStatus === "ACCEPTED"),
         [applications]
     );
 
-    // Filtrer par année (currentYear ou currentYear+1) et session hiver
+    // Filtrer par année prochaine et session hiver + statut
     const filteredApplications = useMemo(() => {
-        const nextYear = new Date().getFullYear() + 1; // année prochaine
+        const nextYear = new Date().getFullYear() + 1;
         return approvedApplications.filter(app => {
             const startYear = app.startDate ? new Date(app.startDate).getFullYear() : null;
-            const isNextYear = startYear === nextYear; // uniquement nextYear
-            const isWinterSession = app.session?.toLowerCase() === "hiver"; // session hiver
+            const isNextYear = startYear === nextYear;
+            const isWinterSession = app.session?.toLowerCase() === "hiver";
             const matchesStatus = filterStudentStatus ? app.etudiantStatus === filterStudentStatus : true;
             return isNextYear && isWinterSession && matchesStatus;
         });
     }, [approvedApplications, filterStudentStatus]);
 
-
-
-    // DEBUG : afficher les applications dans la console
+    // DEBUG
     useEffect(() => {
         console.log("Applications chargées :", applications);
     }, [applications]);
@@ -68,27 +65,28 @@ export default function OffresAConfirmer() {
             clearMessages();
         }
         if (error) {
-            const errorMessage = typeof error === "string" ? error : error?.message || t("errors.generic");
-            toast.error(errorMessage);
+            toast.error(typeof error === "string" ? error : error?.message || t("errors.generic"));
             clearMessages();
         }
     }, [successMessage, error, clearMessages, t]);
 
-    // Colonnes du tableau
-    const columns = useMemo(() => [
-        { key: "internshipOfferTitle", label: t("table.OfferTitle") },
-        { key: "employerEmail", label: t("table.company") },
-        {
-            key: "etudiantStatus",
-            label: t("table.studentStatus"),
-            format: (status) => status ? t(`studentStatus.${status.toLowerCase()}`) : t("studentStatus.pending")
-        },
-        {
-            key: "actions",
-            label: t("table.action"),
-            actions: [{ key: "view", label: t("actions.view"), showIcon: true }]
-        }
-    ], [t]);
+    const columns = useMemo(
+        () => [
+            { key: "internshipOfferTitle", label: t("table.OfferTitle") },
+            { key: "employerEmail", label: t("table.company") },
+            {
+                key: "etudiantStatus",
+                label: t("table.studentStatus"),
+                format: status => status ? t(`studentStatus.${status.toLowerCase()}`) : t("studentStatus.pending")
+            },
+            {
+                key: "actions",
+                label: t("table.action"),
+                actions: [{ key: "view", label: t("actions.view"), showIcon: true }]
+            }
+        ],
+        [t]
+    );
 
     return (
         <div className="p-6">
@@ -112,12 +110,12 @@ export default function OffresAConfirmer() {
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
                                     <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                        <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                            {t("filter.studentStatus")}:{" "}
-                                            {filterStudentStatus
-                                                ? t(`studentStatus.${filterStudentStatus.toLowerCase()}`)
-                                                : t("filter.all")}
-                                        </span>
+                    <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                      {t("filter.studentStatus")}:{" "}
+                        {filterStudentStatus
+                            ? t(`studentStatus.${filterStudentStatus.toLowerCase()}`)
+                            : t("filter.all")}
+                    </span>
                                     </PopoverTrigger>
 
                                     <PopoverContent open={open} contentRef={contentRef}>
@@ -125,18 +123,20 @@ export default function OffresAConfirmer() {
                                             {["PENDING", "CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"].map(status => (
                                                 <button
                                                     key={status}
-                                                    onClick={() => { setFilterStudentStatus(status); setOpen(false); }}
-                                                    className={`px-3 py-1 rounded text-left ${
-                                                        filterStudentStatus === status
-                                                            ? "bg-blue-100 font-semibold"
-                                                            : "hover:bg-gray-100"
-                                                    }`}
+                                                    onClick={() => {
+                                                        setFilterStudentStatus(status);
+                                                        setOpen(false);
+                                                    }}
+                                                    className={`px-3 py-1 rounded text-left ${filterStudentStatus === status ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                                                 >
                                                     {t(`studentStatus.${status.toLowerCase()}`)}
                                                 </button>
                                             ))}
                                             <button
-                                                onClick={() => { setFilterStudentStatus(null); setOpen(false); }}
+                                                onClick={() => {
+                                                    setFilterStudentStatus(null);
+                                                    setOpen(false);
+                                                }}
                                                 className="px-3 py-1 rounded text-left hover:bg-gray-100"
                                             >
                                                 {t("filter.all")}
@@ -162,160 +162,175 @@ export default function OffresAConfirmer() {
                             }
                         }}
                     />
-                </>
-            )}
 
-            {/* Modal pour détails et rejet */}
-            <Modal
-                open={showModal}
-                onClose={() => { setShowModal(false); setModalMode("details"); setRejectReason(""); }}
-                title={modalMode === "details" ? t("modal.title") : t("reasonModal.title")}
-                size="default"
-                footer={
-                    modalMode === "details" ? (
-                        <>
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                            >
-                                <span>{t("modal.close")}</span>
-                            </button>
-
-                            {!selectedOffer?.etudiantStatus && (
+                    {/* Modal */}
+                    <Modal
+                        open={showModal}
+                        onClose={() => {
+                            setShowModal(false);
+                            setModalMode("details");
+                            setRejectReason("");
+                        }}
+                        title={modalMode === "details" ? t("modal.title") : t("reasonModal.title")}
+                        size="default"
+                        footer={
+                            modalMode === "details" ? (
                                 <>
                                     <button
-                                        onClick={() => setModalMode("reject")}
-                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
-                                    >
-                                        <Cross2Icon className="w-4 h-4" />
-                                        <span>{t("actions.reject")}</span>
-                                    </button>
-                                    <button
                                         onClick={() => {
-                                            acceptOffer(selectedOffer.id, selectedOffer.studentEmail, token);
                                             setShowModal(false);
                                             setModalMode("details");
                                         }}
-                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     >
-                                        <CheckIcon className="w-4 h-4" />
-                                        <span>{t("actions.accept")}</span>
+                                        {t("modal.close")}
+                                    </button>
+
+                                    {!selectedOffer?.etudiantStatus && (
+                                        <>
+                                            <button
+                                                onClick={() => setModalMode("reject")}
+                                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                            >
+                                                <Cross2Icon className="w-4 h-4" />
+                                                {t("actions.reject")}
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    acceptOffer(selectedOffer.id, selectedOffer.studentEmail, token);
+                                                    setShowModal(false);
+                                                    setModalMode("details");
+                                                }}
+                                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                            >
+                                                <CheckIcon className="w-4 h-4" />
+                                                {t("actions.accept")}
+                                            </button>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={() => {
+                                            setModalMode("details");
+                                            setRejectReason("");
+                                        }}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    >
+                                        Annuler
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (!rejectReason.trim()) {
+                                                toast.error(t("reasonModal.errorEmpty"));
+                                                return;
+                                            }
+                                            rejectOffer(selectedOffer.id, selectedOffer.studentEmail, rejectReason, token);
+                                            setShowModal(false);
+                                            setModalMode("details");
+                                            setRejectReason("");
+                                        }}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                    >
+                                        Confirmer
                                     </button>
                                 </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <button
-                                onClick={() => { setModalMode("details"); setRejectReason(""); }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                            >
-                                <span>Annuler</span>
-                            </button>
-                            <button
-                                onClick={() => {
-                                    if (!rejectReason.trim()) {
-                                        toast.error(t("reasonModal.errorEmpty"));
-                                        return;
-                                    }
-                                    rejectOffer(selectedOffer.id, selectedOffer.studentEmail, rejectReason, token);
-                                    setShowModal(false);
-                                    setModalMode("details");
-                                    setRejectReason("");
-                                }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
-                            >
-                                <span>Confirmer</span>
-                            </button>
-                        </>
-                    )
-                }
-            >
-                {selectedOffer && modalMode === "details" && (
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.offerTitle")}</h3>
-                                <p className="text-gray-600">{selectedOffer.internshipOfferTitle}</p>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employer")}</h3>
-                                <p className="text-gray-600">{selectedOffer.employerEmail}</p>
-                            </div>
-                        </div>
-
-                        {selectedOffer.internshipOfferDescription && (
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.internshipOfferDescription}</p>
-                            </div>
-                        )}
-
-                        <div className="grid grid-cols-2 gap-4">
-                            {selectedOffer.startDate && (
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.startDate")}</h3>
-                                    <p className="text-gray-600">{new Date(selectedOffer.startDate).toLocaleDateString()}</p>
+                            )
+                        }
+                    >
+                        {selectedOffer && modalMode === "details" && (
+                            <div className="space-y-4">
+                                {/* Détails simplifiés */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.offerTitle")}</h3>
+                                        <p className="text-gray-600">{selectedOffer.internshipOfferTitle}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employer")}</h3>
+                                        <p className="text-gray-600">{selectedOffer.employerEmail}</p>
+                                    </div>
                                 </div>
-                            )}
-                            {selectedOffer.session && (
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.session")}</h3>
-                                    <p className="text-gray-600">{selectedOffer.session}</p>
+
+                                {selectedOffer.internshipOfferDescription && (
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                                        <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.internshipOfferDescription}</p>
+                                    </div>
+                                )}
+
+                                {selectedOffer.salary != null && (
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
+                                        <p className="text-gray-600">
+                                            {selectedOffer.salary.toLocaleString(localStorage.getItem("lang") === "fr" ? "fr-CA" : "en-CA", {
+                                                style: "currency",
+                                                currency: "CAD"
+                                            })}
+                                        </p>
+                                    </div>
+                                )}
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    {selectedOffer.startDate && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.startDate")}</h3>
+                                            <p className="text-gray-600">{new Date(selectedOffer.startDate).toLocaleDateString()}</p>
+                                        </div>
+                                    )}
+                                    {selectedOffer.session && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.session")}</h3>
+                                            <p className="text-gray-600">{selectedOffer.session}</p>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employerStatus")}</h3>
-                                <span className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                                    {t(`employerStatus.${selectedOffer.status.toLowerCase()}`)}
-                                </span>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentStatus")}</h3>
-                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                    selectedOffer.etudiantStatus === "CONFIRMED_BY_STUDENT" ? "bg-green-100 text-green-800" :
-                                        selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? "bg-red-100 text-red-800" :
-                                            "bg-yellow-100 text-yellow-800"
-                                }`}>
-                                    {selectedOffer.etudiantStatus ? t(`studentStatus.${selectedOffer.etudiantStatus.toLowerCase()}`) : t("studentStatus.pending")}
-                                </span>
-                            </div>
-                        </div>
-
-                        {selectedOffer.selectedCvFileName && (
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.selectedCv")}</h3>
-                                <p className="text-gray-600">{selectedOffer.selectedCvFileName}</p>
-                            </div>
-                        )}
-
-                        {selectedOffer.createdAt && (
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.applicationDate")}</h3>
-                                <p className="text-gray-600">{new Date(selectedOffer.createdAt).toLocaleDateString()}</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employerStatus")}</h3>
+                                        <span className="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                      {t(`employerStatus.${selectedOffer.status.toLowerCase()}`)}
+                    </span>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentStatus")}</h3>
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                                selectedOffer.etudiantStatus === "CONFIRMED_BY_STUDENT"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT"
+                                                        ? "bg-red-100 text-red-800"
+                                                        : "bg-gray-100 text-gray-600"
+                                            }`}
+                                        >
+                      {selectedOffer.etudiantStatus
+                          ? t(`studentStatus.${selectedOffer.etudiantStatus.toLowerCase()}`)
+                          : t("studentStatus.pending")}
+                    </span>
+                                    </div>
+                                </div>
                             </div>
                         )}
-                    </div>
-                )}
 
-                {selectedOffer && modalMode === "reject" && (
-                    <div className="space-y-4">
-                        <p className="text-gray-600">{t("reasonModal.description")}</p>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Raison</label>
-                            <textarea
-                                value={rejectReason}
-                                onChange={(e) => setRejectReason(e.target.value)}
-                                placeholder={t("reasonModal.placeholder")}
-                                className="w-full min-h-[150px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                            />
-                        </div>
-                    </div>
-                )}
-            </Modal>
+                        {selectedOffer && modalMode === "reject" && (
+                            <div className="space-y-4">
+                                <p className="text-gray-600">{t("reasonModal.description")}</p>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Raison</label>
+                                    <textarea
+                                        value={rejectReason}
+                                        onChange={e => setRejectReason(e.target.value)}
+                                        placeholder={t("reasonModal.placeholder")}
+                                        className="w-full min-h-[150px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </Modal>
+                </>
+            )}
         </div>
     );
 }

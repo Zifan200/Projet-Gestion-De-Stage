@@ -65,6 +65,7 @@ public class InternshipApplicationServiceTest {
                 .id(1L)
                 .title("Java Dev")
                 .employer(employer)
+                .salary(18.25f)
                 .build();
         InternshipApplication application = InternshipApplication.builder()
                 .id(1L)
@@ -93,6 +94,7 @@ public class InternshipApplicationServiceTest {
         assertEquals(STUDENT_EMAIL, response.getStudentEmail(), "Student email should match");
         assertEquals(studentCV.getId(), response.getSelectedCvID(), "Selected CV ID should match");
         assertEquals(offer.getId(), response.getInternshipOfferId(), "Internship offer ID should match");
+        assertEquals(offer.getSalary(), response.getSalary(), "Internship offer salary should match");
         assertEquals(application.getStatus(), response.getStatus(), "Status should match the application");
     }
 
@@ -155,6 +157,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(1L)
                 .title("Java Developer")
+                .salary(18.25f)
                 .employer(employer)
                 .build();
 
@@ -182,9 +185,12 @@ public class InternshipApplicationServiceTest {
         assertEquals(2, result.size(), "There should be two internship applications returned");
 
         InternshipApplicationResponseDTO first = result.getFirst();
+        InternshipApplicationResponseDTO second = result.getLast();
         assertEquals(app1.getId(), first.getId(), "First application's ID should match");
         assertEquals(STUDENT_EMAIL, first.getStudentEmail(), "Student email should match");
         assertEquals(offer.getId(), first.getInternshipOfferId(), "Offer ID should match");
+        assertEquals(offer.getSalary(), first.getSalary(), "Offer salary should match");
+        assertEquals(offer.getSalary(), second.getSalary(), "Offer salary should match");
         assertEquals(cv.getId(), first.getSelectedCvID(), "CV ID should match");
     }
 
@@ -229,6 +235,7 @@ public class InternshipApplicationServiceTest {
                 .id(1L)
                 .title("Java Developer")
                 .employer(employer)
+                .salary(18.25f)
                 .build();
 
         InternshipApplication app = InternshipApplication.builder()
@@ -252,6 +259,7 @@ public class InternshipApplicationServiceTest {
 
         assertEquals(app.getId(), response.getId(), "Application ID should match");
         assertEquals(STUDENT_EMAIL, response.getStudentEmail(), "Student email should match");
+        assertEquals(offer.getSalary(), response.getSalary(), "Salary should match");
         assertEquals(ApprovalStatus.PENDING, response.getStatus(), "Status should match 'PENDING'");
     }
 
@@ -292,6 +300,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(offerId)
                 .title("Java Developer")
+                .salary(18.25f)
                 .employer(employer)
                 .build();
 
@@ -313,7 +322,8 @@ public class InternshipApplicationServiceTest {
         when(internshipApplicationRepository.findAllByOfferId(offerId)).thenReturn(List.of(app1, app2));
 
         // Act
-        List<InternshipApplicationResponseDTO> result = internshipApplicationService.getAllApplicationsFromOfferId(offerId);
+        List<InternshipApplicationResponseDTO> result =
+                internshipApplicationService.getAllApplicationsFromOfferId(offerId);
 
         // Assert
         assertNotNull(result, "Result should not be null");
@@ -321,6 +331,7 @@ public class InternshipApplicationServiceTest {
 
         assertEquals(app1.getId(), result.get(0).getId(), "First application ID should match");
         assertEquals(app2.getId(), result.get(1).getId(), "Second application ID should match");
+        assertEquals(app2.getOffer().getSalary(), result.get(1).getSalary(), "Salary should match");
     }
 
     @Test
@@ -344,7 +355,12 @@ public class InternshipApplicationServiceTest {
 
         CV cv = CV.builder().id(1L).build();
         Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
-        InternshipOffer offer = InternshipOffer.builder().id(1L).title("Java Dev").employer(employer).build();
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Java Dev")
+                .employer(employer)
+                .salary(17f)
+                .build();
 
         InternshipApplication app = InternshipApplication.builder()
                 .id(1L)
@@ -368,6 +384,7 @@ public class InternshipApplicationServiceTest {
 
         InternshipApplicationResponseDTO response = result.get(0);
         assertEquals(app.getId(), response.getId(), "Application ID should match");
+        assertEquals(app.getOffer().getSalary(), response.getSalary(), "salary should match");
         assertEquals(ApprovalStatus.PENDING, response.getStatus(), "Status should match 'PENDING'");
     }
 
@@ -403,10 +420,25 @@ public class InternshipApplicationServiceTest {
 
         CV cv = CV.builder().id(1L).build();
         Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
-        InternshipOffer offer = InternshipOffer.builder().id(1L).title("Java Dev").employer(employer).build();
+        InternshipOffer offer = InternshipOffer.builder()
+                .id(1L)
+                .title("Java Dev")
+                .employer(employer)
+                .salary(17f)
+                .build();
 
-        InternshipApplication app1 = InternshipApplication.builder().id(1L).student(student).selectedStudentCV(cv).offer(offer).build();
-        InternshipApplication app2 = InternshipApplication.builder().id(2L).student(student).selectedStudentCV(cv).offer(offer).build();
+        InternshipApplication app1 = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+        InternshipApplication app2 = InternshipApplication.builder()
+                .id(2L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
 
         when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
         when(internshipApplicationRepository.getAllByOfferEmployerCredentialsEmail(employerEmail))
@@ -421,6 +453,8 @@ public class InternshipApplicationServiceTest {
         assertEquals(2, result.size());
         assertEquals(app1.getId(), result.get(0).getId());
         assertEquals(app2.getId(), result.get(1).getId());
+        assertEquals(app1.getOffer().getSalary(), result.get(0).getSalary());
+        assertEquals(app2.getOffer().getSalary(), result.get(1).getSalary());
     }
 
     @Test
@@ -445,13 +479,23 @@ public class InternshipApplicationServiceTest {
         Long offerId = 1L;
 
         Employer employer = Employer.builder().email(employerEmail).build();
-        InternshipOffer offer = InternshipOffer.builder().id(offerId).employer(employer).build();
+        InternshipOffer offer = InternshipOffer.builder().id(offerId).employer(employer).salary(17f).build();
 
         CV cv = CV.builder().id(1L).build();
         Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
 
-        InternshipApplication app1 = InternshipApplication.builder().id(1L).student(student).selectedStudentCV(cv).offer(offer).build();
-        InternshipApplication app2 = InternshipApplication.builder().id(2L).student(student).selectedStudentCV(cv).offer(offer).build();
+        InternshipApplication app1 = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
+        InternshipApplication app2 = InternshipApplication.builder()
+                .id(2L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
 
         when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
         when(internshipOfferRepository.findById(offerId)).thenReturn(Optional.of(offer));
@@ -467,9 +511,10 @@ public class InternshipApplicationServiceTest {
         assertEquals(2, result.size());
         assertEquals(app1.getId(), result.get(0).getId());
         assertEquals(app1.getOffer().getId(), result.get(0).getInternshipOfferId());
+        assertEquals(app1.getOffer().getSalary(), result.get(0).getSalary());
         assertEquals(app2.getId(), result.get(1).getId());
         assertEquals(app2.getOffer().getId(), result.get(1).getInternshipOfferId());
-
+        assertEquals(app2.getOffer().getSalary(), result.get(1).getSalary());
     }
 
     @Test
@@ -514,23 +559,30 @@ public class InternshipApplicationServiceTest {
         Long id = 1L;
 
         Employer employer = Employer.builder().email(employerEmail).build();
-        InternshipOffer offer = InternshipOffer.builder().id(offerId).employer(employer).build();
+        InternshipOffer offer = InternshipOffer.builder().id(offerId).employer(employer).salary(17f).build();
 
         CV cv = CV.builder().id(1L).build();
         Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
 
-        InternshipApplication application = InternshipApplication.builder().id(1L).student(student).selectedStudentCV(cv).offer(offer).build();
+        InternshipApplication application = InternshipApplication.builder()
+                .id(1L)
+                .student(student)
+                .selectedStudentCV(cv)
+                .offer(offer)
+                .build();
         when(employerRepository.findByCredentialsEmail(employerEmail)).thenReturn(Optional.of(employer));
-
 
         when(internshipApplicationRepository.findById(id)).thenReturn(Optional.of(application));
 
         // Act
-        InternshipApplicationResponseDTO response = internshipApplicationService.getApplicationByEmployerAndId(employerEmail, id);
+        InternshipApplicationResponseDTO response = internshipApplicationService.getApplicationByEmployerAndId(
+                employerEmail, id
+        );
 
         // When
         assertNotNull(response);
         assertEquals(id, response.getId());
+        assertEquals(application.getOffer().getSalary(), response.getSalary());
     }
 
     @Test
@@ -569,7 +621,7 @@ public class InternshipApplicationServiceTest {
         Long id = 1L;
 
         Employer employer = Employer.builder().email(employerEmail).build();
-        InternshipOffer offer = InternshipOffer.builder().id(id).employer(employer).build();
+        InternshipOffer offer = InternshipOffer.builder().id(id).employer(employer).salary(17f).build();
 
         Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
         CV cv = CV.builder().id(id).build();
@@ -597,6 +649,7 @@ public class InternshipApplicationServiceTest {
         assertEquals(STUDENT_EMAIL, response.getStudentEmail());
         assertEquals(offer.getTitle(), response.getInternshipOfferTitle());
         assertEquals(employerEmail, response.getEmployerEmail());
+        assertEquals(application.getOffer().getSalary(), response.getSalary());
     }
 
     @Test
@@ -703,11 +756,13 @@ public class InternshipApplicationServiceTest {
                 .id(1L)
                 .title("Frontend Angular")
                 .employer(employer)
+                .salary(20f)
                 .build();
         InternshipOffer offer2 = InternshipOffer.builder()
                 .id(2L)
                 .title("Développeur Fullstack")
                 .employer(employer)
+                .salary(16f)
                 .build();
 
         InternshipApplication app1 = InternshipApplication.builder()
@@ -735,8 +790,10 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(list);
         assertEquals(2, list.size());
-        assertEquals("Frontend Angular", list.get(0).getInternshipOfferTitle());
-        assertEquals("Développeur Fullstack", list.get(1).getInternshipOfferTitle());
+        assertEquals("Frontend Angular", list.getFirst().getInternshipOfferTitle());
+        assertEquals("Développeur Fullstack", list.getLast().getInternshipOfferTitle());
+        assertEquals(app1.getOffer().getSalary(), list.getFirst().getSalary());
+        assertEquals(app2.getOffer().getSalary(), list.getLast().getSalary());
     }
 
     @Test
@@ -782,6 +839,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(1L)
                 .title("Frontend React")
+                .salary(17f)
                 .employer(employer)
                 .build();
 
@@ -809,8 +867,9 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(res);
         assertEquals(1, res.size());
-        assertEquals(application.getId(), res.get(0).getId());
-        assertEquals(ApprovalStatus.ACCEPTED, res.get(0).getStatus());
+        assertEquals(application.getId(), res.getFirst().getId());
+        assertEquals(application.getOffer().getSalary(), res.getFirst().getSalary());
+        assertEquals(ApprovalStatus.ACCEPTED, res.getFirst().getStatus());
     }
 
     @Test
@@ -853,6 +912,7 @@ public class InternshipApplicationServiceTest {
                 .id(1L)
                 .title("Frontend React")
                 .employer(employer)
+                .salary(17f)
                 .build();
 
         Etudiant student = Etudiant.builder().email(STUDENT_EMAIL).build();
@@ -876,6 +936,7 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(ApprovalStatus.ACCEPTED, result.getStatus());
+        assertEquals(pendingApp.getOffer().getSalary(), result.getSalary());
     }
 
     @Test
@@ -925,6 +986,7 @@ public class InternshipApplicationServiceTest {
         InternshipOffer offer = InternshipOffer.builder()
                 .id(1L)
                 .title("Frontend React")
+                .salary(19.25f)
                 .employer(employer)
                 .build();
 
@@ -950,6 +1012,7 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(ApprovalStatus.REJECTED, result.getStatus());
+        assertEquals(pendingApp.getOffer().getSalary(), result.getSalary());
         assertEquals(reason, result.getReason());
     }
 
@@ -1039,6 +1102,7 @@ public class InternshipApplicationServiceTest {
                 .id(1L)
                 .employer(employer)
                 .title("Java Developer")
+                .salary(18.75f)
                 .build();
 
         InternshipApplication app = InternshipApplication.builder()
@@ -1060,6 +1124,7 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(app.getId(), response.getId());
+        assertEquals(app.getOffer().getSalary(), response.getSalary());
         assertEquals(ApprovalStatus.CONFIRMED_BY_STUDENT, response.getEtudiantStatus());
     }
 
@@ -1081,6 +1146,7 @@ public class InternshipApplicationServiceTest {
                 .id(1L)
                 .employer(employer)
                 .title("Java Developer")
+                .salary(17.25f)
                 .build();
 
         InternshipApplication app = InternshipApplication.builder()
@@ -1102,6 +1168,7 @@ public class InternshipApplicationServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(app.getId(), response.getId());
+        assertEquals(app.getOffer().getSalary(), response.getSalary());
         assertEquals(ApprovalStatus.REJECTED_BY_STUDENT, response.getEtudiantStatus());
         assertEquals(reason, response.getEtudiantRaison());
     }

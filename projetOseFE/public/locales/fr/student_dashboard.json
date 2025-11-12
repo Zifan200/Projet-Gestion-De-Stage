@@ -2,13 +2,14 @@
   "stats": {
     "cvs": "Mes CVs",
     "acceptedCvs": "CVs acceptés",
-    "pendingCvs": "CVs en attente",
+    "pendingCvs": "CVs en attente d'approbation",
     "availableOffers": "Offres disponibles",
     "acceptedOffers": "Offres acceptées",
     "pendingOffers": "Offres en attente",
     "myApplications": "Mes candidatures",
-    "offersToConfirm": "Offres à confirmer",
-    "totalApplications": "Candidatures totales"
+    "internshipsToConfirm": "Stages à confirmer",
+    "totalApplications": "Candidatures totales",
+    "newConvocations": "Nouvelles convocations"
   },
   "messages": {
     "welcome": "Bon retour, {{firstName}} !",
@@ -24,6 +25,6 @@
     "dashboard": "Tableau de bord étudiant",
     "cvs": "Gestion des CVs",
     "offers": "Aperçu des offres",
-    "convocation": "Vos convocations"
+    "convocation": "Mes convocations"
   }
 }

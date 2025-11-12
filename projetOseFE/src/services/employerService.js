@@ -90,6 +90,12 @@ export const employerService = {
     }
   },
 
+  async getConvocationsForEmployer(token) {
+    const res = await api.get("/employer/liste-convocations-employer", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
 
   createConvocation : async (formData) => {
     try {

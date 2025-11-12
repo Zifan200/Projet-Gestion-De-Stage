@@ -44,7 +44,8 @@
     "status": "Statut",
     "appliedAt": "Postulé le",
     "close": "Fermer",
-    "reason": "Raison"
+    "reason": "Raison",
+    "salary": "Salaire"
   },
   "reasonModal": {
     "description": "Expliquez pourquoi vous rejetez cette candidature."

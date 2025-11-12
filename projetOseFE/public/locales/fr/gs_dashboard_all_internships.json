@@ -55,7 +55,8 @@
     "cancel": "Annuler",
     "confirm": "Confirmer",
     "accepted": "Offre acceptée avec succès !",
-    "rejectSuccess": "Offre rejetée avec succès !"
+    "rejectSuccess": "Offre rejetée avec succès !",
+    "salary": "Salaire"
   },
   "modalSelectedOfferApplications": {
     "title": "Candidats",

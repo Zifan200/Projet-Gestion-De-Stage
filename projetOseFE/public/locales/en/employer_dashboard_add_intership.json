@@ -4,6 +4,7 @@
   "form": {
     "title": "Title",
     "description": "Description",
+    "salary": "Salary",
     "program": "Targeted Program",
     "deadline": "Deadline to apply",
     "startDate": "Internship Start Date",
@@ -26,6 +27,7 @@
     "title_required": "A title is required.",
     "description_required": "A description is required.",
     "program_required": "A program is required.",
+    "invalid_salary": "Please enter a valid salary.",
     "invalid_email": "Please enter a valid email address.",
     "expiration_required": "A deadline is required.",
     "start_required": "A start date is required.",
