@@ -21,10 +21,6 @@
   "filterType": {
     "applicantName": "filter by name"
   },
-  "filterLabels": {
-    "alphabetical": "alphabetical",
-    "reverseAlphabetical" : "reverse alphabetical"
-  },
   "menu": {
     "close": "close"
   },
