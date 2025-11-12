@@ -35,12 +35,12 @@ public class EmailService {
                 .subject(email.getSubject())
                 .html(email.getBody())
                 .build();
-        try {
+        /*try {
             CreateEmailResponse data = resend.emails().send(createEmailOptions);
             logger.info("Email created and sent to={} subject={}", email.getTo(), email.getSubject());
         } catch (ResendException e) {
             logger.error("Send email failed while sending to={} with subject={}",
                     email.getTo(), email.getSubject(), e);
-        }
+        }*/
     }
 }
