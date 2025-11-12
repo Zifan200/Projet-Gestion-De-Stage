@@ -97,7 +97,7 @@ public class Main {
             );
 
             // -----------------------------
-            // 2️⃣ Création de l’employeur
+            // 2️⃣ Création de l'employeur
             // -----------------------------
             EmployerDto employer = EmployerDto.builder()
                 .firstName("Alice")
@@ -147,7 +147,7 @@ public class Main {
                     employer.getEmail(),
                     InternshipOfferDto.builder()
                         .title("Data Analyst")
-                        .description("Stage d’analyse de données avec Python")
+                        .description("Stage d'analyse de données avec Python")
                         .targetedProgramme("Informatique")
                         .expirationDate(LocalDate.now().plusMonths(2))
                         .startDate(LocalDate.of(2025, 4, 1))
@@ -169,27 +169,6 @@ public class Main {
                         .employerEmail(employer.getEmail())
                         .build()
                 );
-            internshipOfferService.updateOfferStatus(
-                offer1.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            internshipOfferService.updateOfferStatus(
-                offer2.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            internshipOfferService.updateOfferStatus(
-                offer3.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            internshipOfferService.updateOfferStatus(
-                offer4.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-
             internshipOfferService.updateOfferStatus(
                 offer1.getId(),
                 ApprovalStatus.ACCEPTED,
@@ -299,7 +278,7 @@ public class Main {
             );
 
             System.out.println(
-                "✅ Candidature 1 (Développeur Java) : ACCEPTÉE par l’étudiant"
+                "✅ Candidature 1 (Développeur Java) : ACCEPTÉE par l'étudiant"
             );
 
             // -----------------------------
@@ -326,11 +305,11 @@ public class Main {
             );
 
             System.out.println(
-                "❌ Candidature 2 (Frontend React) : REFUSÉE par l’étudiant"
+                "❌ Candidature 2 (Frontend React) : REFUSÉE par l'étudiant"
             );
 
             // -----------------------------
-            // 7️⃣ Candidature 3 : Pending (employeur accepté, étudiant n’a rien fait)
+            // 7️⃣ Candidature 3 : Pending (employeur accepté, étudiant n'a rien fait)
             // -----------------------------
             InternshipApplicationResponseDTO app3 =
                 internshipApplicationService.saveInternshipApplication(
@@ -348,7 +327,7 @@ public class Main {
             );
 
             System.out.println(
-                "⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n’a rien fait)"
+                "⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n'a rien fait)"
             );
 
             PreLoadedActors loader = PreLoadedActors.getInstance(context);
