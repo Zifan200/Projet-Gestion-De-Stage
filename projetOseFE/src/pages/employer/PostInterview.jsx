@@ -181,9 +181,9 @@ export const PostInterview = () => {
                             <td className="px-4 py-3">{app.studentFirstName} {app.studentLastName}</td>
                             <td className="px-4 py-3">{app.studentEmail}</td>
                             <td className="px-4 py-3 flex gap-2">
-                                {app.actionStatus ? (
-                                    <span className={`font-semibold ${app.actionStatus === "accepted" ? "text-green-700" : "text-red-700"}`}>
-                                        {app.actionStatus === "accepted" ? t("table.accepted") : t("table.rejected")}
+                                {app.postInterviewStatus ? (
+                                    <span className={`font-semibold ${app.postInterviewStatus === "accepted" ? "text-red-700" : "text-green-700"}`}>
+                                        {app.postInterviewStatus === "accepted" ? t("table.rejected") : t("table.accepted")}
                                     </span>
                                 ) : (
                                     <>
