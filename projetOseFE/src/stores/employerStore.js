@@ -1,9 +1,6 @@
 import {create} from "zustand";
 import {devtools} from "zustand/middleware";
-import {employerService} from "../services/employerService.js";
 import { toast } from "sonner";
-
-import { create } from "zustand";
 import { employerService } from "../services/employerService.js";
 
 export const useEmployerStore = create((set, get) => ({
