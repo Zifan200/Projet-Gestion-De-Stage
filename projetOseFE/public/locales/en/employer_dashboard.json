@@ -6,11 +6,8 @@
     "activeApplications": "Active applications",
     "totalStudents": "Unique students",
     "createOffer": "Create an offer",
-<<<<<<< HEAD
-    "interviews": "Post-interview"
-=======
+    "interviews": "Post-interview",
     "pendingConvocations": "Convocations awaiting confirmation"
->>>>>>> b0b03f0c503098e1dbf8280dccd9e80697ef77ef
   },
   "titles": {
     "home": "Home",
