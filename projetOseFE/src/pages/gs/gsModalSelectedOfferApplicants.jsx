@@ -76,6 +76,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
             await loadPrograms();
             await loadAllApplicationsFromInternshipOffer(offerId);
             const { selectedOfferApplicationsList } = useGeStore.getState();
+            console.log("Loaded applications: ", selectedOfferApplicationsList);
 
             // keep a clean copy for filtering later
             setOriginalList(selectedOfferApplicationsList);
@@ -83,6 +84,15 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
         };
         loadAllData();
     }, []);
+    const selectedOfferApplicationsListFromStore = useGeStore(
+        (state) => state.selectedOfferApplicationsList
+    );
+
+
+    useEffect(() => {
+        setOriginalList(selectedOfferApplicationsListFromStore);
+        setSelectedOfferApplicationsList(selectedOfferApplicationsListFromStore);
+    }, [selectedOfferApplicationsListFromStore]);
 
 
 
