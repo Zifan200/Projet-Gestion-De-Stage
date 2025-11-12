@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useStudentStore, ApprovalStatus } from "../../stores/studentStore.js";
 import {offerService} from "../../services/offerService.js";
+import {Table} from "../../components/ui/table.jsx";
 
 export default function StudentConvocations() {
     const { t } = useTranslation("student_dashboard_convocations");
@@ -25,10 +26,8 @@ export default function StudentConvocations() {
         const loadAllData = async () => {
             await loadConvocations(token);
         }
-        loadAllData().then(r => {
-
-        })
-    }, [token]);
+        loadAllData()
+    }, [token, loadConvocations]);
 
     // Gestion des messages d'erreur
     useEffect(() => {
@@ -62,10 +61,14 @@ export default function StudentConvocations() {
             key: "actions",
             label: t("table.action"),
             actions: [
-                { key: "view", label: t("actions.view"), showIcon: true },
+                { key: "accept", label: t("actions.confirm") },
+                { key: "reject", label: t("actions.reject") },
+
             ]
         }
     ], [t]);
+
+
 
     const filteredConvocations = useMemo(() => {
         const filtered = filterStatus
@@ -93,12 +96,12 @@ export default function StudentConvocations() {
 
     const handleAction = async (actionKey, convocation) => {
         setSelectedConvocation(convocation);
-        if (actionKey === "view") {
-            setShowModal(true);
-        } else if (actionKey === "confirm" || actionKey === "reject") {
-            const newStatus = actionKey === "confirm" ? "CONFIRMED_BY_STUDENT" : "REJECTED_BY_STUDENT";
+        console.log(actionKey)
+        if (actionKey === "accept" || actionKey === "reject") {
+            const newStatus = actionKey === "accept" ? "CONFIRMED_BY_STUDENT" : "REJECTED_BY_STUDENT";
             try {
                 await updateConvocationStatus(convocation.id, convocation.studentEmail, newStatus, token);
+                await loadConvocations(token);
                 toast.success(t(`convocationStatus.${newStatus.toLowerCase()}Success`));
             } catch (err) {
                 toast.error(err.message || t("errors.generic"));
