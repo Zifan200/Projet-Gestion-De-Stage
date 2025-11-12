@@ -71,6 +71,7 @@ class InternshipApplicationControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .build();
 
         when(internshipApplicationService.getAllApplicationsWithStatus("PENDING"))
@@ -80,7 +81,8 @@ class InternshipApplicationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"));
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"))
+                .andExpect(jsonPath("$[0].salary").value("18.25"));
     }
 
     @Test
@@ -119,6 +121,7 @@ class InternshipApplicationControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Java Developer")
+                .salary(18.25f)
                 .build();
 
         when(internshipApplicationService.getAllApplicationsFromOfferId(10L))
@@ -128,7 +131,8 @@ class InternshipApplicationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Java Developer"));
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Java Developer"))
+                .andExpect(jsonPath("$[0].salary").value("18.25"));
     }
 
     @Test
@@ -153,13 +157,17 @@ class InternshipApplicationControllerTest {
 
     @Test
     void getAllInternshipApplicationsFromOfferWithStatus_shouldReturn200() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(internshipApplicationController).setControllerAdvice(new InternshipApplicationControllerException()).build();
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(internshipApplicationController)
+                .setControllerAdvice(new InternshipApplicationControllerException())
+                .build();
 
         InternshipApplicationResponseDTO responseDto = InternshipApplicationResponseDTO.builder()
                 .id(1L)
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .status(ApprovalStatus.PENDING)
                 .build();
 
@@ -171,6 +179,7 @@ class InternshipApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
                 .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"))
+                .andExpect(jsonPath("$[0].salary").value("18.25"))
                 .andExpect(jsonPath("$[0].status").value("PENDING"));
     }
 

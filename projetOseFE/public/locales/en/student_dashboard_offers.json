@@ -20,7 +20,8 @@
     "selectCv": "Select a CV",
     "chooseCv": "Choose a CV",
     "apply": "Apply",
-    "close": "Close"
+    "close": "Close",
+    "salary": "Salary"
   },
   "success": {
     "applyOffer": "You have successfully applied for this offer!"

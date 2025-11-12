@@ -2,13 +2,14 @@
   "stats": {
     "cvs": "My Resumes",
     "acceptedCvs": "Accepted Resumes",
-    "pendingCvs": "Pending Resumes",
+    "pendingCvs": "Resumes awaiting approval",
     "availableOffers": "Available Offers",
     "acceptedOffers": "Accepted Offers",
     "pendingOffers": "Pending Offers",
     "myApplications": "My applications",
-    "offersToConfirm": "Offers to confirm",
-    "totalApplications": "Total applications"
+    "internshipsToConfirm": "Internships to confirm",
+    "totalApplications": "Total applications",
+    "newConvocations": "New convocations"
   },
   "messages": {
     "welcome": "Welcome back, {{firstName}}!",
@@ -24,6 +25,6 @@
     "dashboard": "Student Dashboard",
     "cvs": "Resume Management",
     "offers": "Offers Overview",
-    "convocation": "Your convocations"
+    "convocation": "My convocations"
   }
 }

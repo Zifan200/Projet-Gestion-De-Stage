@@ -1,12 +1,13 @@
 package org.example.service.dto.internship;
 
-import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
+
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
@@ -26,25 +27,13 @@ public class InternshipOfferResponseDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
-    private boolean visibleToStudents;
+    private float salary;
 
     @Builder
-    public InternshipOfferResponseDto(
-        Long id,
-        String title,
-        String description,
-        String targetedProgramme,
-        String employerEmail,
-        Integer applicationCount,
-        LocalDate publishedDate,
-        LocalDate expirationDate,
-        ApprovalStatus status,
-        String reason,
-        LocalDate startDate,
-        LocalDate endDate,
-        String session,
-        boolean visibleToStudents
-    ) {
+    public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
+                                      String employerEmail, Integer applicationCount, LocalDate publishedDate,
+                                      LocalDate expirationDate, ApprovalStatus status, String reason,
+                                      LocalDate startDate, LocalDate endDate, String session, float salary) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -58,28 +47,26 @@ public class InternshipOfferResponseDto {
         this.startDate = startDate;
         this.endDate = endDate;
         this.session = session;
-        this.visibleToStudents = visibleToStudents;
+        this.salary = salary;
     }
 
-    public static InternshipOfferResponseDto create(
-        InternshipOffer internshipOffer
-    ) {
+    public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
         return InternshipOfferResponseDto.builder()
-            .id(internshipOffer.getId())
-            .title(internshipOffer.getTitle())
-            .description(internshipOffer.getDescription())
-            .targetedProgramme(internshipOffer.getTargetedProgramme())
-            .employerEmail(internshipOffer.getEmployer().getEmail())
-            .applicationCount(internshipOffer.getApplications().size())
-            .publishedDate(internshipOffer.getPublishedDate())
-            .expirationDate(internshipOffer.getExpirationDate())
-            .status(internshipOffer.getStatus())
-            .reason(internshipOffer.getReason())
-            .startDate(internshipOffer.getStartDate())
-            .endDate(internshipOffer.getEndDate())
-            .session(internshipOffer.getSession())
-            .visibleToStudents(internshipOffer.isVisibleToStudents())
-            .build();
+                .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
+                .description(internshipOffer.getDescription())
+                .targetedProgramme(internshipOffer.getTargetedProgramme())
+                .employerEmail(internshipOffer.getEmployer().getEmail())
+                .applicationCount(internshipOffer.getApplications().size())
+                .publishedDate(internshipOffer.getPublishedDate())
+                .expirationDate(internshipOffer.getExpirationDate())
+                .status(internshipOffer.getStatus())
+                .reason(internshipOffer.getReason())
+                .startDate(internshipOffer.getStartDate())
+                .endDate(internshipOffer.getEndDate())
+                .session(internshipOffer.getSession())
+                .salary(internshipOffer.getSalary())
+                .build();
     }
 
     public static InternshipOfferResponseDto empty() {

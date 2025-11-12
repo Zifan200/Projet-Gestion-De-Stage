@@ -5,7 +5,8 @@
     "applications": "Total applications",
     "activeApplications": "Active applications",
     "totalStudents": "Unique students",
-    "createOffer": "Create an offer"
+    "createOffer": "Create an offer",
+    "pendingConvocations": "Convocations awaiting confirmation"
   },
   "titles": {
     "home": "Home",

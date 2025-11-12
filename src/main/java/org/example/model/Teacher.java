@@ -1,22 +1,15 @@
 package org.example.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import lombok.*;
-import org.example.model.CV;
 import org.example.model.auth.Credentials;
 import org.example.model.auth.Role;
-import org.springframework.cglib.core.Local;
-import org.springframework.security.core.userdetails.User;
 
 @Entity
 @Getter
@@ -24,41 +17,28 @@ import org.springframework.security.core.userdetails.User;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Etudiant extends UserApp {
+public class Teacher extends UserApp {
 
     private LocalDate since;
     private String phone;
-    private String adresse;
-    private String program;
+    private String department;
+    private String specialization;
 
-    @OneToMany(
-        mappedBy = "etudiant",
-        cascade = jakarta.persistence.CascadeType.ALL
-    )
-    private List<CV> cv = new ArrayList<>();
-
-    @OneToMany(
-        mappedBy = "student",
-        cascade = jakarta.persistence.CascadeType.ALL
-    )
-    private List<InternshipApplication> applications = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<Etudiant> students = new ArrayList<>();
 
     @Builder
-    public Etudiant(
+    public Teacher(
         Long id,
         String firstName,
         String lastName,
         String email,
         String password,
         boolean active,
-        String phone,
-        String adresse,
-        String program,
         LocalDate since,
+        String phone,
+        String department,
+        String specialization,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         LocalDateTime lastLoginAt
@@ -70,7 +50,7 @@ public class Etudiant extends UserApp {
             Credentials.builder()
                 .email(email)
                 .password(password)
-                .role(Role.STUDENT)
+                .role(Role.TEACHER)
                 .build(),
             active,
             createdAt,
@@ -79,7 +59,7 @@ public class Etudiant extends UserApp {
         );
         this.since = since;
         this.phone = phone;
-        this.adresse = adresse;
-        this.program = program;
+        this.department = department;
+        this.specialization = specialization;
     }
 }

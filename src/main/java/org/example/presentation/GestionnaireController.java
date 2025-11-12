@@ -8,15 +8,17 @@ import org.example.service.CVService;
 import org.example.service.InternshipApplicationService;
 import org.example.service.InternshipOfferService;
 import org.example.service.StudentService;
+import org.example.service.TeacherService;
 import org.example.service.dto.cv.CvDownloadDTO;
 import org.example.service.dto.cv.CvResponseDTO;
 import org.example.service.dto.cv.CvStatusDTO;
 import org.example.service.dto.internship.InternshipOfferListDto;
-import org.example.service.dto.internship.InternshipOfferResponseDto;
-import org.example.service.dto.internship.OfferVisibilityDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.dto.student.EtudiantDTO;
+import org.example.service.dto.teacher.StudentAssignmentDTO;
+import org.example.service.dto.teacher.TeacherDTO;
 import org.example.utils.JwtTokenUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ public class GestionnaireController {
 
     private final CVService cvService;
     private final InternshipApplicationService internshipApplicationService;
-    private final InternshipOfferService internshipOfferService;
+    private final TeacherService teacherService;
 
     @GetMapping("/list")
     public ResponseEntity<List<CvResponseDTO>> listAllCvs() {
@@ -92,21 +94,34 @@ public class GestionnaireController {
         );
     }
 
-    @PutMapping("/offers/{offerId}/visibility")
-    public ResponseEntity<InternshipOfferResponseDto> updateOfferVisibility(
-        @PathVariable Long offerId,
-        @Valid @RequestBody OfferVisibilityDTO visibilityDTO
-    ) {
-        InternshipOfferResponseDto response =
-            internshipOfferService.updateOfferVisibility(
-                offerId,
-                visibilityDTO.getVisibleToStudents()
-            );
-        return ResponseEntity.ok(response);
+    // Routes pour la gestion des enseignants et attribution des étudiants
+
+    @GetMapping("/teachers")
+    public ResponseEntity<List<TeacherDTO>> getAllTeachers() {
+        return ResponseEntity.ok(teacherService.getAllTeachers());
     }
 
-    @GetMapping("/offers")
-    public ResponseEntity<List<InternshipOfferListDto>> getAllOffers() {
-        return ResponseEntity.ok(internshipOfferService.getAllOffersSummary());
+    @GetMapping("/teachers/{id}")
+    public ResponseEntity<TeacherDTO> getTeacherById(@PathVariable Long id) {
+        return ResponseEntity.ok(teacherService.getTeacherById(id));
+    }
+
+    @PostMapping("/assign-student-to-teacher")
+    public ResponseEntity<Void> assignStudentToTeacher(
+        @Valid @RequestBody StudentAssignmentDTO assignmentDTO
+    ) {
+        teacherService.assignStudentToTeacher(
+            assignmentDTO.getTeacherId(),
+            assignmentDTO.getStudentId()
+        );
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/unassign-student/{studentId}")
+    public ResponseEntity<Void> unassignStudentFromTeacher(
+        @PathVariable Long studentId
+    ) {
+        teacherService.unassignStudentFromTeacher(studentId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
