@@ -39,6 +39,7 @@ import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
 import {PhoneCallIcon} from "lucide-react";
 import { StudentApplications } from "./pages/student/internshipApplications.jsx";
+import {PostInterview} from "./pages/employer/PostInterview.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -69,12 +70,6 @@ function App() {
       icon: EnvelopeOpenIcon,
     },
     {
-      key: "decision",
-      label: t("student_dashboard_decision:stats.decisionStatus"),
-      href: "/dashboard/student/internshipFinalDecision",
-      icon: CheckIcon,
-    },
-    {
       key: "applications",
       label: t("student_dashboard:stats.myApplications"),
       href: "/dashboard/student/applications",
@@ -85,6 +80,12 @@ function App() {
       label: t("student_dashboard:titles.convocation"),
       href: "/dashboard/student/convocations",
       icon: PhoneCallIcon
+    },
+    {
+      key: "decision",
+      label: t("student_dashboard_decision:stats.decisionStatus"),
+      href: "/dashboard/student/internshipFinalDecision",
+      icon: CheckIcon,
     },
     {
       key: "settings",
@@ -102,12 +103,6 @@ function App() {
       icon: BackpackIcon,
     },
     {
-      key: "applications",
-      label: t("employer_dashboard:stats.applications"),
-      href: "/dashboard/employer/applications",
-      icon: PersonIcon,
-    },
-    {
       key: "createOffers",
       label: t("employer_dashboard:stats.createOffer"),
       href: "/dashboard/employer/add-intership",
@@ -118,6 +113,18 @@ function App() {
       label: t("employer_dashboard:stats.myOffers"),
       href: "/dashboard/employer/my-offers",
       icon: EnvelopeOpenIcon,
+    },
+    {
+      key: "applications",
+      label: t("employer_dashboard:stats.applications"),
+      href: "/dashboard/employer/applications",
+      icon: PhoneCallIcon,
+    },
+    {
+      key: "postInterview",
+      label: t("employer_dashboard:stats.interviews"),
+      href: "/dashboard/employer/post-interviews",
+      icon: PersonIcon,
     },
     {
       key: "settings",
@@ -225,6 +232,7 @@ function App() {
             />
           </Route>
 
+            {/* Routes Employer */}
             <Route
                 path="/dashboard/employer/"
                 element={
@@ -251,6 +259,7 @@ function App() {
                   path="/dashboard/employer/settings"
                   element={<DashboardSettings />}
               />
+              <Route path="post-interviews" element={<PostInterview />} />
             </Route>
             {/* Routes Employeur */}
             <Route path="/signup/employer" element={<EmployerSignUpPage />} />

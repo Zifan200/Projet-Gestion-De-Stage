@@ -38,6 +38,7 @@ public class InternshipApplicationResponseDTO {
 
     private ApprovalStatus status;
     private ApprovalStatus etudiantStatus;
+    private ApprovalStatus postInterviewStatus;
     private LocalDateTime createdAt;
     private LocalDate startDate;
     private String session;
@@ -65,6 +66,7 @@ public class InternshipApplicationResponseDTO {
             float salary,
             ApprovalStatus status,
             ApprovalStatus etudiantStatus,
+            ApprovalStatus postInterviewStatus,
             LocalDateTime createdAt,
             LocalDate startDate,
             String session,
@@ -90,6 +92,7 @@ public class InternshipApplicationResponseDTO {
         this.salary = salary;
         this.status = status;
         this.etudiantStatus = etudiantStatus;
+        this.postInterviewStatus = postInterviewStatus;
         this.createdAt = createdAt;
         this.startDate = startDate;
         this.session = session;
@@ -118,6 +121,7 @@ public class InternshipApplicationResponseDTO {
                 .salary(internshipApplication.getOffer().getSalary())
                 .status(internshipApplication.getStatus())
                 .etudiantStatus(internshipApplication.getEtudiantStatus())
+                .postInterviewStatus(internshipApplication.getPostInterviewStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .startDate(internshipApplication.getStartDate())
                 .session(internshipApplication.getSession())
