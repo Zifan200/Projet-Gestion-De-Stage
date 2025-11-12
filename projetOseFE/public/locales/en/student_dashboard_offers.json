@@ -24,11 +24,11 @@
     "salary": "Salary"
   },
   "success": {
-    "applyOffer": "You have successfully applied for this offer!"
+    "applyOffer": "You have successfully applied for this internship offer!"
   },
   "errors": {
-    "viewOffer": "Error viewing the offer.",
-    "applyOffer": "Failed to apply to the offer.",
+    "viewOffer": "Error viewing the internship offer.",
+    "applyOffer": "Failed to apply to the internship offer.",
     "selectCv": "Please select a CV before applying."
   },
   "filter": {

@@ -27,16 +27,16 @@
     "reject": "Rejeter"
   },
   "success": {
-    "download": "Offre téléchargée avec succès !",
-    "updateStatus": "Statut de l’offre mis à jour.",
-    "reject": "Offre rejetée avec succès !",
-    "accepted": "Offre acceptée !"
+    "download": "Offre de stage téléchargée avec succès !",
+    "updateStatus": "Statut de l’offre de stage mis à jour.",
+    "reject": "Offre de stage rejetée avec succès !",
+    "accepted": "Offre de stage acceptée !"
   },
   "error": {
-    "download": "Échec du téléchargement de l’offre.",
-    "loadOffer": "Échec du chargement de l’offre.",
-    "updateStatus": "Échec de la mise à jour du statut de l’offre.",
-    "rejectFailed": "Échec du rejet de l’offre."
+    "download": "Échec du téléchargement de l’offre de stage.",
+    "loadOffer": "Échec du chargement de l’offre de stage.",
+    "updateStatus": "Échec de la mise à jour du statut de l’offre de stage.",
+    "rejectFailed": "Échec du rejet de l’offre de stage."
   },
   "modal": {
     "companyEmail": "Courriel de l'entreprise",
@@ -46,16 +46,16 @@
     "description": "Description",
     "status": "Statut",
     "rejectReason": "Raison du rejet",
-    "reasonDescription": "Veuillez fournir une raison pour le rejet de cette offre.",
+    "reasonDescription": "Veuillez fournir une raison pour le rejet de cette offre de stage.",
     "reasonPlaceholder": "Entrez la raison du rejet...",
-    "reasonRequired": "Une raison est requise pour rejeter une offre.",
+    "reasonRequired": "Une raison est requise pour rejeter une offre de stage.",
     "accept": "Accepter",
     "reject": "Rejeter",
     "close": "Fermer",
     "cancel": "Annuler",
     "confirm": "Confirmer",
-    "accepted": "Offre acceptée avec succès !",
-    "rejectSuccess": "Offre rejetée avec succès !",
+    "accepted": "Offre de stage acceptée avec succès !",
+    "rejectSuccess": "Offre de stage rejetée avec succès !",
     "salary": "Salaire"
   },
   "modalSelectedOfferApplications": {

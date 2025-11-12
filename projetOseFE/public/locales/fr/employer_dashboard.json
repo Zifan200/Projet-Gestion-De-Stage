@@ -1,11 +1,11 @@
 {
   "stats": {
-    "myOffers": "Mes offres",
+    "myOffers": "Mes offres de stage",
     "offerConfirm": "Candidatures confirmées",
     "applications": "Candidatures totales",
     "activeApplications": "Candidatures actives",
     "totalStudents": "Étudiants uniques",
-    "createOffer": "Créer une offre",
+    "createOffer": "Créer une offre de stage",
     "pendingConvocations": "Convocations en attente de confirmation"
   },
   "titles": {
@@ -13,15 +13,15 @@
     "dashboard": "Tableau de bord employeur",
     "applications": "Candidatures",
     "createOffer": "Ajouter une offre de stage",
-    "myOffers": "Mes offres"
+    "myOffers": "Mes offres de stage"
   },
   "messages": {
     "welcome": "Bon retour, {{firstName}} !",
-    "noOffers": "Aucune offre publiée pour le moment.",
-    "loadPrompt": "Commencez par créer votre première offre."
+    "noOffers": "Aucune offre de stage publiée pour le moment.",
+    "loadPrompt": "Commencez par créer votre première offre de stage."
   },
   "errors": {
-    "loadOffers": "Erreur lors du chargement des offres.",
+    "loadOffers": "Erreur lors du chargement des offres de stage.",
     "loadApplications": "Erreur lors du chargement des candidatures."
   }
 }
