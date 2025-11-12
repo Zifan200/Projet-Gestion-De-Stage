@@ -54,13 +54,13 @@ export const useEmployerStore = create((set, get) => ({
         }
     },
 
-    rejectApplication: async (token, id, reason) => {
+    rejectApplicationPostInterview: async (token, id, reason) => {
         try {
             const updatedApp = await employerService.rejectApplication(token, id, reason);
 
             set((state) => ({
                 applications: state.applications.map((app) =>
-                    app.id === id ? { ...app, status: updatedApp.status, etudiantRaison: updatedApp.etudiantRaison } : app
+                    app.id === id ? { ...app, status: updatedApp.status, reason: updatedApp.reason } : app
                 ),
             }));
 

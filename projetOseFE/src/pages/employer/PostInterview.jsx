@@ -5,10 +5,10 @@ import { useEmployerStore } from "../../stores/employerStore.js";
 import useAuthStore from "../../stores/authStore.js";
 import { Table } from "../../components/ui/table.jsx";
 import { TableActionButton } from "../../components/ui/tableActionButton.jsx";
-import { Modal } from "../../components/ui/modal.jsx";
 import { Header } from "../../components/ui/header.jsx";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "../../components/ui/popover.jsx";
+import { ReasonModal } from "../../components/ui/reason-modal.jsx";
 
 export const PostInterview = () => {
     const { t } = useTranslation("employer_dashboard_postInterviews");
@@ -20,15 +20,18 @@ export const PostInterview = () => {
         fetchApplications,
         fetchListConvocation,
         approveApplication,
-        rejectApplication,
+        rejectApplicationPostInterview,
         loading,
     } = useEmployerStore();
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState("details");
+    const [modalMode, setModalMode] = useState("details"); // "details" ou "reject"
     const [rejectReason, setRejectReason] = useState("");
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
+
+    // 🔹 State local pour gérer le statut d’action
+    const [localApplications, setLocalApplications] = useState([]);
 
     // 🔹 Fetch applications et convocations
     useEffect(() => {
@@ -39,6 +42,31 @@ export const PostInterview = () => {
         };
         fetchData();
     }, [fetchApplications, fetchListConvocation]);
+
+    // 🔹 Associer le status de la convocation à chaque application
+    const applicationsWithConvocationStatus = useMemo(() => {
+        return applications.map((app) => {
+            const convocation = convocations.find(c => c.internshipApplicationId === app.id);
+            return {
+                ...app,
+                convocationStatus: convocation?.status || null,
+            };
+        });
+    }, [applications, convocations]);
+    // 🔹 Initialiser / mettre à jour localApplications sans perdre les actionStatus déjà définis
+    useEffect(() => {
+        setLocalApplications(prev => {
+            return applicationsWithConvocationStatus.map(app => {
+                // Si l'application existait déjà, conserver son actionStatus
+                const existing = prev.find(a => a.id === app.id);
+                return {
+                    ...app,
+                    actionStatus: existing ? existing.actionStatus : null,
+                };
+            });
+        });
+    }, [applicationsWithConvocationStatus]);
+
 
     // 🔹 Liste des années disponibles pour le filtre
     const availableYears = useMemo(() => {
@@ -51,9 +79,27 @@ export const PostInterview = () => {
         ).sort((a, b) => b - a);
     }, [applications]);
 
-    const handleApproveApplication = async (app) => {
+    // 🔹 Filtrage des applications selon la convocation et l'année
+    const filteredApplications = useMemo(() => {
+        return localApplications
+            .filter(app => app.convocationStatus === "CONFIRMED_BY_STUDENT")
+            .filter(app =>
+                filterYear === "All"
+                    ? true
+                    : new Date(app.startDate).getFullYear().toString() === filterYear
+            )
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [localApplications, filterYear]);
+
+    // 🔹 Actions
+    const handleApproveApplication = async (appId) => {
         try {
-            await approveApplication(user.token, app.id);
+            await approveApplication(user.token, appId);
+            setLocalApplications(prev =>
+                prev.map(app =>
+                    app.id === appId ? { ...app, actionStatus: "accepted" } : app
+                )
+            );
         } catch {
             toast.error(t("errors.accept"));
         }
@@ -61,8 +107,12 @@ export const PostInterview = () => {
 
     const handleRejectApplication = async (reason) => {
         try {
-            await rejectApplication(user.token, selectedApplication.id, reason);
-            toast.success(t("success.rejected"));
+            await rejectApplicationPostInterview(user.token, selectedApplication.id, reason);
+            setLocalApplications(prev =>
+                prev.map(app =>
+                    app.id === selectedApplication.id ? { ...app, actionStatus: "rejected" } : app
+                )
+            );
             setIsModalOpen(false);
             setModalMode("details");
             setRejectReason("");
@@ -71,29 +121,6 @@ export const PostInterview = () => {
             toast.error(t("errors.reject"));
         }
     };
-
-    // 🔹 Associer le status de la convocation à chaque application
-    const applicationsWithConvocationStatus = useMemo(() => {
-        return applications.map((app) => {
-            const convocation = convocations.find(c => c.internshipApplicationId === app.id);
-            return {
-                ...app,
-                convocationStatus: convocation?.status || null,
-            };
-        });
-    }, [applications, convocations]);
-
-    // 🔹 Filtrage des applications selon la convocation et l'année
-    const filteredApplications = useMemo(() => {
-        return applicationsWithConvocationStatus
-            .filter(app => app.convocationStatus === "CONFIRMED_BY_STUDENT")
-            .filter(app =>
-                filterYear === "All"
-                    ? true
-                    : new Date(app.startDate).getFullYear().toString() === filterYear
-            )
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }, [applicationsWithConvocationStatus, filterYear]);
 
     return (
         <div className="space-y-6">
@@ -105,9 +132,9 @@ export const PostInterview = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.year")}: {filterYear}
-                                </span>
+                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                  {t("filter.year")}: {filterYear}
+                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
@@ -150,24 +177,32 @@ export const PostInterview = () => {
                             <td className="px-4 py-3">{app.studentFirstName} {app.studentLastName}</td>
                             <td className="px-4 py-3">{app.studentEmail}</td>
                             <td className="px-4 py-3 flex gap-2">
-                                <TableActionButton
-                                    icon={CheckIcon}
-                                    label={t("table.accept")}
-                                    bg_color={"green-100"}
-                                    text_color={"green-700"}
-                                    onClick={() => handleApproveApplication(app)}
-                                />
-                                <TableActionButton
-                                    icon={Cross2Icon}
-                                    label={t("table.reject")}
-                                    bg_color={"red-100"}
-                                    text_color={"red-700"}
-                                    onClick={() => {
-                                        setSelectedApplication(app);
-                                        setModalMode("reject");
-                                        setIsModalOpen(true);
-                                    }}
-                                />
+                                {app.actionStatus ? (
+                                    <span className={`font-semibold ${app.actionStatus === "accepted" ? "text-green-700" : "text-red-700"}`}>
+                    {app.actionStatus === "accepted" ? t("table.accepted") : t("table.rejected")}
+                  </span>
+                                ) : (
+                                    <>
+                                        <TableActionButton
+                                            icon={CheckIcon}
+                                            label={t("table.accept")}
+                                            bg_color={"green-100"}
+                                            text_color={"green-700"}
+                                            onClick={() => handleApproveApplication(app.id)}
+                                        />
+                                        <TableActionButton
+                                            icon={Cross2Icon}
+                                            label={t("table.reject")}
+                                            bg_color={"red-100"}
+                                            text_color={"red-700"}
+                                            onClick={() => {
+                                                setSelectedApplication(app);
+                                                setModalMode("reject");
+                                                setIsModalOpen(true);
+                                            }}
+                                        />
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -175,46 +210,25 @@ export const PostInterview = () => {
                 />
             )}
 
-            {/* Modal de refus */}
-            {modalMode === "reject" && isModalOpen && selectedApplication && (
-                <Modal
-                    title={t("modal.rejectTitle")}
-                    onClose={() => {
-                        setIsModalOpen(false);
-                        setSelectedApplication(null);
-                        setModalMode("details");
-                        setRejectReason("");
-                    }}
-                >
-                    <div className="flex flex-col gap-4">
-                        <textarea
-                            placeholder={t("modal.rejectReason")}
-                            value={rejectReason}
-                            onChange={(e) => setRejectReason(e.target.value)}
-                            className="border p-2 rounded"
-                        />
-                        <div className="flex justify-end gap-3">
-                            <button
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                onClick={() => handleRejectApplication(rejectReason)}
-                            >
-                                {t("modal.submitReject")}
-                            </button>
-                            <button
-                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                                onClick={() => {
-                                    setIsModalOpen(false);
-                                    setSelectedApplication(null);
-                                    setModalMode("details");
-                                    setRejectReason("");
-                                }}
-                            >
-                                {t("modal.cancel")}
-                            </button>
-                        </div>
-                    </div>
-                </Modal>
-            )}
+            {/* Modal de rejet (ReasonModal) */}
+            <ReasonModal
+                open={isModalOpen && modalMode === "reject"}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setSelectedApplication(null);
+                    setRejectReason("");
+                    setModalMode("details");
+                }}
+                onSubmit={handleRejectApplication}
+                title={t("modal.rejectTitle")}
+                description={t("modal.rejectDescription")}
+                placeholder={t("modal.rejectReason2")}
+                cancelLabel={t("modal.cancel")}
+                confirmLabel={t("modal.submitReject")}
+                reasonLabel={t("modal.rejectReason")}
+                initialValue={rejectReason}
+                onChange={(value) => setRejectReason(value)}
+            />
         </div>
     );
 };

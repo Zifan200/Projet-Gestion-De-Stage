@@ -20,7 +20,9 @@
     "publicationDate": "Application date",
     "employerDecision": "Employer's decision",
     "myDecision": "My decision",
-    "noApplications": "no applications"
+    "noApplications": "no applications",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
   },
   "status": {
     "pending": "Under Review",
@@ -36,9 +38,28 @@
     "offerTitle": "Offer",
     "status": "Status",
     "appliedAt": "Applied on",
-    "close": "Close",
     "reason": "Reason",
-    "submit": "Submit convocation"
+    "submit": "Submit convocation",
+    "companyEmail": "Company Email",
+    "targetedProgramme": "Targeted Program",
+    "publishedDate": "Published Date",
+    "deadline": "Deadline",
+    "description": "Description",
+    "rejectReason": "Rejection Reason",
+    "rejectReason2": "Enter a reason for rejection...",
+    "reasonDescription": "Please provide a reason for rejecting this offer.",
+    "reasonPlaceholder": "Enter a reason for rejection...",
+    "reasonRequired": "A reason is required to reject an offer.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "accepted": "Offer accepted successfully!",
+    "rejectSuccess": "Offer rejected successfully!",
+    "rejectTitle": "Rejection reason",
+    "rejectDescription": "Please provide a reason for rejecting this offer.",
+    "submitReject": "Confirm"
   },
   "reasonModal": {
     "title": "Rejection Reason",
@@ -83,4 +104,5 @@
     "form" : "Error in the form.",
     "unknown": "Unknown error."
   }
+
 }

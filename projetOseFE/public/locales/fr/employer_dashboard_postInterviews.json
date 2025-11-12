@@ -20,7 +20,9 @@
     "publicationDate": "Date de cadidature",
     "employerDecision": "Décision de l'employeur",
     "myDecision": "Ma décision",
-    "noApplications": "aucune candidature"
+    "noApplications": "aucune candidature",
+    "accepted": "Accepter",
+    "rejected": "Rejeter"
   },
   "status": {
     "pending": "En cours d'examination",
@@ -36,9 +38,29 @@
     "offerTitle": "Offre",
     "status": "Statut",
     "appliedAt": "Postulé le",
-    "close": "Fermer",
     "reason": "Raison",
-    "submit": "Envoyer la convocation"
+    "submit": "Envoyer la convocation",
+    "companyEmail": "Courriel de l'entreprise",
+    "targetedProgramme": "Programme visé",
+    "publishedDate": "Date de publication",
+    "deadline": "Date limite",
+    "description": "Description",
+    "rejectReason": "Raison du rejet",
+    "rejectReason2": "Entrez la raison du rejet...",
+    "reasonDescription": "Veuillez fournir une raison pour le rejet de cette offre.",
+    "reasonPlaceholder": "Entrez la raison du rejet...",
+    "reasonRequired": "Une raison est requise pour rejeter une offre.",
+    "accept": "Accepter",
+    "reject": "Rejeter",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "accepted": "Offre acceptée avec succès !",
+    "rejectSuccess": "Offre rejetée avec succès !",
+    "rejectTitle": "Raison du rejet",
+    "rejectDescription": "Veuillez fournir une raison pour le rejet de cette offre.",
+    "rejectPlaceholder": "Entrez la raison du rejet...",
+    "submitReject": "Confirmer"
   },
   "reasonModal": {
     "title": "Raison du refus",
@@ -80,6 +102,5 @@
     "noAccessibleEmployerData": "Impossible de récupérer l'email de l'employeur.",
     "form" : "Erreur dans le formulaire.",
     "unknown": "Erreur inconnue"
-
   }
 }
