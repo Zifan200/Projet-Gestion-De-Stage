@@ -1,12 +1,7 @@
-// src/components/layouts/wrapper/DashboardCardWrapper.jsx
 import React, { useState, useEffect } from "react";
 import { DashboardCardPhone } from "../phone/dashboardCardPhone.jsx";
-import {EmployerDashboard} from "../dashboard.jsx"; // version desktop
+import {EmployerDashboard} from "../dashboard.jsx";
 
-/**
- * Wrapper responsive pour le dashboard employeur
- * Affiche DashboardCardPhone si écran ≤ 480px, sinon la version desktop
- */
 export const DashboardCardWrapper = ({ sidebarLinks, title }) => {
     const [isPhone, setIsPhone] = useState(false);
 

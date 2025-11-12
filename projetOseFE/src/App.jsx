@@ -58,6 +58,8 @@ import {AllOffersGsWrapper} from "./pages/gs/wrapper/allOffersGsWrapper.jsx";
 import {CvsGsWrapper} from "./pages/gs/wrapper/cvsGsWrapper.jsx";
 import {InternshipApplicationsGsWrapper} from "./pages/gs/wrapper/internshipApplicationGsWrapper.jsx";
 import {PostInterview} from "./pages/employer/PostInterview.jsx";
+import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx";
+import {PostInterviewWrapper} from "./pages/employer/wrapper/PostInterviewWrapper.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -377,7 +379,20 @@ function App() {
                     />
                   }
               />
-              <Route path="post-interviews" element={<PostInterview />} />
+                <Route
+                    path="post-interviews"
+                    element={
+                        <PostInterviewWrapper
+                            DesktopComponent={PostInterview}
+                            PhoneComponent={() => (
+                                <DashboardPhone
+                                    sidebarLinks={employerDashboardSidebarLinks}
+                                    title="Entretiens post-stage"
+                                />
+                            )}
+                        />
+                    }
+                />
             </Route>
 
 
