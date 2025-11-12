@@ -378,12 +378,7 @@ function App() {
                   element={
                     <ResponsiveRoute
                         DesktopComponent={DashboardSettings}
-                        PhoneComponent={() => (
-                            <DashboardPhone
-                                sidebarLinks={employerDashboardSidebarLinks}
-                                title="Paramètres"
-                            />
-                        )}
+                        PhoneComponent={DashboardSettings}
                     />
                   }
               />
