@@ -26,7 +26,7 @@ export const PostInterviewPhone = () => {
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState("details"); // "details" ou "reject"
+    const [modalMode, setModalMode] = useState("details");
     const [rejectReason, setRejectReason] = useState("");
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
     const [localApplications, setLocalApplications] = useState([]);
@@ -49,13 +49,16 @@ export const PostInterviewPhone = () => {
         });
     }, [applications, convocations]);
 
+    // 🔹 Charger actions persistées depuis localStorage
     useEffect(() => {
-        setLocalApplications(prev =>
-            applicationsWithConvocationStatus.map(app => {
-                const existing = prev.find(a => a.id === app.id);
-                return { ...app, actionStatus: existing ? existing.actionStatus : null };
-            })
-        );
+        const storedActions = JSON.parse(localStorage.getItem("postInterviewPhoneActions") || "[]");
+
+        const merged = applicationsWithConvocationStatus.map(app => {
+            const stored = storedActions.find(a => a.id === app.id);
+            return { ...app, actionStatus: stored?.actionStatus || null };
+        });
+
+        setLocalApplications(merged);
     }, [applicationsWithConvocationStatus]);
 
     // 🔹 Années disponibles
@@ -73,13 +76,20 @@ export const PostInterviewPhone = () => {
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }, [localApplications, filterYear]);
 
+    // 🔹 Sauvegarde actions dans localStorage
+    const saveActionsToStorage = (apps) => {
+        localStorage.setItem("postInterviewPhoneActions", JSON.stringify(apps));
+    };
+
     // 🔹 Actions
     const handleApproveApplication = async (appId) => {
         try {
             await approveApplication(user.token, appId);
-            setLocalApplications(prev =>
-                prev.map(app => app.id === appId ? { ...app, actionStatus: "accepted" } : app)
-            );
+            setLocalApplications(prev => {
+                const updated = prev.map(app => app.id === appId ? { ...app, actionStatus: "accepted" } : app);
+                saveActionsToStorage(updated);
+                return updated;
+            });
         } catch {
             toast.error(t("errors.accept"));
         }
@@ -88,9 +98,11 @@ export const PostInterviewPhone = () => {
     const handleRejectApplication = async (reason) => {
         try {
             await rejectApplicationPostInterview(user.token, selectedApplication.id, reason);
-            setLocalApplications(prev =>
-                prev.map(app => app.id === selectedApplication.id ? { ...app, actionStatus: "rejected" } : app)
-            );
+            setLocalApplications(prev => {
+                const updated = prev.map(app => app.id === selectedApplication.id ? { ...app, actionStatus: "rejected" } : app);
+                saveActionsToStorage(updated);
+                return updated;
+            });
             setIsModalOpen(false);
             setModalMode("details");
             setRejectReason("");

@@ -26,11 +26,9 @@ export const PostInterview = () => {
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState("details"); // "details" ou "reject"
+    const [modalMode, setModalMode] = useState("details");
     const [rejectReason, setRejectReason] = useState("");
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
-
-    // 🔹 State local pour gérer le statut d’action
     const [localApplications, setLocalApplications] = useState([]);
 
     // 🔹 Fetch applications et convocations
@@ -53,20 +51,18 @@ export const PostInterview = () => {
             };
         });
     }, [applications, convocations]);
-    // 🔹 Initialiser / mettre à jour localApplications sans perdre les actionStatus déjà définis
-    useEffect(() => {
-        setLocalApplications(prev => {
-            return applicationsWithConvocationStatus.map(app => {
-                // Si l'application existait déjà, conserver son actionStatus
-                const existing = prev.find(a => a.id === app.id);
-                return {
-                    ...app,
-                    actionStatus: existing ? existing.actionStatus : null,
-                };
-            });
-        });
-    }, [applicationsWithConvocationStatus]);
 
+    // 🔹 Charger les actions persistées depuis localStorage
+    useEffect(() => {
+        const storedActions = JSON.parse(localStorage.getItem("postInterviewActions") || "[]");
+
+        const merged = applicationsWithConvocationStatus.map(app => {
+            const stored = storedActions.find(a => a.id === app.id);
+            return { ...app, actionStatus: stored?.actionStatus || null };
+        });
+
+        setLocalApplications(merged);
+    }, [applicationsWithConvocationStatus]);
 
     // 🔹 Liste des années disponibles pour le filtre
     const availableYears = useMemo(() => {
@@ -92,14 +88,20 @@ export const PostInterview = () => {
     }, [localApplications, filterYear]);
 
     // 🔹 Actions
+    const saveActionsToStorage = (apps) => {
+        localStorage.setItem("postInterviewActions", JSON.stringify(apps));
+    };
+
     const handleApproveApplication = async (appId) => {
         try {
             await approveApplication(user.token, appId);
-            setLocalApplications(prev =>
-                prev.map(app =>
+            setLocalApplications(prev => {
+                const updated = prev.map(app =>
                     app.id === appId ? { ...app, actionStatus: "accepted" } : app
-                )
-            );
+                );
+                saveActionsToStorage(updated);
+                return updated;
+            });
         } catch {
             toast.error(t("errors.accept"));
         }
@@ -108,11 +110,13 @@ export const PostInterview = () => {
     const handleRejectApplication = async (reason) => {
         try {
             await rejectApplicationPostInterview(user.token, selectedApplication.id, reason);
-            setLocalApplications(prev =>
-                prev.map(app =>
+            setLocalApplications(prev => {
+                const updated = prev.map(app =>
                     app.id === selectedApplication.id ? { ...app, actionStatus: "rejected" } : app
-                )
-            );
+                );
+                saveActionsToStorage(updated);
+                return updated;
+            });
             setIsModalOpen(false);
             setModalMode("details");
             setRejectReason("");
@@ -132,9 +136,9 @@ export const PostInterview = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.year")}: {filterYear}
-                </span>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                    {t("filter.year")}: {filterYear}
+                                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
@@ -179,8 +183,8 @@ export const PostInterview = () => {
                             <td className="px-4 py-3 flex gap-2">
                                 {app.actionStatus ? (
                                     <span className={`font-semibold ${app.actionStatus === "accepted" ? "text-green-700" : "text-red-700"}`}>
-                    {app.actionStatus === "accepted" ? t("table.accepted") : t("table.rejected")}
-                  </span>
+                                        {app.actionStatus === "accepted" ? t("table.accepted") : t("table.rejected")}
+                                    </span>
                                 ) : (
                                     <>
                                         <TableActionButton

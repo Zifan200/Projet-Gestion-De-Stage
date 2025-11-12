@@ -60,6 +60,7 @@ import {InternshipApplicationsGsWrapper} from "./pages/gs/wrapper/internshipAppl
 import {PostInterview} from "./pages/employer/PostInterview.jsx";
 import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx";
 import {PostInterviewWrapper} from "./pages/employer/wrapper/PostInterviewWrapper.jsx";
+import {OffresAConfirmerWrapper} from "./pages/student/wrapper/internshipFinalDecisionWrapper.jsx";
 
 function App() {
   const { t } = useTranslation([
@@ -301,7 +302,14 @@ function App() {
                     />
                   }
               />
-              <Route path="internshipFinalDecision" element={<OffresAConfirmer />} />
+                <Route
+                    path="internshipFinalDecision"
+                    element={
+                        <OffresAConfirmerWrapper
+                            DesktopComponent={OffresAConfirmer}
+                        />
+                    }
+                />
               <Route
                   path="convocations"
                   element={
