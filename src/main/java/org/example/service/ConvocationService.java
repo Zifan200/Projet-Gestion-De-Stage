@@ -60,10 +60,6 @@ public class ConvocationService {
             throw new InvalidInternshipApplicationException("Invalid convocation: mismatched employer/student and application");
         }
 
-        if (internship.getStatus() != ApprovalStatus.ACCEPTED) {
-            throw new InvalidInternshipApplicationException("Convocation not allowed: application not approved");
-        }
-
         Convocation convocation = Convocation.builder()
                 .etudiant(student.get())
                 .employer(employer.get())
