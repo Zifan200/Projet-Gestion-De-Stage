@@ -47,6 +47,8 @@ public class InternshipOfferService {
     private final InternshipOfferRepository internshipOfferRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final DeepLTranslatorService deepLTranslator;
+    private final org.example.repository.InternshipRecommendationRepository recommendationRepository;
+    private final org.example.repository.EtudiantRepository etudiantRepository;
 
     public InternshipOfferResponseDto saveInternshipOffer(
         String email,
@@ -312,6 +314,12 @@ public class InternshipOfferService {
             );
         offer.setStatus(status);
         offer.setReason(reasons);
+
+        // Si l'offre est acceptée, la rendre automatiquement visible aux étudiants
+        if (status == ApprovalStatus.ACCEPTED) {
+            offer.setVisibleToStudents(true);
+        }
+
         var savedInternshipOffer = internshipOfferRepository.save(offer);
         eventPublisher.publishEvent(new InternshipOfferStatusChangeEvent());
         return InternshipOfferResponseDto.create(savedInternshipOffer);
@@ -575,5 +583,114 @@ public class InternshipOfferService {
         );
 
         return InternshipOfferResponseDto.create(savedOffer);
+    }
+
+    public List<
+        org.example.service.dto.internship.InternshipOfferWithPriorityDto
+    > getAcceptedOffersWithPriorityByEmail(String email) {
+        // Récupérer l'ID de l'étudiant depuis l'email (si c'est un étudiant)
+        Long studentId = null;
+        Optional<org.example.model.Etudiant> studentOpt =
+            etudiantRepository.findByCredentialsEmail(email);
+
+        if (studentOpt.isPresent()) {
+            studentId = studentOpt.get().getId();
+        }
+
+        // Si studentId est null, les offres seront retournées sans priorités
+        return getAcceptedOffersWithPriority(studentId);
+    }
+
+    public List<
+        org.example.service.dto.internship.InternshipOfferWithPriorityDto
+    > getAcceptedOffersWithPriority(Long studentId) {
+        // Récupérer toutes les offres acceptées et visibles
+        List<InternshipOffer> acceptedOffers = internshipOfferRepository
+            .findDistinctByStatus(ApprovalStatus.ACCEPTED)
+            .stream()
+            .filter(InternshipOffer::isVisibleToStudents)
+            .collect(Collectors.toList());
+
+        // Récupérer toutes les recommandations pour l'étudiant et créer une map par offerId
+        java.util.Map<
+            Long,
+            org.example.model.InternshipRecommendation
+        > recommendationsMap = recommendationRepository
+            .findAllByStudentId(studentId)
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    rec -> rec.getOffer().getId(),
+                    rec -> rec,
+                    (existing, replacement) -> existing
+                )
+            );
+
+        // Pour chaque offre, créer le DTO enrichi avec la priorité si elle existe
+        return acceptedOffers
+            .stream()
+            .map(offer -> {
+                org.example.model.InternshipRecommendation recommendation =
+                    recommendationsMap.get(offer.getId());
+
+                org.example.service.dto.internship.InternshipOfferWithPriorityDto.InternshipOfferWithPriorityDtoBuilder builder =
+                    org.example.service.dto.internship.InternshipOfferWithPriorityDto.builder()
+                        .id(offer.getId())
+                        .title(offer.getTitle())
+                        .enterpriseName(
+                            offer.getEmployer() != null &&
+                                    offer.getEmployer().getEnterpriseName() !=
+                                    null
+                                ? offer.getEmployer().getEnterpriseName()
+                                : "N/A"
+                        )
+                        .description(offer.getDescription())
+                        .expirationDate(offer.getExpirationDate())
+                        .targetedProgramme(offer.getTargetedProgramme())
+                        .status(offer.getStatus())
+                        .reason(offer.getReason())
+                        .applicationCount(offer.getApplications().size())
+                        .startDate(offer.getStartDate())
+                        .endDate(offer.getEndDate())
+                        .session(offer.getSession())
+                        .isRecommended(recommendation != null);
+
+                // Ajouter les informations de recommandation si elles existent
+                if (recommendation != null) {
+                    builder
+                        .priorityCode(recommendation.getPriorityCode())
+                        .recommendationId(recommendation.getId());
+                }
+
+                return builder.build();
+            })
+            // Trier: recommandées en premier (GOLD > BLUE > GREEN), puis non recommandées
+            .sorted((o1, o2) -> {
+                if (o1.isRecommended() && !o2.isRecommended()) return -1;
+                if (!o1.isRecommended() && o2.isRecommended()) return 1;
+                if (o1.isRecommended() && o2.isRecommended()) {
+                    int priority1 = getPriorityOrder(o1.getPriorityCode());
+                    int priority2 = getPriorityOrder(o2.getPriorityCode());
+                    return Integer.compare(priority1, priority2);
+                }
+                return 0;
+            })
+            .collect(Collectors.toList());
+    }
+
+    private int getPriorityOrder(
+        org.example.model.enums.PriorityCode priorityCode
+    ) {
+        if (priorityCode == null) return 4;
+        switch (priorityCode) {
+            case GOLD:
+                return 1;
+            case BLUE:
+                return 2;
+            case GREEN:
+                return 3;
+            default:
+                return 4;
+        }
     }
 }
