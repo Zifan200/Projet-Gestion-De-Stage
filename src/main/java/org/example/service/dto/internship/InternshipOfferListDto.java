@@ -22,6 +22,7 @@ public class InternshipOfferListDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
+    private float salary;
 
     public static InternshipOfferListDto create(InternshipOffer internshipOffer) {
         return InternshipOfferListDto.builder()
@@ -41,6 +42,7 @@ public class InternshipOfferListDto {
                 .startDate(internshipOffer.getStartDate())
                 .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())
+                .salary(internshipOffer.getSalary())
                 .build();
     }
 }

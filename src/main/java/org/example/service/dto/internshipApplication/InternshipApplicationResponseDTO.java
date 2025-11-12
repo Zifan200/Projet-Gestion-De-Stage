@@ -34,6 +34,7 @@ public class InternshipApplicationResponseDTO {
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
+    private float salary;
 
     private ApprovalStatus status;
     private ApprovalStatus etudiantStatus;
@@ -61,6 +62,7 @@ public class InternshipApplicationResponseDTO {
             LocalDate internshipOfferPublishedDate,
             LocalDate internshipOfferExpirationDate,
             String employerEmail,
+            float salary,
             ApprovalStatus status,
             ApprovalStatus etudiantStatus,
             LocalDateTime createdAt,
@@ -85,6 +87,7 @@ public class InternshipApplicationResponseDTO {
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
+        this.salary = salary;
         this.status = status;
         this.etudiantStatus = etudiantStatus;
         this.createdAt = createdAt;
@@ -112,6 +115,7 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
+                .salary(internshipApplication.getOffer().getSalary())
                 .status(internshipApplication.getStatus())
                 .etudiantStatus(internshipApplication.getEtudiantStatus())
                 .createdAt(internshipApplication.getCreatedAt())

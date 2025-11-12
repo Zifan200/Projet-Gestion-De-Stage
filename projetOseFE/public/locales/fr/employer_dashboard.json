@@ -5,7 +5,8 @@
     "applications": "Candidatures totales",
     "activeApplications": "Candidatures actives",
     "totalStudents": "Étudiants uniques",
-    "createOffer": "Créer une offre"
+    "createOffer": "Créer une offre",
+    "pendingConvocations": "Convocations en attente de confirmation"
   },
   "titles": {
     "home": "Accueil",

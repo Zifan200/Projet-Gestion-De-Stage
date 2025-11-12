@@ -1,7 +1,7 @@
 {
   "table":
   {
-    "title": "Offres à confirmer",
+    "title": "Stages à confirmer",
     "OfferTitle": "Titre",
     "company": "Entreprise",
     "receivedDate": "Date de réception",
@@ -11,7 +11,7 @@
   },
   "stats":
   {
-    "decisionStatus" : "Offres à confirmer"
+    "decisionStatus" : "Stages à confirmer"
   },
   "actions":
   {
@@ -31,7 +31,8 @@
     "studentStatus": "Ma décision",
     "selectedCv": "CV sélectionné",
     "applicationDate": "Date de candidature",
-    "close": "Fermer"
+    "close": "Fermer",
+    "salary": "Salaire"
   },
   "filter":
   {

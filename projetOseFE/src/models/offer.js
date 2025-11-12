@@ -29,6 +29,11 @@ export const getOfferSchema = () =>
       targetedProgramme: z
         .string()
         .min(1, i18n.t("employer_dashboard_add_intership:validation.program_required")),
+      salary: z
+          .string()
+          .regex(
+              /^\d+(\.\d{1,2})?$/, "employer_dashboard_add_intership:validation.invalid_salary"
+          ),
       employerEmail: z.string().email(i18n.t("employer_dashboard_add_intership:validation.invalid_email")),
       expirationDate: z
         .string()
