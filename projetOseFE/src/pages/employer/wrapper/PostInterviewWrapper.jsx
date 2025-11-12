@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { PostInterview } from "../postInterview.jsx";
 import { PostInterviewPhone } from "../phone/postInterviewPhone.jsx";
+import {PostInterview} from "../PostInterview.jsx";
 
 export const PostInterviewWrapper = () => {
     const [isPhone, setIsPhone] = useState(false);
