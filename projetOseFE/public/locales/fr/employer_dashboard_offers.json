@@ -14,6 +14,9 @@
     "offerDetails": "Détails de l'offre",
     "description": "Description"
   },
+  "modal": {
+    "salary": "Salaire"
+  },
   "actions": {
     "create_another": "Créer une nouvelle offre",
     "view": "Voir",

@@ -2,6 +2,7 @@ package org.example.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 
@@ -43,10 +44,15 @@ public class InternshipOffer {
     private LocalDate endDate;
     private String session;
 
+    @Min(0)
+    private float salary;
+
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer, LocalDate publishedDate, LocalDate expirationDate,
-            ApprovalStatus status, String reason, LocalDate startDate, LocalDate endDate, String session, List<InternshipApplication> applications
+            Long id, String title, String description, String targetedProgramme, Employer employer,
+            LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason,
+            LocalDate startDate, LocalDate endDate, String session, List<InternshipApplication> applications,
+            float salary
     ){
         this.id = id;
         this.title = title;
@@ -61,5 +67,6 @@ public class InternshipOffer {
         this.endDate = endDate;
         this.session = session;
         this.applications = applications;
+        this.salary = salary;
     }
 }

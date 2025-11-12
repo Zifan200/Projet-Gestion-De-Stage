@@ -34,9 +34,11 @@ public class InternshipApplicationResponseDTO {
     private LocalDate internshipOfferPublishedDate;
     private LocalDate internshipOfferExpirationDate;
     private String employerEmail;
+    private float salary;
 
     private ApprovalStatus status;
     private ApprovalStatus etudiantStatus;
+    private ApprovalStatus postInterviewStatus;
     private LocalDateTime createdAt;
     private LocalDate startDate;
     private String session;
@@ -61,8 +63,10 @@ public class InternshipApplicationResponseDTO {
             LocalDate internshipOfferPublishedDate,
             LocalDate internshipOfferExpirationDate,
             String employerEmail,
+            float salary,
             ApprovalStatus status,
             ApprovalStatus etudiantStatus,
+            ApprovalStatus postInterviewStatus,
             LocalDateTime createdAt,
             LocalDate startDate,
             String session,
@@ -85,8 +89,10 @@ public class InternshipApplicationResponseDTO {
         this.internshipOfferPublishedDate = internshipOfferPublishedDate;
         this.internshipOfferExpirationDate = internshipOfferExpirationDate;
         this.employerEmail = employerEmail;
+        this.salary = salary;
         this.status = status;
         this.etudiantStatus = etudiantStatus;
+        this.postInterviewStatus = postInterviewStatus;
         this.createdAt = createdAt;
         this.startDate = startDate;
         this.session = session;
@@ -112,8 +118,10 @@ public class InternshipApplicationResponseDTO {
                 .internshipOfferDescription(internshipApplication.getOffer().getDescription())
                 .internshipOfferPublishedDate(internshipApplication.getOffer().getPublishedDate())
                 .internshipOfferExpirationDate(internshipApplication.getOffer().getExpirationDate())
+                .salary(internshipApplication.getOffer().getSalary())
                 .status(internshipApplication.getStatus())
                 .etudiantStatus(internshipApplication.getEtudiantStatus())
+                .postInterviewStatus(internshipApplication.getPostInterviewStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .startDate(internshipApplication.getStartDate())
                 .session(internshipApplication.getSession())

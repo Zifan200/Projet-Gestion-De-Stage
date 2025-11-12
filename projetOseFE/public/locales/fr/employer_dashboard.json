@@ -2,10 +2,15 @@
   "stats": {
     "myOffers": "Mes offres",
     "offerConfirm": "Candidatures confirmées",
-    "applications": "Candidatures totales",
+    "applications": "Convocation",
     "activeApplications": "Candidatures actives",
     "totalStudents": "Étudiants uniques",
-    "createOffer": "Créer une offre"
+    "createOffer": "Créer une offre",
+<<<<<<< HEAD
+    "interviews" : "Post-Entretien"
+=======
+    "pendingConvocations": "Convocations en attente de confirmation"
+>>>>>>> b0b03f0c503098e1dbf8280dccd9e80697ef77ef
   },
   "titles": {
     "home": "Accueil",

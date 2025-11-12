@@ -3,23 +3,21 @@ package org.example.model.auth;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum Role{
-	EMPLOYER("ROLE_EMPLOYER"),
+public enum Role {
+    EMPLOYER("ROLE_EMPLOYER"),
     STUDENT("ROLE_STUDENT"),
-	GESTIONNAIRE("ROLE_GESTIONNAIRE"),
-	;
+    GESTIONNAIRE("ROLE_GESTIONNAIRE"),
+    TEACHER("ROLE_TEACHER");
 
-	private final String string;
-	private final Set<Role> managedRoles = new HashSet<>();
+    private final String string;
+    private final Set<Role> managedRoles = new HashSet<>();
 
+    Role(String string) {
+        this.string = string;
+    }
 
-	Role(String string){
-		this.string = string;
-	}
-
-	@Override
-	public String toString(){
-		return string;
-	}
-
+    @Override
+    public String toString() {
+        return string;
+    }
 }

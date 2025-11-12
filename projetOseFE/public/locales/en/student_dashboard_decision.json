@@ -1,7 +1,7 @@
 {
   "table":
   {
-    "title":"Offers to Confirm",
+    "title": "Internships to Confirm",
     "OfferTitle": "Title",
     "company": "Company name",
     "receivedDate": "Received date",
@@ -11,7 +11,7 @@
   },
   "stats":
   {
-    "decisionStatus" : "Offers to Confirm"
+    "decisionStatus" : "Internships to Confirm"
   },
   "actions":
   {
@@ -31,7 +31,8 @@
     "studentStatus": "My decision",
     "selectedCv": "Selected CV",
     "applicationDate": "Application date",
-    "close": "Close"
+    "close": "Close",
+    "salary": "Salary"
   },
   "filter":
   {

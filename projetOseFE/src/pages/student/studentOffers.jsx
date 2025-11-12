@@ -80,8 +80,14 @@ export const StudentOffers = () => {
     const filteredOffers = useMemo(() => {
         return offers
             .filter((offer) => offer.session?.toLowerCase() === "hiver")
-            .filter((offer) => offer.startDate && new Date(offer.startDate).getFullYear().toString() === currentYear)
-            .filter((offer) => !applications.find((a) => a.internshipOfferId === offer.id));
+            .filter(
+                (offer) =>
+                    offer.startDate &&
+                    new Date(offer.startDate).getFullYear().toString() === currentYear
+            )
+            .filter(
+                (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
+            );
     }, [offers, applications]);
 
     const columns = [
@@ -92,36 +98,66 @@ export const StudentOffers = () => {
             key: "actions",
             label: t("table.action"),
             actions: [
-                { key: "view", label: <><EyeOpenIcon className="w-4 h-4" /><span>{t("actions.apply")}</span></> },
-                { key: "download", label: <><DownloadIcon className="w-4 h-4" /><span>{t("actions.download")}</span></> },
+                {
+                    key: "view",
+                    label: (
+                        <>
+                            <EyeOpenIcon className="w-4 h-4" />
+                            <span>{t("actions.apply")}</span>
+                        </>
+                    ),
+                },
+                {
+                    key: "download",
+                    label: (
+                        <>
+                            <DownloadIcon className="w-4 h-4" />
+                            <span>{t("actions.download")}</span>
+                        </>
+                    ),
+                },
             ],
         },
     ];
 
     const tableData = filteredOffers.map((offer) => ({
         ...offer,
-        expirationDate: offer.expirationDate ? new Date(offer.expirationDate).toLocaleDateString() : "-",
+        expirationDate: offer.expirationDate
+            ? new Date(offer.expirationDate).toLocaleDateString()
+            : "-",
     }));
 
     return (
         <div className="space-y-6">
             <Header title={t("title")} />
 
-            <DataTable columns={columns} data={tableData} onAction={(action, offer) => {
-                if (action === "view") handleViewOffer(offer.id);
-                if (action === "download") handleDownload(offer.id);
-            }} />
+            <DataTable
+                columns={columns}
+                data={tableData}
+                onAction={(action, offer) => {
+                    if (action === "view") handleViewOffer(offer.id);
+                    if (action === "download") handleDownload(offer.id);
+                }}
+            />
 
             {selectedOffer && (
                 <Modal
                     open={isModalOpen}
-                    onClose={() => { setIsModalOpen(false); setSelectedOffer(null); setSelectedCv(null); }}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setSelectedOffer(null);
+                        setSelectedCv(null);
+                    }}
                     title={selectedOffer.title}
                     size="default"
                     footer={
                         <>
                             <button
-                                onClick={() => { setIsModalOpen(false); setSelectedOffer(null); setSelectedCv(null); }}
+                                onClick={() => {
+                                    setIsModalOpen(false);
+                                    setSelectedOffer(null);
+                                    setSelectedCv(null);
+                                }}
                                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 {t("modal.close")}
@@ -129,7 +165,11 @@ export const StudentOffers = () => {
                             <button
                                 onClick={handleApply}
                                 disabled={!selectedCv}
-                                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedCv ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+                                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                    selectedCv
+                                        ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                }`}
                             >
                                 {t("modal.apply")}
                             </button>
@@ -139,44 +179,99 @@ export const StudentOffers = () => {
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.companyEmail")}
+                                </h3>
                                 <p className="text-gray-600">{selectedOffer.employerEmail}</p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.targetedProgramme")}</h3>
-                                <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.targetedProgramme")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedOffer.targetedProgramme}
+                                </p>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.publishedDate")}</h3>
-                                <p className="text-gray-600">{selectedOffer.publishedDate ? new Date(selectedOffer.publishedDate).toLocaleDateString() : "-"}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.publishedDate")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedOffer.publishedDate
+                                        ? new Date(selectedOffer.publishedDate).toLocaleDateString()
+                                        : "-"}
+                                </p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.deadline")}</h3>
-                                <p className="text-gray-600">{selectedOffer.expirationDate ? new Date(selectedOffer.expirationDate).toLocaleDateString() : "-"}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.deadline")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedOffer.expirationDate
+                                        ? new Date(
+                                            selectedOffer.expirationDate
+                                        ).toLocaleDateString()
+                                        : "-"}
+                                </p>
                             </div>
                         </div>
 
-                        {selectedOffer.description && (
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                                <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
-                            </div>
-                        )}
+                        {/* Description + Salaire */}
+                        <div className="grid grid-cols-2 gap-4">
+                            {selectedOffer.description && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
+                                    <p className="text-gray-600 whitespace-pre-wrap">
+                                        {selectedOffer.description}
+                                    </p>
+                                </div>
+                            )}
 
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.salary")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {localStorage.key("lang") === "fr"
+                                        ? selectedOffer.salary.toLocaleString("fr-CA", {
+                                            style: "currency",
+                                            currency: "CAD",
+                                        })
+                                        : selectedOffer.salary.toLocaleString("en-CA", {
+                                            style: "currency",
+                                            currency: "CAD",
+                                        })}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Sélection du CV */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">{t("modal.selectCv")}</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                {t("modal.selectCv")}
+                            </label>
                             <select
                                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                                 value={selectedCv?.id || ""}
-                                onChange={(e) => setSelectedCv(cvs.find((cv) => cv.id.toString() === e.target.value))}
+                                onChange={(e) =>
+                                    setSelectedCv(
+                                        cvs.find((cv) => cv.id.toString() === e.target.value)
+                                    )
+                                }
                             >
                                 <option value="">-- {t("modal.chooseCv")} --</option>
-                                {cvs.filter((cv) => cv.status === "ACCEPTED").map((cv) => (
-                                    <option key={cv.id} value={cv.id}>{cv.name || cv.fileName}</option>
-                                ))}
+                                {cvs
+                                    .filter((cv) => cv.status === "ACCEPTED")
+                                    .map((cv) => (
+                                        <option key={cv.id} value={cv.id}>
+                                            {cv.name || cv.fileName}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
                     </div>

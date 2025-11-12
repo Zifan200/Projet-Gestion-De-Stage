@@ -58,30 +58,43 @@ export const employerService = {
     }
   },
 
-  approveApplication: async(token, id) => {
-    const res = api.put(
-        `/employer/get-internship-application/${id}/approve`,
-        null,
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        }
-    );
-    return res;
+  approveApplication: async (token, id) => {
+    try {
+      const res = await api.put(
+          `/employer/get-internship-application/${id}/approve`,
+          null,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+      );
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   },
 
-  rejectApplication: async(token, id, reason) => {
-    const res = api.put(
-        `/employer/get-internship-application/${id}/reject`,
-        { reason },
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        }
-    );
-    return res;
+  rejectApplication: async (token, id, reason) => {
+    try {
+      const res = await api.put(
+          `/employer/get-internship-application/${id}/reject`,
+          { reason },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+      );
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  },
+
+  async getConvocationsForEmployer(token) {
+    const res = await api.get("/employer/liste-convocations-employer", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
   },
 
   createConvocation : async (formData) => {
