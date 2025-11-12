@@ -11,6 +11,7 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 export default function OffresAConfirmer() {
     const { t } = useTranslation("student_dashboard_decision");
     const { token, user } = useAuthStore();
+
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState("details");
@@ -18,9 +19,8 @@ export default function OffresAConfirmer() {
     const [filterStudentStatus, setFilterStudentStatus] = useState(null);
 
     const {
-        convocations,
         applications,
-        loadAcceptedApplications,
+        loadAllApplications,
         loading,
         error,
         successMessage,
@@ -29,12 +29,32 @@ export default function OffresAConfirmer() {
         rejectOffer
     } = useStudentStore();
 
-    // Charger uniquement les candidatures approuvées par l'employeur
+    // Charger toutes les candidatures pour l'étudiant
     useEffect(() => {
         if (token && user?.role === "STUDENT") {
-            loadAcceptedApplications(token);
+            loadAllApplications(token);
         }
-    }, [loadAcceptedApplications, token, user?.role]);
+    }, [loadAllApplications, token, user?.role]);
+
+    // Filtrer les candidatures avec postInterviewStatus ACCEPTED
+    const approvedApplications = useMemo(() =>
+            applications.filter(app => app.postInterviewStatus === "ACCEPTED"),
+        [applications]
+    );
+
+    // Filtrer par année (currentYear ou currentYear+1) et session hiver
+    const filteredApplications = useMemo(() => {
+        const nextYear = new Date().getFullYear() + 1; // année prochaine
+        return approvedApplications.filter(app => {
+            const startYear = app.startDate ? new Date(app.startDate).getFullYear() : null;
+            const isNextYear = startYear === nextYear; // uniquement nextYear
+            const isWinterSession = app.session?.toLowerCase() === "hiver"; // session hiver
+            const matchesStatus = filterStudentStatus ? app.etudiantStatus === filterStudentStatus : true;
+            return isNextYear && isWinterSession && matchesStatus;
+        });
+    }, [approvedApplications, filterStudentStatus]);
+
+
 
     // DEBUG : afficher les applications dans la console
     useEffect(() => {
@@ -54,6 +74,7 @@ export default function OffresAConfirmer() {
         }
     }, [successMessage, error, clearMessages, t]);
 
+    // Colonnes du tableau
     const columns = useMemo(() => [
         { key: "internshipOfferTitle", label: t("table.OfferTitle") },
         { key: "employerEmail", label: t("table.company") },
@@ -68,28 +89,6 @@ export default function OffresAConfirmer() {
             actions: [{ key: "view", label: t("actions.view"), showIcon: true }]
         }
     ], [t]);
-
-    const approvedApplications = convocations.filter(app => app.status === "ACCEPTED");
-
-    const filteredApplications = useMemo(() => {
-        const currentYear = new Date().getFullYear();
-
-        const result = approvedApplications.filter((app) => {
-            const startYear = app.startDate ? new Date(app.startDate).getFullYear() : null;
-            const isCorrectYear = startYear === currentYear || startYear === currentYear + 1;
-            const isWinterSession = app.session?.toLowerCase() === "hiver"; // <-- ici
-
-            console.log(app.internshipOfferTitle, "=>", { startYear, isCorrectYear, session: app.session, isWinterSession });
-
-            return isCorrectYear && isWinterSession;
-        });
-
-        console.log("Applications après filtrage :", result);
-
-        return result;
-    }, [approvedApplications]);
-
-
 
     return (
         <div className="p-6">
@@ -107,16 +106,12 @@ export default function OffresAConfirmer() {
 
             {!loading && approvedApplications.length > 0 && (
                 <>
+                    {/* Filtre par statut étudiant */}
                     <div className="mb-4 flex gap-3">
-                        {/* Filtre par statut étudiant */}
                         <Popover>
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
-                                    <PopoverTrigger
-                                        open={open}
-                                        setOpen={setOpen}
-                                        triggerRef={triggerRef}
-                                    >
+                                    <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
                                         <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                                             {t("filter.studentStatus")}:{" "}
                                             {filterStudentStatus
@@ -124,15 +119,13 @@ export default function OffresAConfirmer() {
                                                 : t("filter.all")}
                                         </span>
                                     </PopoverTrigger>
+
                                     <PopoverContent open={open} contentRef={contentRef}>
                                         <div className="flex flex-col gap-2 min-w-[200px]">
-                                            {["PENDING", "CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"].map((status) => (
+                                            {["PENDING", "CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"].map(status => (
                                                 <button
                                                     key={status}
-                                                    onClick={() => {
-                                                        setFilterStudentStatus(status);
-                                                        setOpen(false);
-                                                    }}
+                                                    onClick={() => { setFilterStudentStatus(status); setOpen(false); }}
                                                     className={`px-3 py-1 rounded text-left ${
                                                         filterStudentStatus === status
                                                             ? "bg-blue-100 font-semibold"
@@ -143,18 +136,13 @@ export default function OffresAConfirmer() {
                                                 </button>
                                             ))}
                                             <button
-                                                onClick={() => {
-                                                    setFilterStudentStatus(null);
-                                                    setOpen(false);
-                                                }}
+                                                onClick={() => { setFilterStudentStatus(null); setOpen(false); }}
                                                 className="px-3 py-1 rounded text-left hover:bg-gray-100"
                                             >
                                                 {t("filter.all")}
                                             </button>
                                             <PopoverClose setOpen={setOpen}>
-                                                <span className="text-sm text-gray-600">
-                                                    {t("filter.close")}
-                                                </span>
+                                                <span className="text-sm text-gray-600">{t("filter.close")}</span>
                                             </PopoverClose>
                                         </div>
                                     </PopoverContent>
@@ -177,27 +165,22 @@ export default function OffresAConfirmer() {
                 </>
             )}
 
+            {/* Modal pour détails et rejet */}
             <Modal
                 open={showModal}
-                onClose={() => {
-                    setShowModal(false);
-                    setModalMode("details");
-                    setRejectReason("");
-                }}
+                onClose={() => { setShowModal(false); setModalMode("details"); setRejectReason(""); }}
                 title={modalMode === "details" ? t("modal.title") : t("reasonModal.title")}
                 size="default"
                 footer={
                     modalMode === "details" ? (
                         <>
                             <button
-                                onClick={() => {
-                                    setShowModal(false);
-                                    setModalMode("details");
-                                }}
+                                onClick={() => setShowModal(false)}
                                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 <span>{t("modal.close")}</span>
                             </button>
+
                             {!selectedOffer?.etudiantStatus && (
                                 <>
                                     <button
@@ -224,10 +207,7 @@ export default function OffresAConfirmer() {
                     ) : (
                         <>
                             <button
-                                onClick={() => {
-                                    setModalMode("details");
-                                    setRejectReason("");
-                                }}
+                                onClick={() => { setModalMode("details"); setRejectReason(""); }}
                                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 <span>Annuler</span>
@@ -258,7 +238,6 @@ export default function OffresAConfirmer() {
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.offerTitle")}</h3>
                                 <p className="text-gray-600">{selectedOffer.internshipOfferTitle}</p>
                             </div>
-
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.employer")}</h3>
                                 <p className="text-gray-600">{selectedOffer.employerEmail}</p>
@@ -279,7 +258,6 @@ export default function OffresAConfirmer() {
                                     <p className="text-gray-600">{new Date(selectedOffer.startDate).toLocaleDateString()}</p>
                                 </div>
                             )}
-
                             {selectedOffer.session && (
                                 <div>
                                     <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.session")}</h3>
@@ -295,13 +273,12 @@ export default function OffresAConfirmer() {
                                     {t(`employerStatus.${selectedOffer.status.toLowerCase()}`)}
                                 </span>
                             </div>
-
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentStatus")}</h3>
                                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                     selectedOffer.etudiantStatus === "CONFIRMED_BY_STUDENT" ? "bg-green-100 text-green-800" :
-                                    selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? "bg-red-100 text-red-800" :
-                                    "bg-yellow-100 text-yellow-800"
+                                        selectedOffer.etudiantStatus === "REJECTED_BY_STUDENT" ? "bg-red-100 text-red-800" :
+                                            "bg-yellow-100 text-yellow-800"
                                 }`}>
                                     {selectedOffer.etudiantStatus ? t(`studentStatus.${selectedOffer.etudiantStatus.toLowerCase()}`) : t("studentStatus.pending")}
                                 </span>
@@ -328,9 +305,7 @@ export default function OffresAConfirmer() {
                     <div className="space-y-4">
                         <p className="text-gray-600">{t("reasonModal.description")}</p>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Raison
-                            </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Raison</label>
                             <textarea
                                 value={rejectReason}
                                 onChange={(e) => setRejectReason(e.target.value)}

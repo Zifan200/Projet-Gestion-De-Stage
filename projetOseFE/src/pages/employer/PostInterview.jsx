@@ -54,7 +54,6 @@ export const PostInterview = () => {
     const handleApproveApplication = async (app) => {
         try {
             await approveApplication(user.token, app.id);
-            toast.success(t("success.accepted"));
         } catch {
             toast.error(t("errors.accept"));
         }

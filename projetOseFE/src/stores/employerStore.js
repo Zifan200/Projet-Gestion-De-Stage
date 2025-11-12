@@ -1,6 +1,8 @@
 import {create} from "zustand";
 import {devtools} from "zustand/middleware";
 import {employerService} from "../services/employerService.js";
+import { toast } from "sonner";
+
 
 export const useEmployerStore = create((set, get) => ({
     employers: [],
@@ -35,30 +37,41 @@ export const useEmployerStore = create((set, get) => ({
     },
 
     approveApplication: async (token, id) => {
-        const res = employerService.approveApplication(token, id);
         try {
+            const updatedApp = await employerService.approveApplication(token, id);
+
             set((state) => ({
                 applications: state.applications.map((app) =>
-                    app.id === id ? {...app, status: "ACCEPTED"} : app
+                    app.id === id ? { ...app, postInterviewStatus: updatedApp.postInterviewStatus } : app
                 ),
             }));
+
+            toast.success("Candidature approuvée !");
         } catch (err) {
-            set({error: err, loading: false});
+            console.error(err);
+            set({ error: err.message || err, loading: false });
+            toast.error("Impossible d'approuver la candidature");
         }
     },
 
     rejectApplication: async (token, id, reason) => {
-        const res = employerService.rejectApplication(token, id, reason);
         try {
+            const updatedApp = await employerService.rejectApplication(token, id, reason);
+
             set((state) => ({
                 applications: state.applications.map((app) =>
-                    app.id === id ? {...app, status: "REJECTED", reason} : app
+                    app.id === id ? { ...app, status: updatedApp.status, etudiantRaison: updatedApp.etudiantRaison } : app
                 ),
             }));
+
+            toast.error("Candidature rejetée !");
         } catch (err) {
-            set({error: err, loading: false});
+            console.error(err);
+            set({ error: err.message || err, loading: false });
+            toast.error("Impossible de rejeter la candidature");
         }
     },
+
 
     fetchListConvocation: async (token) =>{
         try {
