@@ -44,7 +44,8 @@
     "status": "Status",
     "appliedAt": "Applied on",
     "close": "Close",
-    "reason": "Reason"
+    "reason": "Reason",
+    "salary": "Salary"
   },
   "reasonModal": {
     "description": "Explain why you are rejecting this application."

@@ -116,7 +116,7 @@ public class EmployerController {
     }
 
     @GetMapping("/liste-convocations-employer")
-    public ResponseEntity<List<ConvocationDTO>> getConvocationsForStudent(
+    public ResponseEntity<List<ConvocationDTO>> getConvocationsForEmployer(
             HttpServletRequest request
     ) {
         String employerEmail = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();

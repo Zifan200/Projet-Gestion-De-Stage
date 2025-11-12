@@ -1,8 +1,8 @@
 package org.example.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
 @Getter
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="notifications")
+@Table(name = "notifications")
 public class Notification {
 
     @Id
@@ -30,4 +30,7 @@ public class Notification {
 
     @ManyToOne
     private Gestionnaire gestionnaire;
+
+    @ManyToOne
+    private Teacher teacher;
 }

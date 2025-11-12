@@ -126,6 +126,7 @@ class EmployerControllerTest {
                 .description("programme stuff")
                 .employerEmail(employerDto.getEmail())
                 .targetedProgramme("Computer Science")
+                .salary(18.25f)
                 .build();
 
         InternshipOfferResponseDto internshipResponseDto = InternshipOfferResponseDto.builder()
@@ -133,6 +134,7 @@ class EmployerControllerTest {
                 .description(internshipOfferDto.getDescription())
                 .employerEmail(employerDto.getEmail())
                 .targetedProgramme(internshipOfferDto.getTargetedProgramme())
+                .salary(internshipOfferDto.getSalary())
                 .build();
 
         // Arrange mocks
@@ -152,7 +154,8 @@ class EmployerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").value("Developer"))
                 .andExpect(jsonPath("$.description").value("programme stuff"))
-                .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"));
+                .andExpect(jsonPath("$.targetedProgramme").value("Computer Science"))
+                .andExpect(jsonPath("$.salary").value("18.25"));
     }
 
     @Test
@@ -175,6 +178,7 @@ class EmployerControllerTest {
                 .description("programme stuff")
                 .employerEmail(employerDto.getEmail())
                 .targetedProgramme("Computer Science")
+                .salary(18.25f)
                 .build();
 
         InternshipOfferResponseDto internshipResponseDto = InternshipOfferResponseDto.builder()
@@ -182,11 +186,67 @@ class EmployerControllerTest {
                 .description(internshipOfferDto.getDescription())
                 .employerEmail(employerDto.getEmail())
                 .targetedProgramme(internshipOfferDto.getTargetedProgramme())
+                .salary(internshipOfferDto.getSalary())
                 .build();
 
         // Arrange mocks
         when(userAppService.getMe(FAKE_JWT)).thenReturn(employerDto);
-        when(internshipOfferService.saveInternshipOffer(employerDto.getEmail(), internshipOfferDto)).thenThrow(new InvalidInternShipOffer(""));
+        when(internshipOfferService.saveInternshipOffer(employerDto.getEmail(), internshipOfferDto))
+                .thenThrow(new InvalidInternShipOffer(""));
+
+
+        // Serialize dto to JSON
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBody = mapper.writeValueAsString(internshipOfferDto);
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/api/v1/employer/create-internship-offer")
+                        .header("Authorization", "Bearer " + FAKE_JWT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolved = result.getResolvedException();
+        assertNotNull(resolved);
+        assertTrue(resolved instanceof InvalidInternShipOffer);
+    }
+
+    @Test
+    void createInternshipOffer_shouldReturn409_whenInvalidSalary() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(employerController)
+                .setControllerAdvice(new InternshipOfferControllerException())
+                .build();
+
+        EmployerDto employerDto = EmployerDto.builder()
+                .email("test@google.com")
+                .firstName("John")
+                .lastName("Doe")
+                .password("password")
+                .since(LocalDate.now())
+                .build();
+
+        InternshipOfferDto internshipOfferDto = InternshipOfferDto.builder()
+                .title("Developer")
+                .description("programme stuff")
+                .employerEmail(employerDto.getEmail())
+                .targetedProgramme("Computer Science")
+                .salary(-10.23f)
+                .build();
+
+        InternshipOfferResponseDto internshipResponseDto = InternshipOfferResponseDto.builder()
+                .title(internshipOfferDto.getTitle())
+                .description(internshipOfferDto.getDescription())
+                .employerEmail(employerDto.getEmail())
+                .targetedProgramme(internshipOfferDto.getTargetedProgramme())
+                .salary(internshipOfferDto.getSalary())
+                .build();
+
+        // Arrange mocks
+        when(userAppService.getMe(FAKE_JWT)).thenReturn(employerDto);
+        when(internshipOfferService.saveInternshipOffer(employerDto.getEmail(), internshipOfferDto))
+                .thenThrow(new InvalidInternShipOffer("Le salaire est invalide"));
 
 
         // Serialize dto to JSON
@@ -218,6 +278,7 @@ class EmployerControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Java Developer")
+                .salary(18.25f)
                 .build();
 
         when(userAppService.getMe(FAKE_JWT)).thenReturn(
@@ -231,7 +292,8 @@ class EmployerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Java Developer"));
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Java Developer"))
+                .andExpect(jsonPath("$[0].salary").value("18.25"));
     }
 
     @Test
@@ -246,6 +308,7 @@ class EmployerControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .build();
 
         when(userAppService.getMe(FAKE_JWT)).thenReturn(
@@ -259,7 +322,8 @@ class EmployerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"));
+                .andExpect(jsonPath("$[0].internshipOfferTitle").value("Backend Developer"))
+                .andExpect(jsonPath("$[0].salary").value("18.25"));
     }
 
     @Test
@@ -323,6 +387,7 @@ class EmployerControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .build();
 
         InternshipApplicationResponseDTO approvedApplication = InternshipApplicationResponseDTO.builder()
@@ -330,6 +395,7 @@ class EmployerControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .status(ApprovalStatus.ACCEPTED)
                 .build();
 
@@ -347,7 +413,8 @@ class EmployerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("status").value("ACCEPTED"))
                 .andExpect(jsonPath("studentEmail").value("student@mail.com"))
-                .andExpect(jsonPath("internshipOfferTitle").value("Backend Developer"));
+                .andExpect(jsonPath("internshipOfferTitle").value("Backend Developer"))
+                .andExpect(jsonPath("salary").value("18.25"));
     }
 
     @Test
@@ -394,6 +461,7 @@ class EmployerControllerTest {
                 .employerEmail("wrong@test.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .build();
 
         // Act
@@ -425,6 +493,7 @@ class EmployerControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .build();
 
         String reason = "We are asking for 13 years of experience, while you have zero.";
@@ -433,6 +502,7 @@ class EmployerControllerTest {
                 .studentEmail("student@mail.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .status(ApprovalStatus.REJECTED)
                 .reason(reason)
                 .build();
@@ -453,6 +523,7 @@ class EmployerControllerTest {
                 .andExpect(jsonPath("status").value("REJECTED"))
                 .andExpect(jsonPath("studentEmail").value("student@mail.com"))
                 .andExpect(jsonPath("internshipOfferTitle").value("Backend Developer"))
+                .andExpect(jsonPath("salary").value("18.25"))
                 .andExpect(jsonPath("reason").value(reason));
     }
 
@@ -504,6 +575,7 @@ class EmployerControllerTest {
                 .employerEmail("wrong@test.com")
                 .internshipOfferId(10L)
                 .internshipOfferTitle("Backend Developer")
+                .salary(18.25f)
                 .build();
 
         // Act

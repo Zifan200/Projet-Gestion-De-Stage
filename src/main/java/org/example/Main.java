@@ -16,6 +16,7 @@ import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.dto.student.EtudiantDTO;
+import org.example.service.dto.teacher.TeacherDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,17 +32,20 @@ public class Main {
     private final EmployerService employerService;
     private final StudentService studentService;
     private final CVService cvService;
+    private final TeacherService teacherService;
 
     public Main(
         GestionnaireService gestionnaireService,
         EmployerService employerService,
         StudentService studentService,
-        CVService cvService
+        CVService cvService,
+        TeacherService teacherService
     ) {
         this.gestionnaireService = gestionnaireService;
         this.employerService = employerService;
         this.studentService = studentService;
         this.cvService = cvService;
+        this.teacherService = teacherService;
     }
 
     public static void main(String[] args) {
@@ -71,7 +75,29 @@ public class Main {
             gestionnaireService.saveGestionnaire(admin);
 
             // -----------------------------
-            // 2️⃣ Création de l’employeur
+            // 1.5️⃣ Création d'un enseignant
+            // -----------------------------
+            TeacherDTO teacher = TeacherDTO.builder()
+                .firstName("Marie")
+                .lastName("Tremblay")
+                .email("marie.tremblay@college.com")
+                .password("Test123!")
+                .phone("514-555-1234")
+                .department("Informatique")
+                .specialization("Développement logiciel")
+                .since(LocalDate.of(2015, 9, 1))
+                .build();
+            teacherService.saveTeacher(teacher);
+
+            System.out.println(
+                "✅ Enseignant créé : " +
+                    teacher.getFirstName() +
+                    " " +
+                    teacher.getLastName()
+            );
+
+            // -----------------------------
+            // 2️⃣ Création de l'employeur
             // -----------------------------
             EmployerDto employer = EmployerDto.builder()
                 .firstName("Alice")
@@ -121,7 +147,7 @@ public class Main {
                     employer.getEmail(),
                     InternshipOfferDto.builder()
                         .title("Data Analyst")
-                        .description("Stage d’analyse de données avec Python")
+                        .description("Stage d'analyse de données avec Python")
                         .targetedProgramme("Informatique")
                         .expirationDate(LocalDate.now().plusMonths(2))
                         .startDate(LocalDate.of(2025, 4, 1))
@@ -184,7 +210,6 @@ public class Main {
                 ApprovalStatus.ACCEPTED,
                 ""
             );
-
             // -----------------------------
             // 4️⃣ Création étudiant + CV
             // -----------------------------
@@ -273,7 +298,7 @@ public class Main {
             );
 
             System.out.println(
-                "✅ Candidature 1 (Développeur Java) : ACCEPTÉE par l’étudiant"
+                "✅ Candidature 1 (Développeur Java) : ACCEPTÉE par l'étudiant"
             );
 
             // -----------------------------
@@ -300,11 +325,11 @@ public class Main {
             );
 
             System.out.println(
-                "❌ Candidature 2 (Frontend React) : REFUSÉE par l’étudiant"
+                "❌ Candidature 2 (Frontend React) : REFUSÉE par l'étudiant"
             );
 
             // -----------------------------
-            // 7️⃣ Candidature 3 : Pending (employeur accepté, étudiant n’a rien fait)
+            // 7️⃣ Candidature 3 : Pending (employeur accepté, étudiant n'a rien fait)
             // -----------------------------
             InternshipApplicationResponseDTO app3 =
                 internshipApplicationService.saveInternshipApplication(
@@ -322,7 +347,7 @@ public class Main {
             );
 
             System.out.println(
-                "⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n’a rien fait)"
+                "⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n'a rien fait)"
             );
 
             PreLoadedActors loader = PreLoadedActors.getInstance(context);

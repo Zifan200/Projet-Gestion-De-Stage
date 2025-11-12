@@ -7,6 +7,7 @@ import useAuthStore from "../../stores/authStore.js";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {useStudentStore} from "../../stores/studentStore.js";
+import {PhoneCallIcon} from "lucide-react";
 
 export const StudentDashboard = () => {
   const { cvs, loadCvs } = useCvStore();
@@ -18,7 +19,14 @@ export const StudentDashboard = () => {
     loadRejectedOffers,
   } = useOfferStore();
 
-  const { applications, loadAllApplications, loadApplicationsByStatus, loading} = useStudentStore();
+  const {
+    applications,
+    loadAllApplications,
+    loadApplicationsByStatus,
+    convocations,
+    loadConvocations,
+    loading
+  } = useStudentStore();
 
   const user = useAuthStore((s) => s.user);
   const token = useAuthStore((s) => s.token);
@@ -39,6 +47,7 @@ export const StudentDashboard = () => {
         loadPendingOffers(token);
         loadRejectedOffers(token);
         loadAllApplications(token);
+        loadConvocations(token);
       }
     }
   }, [isAuthenticated, user, token]);
@@ -53,24 +62,19 @@ export const StudentDashboard = () => {
   }).length;
 
   const stats = useMemo(() => {
-    const totalCvs = cvs.length;
     const availableOffers = offers.length;
 
     const acceptedCvs = cvs.filter((cv) => cv.status === "ACCEPTED").length;
     const pendingCvs = cvs.filter((cv) => cv.status === "PENDING").length;
 
-    const offersToConfirm = applications.filter(
+    const internshipsToConfirm = applications.filter(
         (app) => app.status === "ACCEPTED" && app.etudiantStatus === null
     ).length;
 
     const totalApps = applications.length;
+    const newConvocations = convocations.filter((c) => c.status === "PENDING").length;
 
     return [
-      {
-        title: t("stats.cvs"),
-        value: totalCvs,
-        icon: FileTextIcon,
-      },
       {
         title: t("stats.acceptedCvs"),
         value: acceptedCvs,
@@ -87,14 +91,19 @@ export const StudentDashboard = () => {
         icon: EyeOpenIcon,
       },
       {
-        title: t("stats.offersToConfirm"),
-        value: offersToConfirm,
-        icon: CheckIcon,
-      },
-      {
         title: t("stats.totalApplications"),
         value: totalApps,
         icon: EnvelopeClosedIcon,
+      },
+      {
+        title: t("stats.internshipsToConfirm"),
+        value: internshipsToConfirm,
+        icon: CheckIcon,
+      },
+      {
+        title: t("stats.newConvocations"),
+        value: newConvocations,
+        icon: PhoneCallIcon,
       },
     ];
   }, [cvs, offers, t]);

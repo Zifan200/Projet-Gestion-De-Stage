@@ -18,24 +18,26 @@ export const StudentApplications = () => {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const { applications, loadAllApplications, loadApplicationsByStatus, loading} = useStudentStore();
     const { downloadOfferPdf } = useOfferStore();
+    const currentYearPlusOne = (new Date().getFullYear() + 1).toString();
+    const [filterYear, setFilterYear] = useState(currentYearPlusOne);
 
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterEmployerDecision, setFilterEmployerDecision] = useState(null);
     const [filterMyDecision, setFilterMyDecision] = useState(null);
     const [filterSession, setFilterSession] = useState("All");
-    const [filterYear, setFilterYear] = useState("All");
     const [modalMode, setModalMode] = useState("details");
 
     const availableYears = useMemo(() => {
         return Array.from(
             new Set(
                 applications
-                    .filter((app) => app.createdAt)
-                    .map((app) => new Date(app.createdAt).getFullYear())
+                    .filter((app) => app.startDate)
+                    .map((app) => new Date(app.startDate).getFullYear())
             )
         ).sort((a, b) => b - a);
     }, [applications]);
+
 
     useEffect(() => {
         if (user == null || !isAuthenticated)
@@ -112,7 +114,7 @@ export const StudentApplications = () => {
                 filterYear === "All"
                     ? true
                     : app.createdAt &&
-                    new Date(app.createdAt).getFullYear().toString() === filterYear
+                    new Date(app.startDate).getFullYear().toString() === filterYear
             )
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }, [applications, filterEmployerDecision, filterMyDecision, filterSession, filterYear]);
@@ -247,7 +249,7 @@ export const StudentApplications = () => {
                             )}
                         </Popover>
 
-                        {/* Session */}
+                       {/*  Session
                         <Popover>
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
@@ -297,9 +299,9 @@ export const StudentApplications = () => {
                                     </PopoverContent>
                                 </>
                             )}
-                        </Popover>
+                        </Popover>*/}
 
-                        {/* Année */}
+                        {/* Année
                         <Popover>
                             {({ open, setOpen, triggerRef, contentRef }) => (
                                 <>
@@ -346,7 +348,7 @@ export const StudentApplications = () => {
                                     </PopoverContent>
                                 </>
                             )}
-                        </Popover>
+                        </Popover>*/}
                     </div>
 
                     {/* Table des postulations */}
@@ -398,16 +400,35 @@ export const StudentApplications = () => {
                             </div>
                         </div>
 
-                        {selectedApplication.internshipOfferDescription && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {selectedApplication.internshipOfferDescription && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
+                                    <p className="text-gray-600 whitespace-pre-wrap">
+                                        {selectedApplication.internshipOfferDescription}
+                                    </p>
+                                </div>
+                            )}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.description")}
+                                    {t("modal.salary")}
                                 </h3>
-                                <p className="text-gray-600 whitespace-pre-wrap">
-                                    {selectedApplication.internshipOfferDescription}
+                                <p className="text-gray-600">
+                                    { localStorage.key("lang") === "fr" ?
+                                        selectedApplication.salary.toLocaleString(
+                                            "fr-CA",
+                                            {style:"currency", currency:"CAD"}
+                                        ) :
+                                        selectedApplication.salary.toLocaleString(
+                                            "en-CA",
+                                            {style:"currency", currency:"CAD"}
+                                        )
+                                    }
                                 </p>
                             </div>
-                        )}
+                        </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             {selectedApplication.startDate && (
@@ -429,9 +450,9 @@ export const StudentApplications = () => {
                                     <p className="text-gray-600">
                                         {
                                             (selectedApplication.session.toUpperCase() !== "AUTOMNE" &&
-                                            selectedApplication.session.toUpperCase() !== "HIVER") ?
-                                            t("modal.noSemester") :
-                                            t(`modal.${selectedApplication.session.toLowerCase()}`)
+                                                selectedApplication.session.toUpperCase() !== "HIVER") ?
+                                                t("modal.noSemester") :
+                                                t(`modal.${selectedApplication.session.toLowerCase()}`)
                                         }
                                     </p>
                                 </div>
@@ -449,9 +470,9 @@ export const StudentApplications = () => {
                                 >
                                     {
                                         (selectedApplication.status.toUpperCase() !== "ACCEPTED" &&
-                                        selectedApplication.status.toUpperCase() !== "DECLINED") ?
-                                        t("status.pending")    :
-                                        t(`status.${selectedApplication.status.toLowerCase()}`)
+                                            selectedApplication.status.toUpperCase() !== "DECLINED") ?
+                                            t("status.pending") :
+                                            t(`status.${selectedApplication.status.toLowerCase()}`)
                                     }
                                 </span>
                             </div>
