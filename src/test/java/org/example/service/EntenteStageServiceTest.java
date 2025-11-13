@@ -11,6 +11,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import org.example.model.EntenteStagePdf;
 import org.example.model.Gestionnaire;
 import org.example.model.auth.Role;
+import org.example.model.enums.ApprovalStatus;
 import org.example.repository.EntenteStagePdfRepository;
 import org.example.repository.GestionnaireRepository;
 import org.example.security.exception.UserNotFoundException;
@@ -64,6 +65,8 @@ class EntenteStageServiceTest {
         dto.setNbHeures(35);
         dto.setSalary(20.5f);
         dto.setInternshipOfferDescription("Développement d'applications Java");
+        dto.setPostInterviewStatus(ApprovalStatus.ACCEPTED);
+        dto.setEtudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT);
 
         existingPdf = new EntenteStagePdf();
         existingPdf.setId(dto.getId());

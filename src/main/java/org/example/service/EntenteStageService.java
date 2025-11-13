@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.model.EntenteStagePdf;
 import org.example.model.Gestionnaire;
 import org.example.model.auth.Role;
+import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.PdfStatus;
 import org.example.repository.EntenteStagePdfRepository;
 import org.example.repository.GestionnaireRepository;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.exception.InvalidInternshipApplicationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +80,13 @@ public class EntenteStageService {
                                          Long gestionnaireId,
                                          Role roleActuel) throws IOException {
 
+        if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED ||
+                dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
+            throw new InvalidInternshipApplicationException(
+                    "Le PDF ne peut être généré que lorsque l'offre est acceptée et confirmée par l'étudiant."
+            );
+        }
+
         Optional<Gestionnaire> gestionnaireOpt = gestionnaireRepository.findById(gestionnaireId);
         if (gestionnaireOpt.isEmpty()) {
             throw new UserNotFoundException("Gestionnaire not found");
@@ -123,6 +132,13 @@ public class EntenteStageService {
                                        InternshipApplicationResponseDTO dto,
                                        Long gestionnaireId,
                                        Role roleActuel) throws IOException {
+
+        if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED ||
+                dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
+            throw new InvalidInternshipApplicationException(
+                    "Le PDF ne peut être généré que lorsque l'offre est acceptée et confirmée par l'étudiant."
+            );
+        }
 
         Optional<Gestionnaire> gestionnaireOpt = gestionnaireRepository.findById(gestionnaireId);
         if (gestionnaireOpt.isEmpty()) {
