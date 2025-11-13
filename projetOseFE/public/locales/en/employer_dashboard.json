@@ -2,10 +2,11 @@
   "stats": {
     "myOffers": "My offers",
     "offerConfirm": "Confirmed applications",
-    "applications": "Total applications",
+    "applications": "Invite to Interviews",
     "activeApplications": "Active applications",
     "totalStudents": "Unique students",
     "createOffer": "Create an offer",
+    "interviews": "Post-interview",
     "pendingConvocations": "Convocations awaiting confirmation"
   },
   "titles": {

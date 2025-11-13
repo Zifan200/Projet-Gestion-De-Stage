@@ -46,6 +46,7 @@ public class InternshipApplicationResponseDTO {
 
     private ApprovalStatus status;
     private ApprovalStatus etudiantStatus;
+    private ApprovalStatus postInterviewStatus;
     private LocalDateTime createdAt;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -81,6 +82,7 @@ public class InternshipApplicationResponseDTO {
             String address,
             ApprovalStatus status,
             ApprovalStatus etudiantStatus,
+            ApprovalStatus postInterviewStatus,
             LocalDateTime createdAt,
             LocalDate startDate,
             LocalDate endDate,
@@ -114,6 +116,7 @@ public class InternshipApplicationResponseDTO {
         this.address = address;
         this.status = status;
         this.etudiantStatus = etudiantStatus;
+        this.postInterviewStatus = postInterviewStatus;
         this.createdAt = createdAt;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -150,6 +153,7 @@ public class InternshipApplicationResponseDTO {
                 .employerAddress(internshipApplication.getOffer().getAddress())
                 .status(internshipApplication.getStatus())
                 .etudiantStatus(internshipApplication.getEtudiantStatus())
+                .postInterviewStatus(internshipApplication.getPostInterviewStatus())
                 .createdAt(internshipApplication.getCreatedAt())
                 .startDate(internshipApplication.getStartDate())
                 .endDate(internshipApplication.getOffer().getEndDate())

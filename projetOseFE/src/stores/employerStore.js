@@ -1,4 +1,6 @@
-import { create } from "zustand";
+import {create} from "zustand";
+import {devtools} from "zustand/middleware";
+import { toast } from "sonner";
 import { employerService } from "../services/employerService.js";
 
 export const useEmployerStore = create((set, get) => ({
@@ -34,30 +36,41 @@ export const useEmployerStore = create((set, get) => ({
     },
 
     approveApplication: async (token, id) => {
-        const res = employerService.approveApplication(token, id);
         try {
+            const updatedApp = await employerService.approveApplication(token, id);
+
             set((state) => ({
                 applications: state.applications.map((app) =>
-                    app.id === id ? {...app, status: "ACCEPTED"} : app
+                    app.id === id ? { ...app, postInterviewStatus: updatedApp.postInterviewStatus } : app
                 ),
             }));
+
+            toast.success("Candidature approuvée !");
         } catch (err) {
-            set({error: err, loading: false});
+            console.error(err);
+            set({ error: err.message || err, loading: false });
+            toast.error("Impossible d'approuver la candidature");
         }
     },
 
-    rejectApplication: async (token, id, reason) => {
-        const res = employerService.rejectApplication(token, id, reason);
+    rejectApplicationPostInterview: async (token, id, reason) => {
         try {
+            const updatedApp = await employerService.rejectApplication(token, id, reason);
+
             set((state) => ({
                 applications: state.applications.map((app) =>
-                    app.id === id ? {...app, status: "REJECTED", reason} : app
+                    app.id === id ? { ...app, status: updatedApp.status, reason: updatedApp.reason } : app
                 ),
             }));
+
+            toast.error("Candidature rejetée !");
         } catch (err) {
-            set({error: err, loading: false});
+            console.error(err);
+            set({ error: err.message || err, loading: false });
+            toast.error("Impossible de rejeter la candidature");
         }
     },
+
 
     fetchListConvocation: async (token) =>{
         try {
