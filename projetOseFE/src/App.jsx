@@ -54,6 +54,7 @@ import StudentConvocationDecisionPhone from "./pages/student/phone/studenConvoca
 import {DashboardCardEmployerWrapper} from "./pages/employer/wrapper/dashboardCardEmployerWrapper.jsx";
 import {DashboardCardGsWrapper} from "./pages/gs/wrapper/dashboardGsPhone.jsx";
 import {DashboardCardStudentWrapper} from "./pages/student/wrapper/dashboardCardStudentWrapper.jsx";
+import {DashboardGsPhone} from "./pages/gs/phone/dashboardGsPhone.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -209,7 +210,7 @@ function App() {
                                 <PageWrapper
                                     sidebarLinks={gsDashboardSidebarLinks}
                                     title={t("gs_dashboard:titles.dashboard")}
-                                    DesktopComponent={DashboardCardGsWrapper}
+                                    DesktopComponent={DashboardGsPhone}
                                 />
                             }
                         />
