@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,9 @@ public class InternshipOfferListDto {
     private LocalDate endDate;
     private String session;
     private float salary;
+    private TypeHoraire typeHoraire;
+    private float nbHeures;
+    private String address;
 
     public static InternshipOfferListDto create(InternshipOffer internshipOffer) {
         return InternshipOfferListDto.builder()
@@ -43,6 +47,9 @@ public class InternshipOfferListDto {
                 .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())
                 .salary(internshipOffer.getSalary())
+                .typeHoraire(internshipOffer.getTypeHoraire())
+                .nbHeures(internshipOffer.getNbHeures())
+                .address(internshipOffer.getAddress())
                 .build();
     }
 }
