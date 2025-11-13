@@ -51,6 +51,9 @@ import {InternshipApplicationsGsPhone} from "./pages/gs/phone/internshipApplicat
 import {StudentOffersPhone} from "./pages/student/phone/studentOffersPhone.jsx";
 import OffresAConfirmerPhone from "./pages/student/phone/internshipFinalDecisionPhone.jsx";
 import StudentConvocationDecisionPhone from "./pages/student/phone/studenConvocationDecisionPhone.jsx";
+import {DashboardCardEmployerWrapper} from "./pages/employer/wrapper/dashboardCardEmployerWrapper.jsx";
+import {DashboardCardGsWrapper} from "./pages/gs/wrapper/dashboardGsPhone.jsx";
+import {DashboardCardStudentWrapper} from "./pages/student/wrapper/dashboardCardStudentWrapper.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -206,7 +209,7 @@ function App() {
                                 <PageWrapper
                                     sidebarLinks={gsDashboardSidebarLinks}
                                     title={t("gs_dashboard:titles.dashboard")}
-                                    DesktopComponent={GsDashboard}
+                                    DesktopComponent={DashboardCardGsWrapper}
                                 />
                             }
                         />
@@ -261,7 +264,7 @@ function App() {
                                 <PageWrapper
                                     sidebarLinks={studentDashboardSidebarLinks}
                                     title={t("student_dashboard:titles.dashboard")}
-                                    DesktopComponent={StudentDashboard} //is dynamic
+                                    DesktopComponent={DashboardCardStudentWrapper}
                                 />
                             }
                         />
@@ -340,7 +343,7 @@ function App() {
                                 <PageWrapper
                                     sidebarLinks={employerDashboardSidebarLinks}
                                     title="Accueil"
-                                    DesktopComponent={EmployerDashboard}
+                                    DesktopComponent={DashboardCardEmployerWrapper}
                                 />
                             }
                         />

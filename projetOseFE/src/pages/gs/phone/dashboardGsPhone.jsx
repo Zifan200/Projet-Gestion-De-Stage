@@ -46,7 +46,7 @@ export const DashboardGsPhone = () => {
 
     return (
         <div className="space-y-6 mt-8">
-            <h1 className="text-2xl font-semibold">{t("titles.dashboard")}</h1>
+            <h1 className="text-2xl font-semibold text-center">{t("titles.dashboard")}</h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                 {stats.map((s, i) => (
