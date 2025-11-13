@@ -2,10 +2,11 @@
   "stats": {
     "myOffers": "My internship offers",
     "offerConfirm": "Confirmed applications",
-    "applications": "Total applications",
+    "applications": "Invite to Interviews",
     "activeApplications": "Active applications",
     "totalStudents": "Unique students",
-    "createOffer": "Create an internship offer",
+    "createOffer": "Create an internship offer", 
+    "interviews": "Post-interview",
     "pendingConvocations": "Convocations awaiting confirmation"
   },
   "titles": {

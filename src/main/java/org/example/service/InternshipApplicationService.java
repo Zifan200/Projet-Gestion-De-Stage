@@ -228,7 +228,7 @@ public class InternshipApplicationService {
                         "Application not found with id: " + applicationId
                 ));
 
-        application.setStatus(ApprovalStatus.ACCEPTED);
+        application.setPostInterviewStatus(ApprovalStatus.ACCEPTED);
         internshipApplicationRepository.save(application);
 
         eventPublisher.publishEvent(new InternshipApplicationStatusChangeEvent());
@@ -250,7 +250,7 @@ public class InternshipApplicationService {
                         "Application not found with id: " + applicationId
                 ));
 
-        application.setStatus(ApprovalStatus.REJECTED);
+        application.setPostInterviewStatus(ApprovalStatus.REJECTED);
         application.setReason(reasons);
         internshipApplicationRepository.save(application);
 
@@ -274,9 +274,9 @@ public class InternshipApplicationService {
             throw new InvalidInternshipApplicationException("Student is not allowed to modify this application");
         }
 
-        if (application.getStatus() != ApprovalStatus.ACCEPTED) {
+        /*if (application.getStatus() != ApprovalStatus.ACCEPTED) {
             throw new InvalidInternshipApplicationException("Student is not allowed to approve this application");
-        }
+        }*/
 
         application.setEtudiantStatus(ApprovalStatus.CONFIRMED_BY_STUDENT);
         internshipApplicationRepository.save(application);
@@ -300,13 +300,13 @@ public class InternshipApplicationService {
                         "Application introuvable avec l'id : " + applicationId
                 ));
 
-        if (!application.getStudent().getCredentials().getEmail().equals(studentEmail)) {
+        /*if (!application.getStudent().getCredentials().getEmail().equals(studentEmail)) {
             throw new InvalidInternshipApplicationException("Student is not allowed to modify this application");
         }
 
         if (application.getStatus() != ApprovalStatus.ACCEPTED) {
             throw new InvalidInternshipApplicationException("Student is not allowed to reject this application at this time.");
-        }
+        }*/
 
         application.setEtudiantStatus(ApprovalStatus.REJECTED_BY_STUDENT);
         application.setEtudiantRaison(reason);

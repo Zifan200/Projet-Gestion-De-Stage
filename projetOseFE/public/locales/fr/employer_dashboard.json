@@ -2,10 +2,11 @@
   "stats": {
     "myOffers": "Mes offres de stage",
     "offerConfirm": "Candidatures confirmées",
-    "applications": "Candidatures totales",
+    "applications": "Convocation",
     "activeApplications": "Candidatures actives",
     "totalStudents": "Étudiants uniques",
-    "createOffer": "Créer une offre de stage",
+    "createOffer": "Créer une offre de stage", 
+    "interviews" : "Post-Entretien",
     "pendingConvocations": "Convocations en attente de confirmation"
   },
   "titles": {

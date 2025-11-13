@@ -8,7 +8,7 @@ import useAuthStore from "../../stores/authStore.js";
 import { useOfferStore } from "../../stores/offerStore.js";
 
 export const DashboardEmployer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("employer_dashboard");
   const navigate = useNavigate();
 
   const user = useAuthStore((s) => s.user);
