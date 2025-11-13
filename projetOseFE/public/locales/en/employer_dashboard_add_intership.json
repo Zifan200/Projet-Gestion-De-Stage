@@ -15,7 +15,7 @@
       "program": "Please select the targeted program"
     }
   },
-  "submit": "Publish Offer",
+  "submit": "Publish Internship Offer",
   "success": {
     "create": "Internship offer successfully created!"
   },

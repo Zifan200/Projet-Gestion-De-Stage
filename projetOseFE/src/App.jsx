@@ -55,6 +55,7 @@ import {DashboardCardEmployerWrapper} from "./pages/employer/wrapper/dashboardCa
 import {DashboardCardGsWrapper} from "./pages/gs/wrapper/dashboardGsPhone.jsx";
 import {DashboardCardStudentWrapper} from "./pages/student/wrapper/dashboardCardStudentWrapper.jsx";
 import {DashboardGsPhone} from "./pages/gs/phone/dashboardGsPhone.jsx";
+import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -403,10 +404,11 @@ function App() {
                                     title="Entretiens post-stage"
                                     sidebarLinks={employerDashboardSidebarLinks}
                                     DesktopComponent={PostInterview}
-                                    PhoneComponent={DashboardPhoneLayout}
+                                    PhoneComponent={PostInterviewPhone}
                                 />
                             }
                         />
+
                     </Route>
 
 

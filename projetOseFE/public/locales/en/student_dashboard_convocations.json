@@ -19,7 +19,7 @@
   },
   "modal": {
     "title": "Convocation Details",
-    "offerTitle": "Internship Title",
+    "offerTitle": "Internship offer Title",
     "employer": "Employer",
     "convocationDate": "Convocation Date",
     "status": "Status",
@@ -28,7 +28,7 @@
     "unknownOffer": "???"
   },
   "convocationStatus": {
-    "pending": "Pending",
+    "pending": "Pending confirmation of convocation",
     "confirmed_by_student": "Confirmed",
     "rejected_by_student": "Rejected"
   },

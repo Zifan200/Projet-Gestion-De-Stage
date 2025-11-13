@@ -27,16 +27,16 @@
     "reject": "Reject"
   },
   "success": {
-    "download": "Offer downloaded successfully!",
-    "updateStatus": "Offer status updated.",
-    "reject": "Offer rejected successfully!",
-    "accepted": "Offer accepted!"
+    "download": "Internship offer downloaded successfully!",
+    "updateStatus": "Internship offer status updated.",
+    "reject": "Internship offer rejected successfully!",
+    "accepted": "Internship offer accepted!"
   },
   "error": {
-    "download": "Failed to download the offer.",
-    "loadOffer": "Failed to load offer details.",
-    "updateStatus": "Failed to update offer status.",
-    "rejectFailed": "Failed to reject the offer."
+    "download": "Failed to download the internship offer.",
+    "loadOffer": "Failed to load internship offer details.",
+    "updateStatus": "Failed to update internship offer status.",
+    "rejectFailed": "Failed to reject the internship offer."
   },
   "modal": {
     "companyEmail": "Company Email",
@@ -46,16 +46,16 @@
     "description": "Description",
     "status": "Status",
     "rejectReason": "Rejection Reason",
-    "reasonDescription": "Please provide a reason for rejecting this offer.",
+    "reasonDescription": "Please provide a reason for rejecting this internship offer.",
     "reasonPlaceholder": "Enter a reason for rejection...",
-    "reasonRequired": "A reason is required to reject an offer.",
+    "reasonRequired": "A reason is required to reject an internship offer.",
     "accept": "Accept",
     "reject": "Reject",
     "close": "Close",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "accepted": "Offer accepted successfully!",
-    "rejectSuccess": "Offer rejected successfully!",
+    "accepted": "Internship offer accepted successfully!",
+    "rejectSuccess": "Internship offer rejected successfully!",
     "salary": "Salary"
   },
   "modalSelectedOfferApplications": {

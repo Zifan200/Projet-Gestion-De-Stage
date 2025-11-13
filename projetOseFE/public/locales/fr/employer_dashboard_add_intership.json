@@ -1,5 +1,5 @@
 {
-  "title": "Créer une nouvelle offre",
+  "title": "Créer une nouvelle offre de stage",
   "description": "Remplissez le formulaire ci-dessous pour publier votre offre de stage.",
   "form": {
     "title": "Titre",
@@ -15,7 +15,7 @@
       "program": "Veuillez sélectionner le programme visé"
     }
   },
-  "submit": "Publier l’offre",
+  "submit": "Publier l’offre de stage",
   "success": {
     "create": "Offre de stage créée avec succès !"
   },

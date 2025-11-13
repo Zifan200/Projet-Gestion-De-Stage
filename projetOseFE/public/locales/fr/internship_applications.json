@@ -2,7 +2,7 @@
   "title": "Candidatures",
   "table": {
     "loading": "chargement",
-    "offerTitle": "Titre de l'offre",
+    "offerTitle": "Titre de l'offre de stage",
     "studentName": "Nom de l'étudiant",
     "studentEmail": "Courriel de l'étudiant",
     "cv": "CV",
@@ -33,7 +33,7 @@
   "modal": {
     "email": "Courriel",
     "cv": "CV",
-    "offerTitle": "Offre",
+    "offerTitle": "Offre de stage",
     "status": "Statut",
     "appliedAt": "Postulé le",
     "close": "Fermer",
