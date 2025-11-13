@@ -43,8 +43,8 @@ export const DashboardCardPhone = () => {
     if (error) return <p className="text-red-500">{t("errors.loadOffers")}</p>;
 
     return (
-        <div className="flex-1 overflow-auto p-4 space-y-6 pt-8 text-center">
-            <h1 className="text-xl font-semibold mb-4">{t("titles.home")}</h1>
+        <div className="space-y-6 mt-8">
+            <h1 className="text-2xl font-semibold text-center">{t("titles.home")}</h1>
 
             {/* Affichage des stats en mode vertical pour mobile */}
             <div className="flex flex-col gap-4">
