@@ -80,7 +80,7 @@ public class EntenteStageService {
                                          Long gestionnaireId,
                                          Role roleActuel) throws IOException {
 
-        if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED ||
+        if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED &&
                 dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
             throw new InvalidInternshipApplicationException(
                     "Le PDF ne peut être généré que lorsque l'offre est acceptée et confirmée par l'étudiant."
@@ -133,7 +133,7 @@ public class EntenteStageService {
                                        Long gestionnaireId,
                                        Role roleActuel) throws IOException {
 
-        if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED ||
+        if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED &&
                 dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
             throw new InvalidInternshipApplicationException(
                     "Le PDF ne peut être généré que lorsque l'offre est acceptée et confirmée par l'étudiant."
