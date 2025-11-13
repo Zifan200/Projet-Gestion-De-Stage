@@ -49,6 +49,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
     const elementOrderFilterTypes = {
         ORDERED: "▲",
+        NONE: "■",
         REVERSE_ORDERED: "▼",
     };
 
@@ -56,8 +57,8 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
         NAME: "name",
         DATE: "date",
     };
-    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(elementOrderFilterTypes.ORDERED)
-    const [currentApplicationDateFilter, setCurrentApplicationDateFilter] = useState(elementOrderFilterTypes.ORDERED)
+    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(elementOrderFilterTypes.NONE)
+    const [currentApplicationDateFilter, setCurrentApplicationDateFilter] = useState(elementOrderFilterTypes.NONE)
     const [activeSortType, setActiveSortType] = useState("date"); // or "name"
 
     const {
@@ -75,7 +76,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
         const loadAllData = async () => {
             await loadPrograms();
             await loadAllApplicationsFromInternshipOffer(offerId);
-            const { selectedOfferApplicationsList } = useGeStore.getState();
+            const {selectedOfferApplicationsList} = useGeStore.getState();
             console.log("Loaded applications: ", selectedOfferApplicationsList);
 
             // keep a clean copy for filtering later
@@ -95,21 +96,20 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
     }, [selectedOfferApplicationsListFromStore]);
 
 
-
     //
     useEffect(() => {
         handleActiveSorting();
     }, [currentStudentNameFilter, currentApplicationDateFilter]);
 
-    const handleActiveSorting=() =>{
+    const handleActiveSorting = () => {
         //NOTE to me(zohn): update icon of other sorts later
         if (activeSortType === sortTypes.DATE) {
             applyDateSort();
-        } else if(activeSortType === sortTypes.NAME) {
+        } else if (activeSortType === sortTypes.NAME) {
             applyNameSort();
         }
     }
-    const applyNameSort= () => {
+    const applyNameSort = () => {
         let list = [...originalList]; // always start from the clean copy
 
         // --- Name filter ---
@@ -126,7 +126,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
         setSelectedOfferApplicationsList(list);
     }
-    const applyDateSort= () => {
+    const applyDateSort = () => {
         let list = [...originalList]; // always start from the clean copy
 
         // --- Date filter ---
@@ -143,7 +143,6 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
         setSelectedOfferApplicationsList(list);
     };
-
 
 
     function statusTranslation(applicationStatus) {
@@ -169,7 +168,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
     const tableRows = () => selectedOfferApplicationsList.map((application) => (
         <tr key={application.id}
-            className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm" >
+            className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm">
             <td className="px-4 py-1 w-auto">
                 <div
                     onClick={() => {
@@ -183,8 +182,8 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
             <td className="px-4 py-1 w-auto">
                 <TableActionButton
                     icon={FileTextIcon}
-                    bg_color={"blue-200"} text_color = {"blue-700"}
-                    label={""+application.selectedCvFileType}
+                    bg_color={"blue-200"} text_color={"blue-700"}
+                    label={"" + application.selectedCvFileType}
                     onClick={() => {
                         setSelectedApplicationCv(application.selectedCvID)
                         handlePreview(application)
@@ -224,13 +223,22 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                             headers={[
                                 <div>
                                     {t("tableHeaders.studentName")}
-                                    <select  className={`w-5 px-1 mx-2 rounded appearance-none text-center focus:bg-yellow-300 ${activeSortType===sortTypes.NAME?" bg-yellow-300":""}`} value={currentStudentNameFilter}
-                                            onClick={()=>{setActiveSortType(sortTypes.NAME)}}
-                                             onChange={(e) => {
-                                                setActiveSortType(sortTypes.NAME)
-                                                setCurrentStudentNameFilter(e.target.value)
-                                            }}>
-                                        {Object.values(elementOrderFilterTypes).map((s,i) => <option key={i} value={s}>{s}</option>)}
+                                    <select
+                                        className={`w-5 px-1 mx-2 rounded appearance-none text-center focus:bg-lime-100 ${
+                                            activeSortType === sortTypes.NAME ? " bg-lime-300" : ""
+                                        }`}
+                                        value={currentStudentNameFilter}
+                                        onClick={() => setActiveSortType(sortTypes.NAME)}
+                                        onChange={(e) => {
+                                            setActiveSortType(sortTypes.NAME);
+                                            setCurrentApplicationDateFilter(elementOrderFilterTypes.NONE);
+                                            setCurrentStudentNameFilter(e.target.value);
+                                        }}
+                                    >
+                                        {Object.values(elementOrderFilterTypes)
+                                            .map((s, i) => (
+                                                <option key={i} value={s}>{s}</option>
+                                            ))}
                                     </select>
                                 </div>,
                                 t("tableHeaders.studentProgramme"),
@@ -238,14 +246,24 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                                 t("tableHeaders.applicationStatus"),
                                 <div>
                                     {t("tableHeaders.applicationDate")}
-                                    <select  className={`w-5 px-1 mx-2 rounded appearance-none text-center focus:bg-yellow-300 ${activeSortType===sortTypes.DATE?" bg-yellow-300":""}`} value={currentApplicationDateFilter}
-                                             onClick={()=>{setActiveSortType(sortTypes.DATE)}}
-                                             onChange={(e) => {
-                                                 setActiveSortType(sortTypes.DATE)
-                                                 setCurrentApplicationDateFilter(e.target.value)
-                                             }}>
-                                        {Object.values(elementOrderFilterTypes).map((s,i) => <option key={i} value={s}>{s}</option>)}
+                                    <select
+                                        className={`w-5 px-1 mx-2 rounded appearance-none text-center focus:bg-lime-100 ${
+                                            activeSortType === sortTypes.DATE ? " bg-lime-300" : ""
+                                        }`}
+                                        value={currentApplicationDateFilter}
+                                        onClick={() => setActiveSortType(sortTypes.DATE)}
+                                        onChange={(e) => {
+                                            setActiveSortType(sortTypes.DATE);
+                                            setCurrentStudentNameFilter(elementOrderFilterTypes.NONE);
+                                            setCurrentApplicationDateFilter(e.target.value);
+                                        }}
+                                    >
+                                        {Object.values(elementOrderFilterTypes)
+                                            .map((s, i) => (
+                                                <option key={i} value={s}>{s}</option>
+                                            ))}
                                     </select>
+
                                 </div>,
 
                             ]}
