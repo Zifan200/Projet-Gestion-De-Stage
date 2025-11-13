@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DashboardPhone } from "../phone/dashboardPhone.jsx";
+import { DashboardPhoneLayout } from "../phone/dashboardPhone.jsx";
 import { DashboardLayout } from "../dashboard.jsx";
 
-export const DashboardPhoneWrapper = ({ sidebarLinks, title, DesktopComponent }) => {
+export const PageWrapper = ({ title="", PhoneComponent, DesktopComponent, phoneClassName="", desktopClassName="", sidebarLinks=[]}) => {
     const [isPhone, setIsPhone] = useState(false);
 
     useEffect(() => {
@@ -15,9 +15,9 @@ export const DashboardPhoneWrapper = ({ sidebarLinks, title, DesktopComponent })
         return () => window.removeEventListener("resize", checkPhone);
     }, []);
 
-    return isPhone ? (
-        <DashboardPhone sidebarLinks={sidebarLinks} title={title} />
+    return isPhone && PhoneComponent ? (
+        <PhoneComponent sidebarLinks={sidebarLinks} title={title} ClassName={phoneClassName}/>
     ) : (
-        <DesktopComponent sidebarLinks={sidebarLinks} title={title} />
+        <DesktopComponent sidebarLinks={sidebarLinks} title={title} ClassName={desktopClassName}/>
     );
 };

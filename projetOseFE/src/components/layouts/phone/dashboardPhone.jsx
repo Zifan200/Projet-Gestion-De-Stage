@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import useAuthStore from "../../../stores/authStore";
 
-export const DashboardPhone = ({ sidebarLinks, title }) => {
+export const DashboardPhoneLayout = ({ sidebarLinks, title }) => {
     const location = useLocation();
     const { isAuthenticated } = useAuthStore();
     const navigate = useNavigate();
