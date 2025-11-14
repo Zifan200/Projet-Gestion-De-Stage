@@ -2,8 +2,8 @@
   "stats": {
     "pendingCvs": "CVs en attente",
     "acceptedCvs": "CVs acceptés",
-    "availableOffers": "Total offres",
-    "pendingOffers": "Offres en attente",
+    "availableOffers": "offres de stage disponibles",
+    "pendingOffers": "Offres de stage en attente",
     "manageCvs": "Gérer les CVs étudiants",
     "allOffers": "Toutes les offres de stage",
     "application": "Candidatures totales"
@@ -12,7 +12,7 @@
     "home": "Accueil",
     "dashboard": "Tableau de bord du gestionnaire",
     "manageCvs": "Gérer les CVs étudiants",
-    "allOffers": "Toutes les offres",
+    "allOffers": "Toutes les offres de stage",
     "settings": "Paramètres"
   },
   "messages": {

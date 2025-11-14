@@ -1,5 +1,5 @@
 {
-  "title": "Offres disponibles",
+  "title": "Offres de stage disponibles",
   "table": {
     "title": "Titre",
     "company": "Entreprise",
@@ -24,11 +24,11 @@
     "salary": "Salaire"
   },
   "success": {
-    "applyOffer": "Tu as postulé à cette offre avec succès!"
+    "applyOffer": "Tu as postulé à cette offre de stage avec succès!"
   },
   "errors": {
-    "viewOffer": "Erreur lors de la visualisation de l'offre.",
-    "applyOffer": "Échec de la postulation à l'offre.",
+    "viewOffer": "Erreur lors de la visualisation de l'offre de stage.",
+    "applyOffer": "Échec de la postulation à l'offre de stage.",
     "selectCv": "Veuillez sélectionner un CV avant de postuler."
   },
   "filter": {

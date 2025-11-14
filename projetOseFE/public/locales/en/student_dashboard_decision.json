@@ -21,7 +21,7 @@
   },
   "modal":
   {
-    "title": "Offer Details",
+    "title": "Internship offer Details",
     "offerTitle": "Internship Title",
     "employer": "Employer",
     "description": "Description",
@@ -60,7 +60,7 @@
     "rejected_by_student": "Rejected"
   },
   "loading": "Loading...",
-  "noApplications": "No offers to confirm",
+  "noApplications": "No internship offers to confirm",
   "errors":
   {
     "generic": "An error occurred"
@@ -73,7 +73,7 @@
   {
     "title": "Reason for Rejection",
     "description": "Explain why you are rejecting this internship offer.",
-    "placeholder": "Ex: I cannot accept this offer because I found another internship...",
+    "placeholder": "Ex: I cannot accept this internship offer because I found another internship...",
     "errorEmpty": "Please enter a reason for rejection"
   }
 }

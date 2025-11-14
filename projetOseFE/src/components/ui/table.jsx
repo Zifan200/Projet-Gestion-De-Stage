@@ -6,8 +6,8 @@ export const Table = ({ headers, rows, emptyMessage }) => {
         <table className="w-full text-sm text-left border-collapse">
           <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
           <tr>
-            {headers.map((h) => (
-              <th key={h} className="px-4 py-3 md:whitespace-nowrap">
+            {headers.map((h, i) => (
+              <th key={i} className="px-4 py-3 md:whitespace-nowrap">
                 {h}
               </th>
             ))}

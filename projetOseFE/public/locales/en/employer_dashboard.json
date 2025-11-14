@@ -1,11 +1,11 @@
 {
   "stats": {
-    "myOffers": "My offers",
+    "myOffers": "My internship offers",
     "offerConfirm": "Confirmed applications",
-    "applications": "Invite to Interviews",
+    "applications": "Invitations to Interviews",
     "activeApplications": "Active applications",
     "totalStudents": "Unique students",
-    "createOffer": "Create an offer",
+    "createOffer": "Create an internship offer", 
     "interviews": "Post-interview",
     "pendingConvocations": "Convocations awaiting confirmation"
   },
@@ -13,16 +13,16 @@
     "home": "Home",
     "dashboard": "Employer Dashboard",
     "applications": "Applications",
-    "createOffer": "Add Internship Offer",
-    "myOffers": "My Offers"
+    "createOffer": "Add internship Offer",
+    "myOffers": "My internship offers"
   },
   "messages": {
     "welcome": "Welcome back, {{firstName}}!",
-    "noOffers": "No offers have been posted yet.",
-    "loadPrompt": "Start by creating your first offer."
+    "noOffers": "No internship offers have been posted yet.",
+    "loadPrompt": "Start by creating your first internship offer."
   },
   "errors": {
-    "loadOffers": "Error while loading offers.",
+    "loadOffers": "Error while loading internship offers.",
     "loadApplications": "Error while loading applications."
   }
 }

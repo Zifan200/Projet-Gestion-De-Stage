@@ -54,13 +54,13 @@ export const DevMode = ({ children }) => {
       <Popover>
         {({ open, setOpen, triggerRef, contentRef }) => (
           <>
-            <div className="fixed bottom-5 left-2 ">
+            <div className="fixed bottom-5 left-2 max-sm:bottom-15 max-sm:left-10 z-50">
               <PopoverTrigger
                 open={open}
                 setOpen={setOpen}
                 triggerRef={triggerRef}
               >
-                <div className="w-[45px] h-[45px] bg-zinc-800 border border-zinc-600 shadow-lg hover:bg-zinc-700 transition rounded-full flex items-center justify-center cursor-pointer">
+                <div className="w-[45px] h-[45px] bg-zinc-800 border border-zinc-600 shadow-lg hover:bg-zinc-700 transition rounded-full flex items-center justify-center cursor-pointer max-sm:w-[64px] max-sm:h-[64px]">
                   <div className="w-2/3 h-2/3 bg-[url('/assets/img/react.png')] bg-cover bg-center"></div>
                 </div>
               </PopoverTrigger>
