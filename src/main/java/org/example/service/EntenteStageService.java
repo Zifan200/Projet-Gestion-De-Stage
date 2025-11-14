@@ -8,11 +8,13 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.example.model.EntenteStagePdf;
 import org.example.model.Gestionnaire;
+import org.example.model.InternshipApplication;
 import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.PdfStatus;
 import org.example.repository.EntenteStagePdfRepository;
 import org.example.repository.GestionnaireRepository;
+import org.example.repository.InternshipApplicationRepository;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.exception.InvalidInternshipApplicationException;
@@ -36,6 +38,7 @@ public class EntenteStageService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final GestionnaireRepository gestionnaireRepository;
     private final EntenteStagePdfRepository ententeStagePdfRepository;
+    private final InternshipApplicationRepository internshipApplicationRepository;
 
 
     private Map<String, String> prepareTextFields(InternshipApplicationResponseDTO dto, Gestionnaire gestionnaire) {
@@ -80,6 +83,7 @@ public class EntenteStageService {
                                          Long gestionnaireId,
                                          Role roleActuel) throws IOException {
 
+        claimApplication(dto.getId(), gestionnaireId);
         if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED &&
                 dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
             throw new InvalidInternshipApplicationException(
@@ -112,8 +116,13 @@ public class EntenteStageService {
         pdfDoc.close();
         byte[] pdfBytes = outputStream.toByteArray();
 
+        InternshipApplication app = internshipApplicationRepository.findById(dto.getId())
+                .orElseThrow();
+
         EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(dto.getId())
                 .orElseGet(EntenteStagePdf::new);
+
+        pdfEntity.setApplication(app);
         pdfEntity.setPdfData(pdfBytes);
 
         switch (roleActuel) {
@@ -240,5 +249,20 @@ public class EntenteStageService {
         if (dto.getStartDate() == null || dto.getEndDate() == null) return "";
         long weeks = java.time.temporal.ChronoUnit.WEEKS.between(dto.getStartDate(), dto.getEndDate());
         return String.valueOf(weeks);
+    }
+
+    @Transactional
+    public void claimApplication(Long applicationId, Long gestionnaireId) {
+        InternshipApplication app = internshipApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalStateException("Application introuvable"));
+
+        if (app.isClaimed()) {
+            throw new InvalidInternshipApplicationException
+                    ("Cette entente a déjà été prise en charge par un autre gestionnaire.");
+        }
+
+        app.setClaimed(true);
+        app.setClaimedBy(gestionnaireId);
+        internshipApplicationRepository.save(app);
     }
 }
