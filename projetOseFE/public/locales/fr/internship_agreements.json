@@ -1,0 +1,67 @@
+{
+  "title": "Ententes de stage",
+  "table": {
+    "loading": "Chargement",
+    "offerTitle": "Titre de l'offre de stage",
+    "studentName": "Nom de l'étudiant",
+    "studentEmail": "Courriel de l'étudiant",
+    "download": "Télécharger",
+    "preview": "Aperçu",
+    "status": "Statut",
+    "action": "Action",
+    "actionView": "Voir",
+    "studentChoice": "Choix des étudiants",
+    "accept": "Accepter",
+    "reject": "Rejeter",
+    "appliedAt": "Postulé le",
+    "publicationDate": "Date de cadidature",
+    "employerDecision": "Décision de l'employeur",
+    "myDecision": "Ma décision",
+    "company": "Entreprise",
+    "createAgreement": "Créer une entente de stage",
+    "noAgreements": "Aucune entente de stage"
+  },
+  "status": {
+    "pending": "En cours d'examination",
+    "accepted": "Acceptée",
+    "rejected": "Refusée",
+    "reviewing": "En révision"
+  },
+  "modal": {
+    "email": "Courriel",
+    "offerTitle": "Offre de stage",
+    "status": "Statut",
+    "appliedAt": "Postulé le",
+    "close": "Fermer",
+    "reason": "Raison",
+    "submit": "Envoyer la convocation"
+  },
+  "filter": {
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "AllYears": "Toutes les Années"
+  },
+  "menu": {
+    "close": "Fermer"
+  },
+  "success": {
+    "accepted": "Candidature acceptée avec succès",
+    "rejected": "Candidature rejetée avec succès",
+    "downloadOffer": "Offre de stage téléchargée avec succès"
+  },
+  "errors": {
+    "reject": "Échec de l'approbation de la candidature",
+    "downloadOffer": "Échec du téléchargement de l'offre de stage",
+    "noTokens": "Aucun token trouvé, veuillez vous reconnecter.",
+    "noAccessibleEmployerData": "Impossible de récupérer l'email de l'employeur.",
+    "form" : "Erreur dans le formulaire.",
+    "unknown": "Erreur inconnue"
+  }
+}
