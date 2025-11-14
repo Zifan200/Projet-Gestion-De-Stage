@@ -40,10 +40,13 @@ public class InternshipApplication {
     private String reason;
     private String etudiantRaison;
 
+    private boolean claimed;
+    private Long claimedBy;
+
     @Builder
     public InternshipApplication(
             Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status, ApprovalStatus etudiantStatus, ApprovalStatus postInterviewStatus,
-            String session, LocalDate startDate
+            String session, LocalDate startDate, String reason, String etudiantRaison, boolean claimed, Long claimedBy
     ){
         this.id = id;
         this.student = student;
@@ -57,6 +60,8 @@ public class InternshipApplication {
         this.reason = reason;
         this.etudiantRaison = etudiantRaison;
         this.postInterviewStatus = postInterviewStatus;
+        this.claimed = claimed;
+        this.claimedBy = claimedBy;
     }
 }
 

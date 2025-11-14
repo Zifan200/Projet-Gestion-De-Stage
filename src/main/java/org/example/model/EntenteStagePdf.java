@@ -26,4 +26,8 @@ public class EntenteStagePdf {
 
     @Version
     private Long version;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id")
+    private InternshipApplication application;
 }

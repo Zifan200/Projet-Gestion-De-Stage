@@ -10,10 +10,12 @@ import com.itextpdf.kernel.pdf.PdfTextArray;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import org.example.model.EntenteStagePdf;
 import org.example.model.Gestionnaire;
+import org.example.model.InternshipApplication;
 import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
 import org.example.repository.EntenteStagePdfRepository;
 import org.example.repository.GestionnaireRepository;
+import org.example.repository.InternshipApplicationRepository;
 import org.example.security.exception.UserNotFoundException;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +38,9 @@ class EntenteStageServiceTest {
     private GestionnaireRepository gestionnaireRepository;
 
     @Mock
+    private InternshipApplicationRepository internshipApplicationRepository;
+
+    @Mock
     private EntenteStagePdfRepository ententeStagePdfRepository;
     @InjectMocks
     private EntenteStageService ententeStageService;
@@ -43,7 +48,7 @@ class EntenteStageServiceTest {
     private Gestionnaire gestionnaire;
     private InternshipApplicationResponseDTO dto;
     private EntenteStagePdf existingPdf;
-    
+
 
     @BeforeEach
     void setUp() throws IOException {
@@ -54,6 +59,7 @@ class EntenteStageServiceTest {
         gestionnaire.setLastName("Dupont");
 
         dto = new InternshipApplicationResponseDTO();
+        dto.setId(1L);
         dto.setEmployerEnterpriseName("TechCorp");
         dto.setEmployerFirstName("John");
         dto.setEmployerLastName("Doe");
@@ -71,6 +77,14 @@ class EntenteStageServiceTest {
         existingPdf = new EntenteStagePdf();
         existingPdf.setId(dto.getId());
         existingPdf.setPdfData(createDummyPdfWithFields());
+
+        InternshipApplication internshipApplication = new InternshipApplication();
+        internshipApplication.setId(dto.getId());
+        internshipApplication.setClaimed(false);
+
+        when(gestionnaireRepository.findById(1L)).thenReturn(Optional.of(gestionnaire));
+        when(internshipApplicationRepository.findById(dto.getId())).thenReturn(Optional.of(internshipApplication));
+        when(internshipApplicationRepository.save(any())).thenReturn(internshipApplication);
     }
 
     private byte[] createDummyPdfWithFields() throws IOException {
@@ -132,7 +146,7 @@ class EntenteStageServiceTest {
 
     @Test
     void updateEntenteDeStage_ShouldUpdatePdf_WhenPdfExists() throws IOException {
-        when(gestionnaireRepository.findById(1L)).thenReturn(Optional.of(gestionnaire));
+        when(ententeStagePdfRepository.findById(dto.getId())).thenReturn(Optional.of(existingPdf));
         when(ententeStagePdfRepository.findById(dto.getId())).thenReturn(Optional.of(existingPdf));
         when(ententeStagePdfRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
