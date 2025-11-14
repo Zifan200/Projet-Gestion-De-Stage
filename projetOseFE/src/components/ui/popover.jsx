@@ -23,7 +23,7 @@ export function Popover({ children }) {
   }, [open]);
 
   return (
-    <div style={{ display: "inline-block", position: "relative" }}>
+    <div style={{ display: "inline-block", position: "relative"}}>
       {children({
         open,
         setOpen,
