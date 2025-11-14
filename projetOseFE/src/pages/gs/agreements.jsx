@@ -1,13 +1,13 @@
-import useGeStore from "../../stores/geStore.js";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/ui/header.jsx";
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "../../components/ui/popover.jsx";
 import { DataTable } from "../../components/ui/data-table.jsx";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
 
 export const GsInternshipAgreements = () => {
-    const { applications, loadAllInternshipApplications } = useGeStore();
+    const { applications, fetchAllAvailableApplications } = useInternshipAgreementStore();
     const { t } = useTranslation("internship_agreements");
 
     const currentYear = new Date().getFullYear().toString();
@@ -15,8 +15,10 @@ export const GsInternshipAgreements = () => {
     const [filterYear, setFilterYear] = useState(currentYear);
 
     useEffect(() => {
-        loadAllInternshipApplications();
-    }, [loadAllInternshipApplications]);
+        fetchAllAvailableApplications();
+    }, [fetchAllAvailableApplications]);
+
+    console.log(applications)
 
     const getStatusColor = (status) => {
         const statusColors = {
@@ -46,10 +48,7 @@ export const GsInternshipAgreements = () => {
     ];
 
     const sortedAndFilteredApplications = useMemo(() => {
-        return applications?.filter(
-            app => app.etudiantStatus === "CONFIRMED_BY_STUDENT" && app.postInterviewStatus === "ACCEPTED"
-        )
-            .filter(app => app.session === "Hiver")
+        return applications?.filter(app => app.session === "Hiver")
             .filter(app => {
                 if (!app.startDate) return false;
                 const year = new Date(app.startDate).getFullYear();
