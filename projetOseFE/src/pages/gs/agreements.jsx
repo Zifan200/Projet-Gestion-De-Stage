@@ -2,21 +2,20 @@ import { useTranslation } from "react-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/ui/header.jsx";
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "../../components/ui/popover.jsx";
-import {DownloadIcon, EyeOpenIcon, FileTextIcon} from "@radix-ui/react-icons";
+import { DownloadIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
-import {ContactIcon, PencilLineIcon, PlusIcon} from "lucide-react";
-import {toast} from "sonner";
-import {TableActionButton} from "../../components/ui/tableActionButton.jsx";
-import {Table} from "../../components/ui/table.jsx";
+import { PencilLineIcon, PlusIcon } from "lucide-react";
+import { TableActionButton } from "../../components/ui/tableActionButton.jsx";
+import { Table } from "../../components/ui/table.jsx";
 import useAuthStore from "../../stores/authStore.js";
 import useGeStore from "../../stores/geStore.js";
-import {Modal} from "../../components/ui/modal.jsx";
+import { Modal } from "../../components/ui/modal.jsx";
 
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
     const { t } = useTranslation("internship_agreements");
     const { applications, loadAllInternshipApplications, loading } = useGeStore();
-    // const { applications, fetchAllAvailableApplications, loading } = useInternshipAgreementStore();
+    const { agreements, createInternshipAgreement } = useInternshipAgreementStore();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
@@ -27,40 +26,6 @@ export const GsInternshipAgreements = () => {
     useEffect(() => {
         loadAllInternshipApplications();
     }, [loadAllInternshipApplications]);
-
-    /*useEffect(() => {
-        fetchAllAvailableApplications();
-    }, [fetchAllAvailableApplications]);*/
-
-    const handleAction = (action, app) => {
-        try {
-            switch (action) {
-                // case "create":
-                //     createInternshipAgreement(app);
-                //     break;
-                case "view":
-                    setSelectedApplication(app);
-                    setIsModalOpen(true);
-                    break;
-                // case "download":
-                //     downloadCvForEmployer(app.selectedCvFileData, app.selectedCvFileName);
-                //     break;
-                default:
-                    break;
-            }
-        } catch (err) {
-            toast.error(err.message || t("errors.downloadCv"));
-        }
-    };
-
-    const getStatusColor = (status) => {
-        const statusColors = {
-            pending: "bg-yellow-100 text-yellow-800",
-            confirmed_by_student: "bg-green-100 text-green-800",
-            rejected_by_student: "bg-red-100 text-red-800"
-        };
-        return statusColors[status?.toLowerCase()] || "bg-gray-100 text-gray-700";
-    };
 
     const tableRows = () => sortedAndFilteredApplications.map((app) => (
         <tr key={app.id} className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm">
@@ -78,23 +43,23 @@ export const GsInternshipAgreements = () => {
                         icon={PlusIcon}
                         label={t("table.createAgreement")}
                         bg_color={"amber-100"} text_color={"amber-700"}
-                        //onClick={() => { setSelectedApplication(app); setIsModalOpen(true); setModalType("convocation"); }}
+                        onClick={() => {
+                            createInternshipAgreement(user.token, app, user.id, user.role)
+                        }}
                     />
                 }
                 { app.claimed && app.claimed_by === user.id &&
-                 <>
-                     <TableActionButton
-                         icon={PencilLineIcon}
-                         label={t("table.sign")}
-                         bg_color={"amber-100"} text_color={"amber-700"}
-                         //onClick={() => { setSelectedApplication(app); setIsModalOpen(true); setModalType("convocation"); }}
-                     />
-                     <TableActionButton
-                         icon={DownloadIcon} label={t("table.download")}
-                         bg_color={"green-100"} text_color={"green-700"}
-                         //onClick={() => downloadCvForEmployer(app.selectedCvFileData, app.selectedCvFileName)}
-                     />
-                 </>
+                    <TableActionButton
+                        icon={PencilLineIcon}
+                        label={t("table.sign")}
+                        bg_color={"amber-100"} text_color={"amber-700"}
+                    />
+                }
+                { app.claimed &&
+                    <TableActionButton
+                        icon={DownloadIcon} label={t("table.download")}
+                        bg_color={"green-100"} text_color={"green-700"}
+                    />
                 }
             </td>
         </tr>
@@ -116,6 +81,7 @@ export const GsInternshipAgreements = () => {
             applications?.filter(app => app.startDate).map(app => new Date(app.startDate).getFullYear())
         )
     ).sort((a, b) => b - a);
+
 
     return (
         <div className="space-y-6">
@@ -204,6 +170,24 @@ export const GsInternshipAgreements = () => {
                     }
                 >
                     <div className="space-y-4">
+                        {/* Informations de l'étudiant */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentName")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentEmail")}
+                                </h3>
+                                <p className="text-gray-600">{selectedApplication.studentEmail}</p>
+                            </div>
+                        </div>
+
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
@@ -218,8 +202,6 @@ export const GsInternshipAgreements = () => {
                                 <p className="text-gray-600">{selectedApplication.employerEmail}</p>
                             </div>
                         </div>
-
-                        {/* Description + Salaire */}
                         <div className="grid grid-cols-2 gap-4">
                             {selectedApplication.internshipOfferDescription && (
                                 <div>
@@ -231,22 +213,11 @@ export const GsInternshipAgreements = () => {
                                     </p>
                                 </div>
                             )}
-
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.salary")}
+                                    {t("modal.address")}
                                 </h3>
-                                <p className="text-gray-600">
-                                    {localStorage.key("lang") === "fr"
-                                        ? selectedApplication.salary.toLocaleString("fr-CA", {
-                                            style: "currency",
-                                            currency: "CAD",
-                                        })
-                                        : selectedApplication.salary.toLocaleString("en-CA", {
-                                            style: "currency",
-                                            currency: "CAD",
-                                        })}
-                                </p>
+                                <p className="text-gray-600">{selectedApplication.employerAddress}</p>
                             </div>
                         </div>
 
@@ -275,20 +246,39 @@ export const GsInternshipAgreements = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.studentName")}
+                                    {t("modal.scheduleType")}
                                 </h3>
                                 <p className="text-gray-600">
-                                    {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
+                                    {selectedApplication.typeHoraire}
                                 </p>
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.studentEmail")}
+                                    {t("modal.hourAmount")}
                                 </h3>
-                                <p className="text-gray-600">{selectedApplication.studentEmail}</p>
+                                <p className="text-gray-600">
+                                    {selectedApplication.nbHeures}
+                                </p>
                             </div>
                         </div>
+
                         <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.salary")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {localStorage.key("lang") === "fr"
+                                        ? selectedApplication.salary.toLocaleString("fr-CA", {
+                                            style: "currency",
+                                            currency: "CAD",
+                                        })
+                                        : selectedApplication.salary.toLocaleString("en-CA", {
+                                            style: "currency",
+                                            currency: "CAD",
+                                        })}
+                                </p>
+                            </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
                                     {t("modal.appliedAt")}
@@ -298,6 +288,7 @@ export const GsInternshipAgreements = () => {
                                 </p>
                             </div>
                         </div>
+
                     </div>
                 </Modal>
             )}

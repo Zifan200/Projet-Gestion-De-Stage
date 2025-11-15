@@ -6,6 +6,7 @@ import java.util.List;
 import org.example.model.CV;
 import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 import org.example.repository.CvRepository;
 import org.example.service.*;
 import org.example.service.dto.cv.CvResponseDTO;
@@ -125,6 +126,10 @@ public class Main {
                         .startDate(LocalDate.of(2025, 2, 15))
                         .EndDate(LocalDate.of(2025, 5, 15))
                         .employerEmail(employer.getEmail())
+                        .salary(18.25f)
+                        .nbHeures(40f)
+                        .typeHoraire(TypeHoraire.FULL_TIME)
+                        .address("111 rue Principale")
                         .build()
                 );
 

@@ -1,9 +1,10 @@
 import {create} from "zustand";
 import { toast } from "sonner";
 import { internshipAgreementService } from "../services/internshipAgreementService.js";
+import {offerService} from "../services/offerService.js";
+import {cvService} from "../services/cvService.js";
 
 export const useInternshipAgreementStore = create((set, get) => ({
-    agreements: [],
     applications: [],
     loading: false,
     error: null,
@@ -13,8 +14,18 @@ export const useInternshipAgreementStore = create((set, get) => ({
             set({loading: true, error: null});
             const data = await internshipAgreementService.getAllAvailable(token);
             set({applications: data, loading: false});
-        } catch (e) {
-            set({error: e.message, loading: false});
+        } catch (err) {
+            set({error: err, loading: false});
         }
     },
+
+    createInternshipAgreement: async (token, application, gsId, role) => {
+        try {
+            await internshipAgreementService.createAgreement(token, application, gsId, role);
+            await get().fetchAllAvailableApplications();
+        } catch (err) {
+            set({ error: err });
+            throw err;
+        }
+    }
 }));

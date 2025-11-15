@@ -30,7 +30,7 @@ public class EntenteStageController {
     private final InternshipApplicationRepository internshipApplicationRepository;
     private final EntenteStagePdfRepository ententeStagePdfRepository;
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<byte[]> createEntente(@RequestBody EntenteGenerationRequestDTO request) throws IOException {
         byte[] pdfBytes = ententeStageService.generateEntenteDeStage(
                 request.getApplication(),
