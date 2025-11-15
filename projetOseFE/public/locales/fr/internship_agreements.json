@@ -19,7 +19,8 @@
     "myDecision": "Ma décision",
     "company": "Entreprise",
     "createAgreement": "Créer une entente de stage",
-    "noAgreements": "Aucune entente de stage"
+    "sign": "Signer",
+    "noApplications": "Aucune candidature de stage"
   },
   "status": {
     "pending": "En cours d'examination",
@@ -28,13 +29,20 @@
     "reviewing": "En révision"
   },
   "modal": {
-    "email": "Courriel",
+    "studentEmail": "Courriel de l'étudiant",
+    "studentName": "Nom de l'étudiant",
+    "companyEmail": "Courriel de l'entreprise",
+    "company": "Entreprise",
     "offerTitle": "Offre de stage",
+    "description": "Description",
+    "salary": "Salaire",
     "status": "Statut",
     "appliedAt": "Postulé le",
-    "close": "Fermer",
-    "reason": "Raison",
-    "submit": "Envoyer la convocation"
+    "semester": "Session",
+    "startDate": "Date de début",
+    "hiver": "Hiver",
+    "automne": "Automne",
+    "close": "Fermer"
   },
   "filter": {
     "status": "Filtrer par Statut",

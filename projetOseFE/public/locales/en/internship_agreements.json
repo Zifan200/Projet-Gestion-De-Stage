@@ -19,7 +19,8 @@
     "myDecision": "My decision",
     "company": "Company",
     "createAgreement": "Create internship agreement",
-    "noAgreements": "No internship agreements"
+    "sign": "Sign",
+    "noApplications": "No internship applications"
   },
   "status": {
     "pending": "Under Review",
@@ -28,11 +29,19 @@
     "reviewing": "In Review"
   },
   "modal": {
-    "email": "Email",
-    "cv": "CV",
+    "studentEmail": "Student Email",
+    "studentName": "Student Name",
+    "companyEmail": "Company Email",
+    "company": "Company",
+    "description": "Description",
     "offerTitle": "Internship offer",
+    "salary": "Salary",
     "status": "Status",
     "appliedAt": "Applied on",
+    "semester": "Semester",
+    "startDate": "Start date",
+    "hiver": "Winter",
+    "automne": "Autumn",
     "close": "Close"
   },
   "filter": {
