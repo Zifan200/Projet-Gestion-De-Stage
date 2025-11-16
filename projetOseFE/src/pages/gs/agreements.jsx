@@ -2,8 +2,7 @@ import { useTranslation } from "react-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/ui/header.jsx";
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "../../components/ui/popover.jsx";
-import { DownloadIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
+import {DownloadIcon, EyeOpenIcon, FileTextIcon} from "@radix-ui/react-icons";
 import { PencilLineIcon, PlusIcon } from "lucide-react";
 import { TableActionButton } from "../../components/ui/tableActionButton.jsx";
 import { Table } from "../../components/ui/table.jsx";
@@ -14,8 +13,12 @@ import { Modal } from "../../components/ui/modal.jsx";
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
     const { t } = useTranslation("internship_agreements");
-    const { applications, loadAllInternshipApplications, loading } = useGeStore();
-    const { agreements, createInternshipAgreement } = useInternshipAgreementStore();
+    const {
+        applications,
+        loadAllInternshipApplications,
+        createInternshipAgreement,
+        loading
+    } = useGeStore();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
@@ -38,28 +41,25 @@ export const GsInternshipAgreements = () => {
                     bg_color={"indigo-100"} text_color={"indigo-700"}
                     onClick={() => { setSelectedApplication(app); setIsModalOpen(true); }}
                 />
-                { !app.claimed &&
+                { !app.claimed ?
                     <TableActionButton
                         icon={PlusIcon}
                         label={t("table.createAgreement")}
                         bg_color={"amber-100"} text_color={"amber-700"}
                         onClick={() => {
-                            createInternshipAgreement(user.token, app, user.id, user.role)
+                            createInternshipAgreement(user.token, app, user.id, user.role);
                         }}
-                    />
-                }
-                { app.claimed && app.claimed_by === user.id &&
-                    <TableActionButton
-                        icon={PencilLineIcon}
-                        label={t("table.sign")}
-                        bg_color={"amber-100"} text_color={"amber-700"}
-                    />
-                }
-                { app.claimed &&
-                    <TableActionButton
-                        icon={DownloadIcon} label={t("table.download")}
-                        bg_color={"green-100"} text_color={"green-700"}
-                    />
+                    /> :
+                    <>
+                        <TableActionButton
+                            icon={FileTextIcon} label={t("table.viewAgreement")}
+                            bg_color={"amber-100"} text_color={"amber-700"}
+                        />
+                        <TableActionButton
+                            icon={DownloadIcon} label={t("table.download")}
+                            bg_color={"green-100"} text_color={"green-700"}
+                        />
+                    </>
                 }
             </td>
         </tr>
@@ -161,8 +161,8 @@ export const GsInternshipAgreements = () => {
                                     setIsModalOpen(false);
                                     setSelectedApplication(null);
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
-                                transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 {t("modal.close")}
                             </button>
