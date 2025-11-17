@@ -7,6 +7,7 @@ import org.example.model.enums.ApprovalStatus;
 import org.example.repository.EntenteStagePdfRepository;
 import org.example.repository.InternshipApplicationRepository;
 import org.example.service.EntenteStageService;
+import org.example.service.dto.entente.EntenteCreationResponseDTO;
 import org.example.service.dto.entente.EntenteGenerationRequestDTO;
 import org.example.service.dto.entente.EntenteStagePdfDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
@@ -31,14 +32,29 @@ public class EntenteStageController {
     private final EntenteStagePdfRepository ententeStagePdfRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<byte[]> createEntente(@RequestBody EntenteGenerationRequestDTO request) throws IOException {
+    public ResponseEntity<EntenteCreationResponseDTO> createEntente(@RequestBody EntenteGenerationRequestDTO request) throws IOException {
+
+        // Génère le PDF
         byte[] pdfBytes = ententeStageService.generateEntenteDeStage(
                 request.getApplication(),
                 request.getGestionnaireId(),
                 request.getRole()
         );
-        return buildPdfResponse(pdfBytes);
+
+        // Crée l'entité et sauvegarde-la pour obtenir l'ID
+        EntenteStagePdf entitePdf = new EntenteStagePdf();
+        entitePdf.setPdfData(pdfBytes);
+        entitePdf.setApplicationId(request.getApplication().getId());
+        ententeStagePdfRepository.save(entitePdf); // <- sauvegarde et génère l'ID
+
+        // Maintenant on a l'ID
+        Long ententeId = entitePdf.getId();
+
+        EntenteCreationResponseDTO response = new EntenteCreationResponseDTO(ententeId, pdfBytes);
+        return ResponseEntity.ok(response);
     }
+
+
 
     @PutMapping("/update")
     public ResponseEntity<byte[]> updateEntente(@RequestBody EntenteGenerationRequestDTO request) throws IOException {
