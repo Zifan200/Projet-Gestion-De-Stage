@@ -222,7 +222,7 @@ export const StudentCVs = () => {
               <span>{t("actions.close")}</span>
             </button>
           </div>
-          <PdfViewer cvId={previewId} role="student" />
+          <PdfViewer cvId={previewId} role="student" type="CV" />
         </div>
       )}
     </div>

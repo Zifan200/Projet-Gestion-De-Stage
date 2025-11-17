@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react";
 import { cvService } from "../services/cvService.js";
 import { geService } from "../services/geService.js";
+import {internshipAgreementService} from "../services/internshipAgreementService.js";
 
-export default function PdfViewer({ cvId, role }) {
+export default function PdfViewer({ documentId, role, type }) {
   const [url, setUrl] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!cvId) return;
+    if (!documentId) return;
 
     const load = async () => {
       try {
         setError(null);
 
-        const service = role === "gs" ? geService : cvService;
-        console.log(role === "gs");
-
-        const blob = await service.downloadCv(cvId);
+        //let blob;
+        console.log("documentId", documentId);
+        //if (type === "CV") {
+          const service = role === "gs" ? geService : cvService;
+          console.log(role === "gs");
+          const blob = await service.downloadCv(documentId);
+        /*}
+        else {
+          blob = await internshipAgreementService.downloadAgreement(documentId);
+        }*/
 
         const blobUrl = URL.createObjectURL(blob);
         setUrl(blobUrl);
@@ -31,7 +38,7 @@ export default function PdfViewer({ cvId, role }) {
     return () => {
       if (url) URL.revokeObjectURL(url);
     };
-  }, [cvId, role]);
+  }, [documentId, role]);
 
   if (error) return <p className="text-red-500">{error}</p>;
   if (!url) return <p>Chargement du document...</p>;

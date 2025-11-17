@@ -2,17 +2,20 @@ import { useTranslation } from "react-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/ui/header.jsx";
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "../../components/ui/popover.jsx";
-import {DownloadIcon, EyeOpenIcon, FileTextIcon} from "@radix-ui/react-icons";
+import {Cross2Icon, DownloadIcon, EyeOpenIcon, FileTextIcon} from "@radix-ui/react-icons";
 import { PencilLineIcon, PlusIcon } from "lucide-react";
 import { TableActionButton } from "../../components/ui/tableActionButton.jsx";
 import { Table } from "../../components/ui/table.jsx";
 import useAuthStore from "../../stores/authStore.js";
 import useGeStore from "../../stores/geStore.js";
 import { Modal } from "../../components/ui/modal.jsx";
+import {useInternshipAgreementStore} from "../../stores/internshipAgreementStore.js";
+import PdfViewer from "../../components/CvViewer.jsx";
 
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
     const { t } = useTranslation("internship_agreements");
+    const { viewAgreement, previewUrl } = useInternshipAgreementStore();
     const {
         applications,
         loadAllInternshipApplications,
@@ -20,6 +23,7 @@ export const GsInternshipAgreements = () => {
         loading
     } = useGeStore();
 
+    const [previewId, setPreviewId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const currentYear = new Date().getFullYear().toString();
@@ -29,6 +33,10 @@ export const GsInternshipAgreements = () => {
     useEffect(() => {
         loadAllInternshipApplications();
     }, [loadAllInternshipApplications]);
+
+    const previewAgreement = (agreementId) => {
+        setPreviewId(agreementId);
+    };
 
     const tableRows = () => sortedAndFilteredApplications.map((app) => (
         <tr key={app.id} className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm">
@@ -54,6 +62,10 @@ export const GsInternshipAgreements = () => {
                         <TableActionButton
                             icon={FileTextIcon} label={t("table.viewAgreement")}
                             bg_color={"amber-100"} text_color={"amber-700"}
+                            onClick={() => {
+                                console.log("meow?", app.ententeStagePdfId);
+                                previewAgreement(app.ententeStagePdfId);
+                            }}
                         />
                         <TableActionButton
                             icon={DownloadIcon} label={t("table.download")}
@@ -64,6 +76,8 @@ export const GsInternshipAgreements = () => {
             </td>
         </tr>
     ));
+
+    console.log("previewId", previewId)
 
     const sortedAndFilteredApplications = useMemo(() => {
         return applications?.filter(app => app.session === "Hiver")
@@ -145,6 +159,7 @@ export const GsInternshipAgreements = () => {
                 />
             }
 
+            {/* Vue détaillée de la candidature */}
             { selectedApplication && (
                 <Modal
                     open={isModalOpen}
@@ -291,6 +306,23 @@ export const GsInternshipAgreements = () => {
 
                     </div>
                 </Modal>
+            )}
+
+            {/* PDF Preview */}
+            { previewId && (
+                <div className="mt-4">
+                    <div className="flex justify-end mb-2">
+                        <button
+                            onClick={() => setPreviewId(null)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
+                            font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        >
+                            <Cross2Icon className="w-4 h-4" />
+                            <span>{t("menu.close")}</span>
+                        </button>
+                    </div>
+                    <PdfViewer documentId={previewId} role="gs" type="entente" />
+                </div>
             )}
         </div>
     );

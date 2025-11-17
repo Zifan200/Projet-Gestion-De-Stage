@@ -202,7 +202,7 @@ export const CvsPhone = () => {
                             {t("actions.close")}
                         </button>
                     </div>
-                    <PdfViewer cvId={previewId} role="student" />
+                    <PdfViewer cvId={previewId} role="student" type="CV" />
                 </div>
             )}
         </div>

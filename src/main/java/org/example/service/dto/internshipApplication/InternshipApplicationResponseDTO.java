@@ -55,6 +55,7 @@ public class InternshipApplicationResponseDTO {
     private String etudiantRaison;
     private boolean claimed;
     private Long claimedBy;
+    private Long ententeStagePdfId;
 
     @Builder
     public InternshipApplicationResponseDTO(
@@ -92,7 +93,8 @@ public class InternshipApplicationResponseDTO {
             String reason,
             String etudiantRaison,
             boolean claimed,
-            Long claimedBy
+            Long claimedBy,
+            Long ententeStagePdfId
     ) {
         this.id = id;
         this.studentEmail = studentEmail;
@@ -129,6 +131,7 @@ public class InternshipApplicationResponseDTO {
         this.etudiantRaison = etudiantRaison;
         this.claimed = claimed;
         this.claimedBy = claimedBy;
+        this.ententeStagePdfId = ententeStagePdfId;
     }
 
     public static InternshipApplicationResponseDTO create(InternshipApplication internshipApplication) {
@@ -168,6 +171,7 @@ public class InternshipApplicationResponseDTO {
                 .etudiantRaison(internshipApplication.getEtudiantRaison())
                 .claimed(internshipApplication.isClaimed())
                 .claimedBy(internshipApplication.getClaimedBy())
+                .ententeStagePdfId(internshipApplication.getEntenteStagePdfId())
                 .build();
     }
 }

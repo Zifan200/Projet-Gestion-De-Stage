@@ -67,12 +67,12 @@ public class EntenteStageController {
 
     // Seulement après qu'une entente a été générée.
     @GetMapping("/{id}")
-    public ResponseEntity<EntenteStagePdfDTO> getEntenteById(@PathVariable long id) {
+    public ResponseEntity<EntenteStagePdfDTO> getEntenteById(@PathVariable Long id) {
         EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Entente non trouvée"));
 
         InternshipApplicationResponseDTO appDto = internshipApplicationRepository
-                .findById(pdfEntity.getApplication().getId())
+                .findById(pdfEntity.getApplicationId())
                 .map(InternshipApplicationResponseDTO::create)
                 .orElse(null);
 
@@ -80,11 +80,24 @@ public class EntenteStageController {
                 pdfEntity.getId(),
                 pdfEntity.getPdfData(),
                 pdfEntity.getStatus(),
-                appDto
+                appDto.getId()
         );
 
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<byte[]> downloadEntente(@PathVariable Long id) {
+        EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Entente non trouvée"));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=entente_stage.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfEntity.getPdfData());
+        //return buildPdfResponse(pdfEntity.getPdfData());
+    }
+
     private ResponseEntity<byte[]> buildPdfResponse(byte[] pdfBytes) {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=entente_stage.pdf")

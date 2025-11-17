@@ -1,15 +1,6 @@
 import { api } from "../lib/api.js";
 
 export const internshipAgreementService = {
-    async getAllAvailable(token){
-        const res = await api.get("/entente/all-available", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return res.data;
-    },
-
     async createAgreement(token, application, gsId, role){
         const res = await api.post(
             "/entente/create",
@@ -21,5 +12,27 @@ export const internshipAgreementService = {
             }
         );
         return res.data;
-    }
+    },
+
+    async viewAgreement(token, agreementId){
+        const res = await api.get(`/entente/${agreementId}`,
+            {
+                responseType: "blob",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+        return window.URL.createObjectURL(res.data);
+    },
+
+    async downloadAgreement(token, agreementId) {
+        const res = await api.get(`/entente/${agreementId}/download`, {
+            responseType: "blob",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return res.data;
+    },
 };

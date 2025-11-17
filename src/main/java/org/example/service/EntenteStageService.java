@@ -122,7 +122,7 @@ public class EntenteStageService {
         EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(dto.getId())
                 .orElseGet(EntenteStagePdf::new);
 
-        pdfEntity.setApplication(app);
+        pdfEntity.setApplicationId(app.getId());
         pdfEntity.setPdfData(pdfBytes);
 
         switch (roleActuel) {
@@ -132,7 +132,10 @@ public class EntenteStageService {
             default -> pdfEntity.setStatus(PdfStatus.CREATED);
         }
 
-        ententeStagePdfRepository.save(pdfEntity);
+        EntenteStagePdf savedEntente = ententeStagePdfRepository.save(pdfEntity);
+        app.setEntenteStagePdfId(savedEntente.getId());
+        internshipApplicationRepository.save(app);
+
         return pdfBytes;
     }
 
