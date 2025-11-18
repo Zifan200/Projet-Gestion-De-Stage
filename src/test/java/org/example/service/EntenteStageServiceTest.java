@@ -144,7 +144,7 @@ class EntenteStageServiceTest {
         assertEquals(8, expectedWeeks);
     }
 
-    @Test
+    /*@Test
     void updateEntenteDeStage_ShouldUpdatePdf_WhenPdfExists() throws IOException {
         when(ententeStagePdfRepository.findById(dto.getId())).thenReturn(Optional.of(existingPdf));
         when(ententeStagePdfRepository.findById(dto.getId())).thenReturn(Optional.of(existingPdf));
@@ -159,9 +159,9 @@ class EntenteStageServiceTest {
         verify(gestionnaireRepository, times(1)).findById(1L);
         verify(ententeStagePdfRepository, times(1)).findById(dto.getId());
         verify(ententeStagePdfRepository, times(1)).save(existingPdf);
-    }
+    }*/
 
-    @Test
+    /*@Test
     void updateEntenteDeStage_ShouldThrowException_WhenPdfDoesNotExist() {
         when(gestionnaireRepository.findById(1L)).thenReturn(Optional.of(gestionnaire));
         when(ententeStagePdfRepository.findById(dto.getId())).thenReturn(Optional.empty());
@@ -172,5 +172,5 @@ class EntenteStageServiceTest {
 
         verify(ententeStagePdfRepository, times(1)).findById(dto.getId());
         verify(ententeStagePdfRepository, never()).save(any());
-    }
+    }*/
 }

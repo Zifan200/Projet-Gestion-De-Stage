@@ -10,11 +10,7 @@ import useGeStore from "../../stores/geStore.js";
 import { Modal } from "../../components/ui/modal.jsx";
 import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
 import PdfViewerEntente from "../../components/PdfViewerEntente.jsx";
-
-const validateGestionnaireSignature = (enteredSignature, gestionnaire) => {
-    const expectedFullName = `${gestionnaire.firstName} ${gestionnaire.lastName}`.trim();
-    return enteredSignature.trim() === expectedFullName;
-};
+import { PDFDocument } from "pdf-lib";
 
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
@@ -24,6 +20,7 @@ export const GsInternshipAgreements = () => {
         previewAgreement,
         downloadAgreement,
         resetAgreement,
+        signAgreement,
         previewUrl
     } = useInternshipAgreementStore();
 
@@ -33,8 +30,6 @@ export const GsInternshipAgreements = () => {
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
     const [signatureGestionnaire, setSignatureGestionnaire] = useState("");
     const fullName = `${user.firstName} ${user.lastName}`.trim();
-
-
 
 
     useEffect(() => {
@@ -49,30 +44,27 @@ export const GsInternshipAgreements = () => {
             console.error("Erreur lors de la création de l'entente:", err);
         }
     };
-    const validateGestionnaireSignature = (enteredSignature, user) => {
-        const expected = `${user.firstName} ${user.lastName}`.trim();
-        return enteredSignature.trim() === expected;
-    };
 
     const handleSign = async () => {
+        console.log("Signature gestionnaire:",selectedApplication);
+
         try {
-            await updateEntenteDeStage(
+            // Appel du store pour signer l'entente côté backend
+            const pdfUrl = await signAgreement(
                 user.token,
                 selectedApplication.ententeStagePdfId,
-                signatureGestionnaire
+                signatureGestionnaire,
+                user.id,
+                selectedApplication // on transmet l'application entière
             );
 
-
-            resetAgreement();
-            await previewAgreement(user.token, selectedApplication.ententeStagePdfId);
+            window.alert("PDF signé avec succès !");
+            console.log("Nouvelle URL du PDF signé:", pdfUrl);
         } catch (err) {
-            console.error(err);
+            console.error("Erreur lors de la signature de l'entente :", err);
+            window.alert("Une erreur est survenue lors de la signature du PDF.");
         }
     };
-
-
-
-
 
 
     const tableRows = () =>
@@ -87,8 +79,9 @@ export const GsInternshipAgreements = () => {
                         label={t("table.actionView")}
                         bg_color="indigo-100"
                         text_color="indigo-700"
-                        onClick={() => { setSelectedApplication(app); setIsModalOpen(true); }}
+                        onClick={() => setIsModalOpen(true)} // juste ouvrir le modal, pas de setSelectedApplication
                     />
+
 
                     {!app.claimed ? (
                         <TableActionButton
@@ -105,8 +98,12 @@ export const GsInternshipAgreements = () => {
                                 label={t("table.viewAgreement")}
                                 bg_color="amber-100"
                                 text_color="amber-700"
-                                onClick={() => previewAgreement(user.token, app.ententeStagePdfId)}
+                                onClick={() => {
+                                    setSelectedApplication(app);
+                                    previewAgreement(user.token, app.ententeStagePdfId);
+                                }}
                             />
+
                             <TableActionButton
                                 icon={DownloadIcon}
                                 label={t("table.download")}

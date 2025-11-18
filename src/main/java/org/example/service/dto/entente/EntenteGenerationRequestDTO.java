@@ -14,4 +14,5 @@ public class EntenteGenerationRequestDTO {
     private InternshipApplicationResponseDTO application;
     private Long gestionnaireId;
     private Role role;
+    private String signatureGestionnaire;
 }

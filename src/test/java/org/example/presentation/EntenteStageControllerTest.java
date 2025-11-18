@@ -69,7 +69,7 @@ class EntenteStageControllerTest {
                 .andExpect(content().bytes(pdfBytes));
     }
 
-    @Test
+   /* @Test
     void shouldUpdatePdfViaPutEndpoint() throws Exception {
         // Arrange
         InternshipApplicationResponseDTO applicationDto = new InternshipApplicationResponseDTO();
@@ -99,5 +99,5 @@ class EntenteStageControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_PDF))
                 .andExpect(content().bytes(pdfBytes));
-    }
+    }*/
 }

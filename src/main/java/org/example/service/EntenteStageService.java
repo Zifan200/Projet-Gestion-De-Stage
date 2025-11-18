@@ -143,7 +143,8 @@ public class EntenteStageService {
     public byte[] updateEntenteDeStage(Long id,
                                        InternshipApplicationResponseDTO dto,
                                        Long gestionnaireId,
-                                       Role roleActuel) throws IOException {
+                                       Role roleActuel,
+                                       String signatureActeur) throws IOException {
 
         if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED &&
                 dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
@@ -152,11 +153,8 @@ public class EntenteStageService {
             );
         }
 
-        Optional<Gestionnaire> gestionnaireOpt = gestionnaireRepository.findById(gestionnaireId);
-        if (gestionnaireOpt.isEmpty()) {
-            throw new UserNotFoundException("Gestionnaire not found");
-        }
-        Gestionnaire gestionnaire = gestionnaireOpt.get();
+        Gestionnaire gestionnaire = gestionnaireRepository.findById(gestionnaireId)
+                .orElseThrow(() -> new UserNotFoundException("Gestionnaire not found"));
 
         EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("PDF avec l'id " + id + " n'existe pas"));
@@ -173,9 +171,15 @@ public class EntenteStageService {
         Map<String, PdfFormField> fields = form.getAllFormFields();
 
         Map<String, String> values = prepareTextFields(dto, gestionnaire);
+        // 🔹 Remplacer la valeur de signature_gestionnaire si elle est fournie
+        if (roleActuel == Role.GESTIONNAIRE && signatureActeur != null) {
+            values.put("signature_gestionnaire", signatureActeur);
+        }
+
+        // Remplir les champs
         values.forEach((key, value) -> {
-            if (fields.containsKey(key) && fields.get(key).getValue().isNull()) {
-                fields.get(key).setValue(value);
+            if (fields.containsKey(key)) {
+                fields.get(key).setValue(value);  // on écrase toujours, pas seulement si vide
             }
         });
 

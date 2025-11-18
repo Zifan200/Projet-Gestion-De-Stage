@@ -72,14 +72,17 @@ public class EntenteStageController {
 
     @PutMapping("/update")
     public ResponseEntity<byte[]> updateEntente(@RequestBody EntenteGenerationRequestDTO request) throws IOException {
+        System.out.println("🔹 updateEntente called for ID chieeeeeeeeeeeeeeeeeeeeee: " + request.getId());
         byte[] pdfBytes = ententeStageService.updateEntenteDeStage(
                 request.getId(),
                 request.getApplication(),
                 request.getGestionnaireId(),
-                request.getRole()
+                request.getRole(),
+                request.getSignatureGestionnaire() // 🔹 on transmet la signature réelle
         );
         return buildPdfResponse(pdfBytes);
     }
+
 
     // Liste seulement les applications qui sont en mesure de générer une entente.
     @GetMapping("/all-available")

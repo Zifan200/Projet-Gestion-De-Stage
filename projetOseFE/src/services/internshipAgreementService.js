@@ -80,5 +80,30 @@ export const internshipAgreementService = {
             console.error("Erreur lors du téléchargement de l'entente :", error);
             throw error;
         }
+    },
+    async signAgreement(token, agreementId, signature, gsId, application) {
+        console.log("Signing agreement with ID:", agreementId, "for gestionnaire ID:", gsId, "and application:", application,"with signature:", signature);
+        try {
+            const payload = {
+                id: agreementId,
+                application,
+                gestionnaireId: gsId,
+                role: "GESTIONNAIRE",
+                signatureGestionnaire: signature
+            };
+
+            const res = await api.put(`/entente/update`, payload, {
+                headers: { Authorization: `Bearer ${token}` },
+                responseType: "arraybuffer"
+            });
+
+            const blob = new Blob([res.data], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+
+            return { pdfUrl: url };
+        } catch (err) {
+            console.error("Erreur lors de la signature de l'entente :", err);
+            throw err;
+        }
     }
 };
