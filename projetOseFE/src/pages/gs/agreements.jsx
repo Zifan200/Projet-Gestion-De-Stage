@@ -143,36 +143,151 @@ export const GsInternshipAgreements = () => {
                 />
             }
 
-            {/* Modal détails candidature */}
-            {selectedApplication && (
+            {/* Vue détaillée de la candidature */}
+            { selectedApplication && (
                 <Modal
                     open={isModalOpen}
-                    onClose={() => { setIsModalOpen(false); setSelectedApplication(null); }}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setSelectedApplication(null);
+                    }}
                     title={selectedApplication.internshipOfferTitle}
                     size="default"
                     footer={
-                        <button
-                            onClick={() => { setIsModalOpen(false); setSelectedApplication(null); }}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        >
-                            {t("modal.close")}
-                        </button>
+                        <>
+                            <button
+                                onClick={() => {
+                                    setIsModalOpen(false);
+                                    setSelectedApplication(null);
+                                }}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
+                            >
+                                {t("modal.close")}
+                            </button>
+                        </>
                     }
                 >
                     <div className="space-y-4">
-                        {/* Infos étudiant et entreprise ici, inchangé */}
-                        <p>{selectedApplication.studentFirstName} {selectedApplication.studentLastName}</p>
-                        <p>{selectedApplication.studentEmail}</p>
-                        <p>{selectedApplication.employerEnterpriseName}</p>
-                        <p>{selectedApplication.employerEmail}</p>
-                        <p>{selectedApplication.internshipOfferDescription}</p>
-                        <p>{selectedApplication.employerAddress}</p>
-                        <p>{new Date(selectedApplication.startDate).toLocaleDateString()}</p>
-                        <p>{selectedApplication.session}</p>
-                        <p>{selectedApplication.typeHoraire}</p>
-                        <p>{selectedApplication.nbHeures}</p>
-                        <p>{selectedApplication.salary}</p>
-                        <p>{new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
+                        {/* Informations de l'étudiant */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentName")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentEmail")}
+                                </h3>
+                                <p className="text-gray-600">{selectedApplication.studentEmail}</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.company")}
+                                </h3>
+                                <p className="text-gray-600">{selectedApplication.employerEnterpriseName}</p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.companyEmail")}
+                                </h3>
+                                <p className="text-gray-600">{selectedApplication.employerEmail}</p>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            {selectedApplication.internshipOfferDescription && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
+                                    <p className="text-gray-600 whitespace-pre-wrap">
+                                        {selectedApplication.internshipOfferDescription}
+                                    </p>
+                                </div>
+                            )}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.address")}
+                                </h3>
+                                <p className="text-gray-600">{selectedApplication.employerAddress}</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.startDate")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {new Date(selectedApplication.startDate).toLocaleDateString()}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.semester")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {(selectedApplication.session.toUpperCase() !== "AUTOMNE" &&
+                                        selectedApplication.session.toUpperCase() !== "HIVER") ?
+                                        t("modal.noSemester") :
+                                        t(`modal.${selectedApplication.session.toLowerCase()}`)}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.scheduleType")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.typeHoraire}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.hourAmount")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.nbHeures}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.salary")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {localStorage.key("lang") === "fr"
+                                        ? selectedApplication.salary.toLocaleString("fr-CA", {
+                                            style: "currency",
+                                            currency: "CAD",
+                                        })
+                                        : selectedApplication.salary.toLocaleString("en-CA", {
+                                            style: "currency",
+                                            currency: "CAD",
+                                        })}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.appliedAt")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
                 </Modal>
             )}
@@ -183,7 +298,7 @@ export const GsInternshipAgreements = () => {
                     <div className="flex justify-end mb-2">
                         <button
                             onClick={resetAgreement}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
                         >
                             <Cross2Icon className="w-4 h-4" />
                             <span>{t("menu.close")}</span>
