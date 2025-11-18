@@ -77,6 +77,8 @@
     "close": "Close",
     "signatureLabel": "Manager's Signature",
     "signaturePlaceholder": "Enter your signature exactly as your full name",
-    "signButton": "Sign Agreement"
+    "signButton": "Sign Agreement",
+    "signatureMismatch": "The signature does not match your full name.",
+    "signatureSuccess": "PDF signed successfully!"
   }
 }

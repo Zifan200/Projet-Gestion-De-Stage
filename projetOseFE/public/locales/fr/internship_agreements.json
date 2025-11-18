@@ -76,6 +76,8 @@
     "close": "Fermer",
     "signatureLabel": "Signature du gestionnaire",
     "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet",
-    "signButton": "Signer l'entente"
+    "signButton": "Signer l'entente",
+    "signatureMismatch": "La signature ne correspond pas à votre nom complet.",
+    "signatureSuccess": "Le PDF a été signé avec succès !"
   }
 }

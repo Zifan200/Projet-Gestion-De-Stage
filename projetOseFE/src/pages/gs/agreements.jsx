@@ -30,9 +30,14 @@ export const GsInternshipAgreements = () => {
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
     const [signatureGestionnaire, setSignatureGestionnaire] = useState("");
     const fullName = `${user.firstName} ${user.lastName}`.trim();
+    const [signatureError, setSignatureError] = useState("");
+    const [signatureSuccess, setSignatureSuccess] = useState("");
+
+
 
 
     useEffect(() => {
+        console.log("Nom complet attendu pour la signature :", `${user.firstName} ${user.lastName}`);
         loadAllInternshipApplications();
     }, [loadAllInternshipApplications]);
 
@@ -46,25 +51,28 @@ export const GsInternshipAgreements = () => {
     };
 
     const handleSign = async () => {
-        console.log("Signature gestionnaire:",selectedApplication);
+        const fullName = `${user.firstName} ${user.lastName}`.trim();
+        if (signatureGestionnaire.trim() !== fullName) {
+            setSignatureError(t("pdf.signatureMismatch"));
+            setSignatureSuccess("");
+            return;
+        }
+        setSignatureError(""); // réinitialiser l'erreur
 
         try {
-            // Appel du store pour signer l'entente côté backend
             const pdfUrl = await signAgreement(
                 user.token,
                 selectedApplication.ententeStagePdfId,
                 signatureGestionnaire,
                 user.id,
-                selectedApplication // on transmet l'application entière
+                selectedApplication
             );
-
-            window.alert("PDF signé avec succès !");
-            console.log("Nouvelle URL du PDF signé:", pdfUrl);
+            setSignatureSuccess(t("pdf.signatureSuccess"));
         } catch (err) {
-            console.error("Erreur lors de la signature de l'entente :", err);
-            window.alert("Une erreur est survenue lors de la signature du PDF.");
+            console.error("Erreur lors de la signature :", err);
         }
     };
+
 
 
     const tableRows = () =>
@@ -311,6 +319,12 @@ export const GsInternshipAgreements = () => {
                             placeholder={t("pdf.signaturePlaceholder")}
                             className="w-full border px-3 py-2 rounded-md"
                         />
+                        {signatureError && (
+                            <p className="text-red-600 mt-1 text-sm">{signatureError}</p>
+                        )}
+                        {signatureSuccess && (
+                            <p className="text-green-600 mt-1 text-sm">{signatureSuccess}</p>
+                        )}
                     </div>
 
                     {/* Bouton SIGNER */}
