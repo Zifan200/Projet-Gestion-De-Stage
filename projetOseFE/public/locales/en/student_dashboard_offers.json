@@ -3,8 +3,16 @@
   "table": {
     "title": "Title",
     "company": "Company",
+    "priority": "Priority",
     "deadline": "Deadline",
     "action": "Action"
+  },
+  "priority": {
+    "bronze": "BRONZE",
+    "silver": "SILVER",
+    "gold": "GOLD",
+    "green": "BRONZE",
+    "blue": "SILVER"
   },
   "actions": {
     "view": "View",
@@ -33,7 +41,11 @@
   },
   "filter": {
     "session": "Filter by Session",
-    "year": "Filter by Year"
+    "year": "Filter by Year",
+    "priority": "Filter by Priority",
+    "all": "All priorities",
+    "showBackgrounds": "Show Backgrounds",
+    "hideBackgrounds": "Hide Backgrounds"
   },
   "session": {
     "all": "All sessions",
