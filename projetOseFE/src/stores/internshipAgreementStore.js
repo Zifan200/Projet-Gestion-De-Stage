@@ -94,5 +94,5 @@ export const useInternshipAgreementStore = create((set, get) => ({
         const { previewUrl } = get();
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         set({ previewUrl: null, loading: false, error: null });
-    }
+    },
 }));

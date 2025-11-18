@@ -105,5 +105,5 @@ export const internshipAgreementService = {
             console.error("Erreur lors de la signature de l'entente :", err);
             throw err;
         }
-    }
+    },
 };

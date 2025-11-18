@@ -59,6 +59,7 @@ import {DashboardGsPhone} from "./pages/gs/phone/dashboardGsPhone.jsx";
 import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx";
 import {AgreementsGsPhone} from "./pages/gs/phone/agreementsGsPhone.jsx";
 import {GsInternshipAgreements} from "./pages/gs/agreements.jsx";
+import {EmployerInternshipAgreements} from "./pages/employer/agreementsEmployer.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -146,6 +147,12 @@ function App() {
             icon: PersonIcon,
         },
         {
+            key: "agreementsEmployer",
+            label: t("employer_dashboard:stats.internshipAgreements"),
+            href: "/dashboard/employer/internship-agreements-employer",
+            icon: Handshake,
+        },
+        {
             key: "settings",
             label: t("menu:settings"),
             href: "/dashboard/employer/settings",
@@ -181,7 +188,7 @@ function App() {
         {
             key: "agreements",
             label: t("gs_dashboard:stats.internshipAgreements"),
-            href: "/dashboard/gs/internship-agreements", // desktop
+            href: "/dashboard/gs/internship-agreements",
             icon: Handshake,
         },
         {
@@ -424,6 +431,12 @@ function App() {
                                     DesktopComponent={PostInterview}
                                     PhoneComponent={PostInterviewPhone}
                                 />
+                            }
+                        />
+                        <Route
+                            path="internship-agreements-employer"
+                            element={
+                                <EmployerInternshipAgreements/>
                             }
                         />
 

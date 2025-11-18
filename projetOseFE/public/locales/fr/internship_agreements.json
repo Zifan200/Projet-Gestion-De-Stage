@@ -20,7 +20,8 @@
     "company": "Entreprise",
     "createAgreement": "Créer une entente de stage",
     "viewAgreement": "Voir l'entente",
-    "noApplications": "Aucune candidature de stage"
+    "noApplications": "Aucune candidature de stage",
+    "noAgreements": "Aucune entente de stage"
   },
   "status": {
     "pending": "En cours d'examination",

@@ -20,7 +20,8 @@
     "company": "Company",
     "createAgreement": "Create internship agreement",
     "viewAgreement": "View agreement",
-    "noApplications": "No internship applications"
+    "noApplications": "No internship applications",
+    "noAgreements": "No internship agreements"
   },
   "status": {
     "pending": "Under Review",
