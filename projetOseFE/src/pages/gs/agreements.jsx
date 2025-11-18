@@ -87,7 +87,7 @@ export const GsInternshipAgreements = () => {
                         label={t("table.actionView")}
                         bg_color="indigo-100"
                         text_color="indigo-700"
-                        onClick={() => setIsModalOpen(true)} // juste ouvrir le modal, pas de setSelectedApplication
+                        onClick={() => { setSelectedApplication(app); setIsModalOpen(true); }} // juste ouvrir le modal, pas de setSelectedApplication
                     />
 
 
@@ -199,7 +199,8 @@ export const GsInternshipAgreements = () => {
                     footer={
                         <button
                             onClick={() => { setIsModalOpen(false); setSelectedApplication(null); }}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+                            transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
                         >
                             {t("modal.close")}
                         </button>
