@@ -6,7 +6,8 @@
     "pendingOffers": "Pending Offers",
     "allOffers": "All Internship Offers",
     "application": "Total applications",
-    "manageCvs": "Manage Student Resumes"
+    "manageCvs": "Manage Student Resumes",
+    "assignments": "Student Assignments"
   },
   "titles": {
     "home": "Home",

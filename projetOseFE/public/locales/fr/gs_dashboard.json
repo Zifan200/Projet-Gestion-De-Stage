@@ -6,7 +6,8 @@
     "pendingOffers": "Offres de stage en attente",
     "manageCvs": "Gérer les CVs étudiants",
     "allOffers": "Toutes les offres de stage",
-    "application": "Candidatures totales"
+    "application": "Candidatures totales",
+    "assignments": "Attribution des étudiants"
   },
   "titles": {
     "home": "Accueil",
