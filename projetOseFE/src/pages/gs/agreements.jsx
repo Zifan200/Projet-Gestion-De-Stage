@@ -40,6 +40,12 @@ export const GsInternshipAgreements = () => {
         loadAllInternshipApplications();
     }, [loadAllInternshipApplications]);
 
+    useEffect(() => {
+        resetAgreement();
+
+        return () => resetAgreement();
+    }, [filterYear, resetAgreement]);
+
     const handleCreateAgreement = async (app) => {
         try {
             await createInternshipAgreement(user.token, app, user.id, user.role);

@@ -26,10 +26,19 @@ export const EmployerInternshipAgreements = () => {
     const [signatureSuccess, setSignatureSuccess] = useState("");
 
 
+
     useEffect(() => {
         fetchApplications();
-
     }, [fetchApplications]);
+
+
+    useEffect(() => {
+
+        resetAgreement();
+
+
+        return () => resetAgreement();
+    }, [filterYear, resetAgreement]);
 
     const handleSign = async () => {
         const fullName = `${user.lastName} ${user.firstName} `.trim();
