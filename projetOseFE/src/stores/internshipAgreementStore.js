@@ -28,24 +28,33 @@ export const useInternshipAgreementStore = create((set, get) => ({
     },
 
 
-    // 🔹 Preview d'une entente existante
     previewAgreement: async (token, agreementId) => {
-        set({ loading: true, error: null });
+        console.log("🔹 previewAgreement called");
+        console.log("Token:", token);
+        console.log("Agreement ID:", agreementId);
+
+        set({ loading: true });
         try {
-            const res = await api.get(`/entente/${agreementId}`, {
+            const res = await api.get(`/entente/${agreementId}/preview`, {
                 headers: { Authorization: `Bearer ${token}` },
                 responseType: "arraybuffer"
             });
 
-            const blob = new Blob([res.data], { type: "application/pdf" });
-            console.log("Blob:", blob);
+            console.log("Backend response status:", res.status);
+            console.log("Backend data length:", res.data?.byteLength);
 
-            set({ previewUrl: blob, loading: false }); // 🔹 on stocke le Blob directement
+            const blob = new Blob([res.data], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            console.log("Blob URL created:", url);
+
+            set({ previewUrl: url, loading: false });
         } catch (err) {
             console.error("Erreur lors du preview de l'entente :", err);
-            set({ error: err.message || "Erreur lors du preview de l'entente", loading: false });
+            set({ error: err.message || "Erreur lors du preview", loading: false });
         }
     },
+
+
 
 
 
@@ -58,6 +67,8 @@ export const useInternshipAgreementStore = create((set, get) => ({
         }
     },
     resetAgreement: () => {
+        const { previewUrl } = get();
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
         set({ previewUrl: null, loading: false, error: null });
     }
 }));

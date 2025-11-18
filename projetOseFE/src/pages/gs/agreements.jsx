@@ -10,6 +10,7 @@ import useGeStore from "../../stores/geStore.js";
 import { Modal } from "../../components/ui/modal.jsx";
 import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
 import PdfViewer from "../../components/CvViewer.jsx";
+import PdfViewerEntente from "../../components/PdfViewerEntente.jsx";
 
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
@@ -26,6 +27,7 @@ export const GsInternshipAgreements = () => {
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
+    const [creatingIds, setCreatingIds] = useState(new Set());
 
     useEffect(() => {
         loadAllInternshipApplications();
@@ -187,9 +189,11 @@ export const GsInternshipAgreements = () => {
                             <span>{t("menu.close")}</span>
                         </button>
                     </div>
-                    <PdfViewer documentUrl={previewUrl} role="gs" type="entente" />
+                    <PdfViewerEntente previewUrl={previewUrl} />
                 </div>
             )}
+
+
         </div>
     );
 };

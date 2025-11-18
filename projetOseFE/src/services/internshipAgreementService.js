@@ -43,8 +43,8 @@ export const internshipAgreementService = {
         }
     },
 
-    async previewAgreement(token, agreementId) {
-        console.log("Service: previewAgreement called with ID:", agreementId); // 🔹 log 3
+    previewAgreement: async (token, agreementId) => {
+        set({ loading: true });
         try {
             const res = await api.get(`/entente/${agreementId}`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -54,11 +54,10 @@ export const internshipAgreementService = {
             const blob = new Blob([res.data], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
 
-            console.log("Service: PDF Blob URL:", url);
-            return url;
-        } catch (error) {
-            console.error("Service: Erreur lors du preview de l'entente :", error);
-            throw error;
+            set({ previewUrl: url, loading: false });
+        } catch (err) {
+            console.error(err);
+            set({ error: err.message || "Erreur lors du preview", loading: false });
         }
     },
 
