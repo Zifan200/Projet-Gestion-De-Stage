@@ -11,20 +11,51 @@ import { useInternshipAgreementStore } from "../../stores/internshipAgreementSto
 import { Modal } from "../../components/ui/modal.jsx";
 import PdfViewerEntente from "../../components/PdfViewerEntente.jsx";
 
+
 export const EmployerInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
     const { t } = useTranslation("internship_agreements");
 
     const { applications, fetchApplications, loading } = useEmployerStore();
-    const { previewAgreement, downloadAgreement, resetAgreement, previewUrl } = useInternshipAgreementStore();
-
+    const { previewAgreement, downloadAgreement, resetAgreement, previewUrl, signAgreement } = useInternshipAgreementStore();
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
+    const [signature, setSignature] = useState("");
+    const [signatureError, setSignatureError] = useState("");
+    const [signatureSuccess, setSignatureSuccess] = useState("");
+
 
     useEffect(() => {
         fetchApplications();
+
     }, [fetchApplications]);
+
+    const handleSign = async () => {
+        const fullName = `${user.lastName} ${user.firstName} `.trim();
+        console.log("Nom complet attendu pour la signature :", fullName);
+        if (signature.trim() !== fullName) {
+            setSignatureError(t("pdf.signatureMismatch"));
+            setSignatureSuccess("");
+            return;
+        }
+        setSignatureError(""); // réinitialiser l'erreur
+
+        try {
+            const pdfUrl = await signAgreement(
+                user.token,
+                selectedApplication.ententeStagePdfId,
+                "EMPLOYER",
+                user.id,
+                signature,
+                selectedApplication
+            );
+            setSignatureSuccess(t("pdf.signatureSuccess"));
+        } catch (err) {
+            console.error("Erreur lors de la signature :", err);
+        }
+    };
+
 
     const tableRows = () =>
         sortedAndFilteredApplications.map((app) => (
@@ -76,13 +107,22 @@ export const EmployerInternshipAgreements = () => {
 
     const sortedAndFilteredApplications = useMemo(() => {
         return applications
-            ?.filter(app => app.startDate)
-            .filter(app => filterYear === "All" || new Date(app.startDate).getFullYear().toString() === filterYear)
+            ?.filter(app => app.startDate) // startDate existe
+            .filter(app => {
+                const year = new Date(app.startDate).getFullYear();
+                return filterYear === "All" || year.toString() === filterYear.toString();
+            })
             .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     }, [applications, filterYear]);
 
-    const availableYears = Array.from(new Set(applications?.filter(app => app.startDate).map(app => new Date(app.startDate).getFullYear())))
-        .sort((a, b) => b - a);
+
+    const availableYears = useMemo(() => {
+        return Array.from(new Set(applications
+            ?.filter(app => app.startDate)
+            .map(app => new Date(app.startDate).getFullYear())
+        ))
+            .sort((a, b) => b - a);
+    }, [applications]);
 
     return (
         <div className="space-y-6">
@@ -207,9 +247,11 @@ export const EmployerInternshipAgreements = () => {
                 </Modal>
             )}
 
-            {/* PDF Preview */}
+
+            {/* PDF Preview + Signature */}
             {previewUrl && (
                 <div className="mt-4 space-y-4">
+                    {/* Bouton fermer PDF */}
                     <div className="flex justify-end mb-2">
                         <button
                             onClick={resetAgreement}
@@ -219,7 +261,35 @@ export const EmployerInternshipAgreements = () => {
                             <span>{t("pdf.close")}</span>
                         </button>
                     </div>
+
+                    {/* PDF Viewer */}
                     <PdfViewerEntente previewUrl={previewUrl} />
+
+                    {/* Champ de signature */}
+                    <div className="mt-4">
+                        <label className="block font-medium mb-1">{t("pdf.signatureLabelEmployer")}</label>
+                        <input
+                            type="text"
+                            value={signature}
+                            onChange={(e) => setSignature(e.target.value)}
+                            placeholder={t("pdf.signaturePlaceholder")}
+                            className="w-full border px-3 py-2 rounded-md"
+                        />
+                        {signatureError && (
+                            <p className="text-red-600 mt-1 text-sm">{signatureError}</p>
+                        )}
+                        {signatureSuccess && (
+                            <p className="text-green-600 mt-1 text-sm">{signatureSuccess}</p>
+                        )}
+                    </div>
+
+                    {/* Bouton SIGNER */}
+                    <button
+                        onClick={handleSign}
+                        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    >
+                        {t("pdf.signButton")}
+                    </button>
                 </div>
             )}
         </div>

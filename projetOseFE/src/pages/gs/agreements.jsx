@@ -32,8 +32,7 @@ export const GsInternshipAgreements = () => {
     const fullName = `${user.firstName} ${user.lastName}`.trim();
     const [signatureError, setSignatureError] = useState("");
     const [signatureSuccess, setSignatureSuccess] = useState("");
-
-
+    const [signature, setSignature] = useState("");
 
 
     useEffect(() => {
@@ -51,20 +50,23 @@ export const GsInternshipAgreements = () => {
     };
 
     const handleSign = async () => {
+        if (!selectedApplication) return;
+
         const fullName = `${user.firstName} ${user.lastName}`.trim();
-        if (signatureGestionnaire.trim() !== fullName) {
+        if (signature.trim() !== fullName) {
             setSignatureError(t("pdf.signatureMismatch"));
             setSignatureSuccess("");
             return;
         }
-        setSignatureError(""); // réinitialiser l'erreur
+        setSignatureError("");
 
         try {
             const pdfUrl = await signAgreement(
                 user.token,
                 selectedApplication.ententeStagePdfId,
-                signatureGestionnaire,
-                user.id,
+                user.role,         // rôle dynamique
+                user.id,           // id du signataire
+                signature,         // signature
                 selectedApplication
             );
             setSignatureSuccess(t("pdf.signatureSuccess"));
@@ -72,9 +74,6 @@ export const GsInternshipAgreements = () => {
             console.error("Erreur lors de la signature :", err);
         }
     };
-
-
-
     const tableRows = () =>
         sortedAndFilteredApplications.map((app) => (
             <tr key={app.id} className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm">
@@ -314,8 +313,8 @@ export const GsInternshipAgreements = () => {
                         </label>
                         <input
                             type="text"
-                            value={signatureGestionnaire}
-                            onChange={(e) => setSignatureGestionnaire(e.target.value)}
+                            value={signature}
+                            onChange={(e) => setSignature(e.target.value)}
                             placeholder={t("pdf.signaturePlaceholder")}
                             className="w-full border px-3 py-2 rounded-md"
                         />

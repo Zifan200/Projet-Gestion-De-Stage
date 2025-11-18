@@ -81,16 +81,21 @@ export const internshipAgreementService = {
             throw error;
         }
     },
-    async signAgreement(token, agreementId, signature, gsId, application) {
-        console.log("Signing agreement with ID:", agreementId, "for gestionnaire ID:", gsId, "and application:", application,"with signature:", signature);
+    async signAgreement(token, agreementId, role, signerId, signature, application) {
         try {
             const payload = {
                 id: agreementId,
                 application,
-                gestionnaireId: gsId,
-                role: "GESTIONNAIRE",
-                signatureGestionnaire: signature
+                role,
             };
+
+            if (role === "GESTIONNAIRE") payload.gestionnaireId = signerId;
+            else if (role === "EMPLOYER") payload.employerId = signerId;
+            else if (role === "STUDENT") payload.etudiantId = signerId;
+
+            if (role === "GESTIONNAIRE") payload.signatureGestionnaire = signature;
+            else if (role === "EMPLOYER") payload.signatureEmployer = signature;
+            else if (role === "STUDENT") payload.signatureEtudiant = signature;
 
             const res = await api.put(`/entente/update`, payload, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -99,7 +104,6 @@ export const internshipAgreementService = {
 
             const blob = new Blob([res.data], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
-
             return { pdfUrl: url };
         } catch (err) {
             console.error("Erreur lors de la signature de l'entente :", err);

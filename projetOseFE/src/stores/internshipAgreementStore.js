@@ -62,22 +62,27 @@ export const useInternshipAgreementStore = create((set, get) => ({
             set({ error: err.message || "Erreur lors du téléchargement de l'entente" });
         }
     },
-    signAgreement: async (token, agreementId, signature, gsId, application) => {
+    signAgreement: async (token, agreementId, role, signerId, signature, application) => {
         try {
             const payload = {
                 id: agreementId,
-                application: application,
-                gestionnaireId: gsId,
-                role: "GESTIONNAIRE",
-                signatureGestionnaire: signature
+                application,
+                role
             };
+
+            if (role === "GESTIONNAIRE") payload.gestionnaireId = signerId;
+            else if (role === "EMPLOYER") payload.employerId = signerId;
+            else if (role === "STUDENT") payload.etudiantId = signerId;
+
+            if (role === "GESTIONNAIRE") payload.signatureGestionnaire = signature;
+            else if (role === "EMPLOYER") payload.signatureEmployer = signature;
+            else if (role === "STUDENT") payload.signatureEtudiant = signature;
 
             const res = await api.put(`/entente/update`, payload, {
                 headers: { Authorization: `Bearer ${token}` },
-                responseType: "arraybuffer" // on reçoit le PDF signé
+                responseType: "arraybuffer"
             });
 
-            // Convertir pdfData en URL pour le preview
             const blob = new Blob([res.data], { type: "application/pdf" });
             const pdfUrl = URL.createObjectURL(blob);
 
