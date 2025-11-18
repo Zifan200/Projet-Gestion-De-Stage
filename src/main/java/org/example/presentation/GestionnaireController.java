@@ -15,6 +15,7 @@ import org.example.service.dto.cv.CvStatusDTO;
 import org.example.service.dto.internship.InternshipOfferListDto;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
 import org.example.service.dto.student.EtudiantDTO;
+import org.example.service.dto.student.StudentAssignmentResponseDTO;
 import org.example.service.dto.teacher.StudentAssignmentDTO;
 import org.example.service.dto.teacher.TeacherDTO;
 import org.example.utils.JwtTokenUtils;
@@ -31,6 +32,7 @@ public class GestionnaireController {
     private final CVService cvService;
     private final InternshipApplicationService internshipApplicationService;
     private final TeacherService teacherService;
+    private final StudentService studentService;
 
     @GetMapping("/list")
     public ResponseEntity<List<CvResponseDTO>> listAllCvs() {
@@ -96,6 +98,11 @@ public class GestionnaireController {
 
     // Routes pour la gestion des enseignants et attribution des étudiants
 
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentAssignmentResponseDTO>> getAllStudents() {
+        return ResponseEntity.ok(studentService.getAllStudents());
+    }
+
     @GetMapping("/teachers")
     public ResponseEntity<List<TeacherDTO>> getAllTeachers() {
         return ResponseEntity.ok(teacherService.getAllTeachers());
@@ -106,8 +113,19 @@ public class GestionnaireController {
         return ResponseEntity.ok(teacherService.getTeacherById(id));
     }
 
-    @PostMapping("/assign-student-to-teacher")
+    @PostMapping("/assignments")
     public ResponseEntity<Void> assignStudentToTeacher(
+        @Valid @RequestBody StudentAssignmentDTO assignmentDTO
+    ) {
+        teacherService.assignStudentToTeacher(
+            assignmentDTO.getTeacherId(),
+            assignmentDTO.getStudentId()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/assign-student-to-teacher")
+    public ResponseEntity<Void> assignStudentToTeacherLegacy(
         @Valid @RequestBody StudentAssignmentDTO assignmentDTO
     ) {
         teacherService.assignStudentToTeacher(
