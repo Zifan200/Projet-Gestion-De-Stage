@@ -155,52 +155,17 @@ public class Main {
               .employerEmail(employer.getEmail())
               .build());
 
-            InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(
-                employer.getEmail(),
-                InternshipOfferDto.builder()
-                    .title("Data Analyst")
-                    .description("Stage d'analyse de données avec Python")
-                    .targetedProgramme("Informatique")
-                    .expirationDate(LocalDate.now().plusMonths(2))
-                    .startDate(LocalDate.of(2025, 4, 1))
-                    .EndDate(LocalDate.of(2025, 7, 1))
-                    .employerEmail(employer.getEmail())
-                    .build());
-            internshipOfferService.updateOfferStatus(
-                offer1.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            internshipOfferService.updateOfferStatus(
-                offer2.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            internshipOfferService.updateOfferStatus(
-                offer3.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            internshipOfferService.updateOfferStatus(
-                offer4.getId(),
-                ApprovalStatus.ACCEPTED,
-                ""
-            );
-            // -----------------------------
-            // 4️⃣ Création étudiant + CV
-            // -----------------------------
-            EtudiantDTO etudiantDTO = studentService.inscriptionEtudiant(
-                EtudiantDTO.builder()
-                    .firstName("Alexandre")
-                    .lastName("Nowell")
-                    .email("alexandre@example.com")
-                    .phone("514-999-9999")
-                    .adresse("Pôle Nord")
-                    .role(Role.STUDENT)
-                    .password("Test123!")
-                    .program("Technique de l'informatique")
-                    .build()
-            );
+      InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(
+          employer.getEmail(),
+          InternshipOfferDto.builder()
+              .title("Data Analyst")
+              .description("Stage d'analyse de données avec Python")
+              .targetedProgramme("Informatique")
+              .expirationDate(LocalDate.now().plusMonths(2))
+              .startDate(LocalDate.of(2025, 4, 1))
+              .EndDate(LocalDate.of(2025, 7, 1))
+              .employerEmail(employer.getEmail())
+              .build());
 
       InternshipOfferResponseDto offer4 = internshipOfferService.saveInternshipOffer(
           employer.getEmail(),
@@ -213,6 +178,7 @@ public class Main {
               .EndDate(LocalDate.of(2025, 6, 1))
               .employerEmail(employer.getEmail())
               .build());
+
       internshipOfferService.updateOfferStatus(
           offer1.getId(),
           ApprovalStatus.ACCEPTED,
@@ -256,10 +222,8 @@ public class Main {
       cvService.approveCv(cvResponseDTO.getId());
 
       // -----------------------------
-      // 5️⃣ Création candidatures avec approvalStatus hardcodé APPROVED
+      // 5️⃣ Création CV accepté pour l'étudiant
       // -----------------------------
-      byte[] bytes = new byte[9];
-
       CV studentCV = CV.builder()
           .etudiant(EtudiantDTO.toEntity(etudiantDTO))
           .data("cv".getBytes())
@@ -271,25 +235,8 @@ public class Main {
           .build();
       cvRepository.save(studentCV);
 
-      // Créer candidature
-      InternshipApplicationDTO internshipApplicationDTO = InternshipApplicationDTO.builder()
-          .internshipOfferId(offer1.getId())
-          .employerEmail(employer.getEmail())
-          .studentEmail(etudiantDTO.getEmail())
-          .selectedCvID(studentCV.getId())
-          .build();
-
-      InternshipApplicationResponseDTO savedInternshipApplication = internshipApplicationService
-          .saveInternshipApplication(
-              internshipApplicationDTO);
-
-      // Hardcoder le statut employeur à APPROVED
-      var appEntity = internshipApplicationService.approveInternshipApplication(
-          employer.getEmail(),
-          savedInternshipApplication.getId());
-
       // -----------------------------
-      // 5️⃣ Candidature 1 : Acceptée par étudiant
+      // 6️⃣ Candidature 1 : Acceptée par étudiant
       // -----------------------------
       InternshipApplicationResponseDTO app1 = internshipApplicationService.saveInternshipApplication(
           InternshipApplicationDTO.builder()
@@ -310,7 +257,7 @@ public class Main {
           "✅ Candidature 1 (Développeur Java) : ACCEPTÉE par l'étudiant");
 
       // -----------------------------
-      // 6️⃣ Candidature 2 : Refusée par étudiant
+      // 7️⃣ Candidature 2 : Refusée par étudiant
       // -----------------------------
       InternshipApplicationResponseDTO app2 = internshipApplicationService.saveInternshipApplication(
           InternshipApplicationDTO.builder()
@@ -332,7 +279,7 @@ public class Main {
           "❌ Candidature 2 (Frontend React) : REFUSÉE par l'étudiant");
 
       // -----------------------------
-      // 7️⃣ Candidature 3 : Pending (employeur accepté, étudiant n'a rien fait)
+      // 8️⃣ Candidature 3 : Pending (employeur accepté, étudiant n'a rien fait)
       // -----------------------------
       InternshipApplicationResponseDTO app3 = internshipApplicationService.saveInternshipApplication(
           InternshipApplicationDTO.builder()
