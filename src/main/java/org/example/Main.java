@@ -155,17 +155,52 @@ public class Main {
               .employerEmail(employer.getEmail())
               .build());
 
-      InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(
-          employer.getEmail(),
-          InternshipOfferDto.builder()
-              .title("Data Analyst")
-              .description("Stage d'analyse de données avec Python")
-              .targetedProgramme("Informatique")
-              .expirationDate(LocalDate.now().plusMonths(2))
-              .startDate(LocalDate.of(2025, 4, 1))
-              .EndDate(LocalDate.of(2025, 7, 1))
-              .employerEmail(employer.getEmail())
-              .build());
+            InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(
+                employer.getEmail(),
+                InternshipOfferDto.builder()
+                    .title("Data Analyst")
+                    .description("Stage d'analyse de données avec Python")
+                    .targetedProgramme("Informatique")
+                    .expirationDate(LocalDate.now().plusMonths(2))
+                    .startDate(LocalDate.of(2025, 4, 1))
+                    .EndDate(LocalDate.of(2025, 7, 1))
+                    .employerEmail(employer.getEmail())
+                    .build());
+            internshipOfferService.updateOfferStatus(
+                offer1.getId(),
+                ApprovalStatus.ACCEPTED,
+                ""
+            );
+            internshipOfferService.updateOfferStatus(
+                offer2.getId(),
+                ApprovalStatus.ACCEPTED,
+                ""
+            );
+            internshipOfferService.updateOfferStatus(
+                offer3.getId(),
+                ApprovalStatus.ACCEPTED,
+                ""
+            );
+            internshipOfferService.updateOfferStatus(
+                offer4.getId(),
+                ApprovalStatus.ACCEPTED,
+                ""
+            );
+            // -----------------------------
+            // 4️⃣ Création étudiant + CV
+            // -----------------------------
+            EtudiantDTO etudiantDTO = studentService.inscriptionEtudiant(
+                EtudiantDTO.builder()
+                    .firstName("Alexandre")
+                    .lastName("Nowell")
+                    .email("alexandre@example.com")
+                    .phone("514-999-9999")
+                    .adresse("Pôle Nord")
+                    .role(Role.STUDENT)
+                    .password("Test123!")
+                    .program("Technique de l'informatique")
+                    .build()
+            );
 
       InternshipOfferResponseDto offer4 = internshipOfferService.saveInternshipOffer(
           employer.getEmail(),
