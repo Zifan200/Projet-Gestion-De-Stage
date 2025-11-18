@@ -6,6 +6,7 @@ import java.util.List;
 import org.example.model.CV;
 import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.PriorityCode;
 import org.example.repository.CvRepository;
 import org.example.service.*;
 import org.example.service.dto.cv.CvResponseDTO;
@@ -15,6 +16,7 @@ import org.example.service.dto.internship.InternshipOfferDto;
 import org.example.service.dto.internship.InternshipOfferResponseDto;
 import org.example.service.dto.internshipApplication.InternshipApplicationDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
+import org.example.service.dto.recommendation.RecommendationRequestDTO;
 import org.example.service.dto.student.EtudiantDTO;
 import org.example.service.dto.teacher.TeacherDTO;
 import org.springframework.boot.CommandLineRunner;
@@ -33,18 +35,21 @@ public class Main {
   private final StudentService studentService;
   private final CVService cvService;
   private final TeacherService teacherService;
+  private final InternshipRecommendationService recommendationService;
 
   public Main(
       GestionnaireService gestionnaireService,
       EmployerService employerService,
       StudentService studentService,
       CVService cvService,
-      TeacherService teacherService) {
+      TeacherService teacherService,
+      InternshipRecommendationService recommendationService) {
     this.gestionnaireService = gestionnaireService;
     this.employerService = employerService;
     this.studentService = studentService;
     this.cvService = cvService;
     this.teacherService = teacherService;
+    this.recommendationService = recommendationService;
   }
 
   public static void main(String[] args) {
@@ -137,9 +142,11 @@ public class Main {
               .title("Développeur Java")
               .description("Stage backend Java Spring Boot")
               .targetedProgramme("Informatique")
+              .session("Hiver")
+              .salary(25.50f)
               .expirationDate(LocalDate.now().plusMonths(2))
-              .startDate(LocalDate.of(2025, 2, 15))
-              .EndDate(LocalDate.of(2025, 5, 15))
+              .startDate(LocalDate.of(2026, 2, 15))
+              .EndDate(LocalDate.of(2026, 5, 15))
               .employerEmail(employer.getEmail())
               .build());
 
@@ -149,9 +156,11 @@ public class Main {
               .title("Frontend React")
               .description("Stage ReactJS avec API REST")
               .targetedProgramme("Informatique")
+              .session("Hiver")
+              .salary(24.00f)
               .expirationDate(LocalDate.now().plusMonths(2))
-              .startDate(LocalDate.of(2025, 3, 1))
-              .EndDate(LocalDate.of(2025, 6, 1))
+              .startDate(LocalDate.of(2026, 3, 1))
+              .EndDate(LocalDate.of(2026, 6, 1))
               .employerEmail(employer.getEmail())
               .build());
 
@@ -161,9 +170,11 @@ public class Main {
               .title("Data Analyst")
               .description("Stage d'analyse de données avec Python")
               .targetedProgramme("Informatique")
+              .session("Hiver")
+              .salary(26.75f)
               .expirationDate(LocalDate.now().plusMonths(2))
-              .startDate(LocalDate.of(2025, 4, 1))
-              .EndDate(LocalDate.of(2025, 7, 1))
+              .startDate(LocalDate.of(2026, 4, 1))
+              .EndDate(LocalDate.of(2026, 7, 1))
               .employerEmail(employer.getEmail())
               .build());
 
@@ -173,9 +184,39 @@ public class Main {
               .title("Junior Frontend Dev")
               .description("Stage: ReactJS avec API REST")
               .targetedProgramme("Informatique")
+              .session("Hiver")
+              .salary(23.50f)
               .expirationDate(LocalDate.now().plusMonths(2))
-              .startDate(LocalDate.of(2025, 3, 1))
-              .EndDate(LocalDate.of(2025, 6, 1))
+              .startDate(LocalDate.of(2026, 3, 1))
+              .EndDate(LocalDate.of(2026, 6, 1))
+              .employerEmail(employer.getEmail())
+              .build());
+
+      InternshipOfferResponseDto offer5 = internshipOfferService.saveInternshipOffer(
+          employer.getEmail(),
+          InternshipOfferDto.builder()
+              .title("DevOps Engineer")
+              .description("Stage en DevOps avec Docker et Kubernetes")
+              .targetedProgramme("Informatique")
+              .session("Hiver")
+              .salary(27.00f)
+              .expirationDate(LocalDate.now().plusMonths(2))
+              .startDate(LocalDate.of(2026, 2, 1))
+              .EndDate(LocalDate.of(2026, 5, 1))
+              .employerEmail(employer.getEmail())
+              .build());
+
+      InternshipOfferResponseDto offer6 = internshipOfferService.saveInternshipOffer(
+          employer.getEmail(),
+          InternshipOfferDto.builder()
+              .title("Mobile Developer")
+              .description("Stage développement mobile React Native")
+              .targetedProgramme("Informatique")
+              .session("Hiver")
+              .salary(25.00f)
+              .expirationDate(LocalDate.now().plusMonths(2))
+              .startDate(LocalDate.of(2026, 3, 15))
+              .EndDate(LocalDate.of(2026, 6, 15))
               .employerEmail(employer.getEmail())
               .build());
 
@@ -193,6 +234,14 @@ public class Main {
           "");
       internshipOfferService.updateOfferStatus(
           offer4.getId(),
+          ApprovalStatus.ACCEPTED,
+          "");
+      internshipOfferService.updateOfferStatus(
+          offer5.getId(),
+          ApprovalStatus.ACCEPTED,
+          "");
+      internshipOfferService.updateOfferStatus(
+          offer6.getId(),
           ApprovalStatus.ACCEPTED,
           "");
 
@@ -295,6 +344,43 @@ public class Main {
 
       System.out.println(
           "⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n'a rien fait)");
+
+      // -----------------------------
+      // 9️⃣ Création de recommandations pour Alexandre
+      // -----------------------------
+
+      // Recommandation OR pour offer4 (Junior Frontend Dev)
+      recommendationService.createOrUpdateRecommendation(
+          RecommendationRequestDTO.builder()
+              .studentId(etudiantDTO.getId())
+              .offerId(offer4.getId())
+              .priorityCode(PriorityCode.GOLD)
+              .build(),
+          admin.getEmail()
+      );
+      System.out.println("⭐ Recommandation OR créée pour offer4");
+
+      // Recommandation BLEU pour offer5 (DevOps Engineer)
+      recommendationService.createOrUpdateRecommendation(
+          RecommendationRequestDTO.builder()
+              .studentId(etudiantDTO.getId())
+              .offerId(offer5.getId())
+              .priorityCode(PriorityCode.SILVER)
+              .build(),
+          admin.getEmail()
+      );
+      System.out.println("⭐ Recommandation BLEU créée pour offer5");
+
+      // Recommandation VERTE pour offer6 (Mobile Developer)
+      recommendationService.createOrUpdateRecommendation(
+          RecommendationRequestDTO.builder()
+              .studentId(etudiantDTO.getId())
+              .offerId(offer6.getId())
+              .priorityCode(PriorityCode.BRONZE)
+              .build(),
+          admin.getEmail()
+      );
+      System.out.println("⭐ Recommandation VERTE créée pour offer6");
 
       PreLoadedActors loader = PreLoadedActors.getInstance(context);
       List<EtudiantDTO> generatedStudents = loader.genStudents(4);

@@ -99,14 +99,14 @@ public class InternshipRecommendationServiceTest {
         RecommendationRequestDTO requestDTO = RecommendationRequestDTO.builder()
             .studentId(1L)
             .offerId(1L)
-            .priorityCode(PriorityCode.BLUE)
+            .priorityCode(PriorityCode.SILVER)
             .build();
 
         InternshipRecommendation savedRecommendation = buildRecommendation(
             student,
             offer,
             gestionnaire,
-            PriorityCode.BLUE
+            PriorityCode.SILVER
         );
 
         when(etudiantRepository.findById(1L)).thenReturn(Optional.of(student));
@@ -129,7 +129,7 @@ public class InternshipRecommendationServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertThat(result.getPriorityCode()).isEqualTo(PriorityCode.BLUE);
+        assertThat(result.getPriorityCode()).isEqualTo(PriorityCode.SILVER);
         assertThat(result.getStudentId()).isEqualTo(1L);
         assertThat(result.getOfferId()).isEqualTo(1L);
         verify(recommendationRepository).save(
@@ -143,7 +143,7 @@ public class InternshipRecommendationServiceTest {
         RecommendationRequestDTO requestDTO = RecommendationRequestDTO.builder()
             .studentId(999L)
             .offerId(1L)
-            .priorityCode(PriorityCode.GREEN)
+            .priorityCode(PriorityCode.BRONZE)
             .build();
 
         when(etudiantRepository.findById(999L)).thenReturn(Optional.empty());
@@ -167,7 +167,7 @@ public class InternshipRecommendationServiceTest {
         RecommendationRequestDTO requestDTO = RecommendationRequestDTO.builder()
             .studentId(1L)
             .offerId(999L)
-            .priorityCode(PriorityCode.GREEN)
+            .priorityCode(PriorityCode.BRONZE)
             .build();
 
         when(etudiantRepository.findById(1L)).thenReturn(Optional.of(student));
@@ -193,7 +193,7 @@ public class InternshipRecommendationServiceTest {
         RecommendationRequestDTO requestDTO = RecommendationRequestDTO.builder()
             .studentId(1L)
             .offerId(1L)
-            .priorityCode(PriorityCode.GREEN)
+            .priorityCode(PriorityCode.BRONZE)
             .build();
 
         when(etudiantRepository.findById(1L)).thenReturn(Optional.of(student));
@@ -269,7 +269,7 @@ public class InternshipRecommendationServiceTest {
             student,
             offer,
             gestionnaire,
-            PriorityCode.BLUE
+            PriorityCode.SILVER
         );
 
         when(etudiantRepository.findById(1L)).thenReturn(Optional.of(student));
@@ -316,7 +316,7 @@ public class InternshipRecommendationServiceTest {
             student,
             offer,
             gestionnaire,
-            PriorityCode.BLUE
+            PriorityCode.SILVER
         );
 
         when(
@@ -345,7 +345,7 @@ public class InternshipRecommendationServiceTest {
             student,
             offer,
             gestionnaire,
-            PriorityCode.GREEN
+            PriorityCode.BRONZE
         );
 
         when(recommendationRepository.findById(1L)).thenReturn(
@@ -382,7 +382,7 @@ public class InternshipRecommendationServiceTest {
             student,
             offer,
             gestionnaire,
-            PriorityCode.BLUE
+            PriorityCode.SILVER
         );
 
         when(recommendationRepository.findById(1L)).thenReturn(
@@ -394,7 +394,7 @@ public class InternshipRecommendationServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertThat(result.getPriorityCode()).isEqualTo(PriorityCode.BLUE);
+        assertThat(result.getPriorityCode()).isEqualTo(PriorityCode.SILVER);
         verify(recommendationRepository).findById(1L);
     }
 
@@ -408,7 +408,7 @@ public class InternshipRecommendationServiceTest {
             student,
             offer,
             gestionnaire,
-            PriorityCode.GREEN
+            PriorityCode.BRONZE
         );
 
         when(

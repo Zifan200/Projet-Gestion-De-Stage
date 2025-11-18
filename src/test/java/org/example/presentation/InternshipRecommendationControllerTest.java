@@ -142,7 +142,7 @@ class InternshipRecommendationControllerTest {
         RecommendationRequestDTO requestDTO = RecommendationRequestDTO.builder()
             .studentId(1L)
             .offerId(1L)
-            .priorityCode(PriorityCode.BLUE)
+            .priorityCode(PriorityCode.SILVER)
             .build();
 
         UserDTO studentUser = buildStudentUser();
@@ -167,7 +167,7 @@ class InternshipRecommendationControllerTest {
         RecommendationRequestDTO requestDTO = RecommendationRequestDTO.builder()
             .studentId(999L)
             .offerId(1L)
-            .priorityCode(PriorityCode.GREEN)
+            .priorityCode(PriorityCode.BRONZE)
             .build();
 
         UserDTO gestionnaireUser = buildGestionnaireUser();
