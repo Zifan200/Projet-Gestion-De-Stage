@@ -20,7 +20,7 @@ export const useInternshipAgreementStore = create((set, get) => ({
                 ),
             }));
 
-            return result; // pour que le composant puisse utiliser l'objet créé si besoin
+            return result;
         } catch (err) {
             set({ error: err });
             throw err;
@@ -30,29 +30,23 @@ export const useInternshipAgreementStore = create((set, get) => ({
 
     // 🔹 Preview d'une entente existante
     previewAgreement: async (token, agreementId) => {
-        console.log("previewAgreement called with ID:", agreementId);
         set({ loading: true, error: null });
-
         try {
             const res = await api.get(`/entente/${agreementId}`, {
                 headers: { Authorization: `Bearer ${token}` },
-                responseType: "arraybuffer" // <-- important
+                responseType: "arraybuffer"
             });
 
-            // Créer un Blob PDF à partir de l'arraybuffer
             const blob = new Blob([res.data], { type: "application/pdf" });
-            const url = URL.createObjectURL(blob);
+            console.log("Blob:", blob);
 
-            console.log("Preview URL generated:", url);
-            set({
-                previewUrl: url,
-                loading: false
-            });
+            set({ previewUrl: blob, loading: false }); // 🔹 on stocke le Blob directement
         } catch (err) {
-            console.error("Erreur lors du preview de l'entente:", err);
+            console.error("Erreur lors du preview de l'entente :", err);
             set({ error: err.message || "Erreur lors du preview de l'entente", loading: false });
         }
     },
+
 
 
     // 🔹 Télécharger une entente

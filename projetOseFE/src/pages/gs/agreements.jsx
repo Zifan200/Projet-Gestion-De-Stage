@@ -62,7 +62,10 @@ export const GsInternshipAgreements = () => {
                             label={t("table.viewAgreement")}
                             bg_color={"amber-100"}
                             text_color={"amber-700"}
-                            onClick={() => previewAgreement(user.token, app.ententeStagePdfId)}
+                            onClick={() => {
+                                console.log("Preview button clicked for app:", app);
+                                previewAgreement(user.token, app.ententeStagePdfId);
+                            }}
                         />
 
                         <TableActionButton
@@ -184,15 +187,9 @@ export const GsInternshipAgreements = () => {
                             <span>{t("menu.close")}</span>
                         </button>
                     </div>
-                    <iframe
-                        src={previewUrl}
-                        width="100%"
-                        height="600px"
-                        title="Entente PDF"
-                    />
+                    <PdfViewer documentUrl={previewUrl} role="gs" type="entente" />
                 </div>
             )}
-
         </div>
     );
 };
