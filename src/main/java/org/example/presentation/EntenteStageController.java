@@ -54,6 +54,20 @@ public class EntenteStageController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}/preview")
+    public ResponseEntity<byte[]> previewEntente(@PathVariable Long id) {
+        System.out.println("🔹 previewEntente called for ID: " + id);
+
+        EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Entente non trouvée"));
+
+        System.out.println("PDF data length: " + (pdfEntity.getPdfData() != null ? pdfEntity.getPdfData().length : "null"));
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfEntity.getPdfData());
+    }
+
 
 
     @PutMapping("/update")
