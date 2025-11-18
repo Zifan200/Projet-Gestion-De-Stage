@@ -45,7 +45,7 @@ public class EntenteStageController {
         EntenteStagePdf entitePdf = new EntenteStagePdf();
         entitePdf.setPdfData(pdfBytes);
         entitePdf.setApplicationId(request.getApplication().getId());
-        ententeStagePdfRepository.save(entitePdf); // <- sauvegarde et génère l'ID
+        //ententeStagePdfRepository.save(entitePdf); // <- sauvegarde et génère l'ID
 
         // Maintenant on a l'ID
         Long ententeId = entitePdf.getId();

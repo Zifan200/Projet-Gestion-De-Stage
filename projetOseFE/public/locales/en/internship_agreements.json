@@ -72,5 +72,11 @@
     "noAccessibleEmployerData": "Employer email not found.",
     "form" : "Error in the form.",
     "unknown": "Unknown error."
+  },
+  "pdf": {
+    "close": "Close",
+    "signatureLabel": "Manager's Signature",
+    "signaturePlaceholder": "Enter your signature exactly as your full name",
+    "signButton": "Sign Agreement"
   }
 }

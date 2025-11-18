@@ -11,6 +11,11 @@ import { Modal } from "../../components/ui/modal.jsx";
 import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
 import PdfViewerEntente from "../../components/PdfViewerEntente.jsx";
 
+const validateGestionnaireSignature = (enteredSignature, gestionnaire) => {
+    const expectedFullName = `${gestionnaire.firstName} ${gestionnaire.lastName}`.trim();
+    return enteredSignature.trim() === expectedFullName;
+};
+
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
     const { t } = useTranslation("internship_agreements");
@@ -26,6 +31,11 @@ export const GsInternshipAgreements = () => {
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
+    const [signatureGestionnaire, setSignatureGestionnaire] = useState("");
+    const fullName = `${user.firstName} ${user.lastName}`.trim();
+
+
+
 
     useEffect(() => {
         loadAllInternshipApplications();
@@ -39,6 +49,31 @@ export const GsInternshipAgreements = () => {
             console.error("Erreur lors de la création de l'entente:", err);
         }
     };
+    const validateGestionnaireSignature = (enteredSignature, user) => {
+        const expected = `${user.firstName} ${user.lastName}`.trim();
+        return enteredSignature.trim() === expected;
+    };
+
+    const handleSign = async () => {
+        try {
+            await updateEntenteDeStage(
+                user.token,
+                selectedApplication.ententeStagePdfId,
+                signatureGestionnaire
+            );
+
+
+            resetAgreement();
+            await previewAgreement(user.token, selectedApplication.ententeStagePdfId);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+
+
+
+
 
     const tableRows = () =>
         sortedAndFilteredApplications.map((app) => (
@@ -252,17 +287,42 @@ export const GsInternshipAgreements = () => {
 
             {/* PDF Preview */}
             {previewUrl && (
-                <div className="mt-4">
+                <div className="mt-4 space-y-4">
+                    {/* Bouton fermer */}
                     <div className="flex justify-end mb-2">
                         <button
                             onClick={resetAgreement}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
                         >
                             <Cross2Icon className="w-4 h-4" />
-                            <span>{t("menu.close")}</span>
+                            <span>{t("pdf.close")}</span>
                         </button>
                     </div>
+
+                    {/* PDF */}
                     <PdfViewerEntente previewUrl={previewUrl} />
+
+                    {/* Champ de signature */}
+                    <div className="mt-4">
+                        <label className="block font-medium mb-1">
+                            {t("pdf.signatureLabel")}
+                        </label>
+                        <input
+                            type="text"
+                            value={signatureGestionnaire}
+                            onChange={(e) => setSignatureGestionnaire(e.target.value)}
+                            placeholder={t("pdf.signaturePlaceholder")}
+                            className="w-full border px-3 py-2 rounded-md"
+                        />
+                    </div>
+
+                    {/* Bouton SIGNER */}
+                    <button
+                        onClick={handleSign}
+                        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    >
+                        {t("pdf.signButton")}
+                    </button>
                 </div>
             )}
         </div>

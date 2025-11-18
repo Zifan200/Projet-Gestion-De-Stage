@@ -71,5 +71,11 @@
     "noAccessibleEmployerData": "Impossible de récupérer l'email de l'employeur.",
     "form" : "Erreur dans le formulaire.",
     "unknown": "Erreur inconnue"
+  },
+  "pdf": {
+    "close": "Fermer",
+    "signatureLabel": "Signature du gestionnaire",
+    "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet",
+    "signButton": "Signer l'entente"
   }
 }
