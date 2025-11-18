@@ -10,7 +10,6 @@ import useGeStore from "../../stores/geStore.js";
 import { Modal } from "../../components/ui/modal.jsx";
 import { useInternshipAgreementStore } from "../../stores/internshipAgreementStore.js";
 import PdfViewerEntente from "../../components/PdfViewerEntente.jsx";
-import { PDFDocument } from "pdf-lib";
 
 export const GsInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
@@ -87,7 +86,7 @@ export const GsInternshipAgreements = () => {
                         label={t("table.actionView")}
                         bg_color="indigo-100"
                         text_color="indigo-700"
-                        onClick={() => { setSelectedApplication(app); setIsModalOpen(true); }} // juste ouvrir le modal, pas de setSelectedApplication
+                        onClick={() => { setSelectedApplication(app); setIsModalOpen(true); }}
                     />
 
 
@@ -137,8 +136,9 @@ export const GsInternshipAgreements = () => {
             .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     }, [applications, filterYear]);
 
-    const availableYears = Array.from(new Set(applications?.filter(app => app.startDate).map(app => new Date(app.startDate).getFullYear())))
-        .sort((a, b) => b - a);
+    const availableYears = Array.from(new Set(
+        applications?.filter(app => app.startDate).map(app => new Date(app.startDate).getFullYear())
+    )).sort((a, b) => b - a);
 
     return (
         <div className="space-y-6">
@@ -150,17 +150,20 @@ export const GsInternshipAgreements = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                shadow-sm cursor-pointer hover:bg-zinc-200 transition">
                                     {t("filter.year")}: {filterYear !== "All" ? filterYear : t("session.AllYears")}
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
-                                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
+                                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px]
+                                overflow-y-auto items-center">
                                     {availableYears.map((year) => (
                                         <button
                                             key={year}
                                             onClick={() => { setFilterYear(year); setOpen(false); }}
-                                            className={`px-3 py-1 rounded text-left ${filterYear === year ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                                            className={`px-3 py-1 rounded text-left ${filterYear === year ? 
+                                                "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                                         >
                                             {year}
                                         </button>
@@ -210,11 +213,17 @@ export const GsInternshipAgreements = () => {
                         {/* Infos étudiant */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentName")}</h3>
-                                <p className="text-gray-600">{selectedApplication.studentFirstName} {selectedApplication.studentLastName}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentName")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {selectedApplication.studentFirstName} {selectedApplication.studentLastName}
+                                </p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.studentEmail")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.studentEmail")}
+                                </h3>
                                 <p className="text-gray-600">{selectedApplication.studentEmail}</p>
                             </div>
                         </div>
@@ -222,11 +231,15 @@ export const GsInternshipAgreements = () => {
                         {/* Infos entreprise */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.company")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.company")}
+                                </h3>
                                 <p className="text-gray-600">{selectedApplication.employerEnterpriseName}</p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.companyEmail")}
+                                </h3>
                                 <p className="text-gray-600">{selectedApplication.employerEmail}</p>
                             </div>
                         </div>
@@ -235,8 +248,12 @@ export const GsInternshipAgreements = () => {
                         <div className="grid grid-cols-2 gap-4">
                             {selectedApplication.internshipOfferDescription && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
-                                    <p className="text-gray-600 whitespace-pre-wrap">{selectedApplication.internshipOfferDescription}</p>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
+                                    <p className="text-gray-600 whitespace-pre-wrap">
+                                        {selectedApplication.internshipOfferDescription}
+                                    </p>
                                 </div>
                             )}
                             <div>
@@ -248,11 +265,17 @@ export const GsInternshipAgreements = () => {
                         {/* Dates et informations supplémentaires */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.startDate")}</h3>
-                                <p className="text-gray-600">{new Date(selectedApplication.startDate).toLocaleDateString()}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.startDate")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {new Date(selectedApplication.startDate).toLocaleDateString()}
+                                </p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.semester")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.semester")}
+                                </h3>
                                 <p className="text-gray-600">
                                     {["AUTOMNE", "HIVER"].includes(selectedApplication.session.toUpperCase())
                                         ? t(`modal.${selectedApplication.session.toLowerCase()}`)
@@ -263,11 +286,15 @@ export const GsInternshipAgreements = () => {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.scheduleType")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.scheduleType")}
+                                </h3>
                                 <p className="text-gray-600">{selectedApplication.typeHoraire}</p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.hourAmount")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.hourAmount")}
+                                </h3>
                                 <p className="text-gray-600">{selectedApplication.nbHeures}</p>
                             </div>
                         </div>
@@ -283,8 +310,12 @@ export const GsInternshipAgreements = () => {
                                 </p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.appliedAt")}</h3>
-                                <p className="text-gray-600">{new Date(selectedApplication.createdAt).toLocaleDateString()}</p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.appliedAt")}
+                                </h3>
+                                <p className="text-gray-600">
+                                    {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -298,7 +329,8 @@ export const GsInternshipAgreements = () => {
                     <div className="flex justify-end mb-2">
                         <button
                             onClick={resetAgreement}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
+                            font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-red-200"
                         >
                             <Cross2Icon className="w-4 h-4" />
                             <span>{t("pdf.close")}</span>

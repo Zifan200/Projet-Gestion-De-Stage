@@ -4,3 +4,8 @@ export const programmes = [
   "Cinéma",
   "Soins infirmiers",
 ];
+
+export const scheduleTypes = [
+  "FULL_TIME",
+  "PART_TIME",
+];

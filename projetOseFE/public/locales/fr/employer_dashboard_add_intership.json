@@ -9,10 +9,17 @@
     "deadline": "Date limite pour postuler",
     "startDate": "Date de début du stage",
     "endDate": "Date de fin du stage",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "hourAmount": "Nombre d'heures par semaine",
+    "address": "Adresse",
     "placeholders": {
       "title": "Veuillez saisir le titre de votre offre de stage",
       "description": "Veuillez saisir la description complète du stage proposé",
-      "program": "Veuillez sélectionner le programme visé"
+      "program": "Veuillez sélectionner le programme visé",
+      "scheduleType": "Veuillez sélectionner le type d'horaire",
+      "address": "Veuillez saisir l'adresse de votre entreprise"
     }
   },
   "submit": "Publier l’offre de stage",
@@ -34,6 +41,9 @@
     "end_required": "Une date de fin est obligatoire.",
     "end_after_start": "La date de fin doit être après la date de début.",
     "expiration_before_start": "La date limite doit être avant la date de début.",
-    "expiration_not_past": "La date limite ne peut pas être dans le passé."
+    "expiration_not_past": "La date limite ne peut pas être dans le passé.",
+    "invalid_hour_amount": "Veuillez entrer un nombre d'heures valide.",
+    "address_required": "Une adresse est requise.",
+    "schedule_type_required": "Un type d'horaire est requis."
   }
 }

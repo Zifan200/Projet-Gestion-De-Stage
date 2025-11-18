@@ -34,6 +34,18 @@ export const getOfferSchema = () =>
           .regex(
               /^\d+(\.\d{1,2})?$/, "employer_dashboard_add_intership:validation.invalid_salary"
           ),
+      typeHoraire: z
+          // .number()
+          .string()
+          .min(1, i18n.t("employer_dashboard_add_intership:validation.schedule_type_required")),
+      nbHeures: z
+          .string()
+          .regex(
+              /^\d+(\.\d{1,2})?/, "employer_dashboard_add_intership:validation.invalid_hour_amount"
+          ),
+      address: z
+          .string()
+          .min(1, i18n.t("employer_dashboard_add_intership:validation.address_required")),
       employerEmail: z.string().email(i18n.t("employer_dashboard_add_intership:validation.invalid_email")),
       expirationDate: z
         .string()
