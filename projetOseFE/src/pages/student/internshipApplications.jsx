@@ -72,7 +72,6 @@ export const StudentApplications = () => {
         { key: "internshipOfferTitle", label: t("table.offerTitle") },
         { key: "appliedAt", label: t("table.appliedAt") },
         { key: "status", label: t("table.employerDecision") },
-        { key: "etudiantStatus", label: t("table.myDecision") },
         {
             key: "actions",
             label: t("table.action"),
@@ -98,7 +97,7 @@ export const StudentApplications = () => {
     const filteredApplications = useMemo(() => {
         return applications
             .filter((app) =>
-                filterEmployerDecision ? app.status === filterEmployerDecision : true
+                filterEmployerDecision ? app.postInterviewStatus === filterEmployerDecision : true
             )
             .filter((app) =>
                 filterMyDecision ? app.etudiantStatus === filterMyDecision : true
@@ -122,9 +121,10 @@ export const StudentApplications = () => {
     const tableData = filteredApplications.map((app) => ({
         ...app,
         appliedAt: new Date(app.createdAt).toLocaleDateString(),
-        rawStatus: app.status?.toLowerCase(),
-        status: t(`status.${app.status?.toLowerCase()}`),
-        etudiantStatus: app.etudiantStatus ? t(`status.${app.etudiantStatus?.toLowerCase()}`) : "N/A" ,
+        rawStatus: app.postInterviewStatus?.toLowerCase(),
+        status: app.postInterviewStatus ?
+            t(`status.${app.postInterviewStatus?.toLowerCase()}`) :
+            t(`status.pending`),
     }));
 
     const handleDownloadApplication = async (offerId) => {
@@ -196,59 +196,6 @@ export const StudentApplications = () => {
                                 </>
                             )}
                         </Popover>
-
-                        {/* Ma décision */}
-                        <Popover>
-                            {({ open, setOpen, triggerRef, contentRef }) => (
-                                <>
-                                    <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                        <span
-                                            className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
-                                            shadow-sm cursor-pointer hover:bg-zinc-200 transition"
-                                        >
-                                          {t("filter.myDecision")}: {" "}
-                                            { filterMyDecision === "All" || filterMyDecision === null ?
-                                                t("filter.allDecisions") :
-                                                t(`status.${filterMyDecision.toLowerCase()}`)
-                                            }
-                                        </span>
-                                    </PopoverTrigger>
-                                    <PopoverContent open={open} contentRef={contentRef}>
-                                        <div className="flex flex-col gap-2 min-w-[150px]">
-                                            {["CONFIRMED_BY_STUDENT", "REJECTED_BY_STUDENT"].map((status) => (
-                                                <button
-                                                    key={status}
-                                                    onClick={() => {
-                                                        setFilterMyDecision(status);
-                                                        setOpen(false);
-                                                    }}
-                                                    className={`px-3 py-1 rounded text-left ${
-                                                        filterEmployerDecision === status
-                                                            ? "bg-blue-100 font-semibold"
-                                                            : "hover:bg-gray-100"
-                                                    }`}
-                                                >
-                                                    {t(`status.${status.toLowerCase()}`)}
-                                                </button>
-                                            ))}
-                                            <button
-                                                onClick={() => {
-                                                    setFilterMyDecision(null);
-                                                    setOpen(false);
-                                                }}
-                                                className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                                            >
-                                                {t("filter.allDecisions")}
-                                            </button>
-                                            <PopoverClose setOpen={setOpen}>
-                                                <span className="text-sm text-gray-600">{t("menu.close")}</span>
-                                            </PopoverClose>
-                                        </div>
-                                    </PopoverContent>
-                                </>
-                            )}
-                        </Popover>
-
                     </div>
 
                     {/* Table des postulations */}
@@ -313,20 +260,9 @@ export const StudentApplications = () => {
                             )}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.salary")}
+                                    {t("modal.address")}
                                 </h3>
-                                <p className="text-gray-600">
-                                    { localStorage.key("lang") === "fr" ?
-                                        selectedApplication.salary.toLocaleString(
-                                            "fr-CA",
-                                            {style:"currency", currency:"CAD"}
-                                        ) :
-                                        selectedApplication.salary.toLocaleString(
-                                            "en-CA",
-                                            {style:"currency", currency:"CAD"}
-                                        )
-                                    }
-                                </p>
+                                <p className="text-gray-600">{selectedApplication.employerAddress}</p>
                             </div>
                         </div>
 
@@ -360,34 +296,51 @@ export const StudentApplications = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
+                            {selectedApplication.createdAt && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.applicationDate")}
+                                    </h3>
+                                    <p className="text-gray-600">
+                                        {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                            )}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.employerDecision")}
+                                    {t("modal.salary")}
                                 </h3>
-                                <span
-                                    className="px-3 py-1 rounded-full text-sm font-semibold
-                                    bg-green-100 text-green-800"
-                                >
-                                    {
-                                        (selectedApplication.status.toUpperCase() !== "ACCEPTED" &&
-                                            selectedApplication.status.toUpperCase() !== "DECLINED") ?
-                                            t("status.pending") :
-                                            t(`status.${selectedApplication.status.toLowerCase()}`)
+                                <p className="text-gray-600">
+                                    {localStorage.key("lang") === "fr" ?
+                                        selectedApplication.salary.toLocaleString(
+                                            "fr-CA",
+                                            {style: "currency", currency: "CAD"}
+                                        ) :
+                                        selectedApplication.salary.toLocaleString(
+                                            "en-CA",
+                                            {style: "currency", currency: "CAD"}
+                                        )
                                     }
-                                </span>
+                                </p>
                             </div>
                         </div>
 
-                        {selectedApplication.createdAt && (
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                                    {t("modal.applicationDate")}
+                                    {t("modal.scheduleType")}
                                 </h3>
                                 <p className="text-gray-600">
-                                    {new Date(selectedApplication.createdAt).toLocaleDateString()}
+                                    {t(`modal.${selectedApplication.typeHoraire.toLowerCase()}`)}
                                 </p>
                             </div>
-                        )}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.hourAmount")}
+                                </h3>
+                                <p className="text-gray-600">{selectedApplication.nbHeures}</p>
+                            </div>
+                        </div>
                     </div>
                 )}
             </Modal>

@@ -152,7 +152,8 @@ export const GsInternshipAgreements = () => {
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
                                 <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
                                 shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.year")}: {filterYear !== "All" ? filterYear : t("session.AllYears")}
+                                    {t("filter.year")}:{" "}
+                                    {filterYear !== "All" ? filterYear : t("session.AllYears")}
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
@@ -289,7 +290,9 @@ export const GsInternshipAgreements = () => {
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
                                     {t("modal.scheduleType")}
                                 </h3>
-                                <p className="text-gray-600">{selectedApplication.typeHoraire}</p>
+                                <p className="text-gray-600">
+                                    {t(`modal.${selectedApplication.typeHoraire.toLowerCase()}`)}
+                                </p>
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">

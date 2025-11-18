@@ -45,7 +45,13 @@
     "appliedAt": "Postulé le",
     "close": "Fermer",
     "reason": "Raison",
-    "salary": "Salaire"
+    "salary": "Salaire",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "unselected": "À spécifier",
+    "hourAmount": "Nombre d'heures par semaine",
+    "address": "Adresse"
   },
   "reasonModal": {
     "description": "Expliquez pourquoi vous rejetez cette candidature."

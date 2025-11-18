@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
@@ -231,7 +231,32 @@ export const StudentOffers = () => {
                                     </p>
                                 </div>
                             )}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.address")}
+                                </h3>
+                                <p className="text-gray-600">{selectedOffer.address}</p>
+                            </div>
+                        </div>
 
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.scheduleType")}
+                                </h3>
+                                <p className="text-gray-600 whitespace-pre-wrap">
+                                    {t(`modal.${selectedOffer.typeHoraire.toLowerCase()}`)}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.hourAmount")}
+                                </h3>
+                                <p className="text-gray-600">{selectedOffer.nbHeures}</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
                                     {t("modal.salary")}
@@ -256,7 +281,8 @@ export const StudentOffers = () => {
                                 {t("modal.selectCv")}
                             </label>
                             <select
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm
+                                    focus:outline-none focus:ring-2 focus:ring-blue-300"
                                 value={selectedCv?.id || ""}
                                 onChange={(e) =>
                                     setSelectedCv(

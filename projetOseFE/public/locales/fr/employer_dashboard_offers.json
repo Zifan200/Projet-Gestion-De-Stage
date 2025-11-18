@@ -15,7 +15,12 @@
     "description": "Description"
   },
   "modal": {
-    "salary": "Salaire"
+    "salary": "Salaire",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "unselected": "À spécifier",
+    "hourAmount": "Nombre d'heures par semaine"
   },
   "actions": {
     "create_another": "Créer une nouvelle offre de stage",

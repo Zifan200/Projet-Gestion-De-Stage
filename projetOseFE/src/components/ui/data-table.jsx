@@ -59,6 +59,7 @@ export const DataTable = ({ columns, data, onAction }) => {
                         pending: "bg-yellow-100 text-yellow-800",
                         accepted: "bg-green-100 text-green-800",
                         rejected: "bg-red-100 text-red-800",
+                        declined: "bg-red-100 text-red-800",
                         reviewing: "bg-blue-100 text-blue-800",
                       }[statusKey] || "bg-gray-100 text-gray-700";
 

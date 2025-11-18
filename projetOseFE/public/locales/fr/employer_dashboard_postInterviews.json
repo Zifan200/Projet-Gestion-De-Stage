@@ -20,9 +20,9 @@
     "publicationDate": "Date de cadidature",
     "employerDecision": "Décision de l'employeur",
     "myDecision": "Ma décision",
-    "noApplications": "aucune candidature",
-    "accepted": "Accepter",
-    "rejected": "Rejeter"
+    "noApplications": "Aucune candidature",
+    "accepted": "Accepté",
+    "rejected": "Rejeté"
   },
   "status": {
     "pending": "En cours d'examination",

@@ -42,7 +42,13 @@
     "startDate": "Date de début",
     "hiver": "Hiver",
     "automne": "Automne",
-    "close": "Fermer"
+    "close": "Fermer",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "unselected": "À spécifier",
+    "hourAmount": "Nombre d'heures par semaine",
+    "address": "Adresse"
   },
   "filter": {
     "status": "Filtrer par Statut",
