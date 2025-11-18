@@ -146,6 +146,9 @@ public class EntenteStageService {
                                        Role roleActuel,
                                        String signatureActeur) throws IOException {
 
+        DateTimeFormatter signatureDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String currentDate = LocalDate.now().format(signatureDateFormatter);
+
         if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED &&
                 dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
             throw new InvalidInternshipApplicationException(
@@ -171,9 +174,15 @@ public class EntenteStageService {
         Map<String, PdfFormField> fields = form.getAllFormFields();
 
         Map<String, String> values = prepareTextFields(dto, gestionnaire);
-        // 🔹 Remplacer la valeur de signature_gestionnaire si elle est fournie
         if (roleActuel == Role.GESTIONNAIRE && signatureActeur != null) {
             values.put("signature_gestionnaire", signatureActeur);
+            values.put("date_signature_gestionnaire", currentDate);
+        } else if (roleActuel == Role.EMPLOYER && signatureActeur != null) {
+            values.put("signature_employer", signatureActeur);
+            values.put("date_signature_employeur", currentDate);
+        } else if (roleActuel == Role.STUDENT && signatureActeur != null) {
+            values.put("signature_etudiant", signatureActeur);
+            values.put("date_signature_etudiant", currentDate);
         }
 
         // Remplir les champs
