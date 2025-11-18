@@ -57,7 +57,7 @@ import {DashboardCardGsWrapper} from "./pages/gs/wrapper/dashboardGsPhone.jsx";
 import {DashboardCardStudentWrapper} from "./pages/student/wrapper/dashboardCardStudentWrapper.jsx";
 import {DashboardGsPhone} from "./pages/gs/phone/dashboardGsPhone.jsx";
 import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx";
-import {GsInternshipAgreementsPhone} from "./pages/gs/phone/GsInternshipAgreementsPhone.jsx";
+import {AgreementsGsPhone} from "./pages/gs/phone/agreementsGsPhone.jsx";
 import {GsInternshipAgreements} from "./pages/gs/agreements.jsx";
 
 function App() {
@@ -257,7 +257,7 @@ function App() {
                             element={
                                 <PageWrapper
                                     DesktopComponent={GsInternshipAgreements}
-                                    PhoneComponent={GsInternshipAgreementsPhone}
+                                    PhoneComponent={AgreementsGsPhone}
                                 />
                             }
                         />

@@ -8,7 +8,7 @@ import { useInternshipAgreementStore } from "../../../stores/internshipAgreement
 import { Modal } from "../../../components/ui/modal.jsx";
 import PdfViewerEntente from "../../../components/PdfViewerEntente.jsx";
 
-export const GsInternshipAgreementsPhone = () => {
+export const AgreementsGsPhone = () => {
     const { t } = useTranslation("internship_agreements");
     const navigate = useNavigate();
     const user = useAuthStore((s) => s.user);
