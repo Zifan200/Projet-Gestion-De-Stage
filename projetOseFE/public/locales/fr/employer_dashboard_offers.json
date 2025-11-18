@@ -1,7 +1,7 @@
 {
-  "title": "Mes offres",
+  "title": "Mes offres de stage",
   "table": {
-    "title": "Mes offres",
+    "title": "Mes offres de stage",
     "offerTitle": "Titre",
     "enterprise": "Entreprise",
     "program": "Programme",
@@ -9,16 +9,16 @@
     "status": "Statut",
     "applications": "Candidatures",
     "actions": "Actions",
-    "noOffers": "Aucune offre disponible.",
+    "noOffers": "Aucune offre de stage disponible.",
     "reason": "Raison du rejet",
-    "offerDetails": "Détails de l'offre",
+    "offerDetails": "Détails de l'offre de stage",
     "description": "Description"
   },
   "modal": {
     "salary": "Salaire"
   },
   "actions": {
-    "create_another": "Créer une nouvelle offre",
+    "create_another": "Créer une nouvelle offre de stage",
     "view": "Voir",
     "download": "Télécharger",
     "close": "Fermer"
@@ -50,13 +50,13 @@
     "rejected": "Refusée"
   },
   "success": {
-    "download": "Offre téléchargée avec succès !"
+    "download": "Offre de stage téléchargée avec succès !"
   },
   "error": {
-    "load": "Échec du chargement des offres.",
-    "download": "Échec du téléchargement de l'offre."
+    "load": "Échec du chargement des offres de stage.",
+    "download": "Échec du téléchargement de l'offre de stage."
   },
-  "noDescription": "Aucune description fournie pour cette offre.",
+  "noDescription": "Aucune description fournie pour cette offre de stage.",
   "menu": {
     "close": "Fermer"
   }

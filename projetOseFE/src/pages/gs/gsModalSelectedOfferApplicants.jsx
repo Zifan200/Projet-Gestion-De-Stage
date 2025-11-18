@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {
     Cross2Icon,
-    FileIcon,
-    ReaderIcon
+    FileIcon, FileTextIcon,
+    ReaderIcon, TriangleDownIcon
 } from "@radix-ui/react-icons";
 import {useNavigate} from "react-router";
 import {Table} from "../../components/ui/table.jsx";
@@ -17,16 +17,20 @@ import {useTranslation} from "react-i18next";
 import useAuthStore from "../../stores/authStore.js";
 import {useOfferStore} from "../../stores/offerStore.js";
 import PdfViewer from "../../components/CvViewer.jsx";
-import { toast } from "sonner";
+import {toast} from "sonner";
+import {TableActionButton} from "../../components/ui/tableActionButton.jsx";
 
 export const ModalSelectedOfferApplicants = ({offerId}) => {
     const {t} = useTranslation("gs_modal_selectedOfferApplications");
     const navigate = useNavigate();
     const user = useAuthStore((s) => s.user);
 
+// store both the original unmodified list and the filtered list
+    const [originalList, setOriginalList] = useState([]);
+    const [selectedOfferApplicationsList, setSelectedOfferApplicationsList] = useState([]);
+
     const [currentProgram, setCurrentProgram] = useState([]);
     const [currentStudentApplications, setCurrentStudentApplications] = useState([]);
-    const [selectedOfferApplicationsList, setSelectedOfferApplicationsList] = useState([])
     const [selectedApplicationCv, setSelectedApplicationCv] = useState(null)
 
     const [previewId, setPreviewId] = useState(null);
@@ -43,11 +47,19 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
     };
 
 
-    const studentNameFilterTypes = {
-        ALPHABETICAL: t("filterLabels.alphabetical"),
-        REVERSE_ALPHABETICAL: t("filterLabels.reverseAlphabetical"),
+    const elementOrderFilterTypes = {
+        ORDERED: "▲",
+        NONE: "■",
+        REVERSE_ORDERED: "▼",
     };
-    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(studentNameFilterTypes.ALPHABETICAL)
+
+    const sortTypes = {
+        NAME: "name",
+        DATE: "date",
+    };
+    const [currentStudentNameFilter, setCurrentStudentNameFilter] = useState(elementOrderFilterTypes.NONE)
+    const [currentApplicationDateFilter, setCurrentApplicationDateFilter] = useState(elementOrderFilterTypes.NONE)
+    const [activeSortType, setActiveSortType] = useState("date"); // or "name"
 
     const {
         selectedOfferApplications,
@@ -63,47 +75,78 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
     useEffect(() => {
         const loadAllData = async () => {
             await loadPrograms();
-            await loadAllApplicationsFromInternshipOffer(offerId)
+            await loadAllApplicationsFromInternshipOffer(offerId);
             const {selectedOfferApplicationsList} = useGeStore.getState();
-            setSelectedOfferApplicationsList(selectedOfferApplicationsList)
-            console.log(offerId)
+            console.log("Loaded applications: ", selectedOfferApplicationsList);
+
+            // keep a clean copy for filtering later
+            setOriginalList(selectedOfferApplicationsList);
+            setSelectedOfferApplicationsList(selectedOfferApplicationsList);
         };
         loadAllData();
-        applyCurrentFilter();
     }, []);
+    const selectedOfferApplicationsListFromStore = useGeStore(
+        (state) => state.selectedOfferApplicationsList
+    );
+
+
+    useEffect(() => {
+        setOriginalList(selectedOfferApplicationsListFromStore);
+        setSelectedOfferApplicationsList(selectedOfferApplicationsListFromStore);
+    }, [selectedOfferApplicationsListFromStore]);
+
 
     //
     useEffect(() => {
-        applyCurrentFilter();
-    }, [ currentStudentNameFilter]);
+        handleActiveSorting();
+    }, [currentStudentNameFilter, currentApplicationDateFilter]);
 
-    const sortStudentsNameAlphabetical = (applicationsList) => {
-        let list = [...applicationsList].sort((a, b) => a.studentFirstName.localeCompare(b.studentFirstName))
-        return list;
-    };
+    const handleActiveSorting = () => {
+        //NOTE to me(zohn): update icon of other sorts later
+        if (activeSortType === sortTypes.DATE) {
+            applyDateSort();
+        } else if (activeSortType === sortTypes.NAME) {
+            applyNameSort();
+        }
+    }
+    const applyNameSort = () => {
+        let list = [...originalList]; // always start from the clean copy
 
-    const sortStudentsNameReverseAlphabetical = (applicationsList) => {
-        let list = [...applicationsList].sort((b, a) => a.studentFirstName.localeCompare(b.studentFirstName));
-        return list;
-    };
-
-    const applyCurrentFilter = () => {
-        let listToFilter = [];
+        // --- Name filter ---
         switch (currentStudentNameFilter) {
-            case studentNameFilterTypes.ALPHABETICAL:
-                listToFilter = sortStudentsNameAlphabetical(selectedOfferApplicationsList);
+            case elementOrderFilterTypes.ORDERED: // A → Z
+                list.sort((a, b) => a.studentFirstName.localeCompare(b.studentFirstName));
                 break;
-            case studentNameFilterTypes.REVERSE_ALPHABETICAL:
-                listToFilter = sortStudentsNameReverseAlphabetical(selectedOfferApplicationsList);
+            case elementOrderFilterTypes.REVERSE_ORDERED: // Z → A
+                list.sort((a, b) => b.studentFirstName.localeCompare(a.studentFirstName));
+                break;
+            default:
                 break;
         }
 
-        let filtered = listToFilter;
-        setSelectedOfferApplicationsList(filtered);
+        setSelectedOfferApplicationsList(list);
+    }
+    const applyDateSort = () => {
+        let list = [...originalList]; // always start from the clean copy
+
+        // --- Date filter ---
+        switch (currentApplicationDateFilter) {
+            case elementOrderFilterTypes.ORDERED: // oldest first
+                list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                break;
+            case elementOrderFilterTypes.REVERSE_ORDERED: // newest first
+                list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                break;
+            default:
+                break;
+        }
+
+        setSelectedOfferApplicationsList(list);
     };
 
-    function statusTranslation(applicationStatus){
-        switch(applicationStatus){
+
+    function statusTranslation(applicationStatus) {
+        switch (applicationStatus) {
             case applicationStatuses.PENDING:
                 return t("applicationStatus.pending");
             case applicationStatuses.ACCEPTED:
@@ -125,14 +168,10 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
 
     const tableRows = () => selectedOfferApplicationsList.map((application) => (
         <tr key={application.id}
-            className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm"
-            onClick={()=>{
-
-            }}
-        >
+            className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm">
             <td className="px-4 py-1 w-auto">
                 <div
-                    onClick={()=>{
+                    onClick={() => {
                         console.log("student selected : " + application.studentFirstName + " " + application.studentLastName)
                     }}
                     className="inline-flex items-center px-3 py-1.5 rounded-md text-md font-bold transition-colors bg-blue-100 hover:bg-blue-200">
@@ -141,33 +180,28 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
             </td>
             <td className="px-4 py-1 w-auto">{application.studentProgrammeName}</td>
             <td className="px-4 py-1 w-auto">
-                <button
-                    onClick={()=>{
-                        console.log("open applicaiton cv : " + application.selectedCvID)
-                        // setSelectedApplicationCv(application.selectedCvID)
+                <TableActionButton
+                    icon={FileTextIcon}
+                    bg_color={"blue-200"} text_color={"blue-700"}
+                    label={"" + application.selectedCvFileType}
+                    onClick={() => {
+                        setSelectedApplicationCv(application.selectedCvID)
                         handlePreview(application)
                     }}
-                    className="flex rounded-full p-2 w-8 h-8 transition-colors bg-lime-100 hover:bg-lime-200"><FileIcon className="justify-center"/></button>
+                />
             </td>
             <td className="px-4 py-3">
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(application.status)}`}>
                     {statusTranslation(application.status)}
                 </span>
             </td>
-            <td className="px-4 py-1 w-auto">{application.internshipOfferPublishedDate}</td>
+            <td className="px-4 py-1 w-auto">{new Date(application.createdAt).toLocaleString()}</td>
 
         </tr>
     ));
 
 
     return <div className="w-full h-full">
-        <div className="pb-3">
-            <span>{t("filterType.applicantName")} : </span>
-            <select className="px-2" value={currentStudentNameFilter}
-                    onChange={e => setCurrentStudentNameFilter(e.target.value)}>
-                {Object.values(studentNameFilterTypes).map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-        </div>
         <div className="overflow-auto max-h-96 border border-gray-300 rounded-lg">
             {loading ? <p>{t("loading")}</p> :
                 <>
@@ -178,25 +212,64 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                                     onClick={() => setPreviewId(null)}
                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
                                 >
-                                    <Cross2Icon className="w-4 h-4" />
+                                    <Cross2Icon className="w-4 h-4"/>
                                     <span>{t("menu.close")}</span>
                                 </button>
                             </div>
-                            <PdfViewer cvId={previewId} role="gs" />
+                            <PdfViewer cvId={previewId} role="gs"/>
                         </div>
-                     :
-                    <Table
-                        headers={[
-                            t("tableHeaders.studentName"),
-                            t("tableHeaders.studentProgramme"),
-                            t("Cv"),
-                            t("tableHeaders.applicationStatus"),
-                            t("tableHeaders.applicationDate"),
+                        :
+                        <Table
+                            headers={[
+                                <div>
+                                    {t("tableHeaders.studentName")}
+                                    <select
+                                        className={`w-5 px-1 mx-2 rounded appearance-none text-center focus:bg-lime-100 ${
+                                            activeSortType === sortTypes.NAME ? " bg-lime-300" : ""
+                                        }`}
+                                        value={currentStudentNameFilter}
+                                        onClick={() => setActiveSortType(sortTypes.NAME)}
+                                        onChange={(e) => {
+                                            setActiveSortType(sortTypes.NAME);
+                                            setCurrentApplicationDateFilter(elementOrderFilterTypes.NONE);
+                                            setCurrentStudentNameFilter(e.target.value);
+                                        }}
+                                    >
+                                        {Object.values(elementOrderFilterTypes)
+                                            .map((s, i) => (
+                                                <option key={i} value={s}>{s}</option>
+                                            ))}
+                                    </select>
+                                </div>,
+                                t("tableHeaders.studentProgramme"),
+                                t("Cv"),
+                                t("tableHeaders.applicationStatus"),
+                                <div>
+                                    {t("tableHeaders.applicationDate")}
+                                    <select
+                                        className={`w-5 px-1 mx-2 rounded appearance-none text-center focus:bg-lime-100 ${
+                                            activeSortType === sortTypes.DATE ? " bg-lime-300" : ""
+                                        }`}
+                                        value={currentApplicationDateFilter}
+                                        onClick={() => setActiveSortType(sortTypes.DATE)}
+                                        onChange={(e) => {
+                                            setActiveSortType(sortTypes.DATE);
+                                            setCurrentStudentNameFilter(elementOrderFilterTypes.NONE);
+                                            setCurrentApplicationDateFilter(e.target.value);
+                                        }}
+                                    >
+                                        {Object.values(elementOrderFilterTypes)
+                                            .map((s, i) => (
+                                                <option key={i} value={s}>{s}</option>
+                                            ))}
+                                    </select>
 
-                        ]}
-                        rows={tableRows()}
-                        emptyMessage={t("noApplications")}
-                    />}
+                                </div>,
+
+                            ]}
+                            rows={tableRows()}
+                            emptyMessage={t("noApplications")}
+                        />}
                 </>
             }
         </div>

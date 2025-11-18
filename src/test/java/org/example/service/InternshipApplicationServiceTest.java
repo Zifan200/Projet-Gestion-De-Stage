@@ -924,20 +924,22 @@ public class InternshipApplicationServiceTest {
                 .selectedStudentCV(cv)
                 .offer(offer)
                 .build();
-        InternshipApplicationResponseDTO pendingRes = InternshipApplicationResponseDTO.create(pendingApp);
 
         when(employerRepository.findByCredentialsEmail(EMPLOYER_EMAIL)).thenReturn(Optional.of(employer));
-        when(internshipApplicationRepository.findById(pendingRes.getId())).thenReturn(Optional.of(pendingApp));
+        when(internshipApplicationRepository.findById(pendingApp.getId())).thenReturn(Optional.of(pendingApp));
+        when(internshipApplicationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         InternshipApplicationResponseDTO result =
-                internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, pendingRes.getId());
+                internshipApplicationService.approveInternshipApplication(EMPLOYER_EMAIL, pendingApp.getId());
 
         // Assert
         assertNotNull(result);
-        assertEquals(ApprovalStatus.ACCEPTED, result.getStatus());
+        assertEquals(ApprovalStatus.ACCEPTED, result.getPostInterviewStatus());
         assertEquals(pendingApp.getOffer().getSalary(), result.getSalary());
     }
+
+
 
     @Test
     void approveInternshipApplication_shouldThrow_whenApplicationNotFound() {
@@ -1000,21 +1002,23 @@ public class InternshipApplicationServiceTest {
                 .selectedStudentCV(cv)
                 .offer(offer)
                 .build();
-        InternshipApplicationResponseDTO pendingRes = InternshipApplicationResponseDTO.create(pendingApp);
 
         when(employerRepository.findByCredentialsEmail(EMPLOYER_EMAIL)).thenReturn(Optional.of(employer));
-        when(internshipApplicationRepository.findById(pendingRes.getId())).thenReturn(Optional.of(pendingApp));
+        when(internshipApplicationRepository.findById(pendingApp.getId())).thenReturn(Optional.of(pendingApp));
+        when(internshipApplicationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         InternshipApplicationResponseDTO result =
-                internshipApplicationService.rejectInternshipApplication(EMPLOYER_EMAIL, pendingRes.getId(), reason);
+                internshipApplicationService.rejectInternshipApplication(EMPLOYER_EMAIL, pendingApp.getId(), reason);
 
         // Assert
         assertNotNull(result);
-        assertEquals(ApprovalStatus.REJECTED, result.getStatus());
+        assertEquals(ApprovalStatus.REJECTED, result.getPostInterviewStatus());
         assertEquals(pendingApp.getOffer().getSalary(), result.getSalary());
         assertEquals(reason, result.getReason());
     }
+
+
 
     @Test
     void rejectInternshipApplication_shouldThrow_whenApplicationNotFound() {

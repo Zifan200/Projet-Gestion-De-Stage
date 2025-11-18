@@ -2,6 +2,9 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import lombok.*;
+import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,11 @@ public class InternshipOffer {
     private LocalDate startDate;
     private LocalDate endDate;
     private String session;
+    private TypeHoraire typeHoraire = TypeHoraire.UNSELECTED;
+
+    @Min(0)
+    private float nbHeures;
+    private String address;
 
     @Min(0)
     private float salary;
@@ -63,7 +71,10 @@ public class InternshipOffer {
         LocalDate startDate,
         LocalDate endDate,
         String session,
+        TypeHoraire typeHoraire,
         List<InternshipApplication> applications,
+        float nbHeures,
+        String address,
         float salary
     ) {
         this.id = id;
@@ -78,7 +89,10 @@ public class InternshipOffer {
         this.startDate = startDate;
         this.endDate = endDate;
         this.session = session;
+        this.typeHoraire = typeHoraire != null ? typeHoraire : TypeHoraire.UNSELECTED;
         this.applications = applications;
+        this.nbHeures = nbHeures;
+        this.address = address;
         this.salary = salary;
     }
 }

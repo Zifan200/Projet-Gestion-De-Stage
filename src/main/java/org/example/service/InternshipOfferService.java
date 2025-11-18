@@ -88,6 +88,9 @@ public class InternshipOfferService {
             .session(session)
             .applications(new ArrayList<>())
             .salary(internshipOfferDto.getSalary())
+            .typeHoraire(internshipOfferDto.getTypeHoraire())
+            .nbHeures(internshipOfferDto.getNbHeures())
+            .address(internshipOfferDto.getAddress())
             .build();
 
         var savedInternshipOffer = internshipOfferRepository.save(
@@ -140,6 +143,9 @@ public class InternshipOfferService {
                     .endDate(offer.getEndDate())
                     .session(offer.getSession())
                     .salary(offer.getSalary())
+                    .typeHoraire(offer.getTypeHoraire())
+                    .nbHeures(offer.getNbHeures())
+                    .address(offer.getAddress())
                     .build()
             )
             .collect(Collectors.toList());
@@ -181,6 +187,9 @@ public class InternshipOfferService {
                     .session(offer.getSession())
                     .applicationCount(offer.getApplications().size())
                     .salary(offer.getSalary())
+                    .typeHoraire(offer.getTypeHoraire())
+                    .nbHeures(offer.getNbHeures())
+                    .address(offer.getAddress())
                     .build()
             )
             .collect(Collectors.toList());
@@ -225,6 +234,9 @@ public class InternshipOfferService {
                     .reason(offer.getReason())
                     .status(offer.getStatus())
                     .salary(offer.getSalary())
+                    .typeHoraire(offer.getTypeHoraire())
+                    .nbHeures(offer.getNbHeures())
+                    .address(offer.getAddress())
                     .build()
             )
             .toList();
@@ -251,6 +263,9 @@ public class InternshipOfferService {
                     .endDate(offer.getEndDate())
                     .session(offer.getSession())
                     .salary(offer.getSalary())
+                    .typeHoraire(offer.getTypeHoraire())
+                    .nbHeures(offer.getNbHeures())
+                    .address(offer.getAddress())
                     .build()
             )
             .toList();
@@ -277,6 +292,9 @@ public class InternshipOfferService {
                     .endDate(offer.getEndDate())
                     .session(offer.getSession())
                     .salary(offer.getSalary())
+                    .typeHoraire(offer.getTypeHoraire())
+                    .nbHeures(offer.getNbHeures())
+                    .address(offer.getAddress())
                     .build()
             )
             .toList();
@@ -303,6 +321,9 @@ public class InternshipOfferService {
                     .endDate(offer.getEndDate())
                     .session(offer.getSession())
                     .salary(offer.getSalary())
+                    .typeHoraire(offer.getTypeHoraire())
+                    .nbHeures(offer.getNbHeures())
+                    .address(offer.getAddress())
                     .build()
             )
             .toList();

@@ -276,6 +276,7 @@ export const InternshipApplications = () => {
                         </a>
                     )}
                 </div>
+
             )}
             {modalType === "convocation" && isModalOpen && selectedApplication && (
                 <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">

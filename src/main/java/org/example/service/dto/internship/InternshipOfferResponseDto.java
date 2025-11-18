@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.InternshipOffer;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 
 import java.time.LocalDate;
 
@@ -28,12 +29,16 @@ public class InternshipOfferResponseDto {
     private LocalDate endDate;
     private String session;
     private float salary;
+    private TypeHoraire typeHoraire;
+    private float nbHeures;
+    private String address;
 
     @Builder
     public InternshipOfferResponseDto(Long id, String title, String description, String targetedProgramme,
                                       String employerEmail, Integer applicationCount, LocalDate publishedDate,
                                       LocalDate expirationDate, ApprovalStatus status, String reason,
-                                      LocalDate startDate, LocalDate endDate, String session, float salary) {
+                                      LocalDate startDate, LocalDate endDate, String session, float salary,
+                                      TypeHoraire typeHoraire, float nbHeures, String address) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -48,6 +53,9 @@ public class InternshipOfferResponseDto {
         this.endDate = endDate;
         this.session = session;
         this.salary = salary;
+        this.typeHoraire = typeHoraire;
+        this.nbHeures = nbHeures;
+        this.address = address;
     }
 
     public static InternshipOfferResponseDto create(InternshipOffer internshipOffer) {
@@ -66,6 +74,9 @@ public class InternshipOfferResponseDto {
                 .endDate(internshipOffer.getEndDate())
                 .session(internshipOffer.getSession())
                 .salary(internshipOffer.getSalary())
+                .typeHoraire(internshipOffer.getTypeHoraire())
+                .nbHeures(internshipOffer.getNbHeures())
+                .address(internshipOffer.getAddress())
                 .build();
     }
 

@@ -3,9 +3,9 @@
     "cvs": "My Resumes",
     "acceptedCvs": "Accepted Resumes",
     "pendingCvs": "Resumes awaiting approval",
-    "availableOffers": "Available Offers",
-    "acceptedOffers": "Accepted Offers",
-    "pendingOffers": "Pending Offers",
+    "availableOffers": "Available internship offers",
+    "acceptedOffers": "Accepted internship offers",
+    "pendingOffers": "Pending internship offers",
     "myApplications": "My applications",
     "internshipsToConfirm": "Internships to confirm",
     "totalApplications": "Total applications",
@@ -14,17 +14,17 @@
   "messages": {
     "welcome": "Welcome back, {{firstName}}!",
     "noCvs": "You haven't uploaded any resumes yet.",
-    "uploadPrompt": "Add your first resume to apply for offers."
+    "uploadPrompt": "Add your first resume to apply for internship offers."
   },
   "errors": {
     "loadCvs": "Error while loading resumes.",
-    "loadOffers": "Error while loading offers."
+    "loadOffers": "Error while loading internship offers."
   },
   "titles": {
     "home": "Home",
     "dashboard": "Student Dashboard",
     "cvs": "Resume Management",
-    "offers": "Offers Overview",
+    "offers": "Internship offers Overview",
     "convocation": "My convocations"
   }
 }
