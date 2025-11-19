@@ -9,7 +9,8 @@
     "myApplications": "Mes candidatures",
     "internshipsToConfirm": "Stages à confirmer",
     "totalApplications": "Candidatures totales",
-    "newConvocations": "Nouvelles convocations"
+    "newConvocations": "Nouvelles convocations",
+    "internshipAgreements": "Ententes de stage"
   },
   "messages": {
     "welcome": "Bon retour, {{firstName}} !",

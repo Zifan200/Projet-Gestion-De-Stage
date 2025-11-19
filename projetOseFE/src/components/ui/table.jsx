@@ -6,11 +6,16 @@ export const Table = ({ headers, rows, emptyMessage }) => {
         <table className="w-full text-sm text-left border-collapse">
           <thead className="bg-[#F9FBFC] text-gray-600 uppercase text-xs font-semibold">
           <tr>
-            {headers.map((h, i) => (
-              <th key={i} className="px-4 py-3 md:whitespace-nowrap">
-                {h}
-              </th>
-            ))}
+            {headers.map((h, i) => {
+              const isObject = typeof h === 'object' && h !== null && !React.isValidElement(h);
+              const label = isObject ? h.label : h;
+              const className = isObject ? h.className : '';
+              return (
+                <th key={i} className={`px-4 py-3 md:whitespace-nowrap ${className}`}>
+                  {label}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>

@@ -111,9 +111,9 @@ export const GsRecommendations = () => {
         <td className="px-4 py-3">
           {student.firstName} {student.lastName}
         </td>
-        <td className="px-4 py-3">{student.email}</td>
+        <td className="px-4 py-3 hidden md:table-cell">{student.email}</td>
         <td className="px-4 py-3">{student.program || t("noProgram")}</td>
-        <td className="px-4 py-3">
+        <td className="px-4 py-3 hidden md:table-cell">
           <div className="flex flex-col gap-1">
             {studentRecommendations.length === 0 ? (
               <span className="text-gray-400 text-xs">{t("noRecommendations")}</span>
@@ -139,10 +139,10 @@ export const GsRecommendations = () => {
         <td className="px-4 py-3">
           <button
             onClick={() => handleRecommend(student)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200"
+            className="inline-flex items-center gap-1.5 p-2 md:px-3 md:py-1.5 rounded-lg text-sm font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200"
           >
             <StarIcon className="w-4 h-4" />
-            <span>{t("actions.recommend")}</span>
+            <span className="hidden md:inline">{t("actions.recommend")}</span>
           </button>
         </td>
       </tr>
@@ -150,7 +150,7 @@ export const GsRecommendations = () => {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <Header title={t("title")} />
 
       <Popover>
@@ -161,14 +161,14 @@ export const GsRecommendations = () => {
               setOpen={setOpen}
               triggerRef={triggerRef}
             >
-              <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                {t("filter.program")}:{" "}
+              <span className="px-3 md:px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
+                <span className="hidden md:inline">{t("filter.program")}: </span>
                 {filterProgram || t("filter.all")}
               </span>
             </PopoverTrigger>
 
             <PopoverContent open={open} contentRef={contentRef}>
-              <div className="flex flex-col gap-2 min-w-[150px]">
+              <div className="flex flex-col gap-2 min-w-[120px] md:min-w-[150px]">
                 {programs.map((program) => (
                   <button
                     key={program}
@@ -214,9 +214,9 @@ export const GsRecommendations = () => {
       <Table
         headers={[
           t("table.student"),
-          t("table.email"),
+          { label: t("table.email"), className: "hidden md:table-cell" },
           t("table.program"),
-          t("table.recommendations"),
+          { label: t("table.recommendations"), className: "hidden md:table-cell" },
           t("table.actions"),
         ]}
         rows={rows}
