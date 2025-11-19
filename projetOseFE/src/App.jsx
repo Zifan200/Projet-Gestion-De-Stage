@@ -61,6 +61,8 @@ import {AgreementsGsPhone} from "./pages/gs/phone/agreementsGsPhone.jsx";
 import {GsInternshipAgreements} from "./pages/gs/agreements.jsx";
 import {EmployerInternshipAgreements} from "./pages/employer/agreementsEmployer.jsx";
 import {StudentInternshipAgreements} from "./pages/student/agreementsStudent.jsx";
+import {StudentInternshipAgreementsPhone} from "./pages/student/phone/agreementsStudentPhone.jsx";
+import {EmployerInternshipAgreementsPhone} from "./pages/employer/phone/agreementsEmployerPhone.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -358,7 +360,10 @@ function App() {
                         <Route
                             path="internship-agreements-student"
                             element={
-                                <StudentInternshipAgreements/>
+                                <PageWrapper
+                                    DesktopComponent={StudentInternshipAgreements}
+                                    PhoneComponent={StudentInternshipAgreementsPhone}
+                                />
                             }
                         />
 
@@ -449,7 +454,10 @@ function App() {
                         <Route
                             path="internship-agreements-employer"
                             element={
-                                <EmployerInternshipAgreements/>
+                                <PageWrapper
+                                    DesktopComponent={EmployerInternshipAgreements}
+                                    PhoneComponent={EmployerInternshipAgreementsPhone}
+                                />
                             }
                         />
 
