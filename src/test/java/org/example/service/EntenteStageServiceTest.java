@@ -85,6 +85,11 @@ class EntenteStageServiceTest {
         when(gestionnaireRepository.findById(1L)).thenReturn(Optional.of(gestionnaire));
         when(internshipApplicationRepository.findById(dto.getId())).thenReturn(Optional.of(internshipApplication));
         when(internshipApplicationRepository.save(any())).thenReturn(internshipApplication);
+        when(ententeStagePdfRepository.save(any(EntenteStagePdf.class))).thenAnswer(invocation -> {
+            EntenteStagePdf pdf = invocation.getArgument(0);
+            pdf.setId(1L); // Simulate database auto-generated ID
+            return pdf;
+        });
     }
 
     private byte[] createDummyPdfWithFields() throws IOException {

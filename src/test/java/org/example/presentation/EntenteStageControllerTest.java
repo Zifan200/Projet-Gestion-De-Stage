@@ -1,6 +1,8 @@
 package org.example.presentation;
 
+import org.example.model.InternshipApplication;
 import org.example.model.auth.Role;
+import org.example.repository.InternshipApplicationRepository;
 import org.example.service.EntenteStageService;
 import org.example.service.dto.entente.EntenteGenerationRequestDTO;
 import org.example.service.dto.internshipApplication.InternshipApplicationResponseDTO;
@@ -14,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,6 +28,9 @@ class EntenteStageControllerTest {
 
     @Mock
     private EntenteStageService ententeStageService;
+
+    @Mock
+    private InternshipApplicationRepository internshipApplicationRepository;
 
     @InjectMocks
     private EntenteStageController ententeStageController;
@@ -44,14 +51,21 @@ class EntenteStageControllerTest {
     void shouldGeneratePdfWhenGestionnaireSignsFirst() throws Exception {
         // Arrange
         InternshipApplicationResponseDTO applicationDto = new InternshipApplicationResponseDTO();
+        applicationDto.setId(1L);
         EntenteGenerationRequestDTO request = new EntenteGenerationRequestDTO();
         request.setApplication(applicationDto);
         request.setGestionnaireId(100L);
 
         byte[] pdfBytes = "PDF_GESTIONNAIRE".getBytes();
 
+        InternshipApplication app = new InternshipApplication();
+        app.setId(1L);
+        app.setEntenteStagePdfId(999L);
+
         when(ententeStageService.generateEntenteDeStage(any(), eq(100L), eq(Role.GESTIONNAIRE)))
                 .thenReturn(pdfBytes);
+        when(internshipApplicationRepository.findById(1L))
+                .thenReturn(Optional.of(app));
 
         // Act + Assert
         mockMvc.perform(post(BASE_PATH + "/create")
@@ -64,9 +78,9 @@ class EntenteStageControllerTest {
                             }
                         """))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Content-Disposition", "attachment; filename=entente_stage.pdf"))
-                .andExpect(content().contentType(MediaType.APPLICATION_PDF))
-                .andExpect(content().bytes(pdfBytes));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.pdfData").exists())
+                .andExpect(jsonPath("$.id").exists());
     }
 
    /* @Test

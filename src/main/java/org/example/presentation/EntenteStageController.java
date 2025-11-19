@@ -41,14 +41,11 @@ public class EntenteStageController {
                 request.getRole()
         );
 
-        // Crée l'entité et sauvegarde-la pour obtenir l'ID
-        EntenteStagePdf entitePdf = new EntenteStagePdf();
-        entitePdf.setPdfData(pdfBytes);
-        entitePdf.setApplicationId(request.getApplication().getId());
-        //ententeStagePdfRepository.save(entitePdf); // <- sauvegarde et génère l'ID
+        // Le service a déjà sauvegardé le PDF et mis à jour l'application avec l'ID
+        InternshipApplication app = internshipApplicationRepository.findById(request.getApplication().getId())
+                .orElseThrow(() -> new IllegalStateException("Application not found"));
 
-        // Maintenant on a l'ID
-        Long ententeId = entitePdf.getId();
+        Long ententeId = app.getEntenteStagePdfId();
 
         EntenteCreationResponseDTO response = new EntenteCreationResponseDTO(ententeId, pdfBytes);
         return ResponseEntity.ok(response);
