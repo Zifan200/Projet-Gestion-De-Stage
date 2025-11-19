@@ -60,6 +60,7 @@ import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx"
 import {AgreementsGsPhone} from "./pages/gs/phone/agreementsGsPhone.jsx";
 import {GsInternshipAgreements} from "./pages/gs/agreements.jsx";
 import {EmployerInternshipAgreements} from "./pages/employer/agreementsEmployer.jsx";
+import {StudentInternshipAgreements} from "./pages/student/agreementsStudent.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -106,6 +107,12 @@ function App() {
             label: t("student_dashboard_decision:stats.decisionStatus"),
             href: "/dashboard/student/internshipFinalDecision",
             icon: CheckIcon,
+        },
+        {
+            key: "agreementsStudent",
+            label: t("student_dashboard:stats.internshipAgreements"),
+            href: "/dashboard/student/internship-agreements-student",
+            icon: Handshake,
         },
         {
             key: "settings",
@@ -346,6 +353,12 @@ function App() {
                                     DesktopComponent={StudentConvocations}
                                     PhoneComponent={StudentConvocationDecisionPhone}
                                 />
+                            }
+                        />
+                        <Route
+                            path="internship-agreements-student"
+                            element={
+                                <StudentInternshipAgreements/>
                             }
                         />
 
