@@ -28,7 +28,7 @@ export const GsInternshipAgreements = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
     const [signatureGestionnaire, setSignatureGestionnaire] = useState("");
-    const fullName = `${user.firstName} ${user.lastName}`.trim();
+    const fullName = `${user?.firstName} ${user?.lastName}`.trim();
     const [signatureError, setSignatureError] = useState("");
     const [signatureSuccess, setSignatureSuccess] = useState("");
 
@@ -36,7 +36,6 @@ export const GsInternshipAgreements = () => {
 
 
     useEffect(() => {
-        console.log("Nom complet attendu pour la signature :", `${user.firstName} ${user.lastName}`);
         loadAllInternshipApplications();
     }, [loadAllInternshipApplications]);
 
@@ -75,7 +74,7 @@ export const GsInternshipAgreements = () => {
 
 
     const tableRows = () =>
-        sortedAndFilteredApplications.map((app) => (
+        sortedAndFilteredApplications?.map((app) => (
             <tr key={app.id} className="select-none pt-4 w-fit border-t border-gray-200 text-gray-700 text-sm">
                 <td className="px-4 py-3">{app.internshipOfferTitle}</td>
                 <td className="px-4 py-3">{app.employerEnterpriseName}</td>
@@ -107,7 +106,7 @@ export const GsInternshipAgreements = () => {
                                 text_color="amber-700"
                                 onClick={() => {
                                     setSelectedApplication(app);
-                                    previewAgreement(user.token, app.ententeStagePdfId);
+                                    previewAgreement(user?.token, app.ententeStagePdfId);
                                 }}
                             />
 

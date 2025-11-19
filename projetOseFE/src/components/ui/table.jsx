@@ -14,7 +14,7 @@ export const Table = ({ headers, rows, emptyMessage }) => {
           </tr>
         </thead>
         <tbody>
-          {rows.length > 0 ? (
+          {rows?.length > 0 ? (
             rows
           ) : (
             <tr>
