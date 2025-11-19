@@ -345,43 +345,6 @@ public class Main {
       System.out.println(
           "⏳ Candidature 3 (Data Analyst) : EN ATTENTE (étudiant n'a rien fait)");
 
-      // -----------------------------
-      // 9️⃣ Création de recommandations pour Alexandre
-      // -----------------------------
-
-      // Recommandation OR pour offer4 (Junior Frontend Dev)
-      recommendationService.createOrUpdateRecommendation(
-          RecommendationRequestDTO.builder()
-              .studentId(etudiantDTO.getId())
-              .offerId(offer4.getId())
-              .priorityCode(PriorityCode.GOLD)
-              .build(),
-          admin.getEmail()
-      );
-      System.out.println("⭐ Recommandation OR créée pour offer4");
-
-      // Recommandation BLEU pour offer5 (DevOps Engineer)
-      recommendationService.createOrUpdateRecommendation(
-          RecommendationRequestDTO.builder()
-              .studentId(etudiantDTO.getId())
-              .offerId(offer5.getId())
-              .priorityCode(PriorityCode.SILVER)
-              .build(),
-          admin.getEmail()
-      );
-      System.out.println("⭐ Recommandation BLEU créée pour offer5");
-
-      // Recommandation VERTE pour offer6 (Mobile Developer)
-      recommendationService.createOrUpdateRecommendation(
-          RecommendationRequestDTO.builder()
-              .studentId(etudiantDTO.getId())
-              .offerId(offer6.getId())
-              .priorityCode(PriorityCode.BRONZE)
-              .build(),
-          admin.getEmail()
-      );
-      System.out.println("⭐ Recommandation VERTE créée pour offer6");
-
       PreLoadedActors loader = PreLoadedActors.getInstance(context);
       List<EtudiantDTO> generatedStudents = loader.genStudents(4);
       List<EmployerDto> generatedEmployers = loader.genEmployers(4);

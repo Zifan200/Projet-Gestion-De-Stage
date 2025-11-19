@@ -3,7 +3,7 @@
   "table": {
     "title": "Title",
     "company": "Company",
-    "priority": "Priority",
+    "priority": "Recommendation level",
     "deadline": "Deadline",
     "action": "Action"
   },
@@ -51,7 +51,7 @@
     "all": "All sessions",
     "fall": "Fall",
     "winter": "Winter",
-    "year" : "All years"
+    "year": "All years"
   },
   "menu": {
     "close": "Close",
