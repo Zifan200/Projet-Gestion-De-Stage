@@ -62,37 +62,34 @@ export const useInternshipAgreementStore = create((set, get) => ({
             set({ error: err.message || "Erreur lors du téléchargement de l'entente" });
         }
     },
-    signAgreement: async (token, agreementId, signature, gsId, application) => {
+    signAgreementStore: async (token, agreementId, role, signerId, signature, application) => {
         try {
-            const payload = {
-                id: agreementId,
-                application: application,
-                gestionnaireId: gsId,
-                role: "GESTIONNAIRE",
-                signatureGestionnaire: signature
-            };
+            // Appel direct au service qui gère déjà payload et URL
+            const result = await internshipAgreementService.signAgreement(
+                token,
+                agreementId,
+                role,
+                signerId,
+                signature,
+                application
+            );
 
-            const res = await api.put(`/entente/update`, payload, {
-                headers: { Authorization: `Bearer ${token}` },
-                responseType: "arraybuffer" // on reçoit le PDF signé
-            });
+            // Mettre à jour l'URL pour prévisualisation
+            set({ previewUrl: result.pdfUrl });
+            return result.pdfUrl;
 
-            // Convertir pdfData en URL pour le preview
-            const blob = new Blob([res.data], { type: "application/pdf" });
-            const pdfUrl = URL.createObjectURL(blob);
-
-            set({ previewUrl: pdfUrl });
-            return pdfUrl;
         } catch (err) {
             console.error("Erreur lors de la signature de l'entente :", err);
+            set({ error: err.message || "Erreur lors de la signature" });
             throw err;
         }
     },
+
 
 
     resetAgreement: () => {
         const { previewUrl } = get();
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         set({ previewUrl: null, loading: false, error: null });
-    }
+    },
 }));

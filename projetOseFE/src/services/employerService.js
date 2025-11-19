@@ -26,7 +26,6 @@ export const employerService = {
 
   getAllApplications: async () => {
     try {
-      // Récupérer le token depuis le localStorage
       const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Vous devez être connecté pour voir les candidatures");
@@ -51,12 +50,22 @@ export const employerService = {
         throw new Error(`Erreur ${res.status}`);
       }
 
-      return await res.json();
+      const data = await res.json();
+
+      // ✅ Console log pour vérifier ID de la candidature, ID du PDF, nom de l'étudiant et titre de l'offre
+      data.forEach((application) => {
+        console.log(
+            `Application ID: ${application.id}, EntenteStagePdfId: ${application.ententeStagePdfId}, Student: ${application.studentFirstName} ${application.studentLastName}, Offer Title: ${application.internshipOfferTitle}`
+        );
+      });
+
+      return data;
     } catch (err) {
       console.error(err);
       throw err;
     }
   },
+
 
   approveApplication: async (token, id) => {
     try {

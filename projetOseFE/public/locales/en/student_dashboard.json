@@ -9,7 +9,8 @@
     "myApplications": "My applications",
     "internshipsToConfirm": "Internships to confirm",
     "totalApplications": "Total applications",
-    "newConvocations": "New convocations"
+    "newConvocations": "New convocations",
+    "internshipAgreements": "Internship Agreements"
   },
   "messages": {
     "welcome": "Welcome back, {{firstName}}!",

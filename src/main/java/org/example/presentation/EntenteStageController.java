@@ -3,6 +3,7 @@ package org.example.presentation;
 import lombok.RequiredArgsConstructor;
 import org.example.model.EntenteStagePdf;
 import org.example.model.InternshipApplication;
+import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
 import org.example.repository.EntenteStagePdfRepository;
 import org.example.repository.InternshipApplicationRepository;
@@ -69,17 +70,35 @@ public class EntenteStageController {
 
     @PutMapping("/update")
     public ResponseEntity<byte[]> updateEntente(@RequestBody EntenteGenerationRequestDTO request) throws IOException {
-        System.out.println("🔹 updateEntente called for ID chieeeeeeeeeeeeeeeeeeeeee: " + request.getId());
+
+        // Déterminer la signature à utiliser selon le rôle
+        String signature;
+        switch (request.getRole()) {
+            case GESTIONNAIRE -> signature = request.getSignatureGestionnaire();
+            case EMPLOYER -> signature = request.getSignatureEmployer();
+            case STUDENT -> signature = request.getSignatureEtudiant();
+            default -> throw new IllegalArgumentException("Rôle inconnu : " + request.getRole());
+        }
+
+        // Déterminer l'ID de la personne qui signe
+        Long signerId;
+        switch (request.getRole()) {
+            case GESTIONNAIRE -> signerId = request.getGestionnaireId();
+            case EMPLOYER -> signerId = request.getEmployerId();
+            case STUDENT -> signerId = request.getEtudiantId();
+            default -> throw new IllegalArgumentException("Rôle inconnu : " + request.getRole());
+        }
+
         byte[] pdfBytes = ententeStageService.updateEntenteDeStage(
                 request.getId(),
                 request.getApplication(),
-                request.getGestionnaireId(),
+                signerId,
                 request.getRole(),
-                request.getSignatureGestionnaire() // 🔹 on transmet la signature réelle
+                signature
         );
+
         return buildPdfResponse(pdfBytes);
     }
-
 
     // Liste seulement les applications qui sont en mesure de générer une entente.
     @GetMapping("/all-available")

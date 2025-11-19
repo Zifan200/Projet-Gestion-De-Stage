@@ -20,7 +20,8 @@
     "company": "Entreprise",
     "createAgreement": "Créer une entente de stage",
     "viewAgreement": "Voir l'entente",
-    "noApplications": "Aucune candidature de stage"
+    "noApplications": "Aucune candidature de stage",
+    "noAgreements": "Aucune entente de stage"
   },
   "status": {
     "pending": "En cours d'examination",
@@ -48,6 +49,7 @@
     "part_time": "Temps partiel",
     "unselected": "À spécifier",
     "hourAmount": "Nombre d'heures par semaine",
+    "noSemester": "Non spécifié",
     "address": "Adresse"
   },
   "filter": {
@@ -81,7 +83,9 @@
   "pdf": {
     "close": "Fermer",
     "signatureLabel": "Signature du gestionnaire",
-    "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet",
+    "signatureLabelEmployer": "Signature de l'employeur",
+    "signatureLabelStudent": "Signature de l'étudiant",
+    "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet (Nom, Prénom)",
     "signButton": "Signer l'entente",
     "signatureMismatch": "La signature ne correspond pas à votre nom complet.",
     "signatureSuccess": "Le PDF a été signé avec succès !"

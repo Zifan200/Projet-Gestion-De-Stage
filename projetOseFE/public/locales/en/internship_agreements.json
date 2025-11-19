@@ -20,7 +20,8 @@
     "company": "Company",
     "createAgreement": "Create internship agreement",
     "viewAgreement": "View agreement",
-    "noApplications": "No internship applications"
+    "noApplications": "No internship applications",
+    "noAgreements": "No internship agreements"
   },
   "status": {
     "pending": "Under Review",
@@ -43,12 +44,13 @@
     "hiver": "Winter",
     "automne": "Autumn",
     "close": "Close",
-    "scheduleType": "Schedule type",
+    "scheduleType": "Schedule Type",
     "full_time": "Full time",
     "part_time": "Part time",
     "unselected": "Unspecified",
     "hourAmount": "Amount of hours per week",
-    "address": "Address"
+    "address": "Address",
+    "noSemester": "Not specified"
   },
   "filter": {
     "status": "Filter by Status",
@@ -82,7 +84,9 @@
   "pdf": {
     "close": "Close",
     "signatureLabel": "Manager's Signature",
-    "signaturePlaceholder": "Enter your signature exactly as your full name",
+    "signatureLabelEmployer": "Employer's Signature",
+    "signatureLabelStudent": "Student's Signature",
+    "signaturePlaceholder": "Enter your signature exactly as your full name (Last name, First name)",
     "signButton": "Sign Agreement",
     "signatureMismatch": "The signature does not match your full name.",
     "signatureSuccess": "PDF signed successfully!"

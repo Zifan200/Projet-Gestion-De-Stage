@@ -61,6 +61,10 @@ import {DashboardGsPhone} from "./pages/gs/phone/dashboardGsPhone.jsx";
 import {PostInterviewPhone} from "./pages/employer/phone/PostInterviewPhone.jsx";
 import {AgreementsGsPhone} from "./pages/gs/phone/agreementsGsPhone.jsx";
 import {GsInternshipAgreements} from "./pages/gs/agreements.jsx";
+import {EmployerInternshipAgreements} from "./pages/employer/agreementsEmployer.jsx";
+import {StudentInternshipAgreements} from "./pages/student/agreementsStudent.jsx";
+import {StudentInternshipAgreementsPhone} from "./pages/student/phone/agreementsStudentPhone.jsx";
+import {EmployerInternshipAgreementsPhone} from "./pages/employer/phone/agreementsEmployerPhone.jsx";
 
 function App() {
     const {t} = useTranslation([
@@ -109,6 +113,12 @@ function App() {
             icon: CheckIcon,
         },
         {
+            key: "agreementsStudent",
+            label: t("student_dashboard:stats.internshipAgreements"),
+            href: "/dashboard/student/internship-agreements-student",
+            icon: Handshake,
+        },
+        {
             key: "settings",
             label: t("menu:settings"),
             href: "/dashboard/student/settings",
@@ -146,6 +156,12 @@ function App() {
             label: t("employer_dashboard:stats.interviews"),
             href: "/dashboard/employer/post-interviews",
             icon: PersonIcon,
+        },
+        {
+            key: "agreementsEmployer",
+            label: t("employer_dashboard:stats.internshipAgreements"),
+            href: "/dashboard/employer/internship-agreements-employer",
+            icon: Handshake,
         },
         {
             key: "settings",
@@ -197,6 +213,12 @@ function App() {
             label: t("gs_dashboard:stats.recommendations"),
             href: "/dashboard/gs/recommendations",
             icon: CheckIcon,
+        },
+        {
+            key: "agreements",
+            label: t("gs_dashboard:stats.internshipAgreements"),
+            href: "/dashboard/gs/internship-agreements",
+            icon: Handshake,
         },
         {
             key: "settings",
@@ -373,6 +395,15 @@ function App() {
                                 />
                             }
                         />
+                        <Route
+                            path="internship-agreements-student"
+                            element={
+                                <PageWrapper
+                                    DesktopComponent={StudentInternshipAgreements}
+                                    PhoneComponent={StudentInternshipAgreementsPhone}
+                                />
+                            }
+                        />
 
                     </Route>
 
@@ -455,6 +486,15 @@ function App() {
                                     sidebarLinks={employerDashboardSidebarLinks}
                                     DesktopComponent={PostInterview}
                                     PhoneComponent={PostInterviewPhone}
+                                />
+                            }
+                        />
+                        <Route
+                            path="internship-agreements-employer"
+                            element={
+                                <PageWrapper
+                                    DesktopComponent={EmployerInternshipAgreements}
+                                    PhoneComponent={EmployerInternshipAgreementsPhone}
                                 />
                             }
                         />

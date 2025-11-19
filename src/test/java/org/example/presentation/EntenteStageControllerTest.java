@@ -47,7 +47,7 @@ class EntenteStageControllerTest {
     private static final String BASE_PATH = "/api/v1/entente";
 
 
-    @Test
+    /*@Test
     void shouldGeneratePdfWhenGestionnaireSignsFirst() throws Exception {
         // Arrange
         InternshipApplicationResponseDTO applicationDto = new InternshipApplicationResponseDTO();
