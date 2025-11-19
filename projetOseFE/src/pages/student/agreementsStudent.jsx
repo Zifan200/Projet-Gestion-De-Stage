@@ -50,13 +50,13 @@ export const StudentInternshipAgreements = () => {
             setSignatureSuccess("");
             return;
         }
-        setSignatureError(""); // réinitialiser l'erreur
+        setSignatureError("");
 
         try {
             const pdfUrl = await signAgreement(
                 user.token,
                 selectedApplication.ententeStagePdfId,
-                "ETUDIANT",
+                "STUDENT",
                 user.id,
                 signature,
                 selectedApplication
