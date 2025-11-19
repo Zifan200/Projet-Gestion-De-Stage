@@ -4,7 +4,6 @@ package org.example.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.model.enums.ApprovalStatus;
 import org.example.service.*;
 import org.example.service.dto.employer.EmployerDto;
 import org.example.service.dto.employer.EmployerResponseDto;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.example.service.dto.internshipApplication.*;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -31,6 +31,7 @@ public class EmployerController {
     private final InternshipApplicationService internshipApplicationService;
     private final ConvocationService convocationService;
     private final CVService cvService;
+    private final EntenteStageService ententeStageService;
 
     @PostMapping("/register")
     public ResponseEntity<EmployerResponseDto> registerEmployer(@Valid @RequestBody EmployerDto employerDto) {
@@ -121,5 +122,13 @@ public class EmployerController {
     ) {
         String employerEmail = userAppService.getMe(JwtTokenUtils.getTokenFromRequest(request)).getEmail();
         return ResponseEntity.ok(convocationService.getAllConvocationsForEmployer(employerEmail));
+    }
+
+    // Méthode utilitaire pour construire la réponse PDF
+    private ResponseEntity<byte[]> buildPdfResponse(byte[] pdfBytes) {
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/pdf")
+                .header("Content-Disposition", "inline; filename=entente_stage.pdf")
+                .body(pdfBytes);
     }
 }
