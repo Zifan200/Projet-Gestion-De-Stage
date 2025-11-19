@@ -15,7 +15,7 @@ import PdfViewerEntente from "../../components/PdfViewerEntente.jsx";
 export const EmployerInternshipAgreements = () => {
     const user = useAuthStore((s) => s.user);
     const { t } = useTranslation("internship_agreements");
-
+    user.token=localStorage.getItem("token");
     const { applications, fetchApplications, loading } = useEmployerStore();
     const { previewAgreement, downloadAgreement, resetAgreement, previewUrl, signAgreementStore } = useInternshipAgreementStore();
     const [selectedApplication, setSelectedApplication] = useState(null);

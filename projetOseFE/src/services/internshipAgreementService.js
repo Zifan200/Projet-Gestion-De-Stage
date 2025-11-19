@@ -85,12 +85,12 @@ export const internshipAgreementService = {
         try {
             const payload = {
                 id: agreementId,
-                gestionnaireId: 0,
+                /*gestionnaireId: 0,
                 employerId: 0,
                 etudiantId: 0,
                 signatureGestionnaire: "",
                 signatureEmployer: "",
-                signatureEtudiant: "",
+                signatureEtudiant: "",*/
                 application,
                 role,
             };
