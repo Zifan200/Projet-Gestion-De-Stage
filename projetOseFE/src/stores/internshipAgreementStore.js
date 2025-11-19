@@ -62,7 +62,7 @@ export const useInternshipAgreementStore = create((set, get) => ({
             set({ error: err.message || "Erreur lors du téléchargement de l'entente" });
         }
     },
-    signAgreement: async (token, agreementId, role, signerId, signature, application) => {
+    signAgreementStore: async (token, agreementId, role, signerId, signature, application) => {
         try {
             // Appel direct au service qui gère déjà payload et URL
             const result = await internshipAgreementService.signAgreement(

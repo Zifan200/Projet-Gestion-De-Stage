@@ -17,7 +17,7 @@ export const EmployerInternshipAgreements = () => {
     const { t } = useTranslation("internship_agreements");
 
     const { applications, fetchApplications, loading } = useEmployerStore();
-    const { previewAgreement, downloadAgreement, resetAgreement, previewUrl, signAgreement } = useInternshipAgreementStore();
+    const { previewAgreement, downloadAgreement, resetAgreement, previewUrl, signAgreementStore } = useInternshipAgreementStore();
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
@@ -42,19 +42,19 @@ export const EmployerInternshipAgreements = () => {
 
     const handleSign = async () => {
         const fullName = `${user.lastName} ${user.firstName} `.trim();
-        console.log("Nom complet attendu pour la signature :", fullName);
+        console.log("selectedApplication.ententeStagePdfId aaaaaaaaaaaa :", selectedApplication.ententeStagePdfId);
         if (signature.trim() !== fullName) {
             setSignatureError(t("pdf.signatureMismatch"));
             setSignatureSuccess("");
             return;
         }
-        setSignatureError(""); // réinitialiser l'erreur
+        setSignatureError("");
 
         try {
-            const pdfUrl = await signAgreement(
+            const pdfUrl = await signAgreementStore(
                 user.token,
                 selectedApplication.ententeStagePdfId,
-                "EMPLOYER",
+                user.role,
                 user.id,
                 signature,
                 selectedApplication
@@ -97,6 +97,7 @@ export const EmployerInternshipAgreements = () => {
                             }}
                         />
                     )}
+
 
                     {/* 3️⃣ Download PDF → télécharge le PDF */}
                     {app.ententeStagePdfId && (

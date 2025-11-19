@@ -20,7 +20,7 @@ export const GsInternshipAgreements = () => {
         previewAgreement,
         downloadAgreement,
         resetAgreement,
-        signAgreement,
+        signAgreementStore,
         previewUrl
     } = useInternshipAgreementStore();
 
@@ -67,7 +67,7 @@ export const GsInternshipAgreements = () => {
         setSignatureError("");
 
         try {
-            const pdfUrl = await signAgreement(
+            const pdfUrl = await signAgreementStore(
                 user.token,
                 selectedApplication.ententeStagePdfId,
                 user.role,         // rôle dynamique

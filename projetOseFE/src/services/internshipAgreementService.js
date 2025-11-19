@@ -85,6 +85,12 @@ export const internshipAgreementService = {
         try {
             const payload = {
                 id: agreementId,
+                gestionnaireId: 0,
+                employerId: 0,
+                etudiantId: 0,
+                signatureGestionnaire: "",
+                signatureEmployer: "",
+                signatureEtudiant: "",
                 application,
                 role,
             };
@@ -96,6 +102,9 @@ export const internshipAgreementService = {
             if (role === "GESTIONNAIRE") payload.signatureGestionnaire = signature;
             else if (role === "EMPLOYER") payload.signatureEmployer = signature;
             else if (role === "STUDENT") payload.signatureEtudiant = signature;
+
+            // ← Ici, avant l'appel PUT
+            console.log("Appel PUT vers : /entente/update avec payload :", payload);
 
             const res = await api.put(`/entente/update`, payload, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -109,5 +118,5 @@ export const internshipAgreementService = {
             console.error("Erreur lors de la signature de l'entente :", err);
             throw err;
         }
-    },
+    }
 };
