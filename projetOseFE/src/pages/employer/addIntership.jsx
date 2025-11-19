@@ -12,7 +12,7 @@ import Input from "../../components/ui/Input.jsx";
 import { Textarea } from "../../components/ui/textarea.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import { FormTemplate } from "../../components/ui/form-template.jsx";
-import { programmes } from "../../config/app.js";
+import {programmes, scheduleTypes} from "../../config/app.js";
 
 export default function AddIntership() {
   const { t } = useTranslation("employer_dashboard_add_intership");
@@ -104,6 +104,46 @@ export default function AddIntership() {
                       {...form.register("salary")}
                   />
                 </div>
+              </div>
+
+              {/* Type d'horaire */}
+              <div className="flex flex-col w-full">
+                <Label name="scheduleType" label={t("form.scheduleType")} />
+                <select
+                    name="scheduleType"
+                    {...form.register("typeHoraire")}
+                    className="rounded-xl border border-zinc-300 p-3"
+                >
+                  <option value="">{t("form.placeholders.scheduleType")}</option>
+                  {scheduleTypes.map((scheduleType, i) => (
+                      <option key={i} value={i}>
+                        {t(`form.${scheduleType.toLowerCase()}`)}
+                      </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Nombre d'heures */}
+              <div className="w-full">
+                <Label name="hourAmount" label={t("form.hourAmount")} />
+                <div className="flex">
+                  <Input
+                      name="hourAmount"
+                      type="text"
+                      placeholder="40"
+                      {...form.register("nbHeures")}
+                  />
+                </div>
+              </div>
+
+              {/* Adresse */}
+              <div className="w-full">
+                <Label name="address" label={t("form.address")} />
+                <Input
+                    name="address"
+                    placeholder={t("form.placeholders.address")}
+                    {...form.register("address")}
+                />
               </div>
 
               {/* Start Date */}

@@ -45,7 +45,13 @@
     "appliedAt": "Applied on",
     "close": "Close",
     "reason": "Reason",
-    "salary": "Salary"
+    "salary": "Salary",
+    "scheduleType": "Schedule type",
+    "full_time": "Full time",
+    "part_time": "Part time",
+    "unselected": "Unspecified",
+    "hourAmount": "Amount of hours per week",
+    "address": "Address"
   },
   "reasonModal": {
     "description": "Explain why you are rejecting this application."

@@ -43,11 +43,14 @@
     "startDate": "Start date",
     "hiver": "Winter",
     "automne": "Autumn",
-    "address": "Address",
+    "close": "Close",
     "scheduleType": "Schedule Type",
-    "hourAmount": "Number of Hours",
-    "noSemester": "Not specified",
-    "close": "Close"
+    "full_time": "Full time",
+    "part_time": "Part time",
+    "unselected": "Unspecified",
+    "hourAmount": "Amount of hours per week",
+    "address": "Address",
+    "noSemester": "Not specified"
   },
   "filter": {
     "status": "Filter by Status",

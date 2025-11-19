@@ -5,9 +5,10 @@
     "applications": "Convocations",
     "activeApplications": "Candidatures actives",
     "totalStudents": "Étudiants uniques",
-    "createOffer": "Créer une offre de stage", 
+    "createOffer": "Créer une offre de stage",
     "interviews" : "Post-Entretien",
-    "pendingConvocations": "Convocations en attente de confirmation"
+    "pendingConvocations": "Convocations en attente de confirmation",
+    "internshipAgreements": "Ententes de stage"
   },
   "titles": {
     "home": "Accueil",

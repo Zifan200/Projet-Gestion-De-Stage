@@ -12,7 +12,6 @@ import {
     PopoverClose,
 } from "../../components/ui/popover.jsx";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
-import { Button } from "../../components/ui/button.jsx";
 import { useGeStore } from "../../stores/geStore.js";
 import { ModalSelectedOfferApplicants } from "./gsModalSelectedOfferApplicants.jsx";
 import { Modal } from "../../components/ui/modal.jsx";
@@ -241,14 +240,16 @@ export const AllOffers = () => {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => openOffer(offer.id)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
+                                font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200"
                         >
                             <EyeOpenIcon className="w-4 h-4" />
                             <span>{t("actions.view")}</span>
                         </button>
                         <button
                             onClick={() => handleDownload(offer.id)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
+                                font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
                         >
                             <DownloadIcon className="w-4 h-4" />
                             <span>{t("actions.download")}</span>
@@ -274,9 +275,11 @@ export const AllOffers = () => {
                                 setOpen={setOpen}
                                 triggerRef={triggerRef}
                             >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.status")}: {currentOfferStatus}
-                </span>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                shadow-sm cursor-pointer hover:bg-zinc-200 transition"
+                                >
+                                  {t("filter.status")}: {currentOfferStatus}
+                                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -297,9 +300,9 @@ export const AllOffers = () => {
                                         </button>
                                     ))}
                                     <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
+                                        <span className="text-sm text-gray-600">
+                                          {t("menu.close")}
+                                        </span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
@@ -316,9 +319,11 @@ export const AllOffers = () => {
                                 setOpen={setOpen}
                                 triggerRef={triggerRef}
                             >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("filter.program")}: {currentProgram || t("programAll")}
-                </span>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm
+                                    cursor-pointer hover:bg-zinc-200 transition"
+                                >
+                                  {t("filter.program")}: {currentProgram || t("programAll")}
+                                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div className="flex flex-col gap-2 min-w-[150px]">
@@ -352,69 +357,15 @@ export const AllOffers = () => {
                                         </button>
                                     ))}
                                     <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
+                                        <span className="text-sm text-gray-600">
+                                          {t("menu.close")}
+                                        </span>
                                     </PopoverClose>
                                 </div>
                             </PopoverContent>
                         </>
                     )}
                 </Popover>
-
-                {/* Session Filter
-        <Popover>
-          {({ open, setOpen, triggerRef, contentRef }) => (
-            <>
-              <PopoverTrigger
-                open={open}
-                setOpen={setOpen}
-                triggerRef={triggerRef}
-              >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("gs_dashboard_offers:filter.session")}:{" "}
-                  {currentSession !== "All"
-                    ? currentSession
-                    : t("gs_dashboard_offers:session.all")}
-                </span>
-              </PopoverTrigger>
-              <PopoverContent open={open} contentRef={contentRef}>
-                <div className="flex flex-col gap-2 min-w-[150px]">
-                  {["Automne", "Hiver"].map((session) => (
-                    <button
-                      key={session}
-                      onClick={() => {
-                        setCurrentSession(session);
-                        setOpen(false);
-                      }}
-                      className={`px-3 py-1 rounded text-left ${
-                        currentSession === session
-                          ? "bg-blue-100 font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {session}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => {
-                      setCurrentSession("All");
-                      setOpen(false);
-                    }}
-                    className="px-3 py-1 rounded text-left hover:bg-gray-100"
-                  >
-                    {t("gs_dashboard_offers:session.all")}
-                  </button>
-                  <PopoverClose setOpen={setOpen}>
-                    <span className="text-sm text-gray-600">
-                      {t("menu.close")}
-                    </span>
-                  </PopoverClose>
-                </div>
-              </PopoverContent>
-            </>
-          )}
-        </Popover>*/}
 
                 {/* Year Filter */}
                 <Popover>
@@ -425,15 +376,19 @@ export const AllOffers = () => {
                                 setOpen={setOpen}
                                 triggerRef={triggerRef}
                             >
-                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                  {t("gs_dashboard_offers:filter.year")}:{" "}
-                    {currentYear !== "All"
-                        ? currentYear
-                        : t("gs_dashboard_offers:session.year")}
-                </span>
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                    shadow-sm cursor-pointer hover:bg-zinc-200 transition"
+                                >
+                                  {t("gs_dashboard_offers:filter.year")}:{" "}
+                                    {currentYear !== "All"
+                                        ? currentYear
+                                        : t("gs_dashboard_offers:session.year")}
+                                </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
-                                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
+                                <div className="flex flex-col gap-2 min-w-[150px] max-h-[300px]
+                                overflow-y-auto items-center"
+                                >
                                     {availableYears.map((year) => (
                                         <button
                                             key={year}
@@ -497,7 +452,8 @@ export const AllOffers = () => {
                                     setIsModalOpen(false);
                                     setSelectedOffer(null);
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 <span>{t("modal.close")}</span>
                             </button>
@@ -505,13 +461,15 @@ export const AllOffers = () => {
                                 onClick={() => {
                                     setShowRejectModal(true);
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                font-medium transition-colors bg-red-100 text-red-700 hover:bg-red-200"
                             >
                                 <span>{t("actions.reject")}</span>
                             </button>
                             <button
                                 onClick={handleAccept}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
                             >
                                 <span>{t("modal.accept")}</span>
                             </button>
@@ -523,7 +481,8 @@ export const AllOffers = () => {
                                     setIsModalOpen(false);
                                     setSelectedOffer(null);
                                 }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                             >
                                 <span>{t("modal.close")}</span>
                             </button>
@@ -531,12 +490,16 @@ export const AllOffers = () => {
                                 <button
                                     onClick={() => {
                                         setIsModalOpen(false);
-                                        setTimeout(() => setIsOfferApplicationListModalOpen(true), 150);
+                                        setTimeout(() => {
+                                            setIsOfferApplicationListModalOpen(true), 150
+                                        });
                                     }}
-                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm
+                                    font-medium transition-colors bg-green-100 text-green-700 hover:bg-green-200"
                                 >
                                     <span>{t("modalSelectedOfferApplications.btnLabels.seeApplications")}</span>
-                                    <span className="ml-1 flex items-center justify-center w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold">
+                                    <span className="ml-1 flex items-center justify-center w-6 h-6 rounded-full
+                                    bg-red-500 text-white text-xs font-bold">
                     {selectedOffer.applicationCount}
                   </span>
                                 </button>
@@ -548,7 +511,8 @@ export const AllOffers = () => {
                                 setIsModalOpen(false);
                                 setSelectedOffer(null);
                             }}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+                            transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                         >
                             <span>{t("modal.close")}</span>
                         </button>
@@ -559,12 +523,16 @@ export const AllOffers = () => {
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.companyEmail")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.companyEmail")}
+                                </h3>
                                 <p className="text-gray-600">{selectedOffer.employerEmail}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.targetedProgramme")}</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.targetedProgramme")}
+                                </h3>
                                 <p className="text-gray-600">{selectedOffer.targetedProgramme}</p>
                             </div>
                         </div>
@@ -572,42 +540,87 @@ export const AllOffers = () => {
                         <div className="grid grid-cols-2 gap-4">
                             {selectedOffer.description && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.description")}</h3>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.description")}
+                                    </h3>
                                     <p className="text-gray-600 whitespace-pre-wrap">{selectedOffer.description}</p>
                                 </div>
                             )}
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
-                                <p className="text-gray-600">
-                                    { localStorage.key("lang") === "fr" ?
-                                        selectedOffer.salary.toLocaleString("fr-CA", {style:"currency", currency:"CAD"}) :
-                                        selectedOffer.salary.toLocaleString("en-CA", {style:"currency", currency:"CAD"})
-                                    }
-                                </p>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.address")}
+                                </h3>
+                                <p className="text-gray-600">{selectedOffer.address}</p>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             {selectedOffer.publishedDate && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.publishedDate")}</h3>
-                                    <p className="text-gray-600">{new Date(selectedOffer.publishedDate).toLocaleDateString()}</p>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.publishedDate")}
+                                    </h3>
+                                    <p className="text-gray-600">
+                                        {new Date(selectedOffer.publishedDate).toLocaleDateString()}
+                                    </p>
                                 </div>
                             )}
 
                             {selectedOffer.expirationDate && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.deadline")}</h3>
-                                    <p className="text-gray-600">{new Date(selectedOffer.expirationDate).toLocaleDateString()}</p>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                        {t("modal.deadline")}
+                                    </h3>
+                                    <p className="text-gray-600">
+                                        {new Date(selectedOffer.expirationDate).toLocaleDateString()}
+                                    </p>
                                 </div>
                             )}
                         </div>
 
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.status")}</h3>
-                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(selectedOffer.status)}`}>
-                {t(`status.${selectedOffer.status?.toLowerCase()}`)}
-              </span>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.status")}
+                                </h3>
+                                <span className={`px-3 py-1 rounded-full text-sm font-semibold 
+                                    ${getStatusColor(selectedOffer.status)}`}
+                                >
+                                    {t(`status.${selectedOffer.status?.toLowerCase()}`)}
+                                </span>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">{t("modal.salary")}</h3>
+                                <p className="text-gray-600">
+                                    {localStorage.key("lang") === "fr" ?
+                                        selectedOffer.salary.toLocaleString("fr-CA", {
+                                            style: "currency",
+                                            currency: "CAD"
+                                        }) :
+                                        selectedOffer.salary.toLocaleString("en-CA", {
+                                            style: "currency",
+                                            currency: "CAD"
+                                        })
+                                    }
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.scheduleType")}
+                                </h3>
+                                <p className="text-gray-600 whitespace-pre-wrap">
+                                    {t(`modal.${selectedOffer.typeHoraire.toLowerCase()}`)}
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    {t("modal.hourAmount")}
+                                </h3>
+                                <p className="text-gray-600">{selectedOffer.nbHeures}</p>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -641,7 +654,8 @@ export const AllOffers = () => {
                             setIsOfferApplicationListModalOpen(false);
                             setTimeout(() => setIsModalOpen(true), 150);
                         }}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+                        transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                     >
                         <span>{t("modalSelectedOfferApplications.btnLabels.back")}</span>
                     </button>

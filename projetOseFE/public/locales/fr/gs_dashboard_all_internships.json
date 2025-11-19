@@ -56,7 +56,13 @@
     "confirm": "Confirmer",
     "accepted": "Offre de stage acceptée avec succès !",
     "rejectSuccess": "Offre de stage rejetée avec succès !",
-    "salary": "Salaire"
+    "salary": "Salaire",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "unselected": "À spécifier",
+    "hourAmount": "Nombre d'heures par semaine",
+    "address": "Adresse"
   },
   "modalSelectedOfferApplications": {
     "title": "Candidats",

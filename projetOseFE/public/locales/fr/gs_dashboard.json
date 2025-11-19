@@ -1,13 +1,15 @@
 {
   "stats": {
-    "pendingCvs": "CVs en attente",
+    "pendingCvs": "CVs en attente d'approbation",
     "acceptedCvs": "CVs acceptés",
-    "availableOffers": "offres de stage disponibles",
-    "pendingOffers": "Offres de stage en attente",
+    "availableOffers": "Offres de stage disponibles",
+    "pendingOffers": "Offres de stage en attente d'approbation",
     "manageCvs": "Gérer les CVs étudiants",
     "allOffers": "Toutes les offres de stage",
     "application": "Candidatures totales",
     "internshipAgreements": "Ententes de stage",
+    "agreementsToCreate": "Ententes de stage à créer",
+    "signedAgreements": "Ententes de stage signées",
     "assignments": "Attribution des étudiants",
     "recommendations": "Recommandations"
   },

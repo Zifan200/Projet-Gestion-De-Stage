@@ -102,7 +102,7 @@ export default function StudentConvocations() {
             try {
                 await updateConvocationStatus(convocation.id, convocation.studentEmail, newStatus, token);
                 await loadConvocations(token);
-                toast.success(t(`convocationStatus.${newStatus.toLowerCase()}Success`));
+                toast.success(t(`convocationStatus.${newStatus.toLowerCase()}`));
             } catch (err) {
                 toast.error(err.message || t("errors.generic"));
             }

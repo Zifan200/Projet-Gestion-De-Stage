@@ -1,16 +1,17 @@
 {
   "stats": {
-    "pendingCvs": "Pending Resumes",
+    "pendingCvs": "Resumes Awaiting Approval",
     "acceptedCvs": "Accepted Resumes",
-    "availableOffers": "Total internship offers",
-    "pendingOffers": "Pending Offers",
+    "availableOffers": "Total Internship Offers",
+    "pendingOffers": "Internship Offers Awaiting Approval",
     "allOffers": "All Internship Offers",
-    "application": "Total applications",
+    "application": "Total Applications",
     "manageCvs": "Manage Student Resumes",
     "internshipAgreements": "Internship Agreements",
+    "agreementsToCreate": "Internship Agreements To Create",
+    "signedAgreements": "Signed Internship Agreements",
     "assignments": "Student Assignments",
     "recommendations": "Recommendations"
-
   },
   "titles": {
     "home": "Home",

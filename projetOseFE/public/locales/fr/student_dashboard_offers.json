@@ -29,7 +29,13 @@
     "chooseCv": "Choisir un CV",
     "apply": "Postuler",
     "close": "Fermer",
-    "salary": "Salaire"
+    "salary": "Salaire",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "unselected": "À spécifier",
+    "hourAmount": "Nombre d'heures par semaine",
+    "address": "Adresse"
   },
   "success": {
     "applyOffer": "Tu as postulé à cette offre de stage avec succès!"

@@ -6,13 +6,20 @@
     "description": "Description",
     "salary": "Salary",
     "program": "Targeted Program",
-    "deadline": "Deadline to apply",
+    "deadline": "Deadline to Apply",
     "startDate": "Internship Start Date",
     "endDate": "Internship End Date",
+    "scheduleType": "Schedule Type",
+    "full_time": "Full Time",
+    "part_time": "Part Time",
+    "hourAmount": "Amount of hours per week",
+    "address": "Address",
     "placeholders": {
       "title": "Please enter the title of your internship offer",
       "description": "Please enter the full description of the offered internship",
-      "program": "Please select the targeted program"
+      "program": "Please select the targeted program",
+      "scheduleType": "Please select the schedule type",
+      "address": "Please enter your company's address"
     }
   },
   "submit": "Publish Internship Offer",
@@ -34,6 +41,9 @@
     "end_required": "An end date is required.",
     "end_after_start": "The end date must be after the start date.",
     "expiration_before_start": "The deadline must be before the start date.",
-    "expiration_not_past": "The deadline cannot be in the past."
+    "expiration_not_past": "The deadline cannot be in the past.",
+    "invalid_hour_amount": "Please enter a valid amount of hours.",
+    "address_required": "An address is required.",
+    "schedule_type_required": "A type of schedule is required."
   }
 }

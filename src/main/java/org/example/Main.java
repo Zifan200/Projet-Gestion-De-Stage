@@ -119,19 +119,19 @@ public class Main {
               " " +
               teacher2.getLastName());
 
-        // -----------------------------
-        // 2️⃣ Création de l'employeur
-        // -----------------------------
-        EmployerDto employer = EmployerDto.builder()
-                .firstName("Alice")
-                .lastName("Dupont")
-                .email("alice@example.com")
-                .password("Test123!")
-                .since(LocalDate.of(2020, 1, 1))
-                .enterpriseName("TechCorp")
-                .phone("123-456-7890")
-                .build();
-        employerService.saveEmployer(employer);
+      // -----------------------------
+      // 2️⃣ Création de l'employeur
+      // -----------------------------
+      EmployerDto employer = EmployerDto.builder()
+          .firstName("Alice")
+          .lastName("Dupont")
+          .email("alice@example.com")
+          .password("Test123!")
+          .since(LocalDate.of(2020, 1, 1))
+          .enterpriseName("TechCorp")
+          .phone("123-456-7890")
+          .build();
+      employerService.saveEmployer(employer);
 
       // -----------------------------
       // 3️⃣ Création d'offres de stage
@@ -149,6 +149,9 @@ public class Main {
               .startDate(LocalDate.of(2026, 2, 15))
               .EndDate(LocalDate.of(2026, 5, 15))
               .employerEmail(employer.getEmail())
+              .nbHeures(40f)
+              .typeHoraire(TypeHoraire.FULL_TIME)
+              .address("111 rue Principale")
               .build());
 
       InternshipOfferResponseDto offer2 = internshipOfferService.saveInternshipOffer(
@@ -163,6 +166,9 @@ public class Main {
               .startDate(LocalDate.of(2026, 3, 1))
               .EndDate(LocalDate.of(2026, 6, 1))
               .employerEmail(employer.getEmail())
+              .nbHeures(35f)
+              .typeHoraire(TypeHoraire.FULL_TIME)
+              .address("111 rue Principale")
               .build());
 
       InternshipOfferResponseDto offer3 = internshipOfferService.saveInternshipOffer(
@@ -177,6 +183,9 @@ public class Main {
               .startDate(LocalDate.of(2026, 4, 1))
               .EndDate(LocalDate.of(2026, 7, 1))
               .employerEmail(employer.getEmail())
+              .nbHeures(15f)
+              .typeHoraire(TypeHoraire.PART_TIME)
+              .address("111 rue Principale")
               .build());
 
       InternshipOfferResponseDto offer4 = internshipOfferService.saveInternshipOffer(
@@ -191,6 +200,9 @@ public class Main {
               .startDate(LocalDate.of(2026, 3, 1))
               .EndDate(LocalDate.of(2026, 6, 1))
               .employerEmail(employer.getEmail())
+              .nbHeures(20f)
+              .typeHoraire(TypeHoraire.PART_TIME)
+              .address("111 rue Principale")
               .build());
 
       InternshipOfferResponseDto offer5 = internshipOfferService.saveInternshipOffer(
@@ -205,6 +217,9 @@ public class Main {
               .startDate(LocalDate.of(2026, 2, 1))
               .EndDate(LocalDate.of(2026, 5, 1))
               .employerEmail(employer.getEmail())
+              .nbHeures(40f)
+              .typeHoraire(TypeHoraire.FULL_TIME)
+              .address("111 rue Principale")
               .build());
 
       InternshipOfferResponseDto offer6 = internshipOfferService.saveInternshipOffer(
@@ -219,6 +234,9 @@ public class Main {
               .startDate(LocalDate.of(2026, 3, 15))
               .EndDate(LocalDate.of(2026, 6, 15))
               .employerEmail(employer.getEmail())
+              .nbHeures(18f)
+              .typeHoraire(TypeHoraire.PART_TIME)
+              .address("111 rue Principale")
               .build());
 
       internshipOfferService.updateOfferStatus(

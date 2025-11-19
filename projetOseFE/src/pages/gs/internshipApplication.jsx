@@ -10,13 +10,10 @@ import {
 } from "../../components/ui/popover.jsx";
 
 import useGeStore from "../../stores/geStore.js";
-import { toast } from "sonner";
 
 export const InternshipApplicationsGE = () => {
     const { t } = useTranslation("internship_applications");
-
     const { applications = [], loadAllInternshipApplications } = useGeStore();
-
     const [filterStatus, setFilterStatus] = useState(null);
     const currentYear = new Date().getFullYear().toString();
     const [filterSession, setFilterSession] = useState("Hiver"); // session = Hiver
@@ -61,9 +58,6 @@ export const InternshipApplicationsGE = () => {
             .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     }, [applications, filterYear]);
 
-
-
-
     const tableData = sortedAndFilteredApplications.map((app) => ({
         ...app,
         studentName: `${app.studentFirstName} ${app.studentLastName}`,
@@ -89,8 +83,11 @@ export const InternshipApplicationsGE = () => {
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.status")}: {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                    shadow-sm cursor-pointer hover:bg-zinc-200 transition"
+                                >
+                                    {t("filter.status")}:{" "}
+                                    {filterStatus ? t(`status.${filterStatus.toLowerCase()}`) : t("filter.all")}
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
@@ -99,7 +96,8 @@ export const InternshipApplicationsGE = () => {
                                         <button
                                             key={status}
                                             onClick={() => { setFilterStatus(status); setOpen(false); }}
-                                            className={`px-3 py-1 rounded text-left ${filterStatus === status ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                                            className={`px-3 py-1 rounded text-left ${filterStatus === status ? 
+                                                "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                                         >
                                             {t(`status.${status}`)}
                                         </button>
@@ -119,50 +117,24 @@ export const InternshipApplicationsGE = () => {
                     )}
                 </Popover>
 
-                {/* Session Filter
-                <Popover>
-                    {({ open, setOpen, triggerRef, contentRef }) => (
-                        <>
-                            <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.session")}: {filterSession !== "All" ? filterSession : t("session.all")}
-                                </span>
-                            </PopoverTrigger>
-                            <PopoverContent open={open} contentRef={contentRef}>
-                                <div className="flex flex-col gap-2 min-w-[150px]">
-                                    {["Automne", "Hiver"].map((session) => (
-                                        <button
-                                            key={session}
-                                            onClick={() => { setFilterSession(session); setOpen(false); }}
-                                            className={`px-3 py-1 rounded text-left ${filterSession === session ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
-                                        >
-                                            {session}
-                                        </button>
-                                    ))}
-                                    <button onClick={() => { setFilterSession("All"); setOpen(false); }} className="px-3 py-1 rounded text-left hover:bg-gray-100">
-                                        {t("session.all")}
-                                    </button>
-                                    <PopoverClose setOpen={setOpen}>
-                                        <span className="text-sm text-gray-600">{t("menu.close")}</span>
-                                    </PopoverClose>
-                                </div>
-                            </PopoverContent>
-                        </>
-                    )}
-                </Popover>*/}
-
                 {/* Year Filter */}
                 <Popover>
                     {({ open, setOpen, triggerRef, contentRef }) => (
                         <>
                             <PopoverTrigger open={open} setOpen={setOpen} triggerRef={triggerRef}>
-                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition">
-                                    {t("filter.year")}: {filterYear !== "All" ? filterYear : t("session.AllYears")}
+                                <span className="px-4 py-1 border border-zinc-400 bg-zinc-100 rounded-md
+                                    shadow-sm cursor-pointer hover:bg-zinc-200 transition"
+                                >
+                                    { t("filter.year")}:{" "}
+                                        {filterYear !== "All" ? filterYear : t("session.AllYears")
+                                    }
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent open={open} contentRef={contentRef}>
                                 <div
-                                    className="flex flex-col gap-2 min-w-[150px] max-h-[300px] overflow-y-auto items-center">
+                                    className="flex flex-col gap-2 min-w-[150px] max-h-[300px]
+                                    overflow-y-auto items-center"
+                                >
                                     {availableYears.map((year) => (
                                         <button
                                             key={year}
@@ -170,7 +142,8 @@ export const InternshipApplicationsGE = () => {
                                                 setFilterYear(year);
                                                 setOpen(false);
                                             }}
-                                            className={`px-3 py-1 rounded text-left ${filterYear === year ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
+                                            className={`px-3 py-1 rounded text-left ${filterYear === year ? 
+                                                "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                                         >
                                             {year}
                                         </button>

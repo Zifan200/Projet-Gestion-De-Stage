@@ -32,7 +32,13 @@
     "selectedCv": "CV sélectionné",
     "applicationDate": "Date de candidature",
     "close": "Fermer",
-    "salary": "Salaire"
+    "salary": "Salaire",
+    "scheduleType": "Type d'horaire",
+    "full_time": "Temps plein",
+    "part_time": "Temps partiel",
+    "unselected": "À spécifier",
+    "hourAmount": "Nombre d'heures par semaine",
+    "address": "Adresse"
   },
   "filter":
   {
@@ -49,7 +55,7 @@
   },
   "employerStatus":
   {
-    "pending": "En attente",
+    "pending": "En attente d'approbation",
     "accepted": "Acceptée",
     "rejected": "Refusée"
   },

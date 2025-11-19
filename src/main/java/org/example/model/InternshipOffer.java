@@ -53,23 +53,23 @@ public class InternshipOffer {
 
     @Builder
     public InternshipOffer(
-            Long id,
-            String title,
-            String description,
-            String targetedProgramme,
-            Employer employer,
-            LocalDate publishedDate,
-            LocalDate expirationDate,
-            ApprovalStatus status,
-            String reason,
-            LocalDate startDate,
-            LocalDate endDate,
-            String session,
-            TypeHoraire typeHoraire,
-            List<InternshipApplication> applications,
-            float nbHeures,
-            String address,
-            float salary
+        Long id,
+        String title,
+        String description,
+        String targetedProgramme,
+        Employer employer,
+        LocalDate publishedDate,
+        LocalDate expirationDate,
+        ApprovalStatus status,
+        String reason,
+        LocalDate startDate,
+        LocalDate endDate,
+        String session,
+        TypeHoraire typeHoraire,
+        List<InternshipApplication> applications,
+        float nbHeures,
+        String address,
+        float salary
     ) {
         this.id = id;
         this.title = title;
