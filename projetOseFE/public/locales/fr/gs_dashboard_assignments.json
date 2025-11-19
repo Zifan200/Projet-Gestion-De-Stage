@@ -1,0 +1,34 @@
+{
+  "title": "Attribution des étudiants aux professeurs",
+  "filter": {
+    "status": "Filtrer par statut",
+    "all": "Tous"
+  },
+  "status": {
+    "assigned": "Attribué",
+    "unassigned": "Non attribué"
+  },
+  "table": {
+    "student": "Étudiant",
+    "email": "Email",
+    "program": "Programme",
+    "status": "Statut",
+    "professor": "Professeur",
+    "actions": "Actions"
+  },
+  "actions": {
+    "assign": "Attribuer",
+    "reassign": "Réattribuer",
+    "retryNotification": "Renvoyer notification"
+  },
+  "noProfessor": "Aucun professeur",
+  "noProfessorsAvailable": "Aucun professeur disponible pour l'instant.",
+  "empty": "Aucun étudiant trouvé.",
+  "toast": {
+    "notificationRetried": "Notification renvoyée avec succès",
+    "notificationRetryError": "Erreur lors du renvoi de la notification"
+  },
+  "menu": {
+    "close": "Fermer"
+  }
+}

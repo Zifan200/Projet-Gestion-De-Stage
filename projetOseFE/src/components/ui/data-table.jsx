@@ -20,7 +20,7 @@ const getButtonStyles = (actionKey) => {
   return `${baseStyles} ${variants[actionKey] || "bg-gray-100 text-gray-700 hover:bg-gray-200"}`;
 };
 
-export const DataTable = ({ columns, data, onAction }) => {
+export const DataTable = ({ columns, data, onAction, getRowClassName }) => {
   return (
     <div className="overflow-x-auto bg-white shadow rounded">
       <table className="w-full text-sm text-left border-collapse">
@@ -47,7 +47,10 @@ export const DataTable = ({ columns, data, onAction }) => {
             data.map((row) => (
               <tr
                 key={row.id}
-                className="border-t border-gray-200 text-gray-700 text-sm"
+                className={cn(
+                  "border-t border-gray-200 text-gray-700 text-sm transition-colors",
+                  getRowClassName ? getRowClassName(row) : ""
+                )}
               >
                 {columns.map((col) => {
                   if (col.key === "status") {
@@ -121,6 +124,15 @@ export const DataTable = ({ columns, data, onAction }) => {
                               ),
                           )}
                         </div>
+                      </td>
+                    );
+                  }
+
+                  // Support for custom render function
+                  if (col.render) {
+                    return (
+                      <td key={col.key} className="px-4 py-3 align-middle">
+                        {col.render(row)}
                       </td>
                     );
                   }

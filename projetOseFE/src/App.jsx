@@ -40,6 +40,8 @@ import {InternshipApplicationsGE} from "./pages/gs/internshipApplication.jsx";
 import StudentConvocations from "./pages/student/studentConvocationDecision.jsx";
 import {PhoneCallIcon} from "lucide-react";
 import {StudentApplications} from "./pages/student/internshipApplications.jsx";
+import {GsAssignments} from "./pages/gs/assignments.jsx";
+import {GsRecommendations} from "./pages/gs/recommendations.jsx";
 import {InternshipApplicationsWrapper} from "./pages/employer/wrapper/InternshipApplicationsWrapper.jsx";
 import {PageWrapper} from "./components/layouts/wrapper/pageWrapper.jsx";
 import {OfferListWrapper} from "./pages/employer/wrapper/offerListWrapper.jsx";
@@ -195,6 +197,18 @@ function App() {
             icon: PersonIcon,
         },
         {
+            key: "assignments",
+            label: t("gs_dashboard:stats.assignments"),
+            href: "/dashboard/gs/assignments",
+            icon: PersonIcon,
+        },
+        {
+            key: "recommendations",
+            label: t("gs_dashboard:stats.recommendations"),
+            href: "/dashboard/gs/recommendations",
+            icon: CheckIcon,
+        },
+        {
             key: "agreements",
             label: t("gs_dashboard:stats.internshipAgreements"),
             href: "/dashboard/gs/internship-agreements",
@@ -274,6 +288,24 @@ function App() {
                                 <PageWrapper
                                     DesktopComponent={GsInternshipAgreements}
                                     PhoneComponent={AgreementsGsPhone}
+                                />
+                            }
+                        />
+
+                        <Route
+                            path="/dashboard/gs/assignments"
+                            element={
+                                <PageWrapper
+                                    DesktopComponent={GsAssignments}
+                                />
+                            }
+                        />
+
+                        <Route
+                            path="/dashboard/gs/recommendations"
+                            element={
+                                <PageWrapper
+                                    DesktopComponent={GsRecommendations}
                                 />
                             }
                         />
