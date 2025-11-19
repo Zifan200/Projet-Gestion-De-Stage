@@ -13,5 +13,10 @@ public class EntenteGenerationRequestDTO {
     private Long id;
     private InternshipApplicationResponseDTO application;
     private Long gestionnaireId;
+    private Long employerId;
+    private Long etudiantId;
     private Role role;
+    private String signatureGestionnaire;
+    private String signatureEmployer;
+    private String signatureEtudiant;
 }

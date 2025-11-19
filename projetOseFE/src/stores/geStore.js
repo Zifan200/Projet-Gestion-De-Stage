@@ -2,6 +2,7 @@ import {create} from "zustand";
 import {persist} from "zustand/middleware";
 import {geService} from "../services/geService.js";
 import {internshipApplicationService} from "../services/internshipApplicationService.js"
+import {internshipAgreementService} from "../services/internshipAgreementService.js";
 
 export const useGeStore = create(
     persist(
@@ -27,6 +28,19 @@ export const useGeStore = create(
                     set({applications: data, error: null});
                 } catch (err) {
                     set({error: err.message});
+                }
+            },
+            createInternshipAgreement: async (token, application, gsId, role) => {
+                try {
+                    await internshipAgreementService.createAgreement(token, application, gsId, role);
+                    set((state) => ({
+                        applications: state.applications.map((app) =>
+                            app.id === application.id ? {...app, claimed: true, claimed_by: gsId} : app,
+                        ),
+                    }));
+                } catch (err) {
+                    set({ error: err });
+                    throw err;
                 }
             },
 

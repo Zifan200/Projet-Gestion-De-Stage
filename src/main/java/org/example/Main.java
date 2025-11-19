@@ -6,6 +6,7 @@ import java.util.List;
 import org.example.model.CV;
 import org.example.model.auth.Role;
 import org.example.model.enums.ApprovalStatus;
+import org.example.model.enums.TypeHoraire;
 import org.example.model.enums.PriorityCode;
 import org.example.repository.CvRepository;
 import org.example.service.*;
@@ -118,19 +119,19 @@ public class Main {
               " " +
               teacher2.getLastName());
 
-      // -----------------------------
-      // 2️⃣ Création de l'employeur
-      // -----------------------------
-      EmployerDto employer = EmployerDto.builder()
-          .firstName("Alice")
-          .lastName("Dupont")
-          .email("alice@example.com")
-          .password("Test123!")
-          .since(LocalDate.of(2020, 1, 1))
-          .enterpriseName("TechCorp")
-          .phone("123-456-7890")
-          .build();
-      employerService.saveEmployer(employer);
+        // -----------------------------
+        // 2️⃣ Création de l'employeur
+        // -----------------------------
+        EmployerDto employer = EmployerDto.builder()
+                .firstName("Alice")
+                .lastName("Dupont")
+                .email("alice@example.com")
+                .password("Test123!")
+                .since(LocalDate.of(2020, 1, 1))
+                .enterpriseName("TechCorp")
+                .phone("123-456-7890")
+                .build();
+        employerService.saveEmployer(employer);
 
       // -----------------------------
       // 3️⃣ Création d'offres de stage

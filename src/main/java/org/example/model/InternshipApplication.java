@@ -43,10 +43,13 @@ public class InternshipApplication {
     private boolean claimed;
     private Long claimedBy;
 
+    private Long ententeStagePdfId;
+
     @Builder
     public InternshipApplication(
-            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status, ApprovalStatus etudiantStatus, ApprovalStatus postInterviewStatus,
-            String session, LocalDate startDate, String reason, String etudiantRaison, boolean claimed, Long claimedBy
+            Long id, Etudiant student, InternshipOffer offer, CV selectedStudentCV, ApprovalStatus status,
+            ApprovalStatus etudiantStatus, ApprovalStatus postInterviewStatus, String session, LocalDate startDate,
+            String reason, String etudiantRaison, boolean claimed, Long claimedBy, Long ententeStagePdfId
     ){
         this.id = id;
         this.student = student;
@@ -62,6 +65,7 @@ public class InternshipApplication {
         this.postInterviewStatus = postInterviewStatus;
         this.claimed = claimed;
         this.claimedBy = claimedBy;
+        this.ententeStagePdfId = ententeStagePdfId;
     }
 }
 

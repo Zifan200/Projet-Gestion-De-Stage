@@ -1,0 +1,90 @@
+{
+  "title": "Ententes de stage",
+  "table": {
+    "loading": "Chargement",
+    "offerTitle": "Titre de l'offre de stage",
+    "studentName": "Nom de l'étudiant",
+    "studentEmail": "Courriel de l'étudiant",
+    "download": "Télécharger",
+    "preview": "Aperçu",
+    "status": "Statut",
+    "action": "Action",
+    "actionView": "Voir",
+    "studentChoice": "Choix des étudiants",
+    "accept": "Accepter",
+    "reject": "Rejeter",
+    "appliedAt": "Postulé le",
+    "publicationDate": "Date de cadidature",
+    "employerDecision": "Décision de l'employeur",
+    "myDecision": "Ma décision",
+    "company": "Entreprise",
+    "createAgreement": "Créer une entente de stage",
+    "viewAgreement": "Voir l'entente",
+    "noApplications": "Aucune candidature de stage",
+    "noAgreements": "Aucune entente de stage"
+  },
+  "status": {
+    "pending": "En cours d'examination",
+    "accepted": "Acceptée",
+    "rejected": "Refusée",
+    "reviewing": "En révision"
+  },
+  "modal": {
+    "studentEmail": "Courriel de l'étudiant",
+    "studentName": "Nom de l'étudiant",
+    "companyEmail": "Courriel de l'entreprise",
+    "company": "Entreprise",
+    "offerTitle": "Offre de stage",
+    "description": "Description",
+    "salary": "Salaire",
+    "status": "Statut",
+    "appliedAt": "Postulé le",
+    "semester": "Session",
+    "startDate": "Date de début",
+    "hiver": "Hiver",
+    "automne": "Automne",
+    "address": "Adresse",
+    "scheduleType": "Type d'horaire",
+    "hourAmount": "Nombre d'heures",
+    "noSemester": "Non spécifié",
+    "close": "Fermer"
+  },
+  "filter": {
+    "status": "Filtrer par Statut",
+    "all": "Tous les Statuts",
+    "session": "Filtrer par Session",
+    "year": "Filtrer par Année"
+  },
+  "session": {
+    "all": "Toutes les Sessions",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "AllYears": "Toutes les Années"
+  },
+  "menu": {
+    "close": "Fermer"
+  },
+  "success": {
+    "accepted": "Candidature acceptée avec succès",
+    "rejected": "Candidature rejetée avec succès",
+    "downloadOffer": "Offre de stage téléchargée avec succès"
+  },
+  "errors": {
+    "reject": "Échec de l'approbation de la candidature",
+    "downloadOffer": "Échec du téléchargement de l'offre de stage",
+    "noTokens": "Aucun token trouvé, veuillez vous reconnecter.",
+    "noAccessibleEmployerData": "Impossible de récupérer l'email de l'employeur.",
+    "form" : "Erreur dans le formulaire.",
+    "unknown": "Erreur inconnue"
+  },
+  "pdf": {
+    "close": "Fermer",
+    "signatureLabel": "Signature du gestionnaire",
+    "signatureLabelEmployer": "Signature de l'employeur",
+    "signatureLabelStudent": "Signature de l'étudiant",
+    "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet (Nom, Prénom)",
+    "signButton": "Signer l'entente",
+    "signatureMismatch": "La signature ne correspond pas à votre nom complet.",
+    "signatureSuccess": "Le PDF a été signé avec succès !"
+  }
+}

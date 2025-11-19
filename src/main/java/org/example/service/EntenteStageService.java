@@ -43,13 +43,28 @@ public class EntenteStageService {
 
     private Map<String, String> prepareTextFields(InternshipApplicationResponseDTO dto, Gestionnaire gestionnaire) {
         Map<String, String> values = new HashMap<>();
+
         values.put("nom_entreprise", safe(dto.getEmployerEnterpriseName()));
-        values.put("gestionnaire_firstName", safe(gestionnaire.getFirstName()));
-        values.put("gestionnaire_lastName", safe(gestionnaire.getLastName()));
+
+        // Champs gestionnaire pour affichage seulement
+        if (gestionnaire != null) {
+            values.put("gestionnaire_firstName", safe(gestionnaire.getFirstName()));
+            values.put("gestionnaire_lastName", safe(gestionnaire.getLastName()));
+            values.put("signature_gestionnaire_firstName", safe(gestionnaire.getFirstName()));
+            values.put("signature_gestionnaire_lastName", safe(gestionnaire.getLastName()));
+        } else {
+            values.put("gestionnaire_firstName", "");
+            values.put("gestionnaire_lastName", "");
+            values.put("signature_gestionnaire_firstName", "");
+            values.put("signature_gestionnaire_lastName", "");
+        }
+
+        // Champs employeur et étudiant pour affichage
         values.put("employer_firstName", safe(dto.getEmployerFirstName()));
         values.put("employer_lastName", safe(dto.getEmployerLastName()));
         values.put("etudiant_firstName", safe(dto.getStudentFirstName()));
         values.put("etudiant_lastName", safe(dto.getStudentLastName()));
+
         values.put("offre_address", safe(dto.getEmployerAddress()));
         values.put("start_date", dto.getStartDate() != null ? dto.getStartDate().format(DATE_FORMATTER) : "");
         values.put("end_date", dto.getEndDate() != null ? dto.getEndDate().format(DATE_FORMATTER) : "");
@@ -59,24 +74,19 @@ public class EntenteStageService {
         values.put("offre_salary", String.format("%.2f $/h", dto.getSalary()));
         values.put("offre_description", safe(dto.getInternshipOfferDescription()));
 
-        // Initialisation des signatures
+        // Champs signature pour affichage (prénom/nom) uniquement
         values.put("signature_etudiant", "Signer ici");
         values.put("signature_employeur", "Signer ici");
         values.put("signature_gestionnaire", "Signer ici");
-
-        values.put("date_signature_etudiant", "");
-        values.put("date_signature_employeur", "");
-        values.put("date_signature_gestionnaire", "");
 
         values.put("signature_etudiant_firstName", safe(dto.getStudentFirstName()));
         values.put("signature_etudiant_lastName", safe(dto.getStudentLastName()));
         values.put("signature_employeur_firstName", safe(dto.getEmployerFirstName()));
         values.put("signature_employeur_lastName", safe(dto.getEmployerLastName()));
-        values.put("signature_gestionnaire_firstName", safe(gestionnaire.getFirstName()));
-        values.put("signature_gestionnaire_lastName", safe(gestionnaire.getLastName()));
 
         return values;
     }
+
 
     @Transactional
     public byte[] generateEntenteDeStage(InternshipApplicationResponseDTO dto,
@@ -122,7 +132,7 @@ public class EntenteStageService {
         EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(dto.getId())
                 .orElseGet(EntenteStagePdf::new);
 
-        pdfEntity.setApplication(app);
+        pdfEntity.setApplicationId(app.getId());
         pdfEntity.setPdfData(pdfBytes);
 
         switch (roleActuel) {
@@ -132,16 +142,24 @@ public class EntenteStageService {
             default -> pdfEntity.setStatus(PdfStatus.CREATED);
         }
 
-        ententeStagePdfRepository.save(pdfEntity);
+        EntenteStagePdf savedEntente = ententeStagePdfRepository.save(pdfEntity);
+        app.setEntenteStagePdfId(savedEntente.getId());
+        internshipApplicationRepository.save(app);
+
         return pdfBytes;
     }
 
     @Transactional
     public byte[] updateEntenteDeStage(Long id,
                                        InternshipApplicationResponseDTO dto,
-                                       Long gestionnaireId,
-                                       Role roleActuel) throws IOException {
+                                       Long signerId,
+                                       Role roleActuel,
+                                       String signatureActeur) throws IOException {
 
+        DateTimeFormatter signatureDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String currentDate = LocalDate.now().format(signatureDateFormatter);
+
+        // Vérifie que l'application est dans un état valide pour générer le PDF
         if (dto.getPostInterviewStatus() != ApprovalStatus.ACCEPTED &&
                 dto.getEtudiantStatus() != ApprovalStatus.CONFIRMED_BY_STUDENT) {
             throw new InvalidInternshipApplicationException(
@@ -149,11 +167,12 @@ public class EntenteStageService {
             );
         }
 
-        Optional<Gestionnaire> gestionnaireOpt = gestionnaireRepository.findById(gestionnaireId);
-        if (gestionnaireOpt.isEmpty()) {
-            throw new UserNotFoundException("Gestionnaire not found");
+        // Gestionnaire seulement si rôle GESTIONNAIRE
+        Gestionnaire gestionnaire = null;
+        if (roleActuel == Role.GESTIONNAIRE) {
+            gestionnaire = gestionnaireRepository.findById(signerId)
+                    .orElseThrow(() -> new UserNotFoundException("Gestionnaire not found"));
         }
-        Gestionnaire gestionnaire = gestionnaireOpt.get();
 
         EntenteStagePdf pdfEntity = ententeStagePdfRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("PDF avec l'id " + id + " n'existe pas"));
@@ -169,24 +188,63 @@ public class EntenteStageService {
         PdfAcroForm form = PdfAcroForm.getAcroForm(pdfDoc, true);
         Map<String, PdfFormField> fields = form.getAllFormFields();
 
+        // Remplir uniquement les champs vides (pour ne pas écraser les signatures existantes)
         Map<String, String> values = prepareTextFields(dto, gestionnaire);
+
+// Remplir seulement les champs qui sont vides, sans toucher aux signatures déjà présentes
         values.forEach((key, value) -> {
-            if (fields.containsKey(key) && fields.get(key).getValue().isNull()) {
-                fields.get(key).setValue(value);
+            if (fields.containsKey(key)) {
+                String fieldValue = fields.get(key).getValueAsString();
+                // On ne remplit que si vide ET si ce n'est pas une signature
+                if ((fieldValue == null || fieldValue.isEmpty()) &&
+                        !key.startsWith("signature_") &&
+                        !key.startsWith("date_signature_")) {
+                    fields.get(key).setValue(value);
+                }
             }
         });
 
+// Écraser uniquement les champs de signature pour le rôle actuel
+        if (signatureActeur != null) {
+            switch (roleActuel) {
+                case EMPLOYER:
+                    System.out.println("employer miaouuuu");
+
+                    if (fields.containsKey("signature_employeur")) {
+                        fields.get("signature_employeur").setValue(signatureActeur);
+                    }
+                    if (fields.containsKey("date_signature_employeur")) {
+                        fields.get("date_signature_employeur").setValue(currentDate);
+                    }
+                    break;
+                case STUDENT:
+                    if (fields.containsKey("signature_etudiant")) {
+                        fields.get("signature_etudiant").setValue(signatureActeur);
+                        System.out.println(signatureActeur);
+                    }
+                    if (fields.containsKey("date_signature_etudiant")) {
+                        fields.get("date_signature_etudiant").setValue(currentDate);
+                    }
+                    break;
+                case GESTIONNAIRE:
+                    if (fields.containsKey("signature_gestionnaire")) {
+                        fields.get("signature_gestionnaire").setValue(signatureActeur);
+                    }
+                    if (fields.containsKey("date_signature_gestionnaire")) {
+                        fields.get("date_signature_gestionnaire").setValue(currentDate);
+                    }
+                    break;
+            }
+        }
+
         fillSignatureDate(fields, roleActuel);
         lockFieldsByRole(fields, roleActuel);
-
-        if (roleActuel == Role.GESTIONNAIRE) {
-            form.flattenFields();
-        }
 
         pdfDoc.close();
         byte[] updatedPdf = outputStream.toByteArray();
         pdfEntity.setPdfData(updatedPdf);
 
+        // Mettre à jour le statut
         switch (roleActuel) {
             case EMPLOYER -> pdfEntity.setStatus(PdfStatus.EMPLOYER_SIGNED);
             case STUDENT -> pdfEntity.setStatus(PdfStatus.STUDENT_SIGNED);
@@ -196,6 +254,7 @@ public class EntenteStageService {
         ententeStagePdfRepository.save(pdfEntity);
         return updatedPdf;
     }
+
 
     private void fillSignatureDate(Map<String, PdfFormField> fields, Role roleActuel) {
         String today = LocalDate.now().format(DATE_FORMATTER);

@@ -13,5 +13,6 @@ public class EntenteStagePdfDTO {
     private Long id;
     private byte[] pdfData;
     private PdfStatus status;
-    private InternshipApplicationResponseDTO application;
+//    private InternshipApplicationResponseDTO application;
+    private Long applicationId;
 }

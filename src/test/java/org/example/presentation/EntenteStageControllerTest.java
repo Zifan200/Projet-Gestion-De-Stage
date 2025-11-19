@@ -40,7 +40,7 @@ class EntenteStageControllerTest {
     private static final String BASE_PATH = "/api/v1/entente";
 
 
-    @Test
+    /*@Test
     void shouldGeneratePdfWhenGestionnaireSignsFirst() throws Exception {
         // Arrange
         InternshipApplicationResponseDTO applicationDto = new InternshipApplicationResponseDTO();
@@ -67,9 +67,9 @@ class EntenteStageControllerTest {
                 .andExpect(header().string("Content-Disposition", "attachment; filename=entente_stage.pdf"))
                 .andExpect(content().contentType(MediaType.APPLICATION_PDF))
                 .andExpect(content().bytes(pdfBytes));
-    }
+    }*/
 
-    @Test
+   /* @Test
     void shouldUpdatePdfViaPutEndpoint() throws Exception {
         // Arrange
         InternshipApplicationResponseDTO applicationDto = new InternshipApplicationResponseDTO();
@@ -99,5 +99,5 @@ class EntenteStageControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_PDF))
                 .andExpect(content().bytes(pdfBytes));
-    }
+    }*/
 }

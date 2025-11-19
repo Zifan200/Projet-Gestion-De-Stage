@@ -7,8 +7,10 @@
     "allOffers": "All Internship Offers",
     "application": "Total applications",
     "manageCvs": "Manage Student Resumes",
+    "internshipAgreements": "Internship Agreements",
     "assignments": "Student Assignments",
     "recommendations": "Recommendations"
+
   },
   "titles": {
     "home": "Home",

@@ -216,7 +216,7 @@ export const ModalSelectedOfferApplicants = ({offerId}) => {
                                     <span>{t("menu.close")}</span>
                                 </button>
                             </div>
-                            <PdfViewer cvId={previewId} role="gs"/>
+                            <PdfViewer cvId={previewId} role="gs" type="CV" />
                         </div>
                         :
                         <Table
