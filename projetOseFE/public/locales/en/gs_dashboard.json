@@ -9,7 +9,9 @@
     "manageCvs": "Manage Student Resumes",
     "internshipAgreements": "Internship Agreements",
     "agreementsToCreate": "Internship Agreements To Create",
-    "signedAgreements": "Signed Internship Agreements"
+    "signedAgreements": "Signed Internship Agreements",
+    "assignments": "Student Assignments",
+    "recommendations": "Recommendations"
   },
   "titles": {
     "home": "Home",

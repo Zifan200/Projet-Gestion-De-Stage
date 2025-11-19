@@ -9,7 +9,9 @@
     "application": "Candidatures totales",
     "internshipAgreements": "Ententes de stage",
     "agreementsToCreate": "Ententes de stage à créer",
-    "signedAgreements": "Ententes de stage signées"
+    "signedAgreements": "Ententes de stage signées",
+    "assignments": "Attribution des étudiants",
+    "recommendations": "Recommandations"
   },
   "titles": {
     "home": "Accueil",

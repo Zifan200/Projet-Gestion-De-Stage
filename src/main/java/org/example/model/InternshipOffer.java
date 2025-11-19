@@ -1,16 +1,16 @@
 package org.example.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.example.model.enums.ApprovalStatus;
 import org.example.model.enums.TypeHoraire;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import lombok.*;
+import org.example.model.enums.ApprovalStatus;
 
 @Entity
 @NoArgsConstructor
@@ -22,6 +22,7 @@ public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String title;
     private String description;
     private String targetedProgramme;
@@ -33,8 +34,11 @@ public class InternshipOffer {
     private LocalDate publishedDate;
     private LocalDate expirationDate;
 
-    @OneToMany(mappedBy = "offer", cascade = jakarta.persistence.CascadeType.ALL)
-    private List<InternshipApplication> applications  = new ArrayList<>();
+    @OneToMany(
+        mappedBy = "offer",
+        cascade = jakarta.persistence.CascadeType.ALL
+    )
+    private List<InternshipApplication> applications = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -55,11 +59,24 @@ public class InternshipOffer {
 
     @Builder
     public InternshipOffer(
-            Long id, String title, String description, String targetedProgramme, Employer employer,
-            LocalDate publishedDate, LocalDate expirationDate, ApprovalStatus status, String reason,
-            LocalDate startDate, LocalDate endDate, String session, TypeHoraire typeHoraire,
-            List<InternshipApplication> applications, float nbHeures, String address, float salary
-    ){
+        Long id,
+        String title,
+        String description,
+        String targetedProgramme,
+        Employer employer,
+        LocalDate publishedDate,
+        LocalDate expirationDate,
+        ApprovalStatus status,
+        String reason,
+        LocalDate startDate,
+        LocalDate endDate,
+        String session,
+        TypeHoraire typeHoraire,
+        List<InternshipApplication> applications,
+        float nbHeures,
+        String address,
+        float salary
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;

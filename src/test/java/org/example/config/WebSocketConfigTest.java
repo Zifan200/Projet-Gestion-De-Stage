@@ -49,7 +49,7 @@ class WebSocketConfigTest {
         config.configureMessageBroker(messageBrokerRegistry);
 
         // Assert
-        verify(messageBrokerRegistry).enableSimpleBroker("/topic");
+        verify(messageBrokerRegistry).enableSimpleBroker("/topic", "/queue");
         verify(messageBrokerRegistry).setApplicationDestinationPrefixes("/app");
     }
 
