@@ -82,6 +82,7 @@ export const StudentInternshipAgreements = () => {
                         bg_color="indigo-100"
                         text_color="indigo-700"
                         onClick={() => {
+                            setSelectedApplication(app);
                             setIsModalOpen(true);
                         }}
                     />

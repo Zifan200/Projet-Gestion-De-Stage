@@ -80,8 +80,8 @@ export const EmployerInternshipAgreements = () => {
                         bg_color="indigo-100"
                         text_color="indigo-700"
                         onClick={() => {
-                            setIsModalOpen(true);
-                        }}
+                            setSelectedApplication(app);
+                            setIsModalOpen(true);                        }}
                     />
 
                     {/* 2️⃣ View Agreement → prévisualise le PDF */}
