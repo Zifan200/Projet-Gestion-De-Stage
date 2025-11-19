@@ -43,6 +43,10 @@
     "startDate": "Start date",
     "hiver": "Winter",
     "automne": "Autumn",
+    "address": "Address",
+    "scheduleType": "Schedule Type",
+    "hourAmount": "Number of Hours",
+    "noSemester": "Not specified",
     "close": "Close"
   },
   "filter": {
@@ -79,7 +83,7 @@
     "signatureLabel": "Manager's Signature",
     "signatureLabelEmployer": "Employer's Signature",
     "signatureLabelStudent": "Student's Signature",
-    "signaturePlaceholder": "Enter your signature exactly as your full name",
+    "signaturePlaceholder": "Enter your signature exactly as your full name (Last name, First name)",
     "signButton": "Sign Agreement",
     "signatureMismatch": "The signature does not match your full name.",
     "signatureSuccess": "PDF signed successfully!"

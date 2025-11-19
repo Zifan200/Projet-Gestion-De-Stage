@@ -43,6 +43,10 @@
     "startDate": "Date de début",
     "hiver": "Hiver",
     "automne": "Automne",
+    "address": "Adresse",
+    "scheduleType": "Type d'horaire",
+    "hourAmount": "Nombre d'heures",
+    "noSemester": "Non spécifié",
     "close": "Fermer"
   },
   "filter": {
@@ -78,7 +82,7 @@
     "signatureLabel": "Signature du gestionnaire",
     "signatureLabelEmployer": "Signature de l'employeur",
     "signatureLabelStudent": "Signature de l'étudiant",
-    "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet",
+    "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet (Nom, Prénom)",
     "signButton": "Signer l'entente",
     "signatureMismatch": "La signature ne correspond pas à votre nom complet.",
     "signatureSuccess": "Le PDF a été signé avec succès !"
