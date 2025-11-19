@@ -197,12 +197,6 @@ function App() {
             icon: PersonIcon,
         },
         {
-            key: "agreements",
-            label: t("gs_dashboard:stats.internshipAgreements"),
-            href: "/dashboard/gs/internship-agreements", // desktop
-            icon: Handshake,
-        },
-        {
             key: "assignments",
             label: t("gs_dashboard:stats.assignments"),
             href: "/dashboard/gs/assignments",
