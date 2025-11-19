@@ -64,35 +64,27 @@ export const useInternshipAgreementStore = create((set, get) => ({
     },
     signAgreement: async (token, agreementId, role, signerId, signature, application) => {
         try {
-            const payload = {
-                id: agreementId,
-                application,
-                role
-            };
+            // Appel direct au service qui gère déjà payload et URL
+            const result = await internshipAgreementService.signAgreement(
+                token,
+                agreementId,
+                role,
+                signerId,
+                signature,
+                application
+            );
 
-            if (role === "GESTIONNAIRE") payload.gestionnaireId = signerId;
-            else if (role === "EMPLOYER") payload.employerId = signerId;
-            else if (role === "STUDENT") payload.etudiantId = signerId;
+            // Mettre à jour l'URL pour prévisualisation
+            set({ previewUrl: result.pdfUrl });
+            return result.pdfUrl;
 
-            if (role === "GESTIONNAIRE") payload.signatureGestionnaire = signature;
-            else if (role === "EMPLOYER") payload.signatureEmployer = signature;
-            else if (role === "STUDENT") payload.signatureEtudiant = signature;
-
-            const res = await api.put(`/entente/update`, payload, {
-                headers: { Authorization: `Bearer ${token}` },
-                responseType: "arraybuffer"
-            });
-
-            const blob = new Blob([res.data], { type: "application/pdf" });
-            const pdfUrl = URL.createObjectURL(blob);
-
-            set({ previewUrl: pdfUrl });
-            return pdfUrl;
         } catch (err) {
             console.error("Erreur lors de la signature de l'entente :", err);
+            set({ error: err.message || "Erreur lors de la signature" });
             throw err;
         }
     },
+
 
 
     resetAgreement: () => {
