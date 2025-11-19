@@ -3,12 +3,14 @@ package org.example.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.example.model.Etudiant;
 import org.example.model.InternshipApplication;
 import org.example.repository.EtudiantRepository;
 import org.example.repository.InternshipApplicationRepository;
 import org.example.service.dto.student.EtudiantDTO;
+import org.example.service.dto.student.StudentAssignmentResponseDTO;
 import org.example.service.dto.teacher.TeacherDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,5 +70,13 @@ public class StudentService {
         }
 
         return TeacherDTO.fromEntity(student.getTeacher());
+    }
+
+    public List<StudentAssignmentResponseDTO> getAllStudents() {
+        return etudiantRepository
+            .findAll()
+            .stream()
+            .map(StudentAssignmentResponseDTO::fromEntity)
+            .collect(Collectors.toList());
     }
 }

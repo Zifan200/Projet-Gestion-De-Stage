@@ -685,7 +685,7 @@ public class InternshipOfferService {
 
                 return builder.build();
             })
-            // Trier: recommandées en premier (GOLD > BLUE > GREEN), puis non recommandées
+            // Trier: recommandées en premier (GOLD > SILVER > BRONZE), puis non recommandées
             .sorted((o1, o2) -> {
                 if (o1.isRecommended() && !o2.isRecommended()) return -1;
                 if (!o1.isRecommended() && o2.isRecommended()) return 1;
@@ -706,9 +706,9 @@ public class InternshipOfferService {
         switch (priorityCode) {
             case GOLD:
                 return 1;
-            case BLUE:
+            case SILVER:
                 return 2;
-            case GREEN:
+            case BRONZE:
                 return 3;
             default:
                 return 4;

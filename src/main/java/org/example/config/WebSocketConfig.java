@@ -43,7 +43,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "/queue");
         config.setApplicationDestinationPrefixes("/app");
     }
 
@@ -123,6 +123,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 case "employer" -> user.get().getRole() == Role.EMPLOYER && userId.toString().equals(idInDestination);
                 case "gestionnaire" ->
                         user.get().getRole() == Role.GESTIONNAIRE && userId.toString().equals(idInDestination);
+                case "teacher" -> user.get().getRole() == Role.TEACHER && userId.toString().equals(idInDestination);
                 default -> false;
             };
         }

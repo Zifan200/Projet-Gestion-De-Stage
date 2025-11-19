@@ -1,0 +1,70 @@
+{
+  "title": "Student Recommendations",
+  "filter": {
+    "program": "Filter by program",
+    "all": "All programs"
+  },
+  "info": {
+    "maxGold": "Note: A maximum of 3 GOLD recommendations can be assigned per student."
+  },
+  "table": {
+    "student": "Student",
+    "email": "Email",
+    "program": "Program",
+    "recommendations": "Recommendations",
+    "actions": "Actions"
+  },
+  "empty": "No students found.",
+  "noRecommendations": "No recommendations",
+  "noProgram": "Not specified",
+  "actions": {
+    "recommend": "Recommend",
+    "delete": "Delete"
+  },
+  "priority": {
+    "bronze": {
+      "badge": "BRONZE",
+      "description": "Standard recommendation - Student can apply to this offer"
+    },
+    "silver": {
+      "badge": "SILVER",
+      "description": "Strong recommendation - Student is well-suited for this offer"
+    },
+    "gold": {
+      "badge": "GOLD",
+      "description": "Priority recommendation - Student is highly recommended (maximum 3 per student)"
+    },
+    "green": {
+      "badge": "BRONZE",
+      "description": "Standard recommendation - Student can apply to this offer"
+    },
+    "blue": {
+      "badge": "SILVER",
+      "description": "Strong recommendation - Student is well-suited for this offer"
+    }
+  },
+  "confirmDelete": "Are you sure you want to delete this recommendation?",
+  "toast": {
+    "recommendationDeleted": "Recommendation deleted successfully",
+    "deleteError": "Error deleting recommendation",
+    "fillAllFields": "Please fill in all fields",
+    "recommendationCreated": "Recommendation created successfully",
+    "recommendationsUpdated": "Recommendations updated successfully",
+    "maxGoldRecommendations": "Maximum of 3 GOLD recommendations reached for this student",
+    "recommendationError": "Error creating recommendation"
+  },
+  "modal": {
+    "title": "Manage Recommendations",
+    "student": "Student",
+    "email": "Email",
+    "program": "Program",
+    "selectOffers": "Select offers to recommend",
+    "noOffers": "No offers available",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
+  },
+  "menu": {
+    "close": "Close"
+  }
+}

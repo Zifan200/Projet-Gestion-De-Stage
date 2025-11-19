@@ -5,10 +5,17 @@ import useAuthStore from "../../../stores/authStore.js";
 import { useOfferStore } from "../../../stores/offerStore.js";
 import { useCvStore } from "../../../stores/cvStore.js";
 import { useStudentStore } from "../../../stores/studentStore.js";
+import { useRecommendationStore } from "../../../stores/recommendationStore.js";
 import { toast } from "sonner";
 import { DataTable } from "../../../components/ui/data-table.jsx";
 import { Modal } from "../../../components/ui/modal.jsx";
 import { EyeOpenIcon, DownloadIcon } from "@radix-ui/react-icons";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "../../../components/ui/popover.jsx";
 
 export const StudentOffersPhone = () => {
     const { t } = useTranslation("student_dashboard_offers");
@@ -17,6 +24,8 @@ export const StudentOffersPhone = () => {
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCv, setSelectedCv] = useState(null);
+    const [filterPriority, setFilterPriority] = useState(null);
+    const [showBackgrounds, setShowBackgrounds] = useState(true);
 
     const user = useAuthStore((s) => s.user);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -24,6 +33,7 @@ export const StudentOffersPhone = () => {
     const { offers, loadOffersSummary, viewOffer, downloadOfferPdf } = useOfferStore();
     const { cvs, loadCvs, applyCvStore } = useCvStore();
     const { applications, loadAllApplications } = useStudentStore();
+    const { studentRecommendations, loadRecommendationsForStudent } = useRecommendationStore();
 
     useEffect(() => {
         if (!isAuthenticated || !user) {
@@ -32,6 +42,9 @@ export const StudentOffersPhone = () => {
             loadOffersSummary();
             loadCvs();
             loadAllApplications();
+            if (user.id) {
+                loadRecommendationsForStudent(user.token, user.id);
+            }
         }
     }, [isAuthenticated, user, navigate, loadOffersSummary, loadCvs, loadAllApplications]);
 
@@ -76,8 +89,40 @@ export const StudentOffersPhone = () => {
 
     const currentYear = (new Date().getFullYear() + 1).toString();
 
+    const getPriorityOrder = (priority) => {
+        switch (priority) {
+            case "GOLD":
+                return 1;
+            case "SILVER":
+                return 2;
+            case "BRONZE":
+                return 3;
+            case "BLUE":
+                return 2;
+            case "GREEN":
+                return 3;
+            default:
+                return 4;
+        }
+    };
+
+    const getRowClassName = (offer) => {
+        if (!offer.priorityCode) return "hover:bg-gray-50";
+
+        switch (offer.priorityCode) {
+            case "GOLD":
+                return "bg-gradient-to-r from-amber-50 to-yellow-50 hover:from-amber-100 hover:to-yellow-100 border-l-4 border-amber-400";
+            case "SILVER":
+                return "bg-gray-50 hover:bg-gray-100 border-l-4 border-gray-400";
+            case "BRONZE":
+                return "bg-orange-50 hover:bg-orange-100 border-l-4 border-orange-400";
+            default:
+                return "hover:bg-gray-50";
+        }
+    };
+
     const filteredOffers = useMemo(() => {
-        return offers
+        const filtered = offers
             .filter((offer) => offer.session?.toLowerCase() === "hiver")
             .filter(
                 (offer) =>
@@ -86,11 +131,55 @@ export const StudentOffersPhone = () => {
             )
             .filter(
                 (offer) => !applications.find((a) => a.internshipOfferId === offer.id)
-            );
-    }, [offers, applications]);
+            )
+            .map((offer) => {
+                const recommendation = studentRecommendations.find(
+                    (rec) => rec.offerId === offer.id
+                );
+                return {
+                    ...offer,
+                    priorityCode: recommendation?.priorityCode || null,
+                };
+            })
+            .filter((offer) => {
+                if (!filterPriority) return true;
+                return offer.priorityCode === filterPriority;
+            });
+
+        return filtered.sort((a, b) =>
+            getPriorityOrder(a.priorityCode) - getPriorityOrder(b.priorityCode)
+        );
+    }, [offers, applications, studentRecommendations, filterPriority]);
+
+    const getPriorityBadgeClass = (priority) => {
+        switch (priority) {
+            case "BRONZE":
+                return "bg-orange-100 text-orange-800";
+            case "SILVER":
+                return "bg-gray-100 text-gray-800";
+            case "GOLD":
+                return "bg-amber-100 text-amber-800";
+            default:
+                return "bg-gray-100 text-gray-800";
+        }
+    };
 
     const columns = [
         { key: "title", label: t("table.title") },
+        ...(!showBackgrounds ? [{
+            key: "priority",
+            label: t("table.priority"),
+            render: (offer) => {
+                if (!offer.priorityCode) return (
+                    <span className="text-gray-400 text-xs italic">-</span>
+                );
+                return (
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityBadgeClass(offer.priorityCode)}`}>
+                        {t(`priority.${offer.priorityCode.toLowerCase()}`)}
+                    </span>
+                );
+            }
+        }] : []),
         { key: "expirationDate", label: t("table.deadline") },
         {
             key: "actions",
@@ -119,7 +208,80 @@ export const StudentOffersPhone = () => {
             {/* Titre principal de la page */}
             <h1 className="text-xl font-bold text-gray-800">{t("title")}</h1>
 
-            <DataTable columns={columns} data={tableData} onAction={handleAction} />
+            {/* Filtres et contrôles */}
+            <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                    <Popover>
+                        {({ open, setOpen, triggerRef, contentRef }) => (
+                            <>
+                                <PopoverTrigger
+                                    open={open}
+                                    setOpen={setOpen}
+                                    triggerRef={triggerRef}
+                                >
+                                    <span className="px-3 py-1 border border-zinc-400 bg-zinc-100 rounded-md shadow-sm cursor-pointer hover:bg-zinc-200 transition text-sm">
+                                        {t("filter.priority")}:{" "}
+                                        {filterPriority ? t(`priority.${filterPriority.toLowerCase()}`) : t("filter.all")}
+                                    </span>
+                                </PopoverTrigger>
+
+                                <PopoverContent open={open} contentRef={contentRef}>
+                                    <div className="flex flex-col gap-2 min-w-[150px]">
+                                        {["GOLD", "SILVER", "BRONZE"].map((priority) => (
+                                            <button
+                                                key={priority}
+                                                onClick={() => {
+                                                    setFilterPriority(priority);
+                                                    setOpen(false);
+                                                }}
+                                                className={`px-3 py-1 rounded text-left text-sm ${
+                                                    filterPriority === priority
+                                                        ? "bg-blue-100 font-semibold"
+                                                        : "hover:bg-gray-100"
+                                                }`}
+                                            >
+                                                {t(`priority.${priority.toLowerCase()}`)}
+                                            </button>
+                                        ))}
+                                        <button
+                                            onClick={() => {
+                                                setFilterPriority(null);
+                                                setOpen(false);
+                                            }}
+                                            className="px-3 py-1 rounded text-left text-sm hover:bg-gray-100"
+                                        >
+                                            {t("filter.all")}
+                                        </button>
+                                        <PopoverClose setOpen={setOpen}>
+                                            <span className="text-xs text-gray-600">
+                                                {t("menu.close")}
+                                            </span>
+                                        </PopoverClose>
+                                    </div>
+                                </PopoverContent>
+                            </>
+                        )}
+                    </Popover>
+
+                    <button
+                        onClick={() => setShowBackgrounds(!showBackgrounds)}
+                        className={`px-3 py-1 rounded-md shadow-sm transition text-sm ${
+                            showBackgrounds
+                                ? "bg-blue-500 text-white hover:bg-blue-600"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                    >
+                        {showBackgrounds ? t("filter.hideBackgrounds") : t("filter.showBackgrounds")}
+                    </button>
+                </div>
+            </div>
+
+            <DataTable
+                columns={columns}
+                data={tableData}
+                onAction={handleAction}
+                getRowClassName={showBackgrounds ? getRowClassName : undefined}
+            />
 
             <Modal
                 open={isModalOpen}

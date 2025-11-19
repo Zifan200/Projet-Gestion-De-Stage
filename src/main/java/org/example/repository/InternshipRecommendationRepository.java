@@ -20,8 +20,8 @@ public interface InternshipRecommendationRepository extends JpaRepository<Intern
     @Query("SELECT r FROM InternshipRecommendation r WHERE r.student.id = :studentId ORDER BY " +
            "CASE r.priorityCode " +
            "WHEN 'GOLD' THEN 1 " +
-           "WHEN 'BLUE' THEN 2 " +
-           "WHEN 'GREEN' THEN 3 " +
+           "WHEN 'SILVER' THEN 2 " +
+           "WHEN 'BRONZE' THEN 3 " +
            "END")
     List<InternshipRecommendation> findAllByStudentIdOrderedByPriority(@Param("studentId") Long studentId);
 

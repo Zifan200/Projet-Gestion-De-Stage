@@ -3,8 +3,16 @@
   "table": {
     "title": "Titre",
     "company": "Entreprise",
+    "priority": "Niveau de recommendation",
     "deadline": "Date limite",
     "action": "Action"
+  },
+  "priority": {
+    "bronze": "BRONZE",
+    "silver": "ARGENT",
+    "gold": "OR",
+    "green": "BRONZE",
+    "blue": "ARGENT"
   },
   "actions": {
     "view": "Voir",
@@ -33,14 +41,17 @@
   },
   "filter": {
     "session": "Filtrer par session",
-    "year": "Filtrer par année"
+    "year": "Filtrer par année",
+    "priority": "Filtrer par priorité",
+    "all": "Toutes les priorités",
+    "showBackgrounds": "Afficher arrière-plans",
+    "hideBackgrounds": "Masquer arrière-plans"
   },
-
   "session": {
     "all": "Toutes les sessions",
     "fall": "Automne",
     "winter": "Hiver",
-    "year" : "Toutes les années"
+    "year": "Toutes les années"
   },
   "menu": {
     "close": "Fermer",

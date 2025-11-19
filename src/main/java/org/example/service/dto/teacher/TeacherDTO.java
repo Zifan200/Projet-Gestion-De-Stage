@@ -25,6 +25,8 @@ public class TeacherDTO extends UserDTO {
     private String specialization;
     private LocalDate since;
     private Integer numberOfStudents;
+    private Integer assignedStudentsCount;
+    private Boolean available;
 
     @Builder
     public TeacherDTO(
@@ -38,7 +40,9 @@ public class TeacherDTO extends UserDTO {
         String department,
         String specialization,
         LocalDate since,
-        Integer numberOfStudents
+        Integer numberOfStudents,
+        Integer assignedStudentsCount,
+        Boolean available
     ) {
         super(id, firstName, lastName, email, password, role);
         this.phone = phone;
@@ -46,6 +50,8 @@ public class TeacherDTO extends UserDTO {
         this.specialization = specialization;
         this.since = since;
         this.numberOfStudents = numberOfStudents;
+        this.assignedStudentsCount = assignedStudentsCount;
+        this.available = available;
     }
 
     public TeacherDTO() {}
@@ -65,6 +71,7 @@ public class TeacherDTO extends UserDTO {
     }
 
     public static TeacherDTO fromEntity(Teacher teacher) {
+        int studentCount = teacher.getStudents() != null ? teacher.getStudents().size() : 0;
         return TeacherDTO.builder()
             .id(teacher.getId())
             .firstName(teacher.getFirstName())
@@ -76,9 +83,9 @@ public class TeacherDTO extends UserDTO {
             .department(teacher.getDepartment())
             .specialization(teacher.getSpecialization())
             .since(teacher.getSince())
-            .numberOfStudents(
-                teacher.getStudents() != null ? teacher.getStudents().size() : 0
-            )
+            .numberOfStudents(studentCount)
+            .assignedStudentsCount(studentCount)
+            .available(teacher.isActive()) // Assuming active teachers are available
             .build();
     }
 

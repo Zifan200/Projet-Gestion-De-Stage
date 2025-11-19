@@ -1,0 +1,70 @@
+{
+  "title": "Recommandations aux étudiants",
+  "filter": {
+    "program": "Filtrer par programme",
+    "all": "Tous les programmes"
+  },
+  "info": {
+    "maxGold": "Note : Un maximum de 3 recommandations OR peuvent être attribuées par étudiant."
+  },
+  "table": {
+    "student": "Étudiant",
+    "email": "Email",
+    "program": "Programme",
+    "recommendations": "Recommandations",
+    "actions": "Actions"
+  },
+  "empty": "Aucun étudiant trouvé.",
+  "noRecommendations": "Aucune recommandation",
+  "noProgram": "Non spécifié",
+  "actions": {
+    "recommend": "Recommander",
+    "delete": "Supprimer"
+  },
+  "priority": {
+    "bronze": {
+      "badge": "BRONZE",
+      "description": "Recommandation standard - L'étudiant peut postuler à cette offre"
+    },
+    "silver": {
+      "badge": "ARGENT",
+      "description": "Recommandation forte - L'étudiant est bien adapté pour cette offre"
+    },
+    "gold": {
+      "badge": "OR",
+      "description": "Recommandation prioritaire - L'étudiant est fortement recommandé (maximum 3 par étudiant)"
+    },
+    "green": {
+      "badge": "BRONZE",
+      "description": "Recommandation standard - L'étudiant peut postuler à cette offre"
+    },
+    "blue": {
+      "badge": "ARGENT",
+      "description": "Recommandation forte - L'étudiant est bien adapté pour cette offre"
+    }
+  },
+  "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette recommandation?",
+  "toast": {
+    "recommendationDeleted": "Recommandation supprimée avec succès",
+    "deleteError": "Erreur lors de la suppression de la recommandation",
+    "fillAllFields": "Veuillez remplir tous les champs",
+    "recommendationCreated": "Recommandation créée avec succès",
+    "recommendationsUpdated": "Recommandations mises à jour avec succès",
+    "maxGoldRecommendations": "Maximum de 3 recommandations OR atteint pour cet étudiant",
+    "recommendationError": "Erreur lors de la création de la recommandation"
+  },
+  "modal": {
+    "title": "Gérer les recommandations",
+    "student": "Étudiant",
+    "email": "Email",
+    "program": "Programme",
+    "selectOffers": "Sélectionnez les offres à recommander",
+    "noOffers": "Aucune offre disponible",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "saving": "Sauvegarde..."
+  },
+  "menu": {
+    "close": "Fermer"
+  }
+}
