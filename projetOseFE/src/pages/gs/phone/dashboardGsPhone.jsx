@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { StatCard } from "../../../components/ui/stat-card.jsx";
-import { FileTextIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import {FileTextIcon, EyeOpenIcon, PlusIcon} from "@radix-ui/react-icons";
 import useAuthStore from "../../../stores/authStore.js";
 import useGeStore from "../../../stores/geStore.js";
 import { useOfferStore } from "../../../stores/offerStore.js";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import {Handshake, HandshakeIcon, PencilLineIcon} from "lucide-react";
 
 export const DashboardGsPhone = () => {
     const { t } = useTranslation("gs_dashboard");
@@ -14,7 +15,7 @@ export const DashboardGsPhone = () => {
     const token = useAuthStore((s) => s.token);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-    const { cvs, loadAllsStudentCvs } = useGeStore();
+    const { cvs, loadAllsStudentCvs, applications, loadAllInternshipApplications } = useGeStore();
     const { offers, loadAllOffersSummary } = useOfferStore();
 
     useEffect(() => {
@@ -24,7 +25,10 @@ export const DashboardGsPhone = () => {
     useEffect(() => {
         const fetchData = async () => {
             await loadAllsStudentCvs();
-            if (token) await loadAllOffersSummary(token);
+            if (token) {
+                await loadAllOffersSummary(token);
+                await loadAllInternshipApplications(token);
+            }
         };
         fetchData();
     }, [token]);
@@ -35,12 +39,24 @@ export const DashboardGsPhone = () => {
         const acceptedCvCount = cvs?.filter((cv) => cv.status === "ACCEPTED").length || 0;
         const availableOffers = offers?.length || 0;
         const pendingOffers = offers?.filter((offer) => offer.status === "PENDING").length || 0;
+        const agreementsToCreate = applications?.filter((app) =>
+            app.etudiantStatus === "CONFIRMED_BY_STUDENT" &&
+            app.postInterviewStatus === "ACCEPTED" &&
+            !app.claimed
+        ).length || 0;
+        const signedAgreements = applications?.filter((app) =>
+            app.etudiantStatus === "CONFIRMED_BY_STUDENT" &&
+            app.postInterviewStatus === "ACCEPTED" &&
+            app.claimedBy === user.id
+        ).length || 0;
 
         return [
             { title: t("stats.pendingCvs"), value: pendingCvCount, icon: FileTextIcon },
             { title: t("stats.acceptedCvs"), value: acceptedCvCount, icon: FileTextIcon },
             { title: t("stats.availableOffers"), value: availableOffers, icon: EyeOpenIcon },
             { title: t("stats.pendingOffers"), value: pendingOffers, icon: EyeOpenIcon },
+            { title: t("stats.agreementsToCreate"), value: agreementsToCreate, icon: HandshakeIcon },
+            { title: t("stats.signedAgreements"), value: signedAgreements, icon: PencilLineIcon },
         ];
     }, [cvs, offers, t]);
 
