@@ -56,7 +56,7 @@ export const StudentInternshipAgreements = () => {
             const pdfUrl = await signAgreement(
                 user.token,
                 selectedApplication.ententeStagePdfId,
-                "EMPLOYER",
+                "ETUDIANT",
                 user.id,
                 signature,
                 selectedApplication
@@ -82,7 +82,6 @@ export const StudentInternshipAgreements = () => {
                         bg_color="indigo-100"
                         text_color="indigo-700"
                         onClick={() => {
-                            setSelectedApplication(app);
                             setIsModalOpen(true);
                         }}
                     />
@@ -92,6 +91,7 @@ export const StudentInternshipAgreements = () => {
                         <TableActionButton
                             icon={FileTextIcon}
                             label={t("table.viewAgreement")}
+
                             bg_color="amber-100"
                             text_color="amber-700"
                             onClick={() => {
@@ -278,7 +278,7 @@ export const StudentInternshipAgreements = () => {
 
                     {/* Champ de signature */}
                     <div className="mt-4">
-                        <label className="block font-medium mb-1">{t("pdf.signatureLabelEmployer")}</label>
+                        <label className="block font-medium mb-1">{t("pdf.signatureLabelStudent")}</label>
                         <input
                             type="text"
                             value={signature}

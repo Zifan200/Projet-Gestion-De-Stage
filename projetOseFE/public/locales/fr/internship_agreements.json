@@ -77,6 +77,7 @@
     "close": "Fermer",
     "signatureLabel": "Signature du gestionnaire",
     "signatureLabelEmployer": "Signature de l'employeur",
+    "signatureLabelStudent": "Signature de l'étudiant",
     "signaturePlaceholder": "Écrivez votre signature exactement comme votre nom complet",
     "signButton": "Signer l'entente",
     "signatureMismatch": "La signature ne correspond pas à votre nom complet.",
