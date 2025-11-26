@@ -18,7 +18,7 @@ import { useTranslation, Trans } from "react-i18next";
 
 export const RequestPassword = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("login");
   const form = useForm({
     resolver: zodResolver(requestPasswordSchema),
     defaultValues: {
@@ -47,22 +47,22 @@ export const RequestPassword = () => {
   return (
     <>
       <FormTemplate
-        title={t("form.passwordRequest.title")}
-        description={t("form.passwordRequest.description")}
+        title={t("requestPasswordReset.title")}
+        description={t("requestPasswordReset.description")}
       >
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit, onError)} className="">
             <div className={"flex flex-col mb-7"}>
-              <Label name="email" label={t("form.fields.email")} />
-              <Input name="email" placeholder="Email" />
+              <Label name="email" label={t("requestPasswordReset.fields.email")} />
+              <Input name="email" placeholder={t("requestPasswordReset.placeholder.email")} />
             </div>
 
-            <Button className="p-2" label={t("form.passwordRequest.button")} />
+            <Button className="p-2" label={t("requestPasswordReset.buttons.sendLink")} />
             <div className={"text-center mt-2 text-zinc-600"}>
               {" "}
               <span className={"text-blue-400"}>
                 <Link to={"/login"}>
-                  {t("form.passwordRequest.backToLogin")}
+                  {t("requestPasswordReset.backToLogin")}
                 </Link>
               </span>
             </div>

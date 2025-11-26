@@ -28,5 +28,21 @@
   },
   "success": {
     "loginSuccess": "Connexion réussie !"
+  },
+  "requestPasswordReset": {
+    "title": "Demande de réinitialisation du mot de passe",
+    "description": "Entrez votre courriel pour recevoir le lien de réinitialisation.",
+    "fields": {
+      "email": "Adresse courriel"
+    },
+    "placeholder": {
+      "email": "Entrez votre courriel"
+    },
+    "buttons": {
+      "sendLink": "Envoyer le lien"
+    },
+    "backToLogin": "Retour à la connexion",
+    "emailSent": "Si un compte avec ce courriel existe, un lien de réinitialisation a été envoyé."
   }
+
 }

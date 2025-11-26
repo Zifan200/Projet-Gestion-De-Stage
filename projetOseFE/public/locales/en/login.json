@@ -28,5 +28,20 @@
   },
   "success": {
     "loginSuccess": "Successfully logged in!"
+  },
+  "requestPasswordReset": {
+    "title": "Request password reset",
+    "description": "Enter your email to receive password reset link.",
+    "fields": {
+      "email": "Email address"
+    },
+    "placeholder": {
+      "email": "Enter your email"
+    },
+    "buttons": {
+      "sendLink": "Send Reset Link"
+    },
+    "backToLogin": "Back to login",
+    "emailSent": "If an account with that email exists, a reset link has been sent."
   }
 }
