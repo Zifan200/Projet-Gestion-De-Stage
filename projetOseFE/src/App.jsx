@@ -228,7 +228,7 @@ function App() {
                 <Navbar/>
                 <Routes>
                     {/* Pages principales */}
-                    <Route path="/" element={<Home/>}/>
+                    {/*<Route path="/" element={<LoginPage/>}/>*/}
                     <Route path="/reset-password" element={<ResetPasswordPage/>}/>
                     <Route path="/request-password" element={<RequestPassword/>}/>
 
@@ -498,7 +498,10 @@ function App() {
 
                     {/* Routes Employeur */}
                     <Route path="/signup/employer" element={<EmployerSignUpPage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
+
+                    <Route path={"/"} element={<LoginPage/>}/>
+                    <Route path={"/login"} element={<LoginPage/>}/>
+
                     <Route path="/employer/ajout_stages" element={<AjoutStage/>}/>
                 </Routes>
                 <DevMode/>
